@@ -1,0 +1,46 @@
+#!/bin/bash
+#set -eo pipefail
+
+#myserver='SHTU'
+#myserver='SPST'
+#myserver='MAGIC3'
+myserver='KUNLUN'
+
+export VIMINIT='source ~/tianff/scripts/vimrc.me'
+
+#======================================[KUNLUN]
+if [ "$myserver" = "KUNLUN" ]; then
+echo "KUNLUN"
+mycluster=sbatch
+module purge
+#export MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
+#export FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
+module load compiler/intel/2017.5.239
+module load mpi/intelmpi/2017.4.239
+module load mathlib/lapack/intel/3.8.0
+#ulimit -s unlimited
+export PATH=$PATH:/public/home/ssct057t/tianff/software/vasp/vtstscripts-966
+module add apps/gnuplot/5.0.5/gcc-7.3.1
+
+#======================================[SPST]
+elif [ "$myserver" = "SPST" ]; then
+#echo 'spst'
+source /opt/intel/bin/compilervars.sh intel64
+source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64 
+
+#======================================[SHTU]
+elif [ "$myserver" = "SHTU" ]; then
+echo "SHTU"
+module purge
+module add compiler/intel/composer_xe_2019.1.053
+module add mpi/intelmpi/2019.7
+module add apps/gnuplot/5.0.6
+mycluster=pbs
+
+#======================================[MAGIC3]
+elif [ "$myserver" = "MAGIC3" ]; then
+module add intel/2019 
+workhome=/public/home/users/shtu011/tianff/201903/tianff
+export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_libraries_2019.4.243/linux/mkl/lib/intel64
+export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
+fi
