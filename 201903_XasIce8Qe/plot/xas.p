@@ -10,11 +10,11 @@ set term svg font "Arial-Bold,25" size 800,500
 #set label 'Intensity (Arb. Units)' at 530.5,17.5 center rotate
 set xlabel 'Energy (eV)'
 set ylabel 'Intensity (Arb. Units)'
-#set key box
+set key box
 set key samplen 2
 
-set output 'chenw.svg'
-p [532:546] [0:2.5]\
+#set output 'chenw.svg'
+#p [532:546] [0:2.5]\
 workhome.'../chenw/wernet2004_water.dat.norm' u 1:2:(0.05) w circle lw 2 lc ''.word(colors,1) t 'Exp.',\
 workhome.'../chenw/chenw2009_water_fch.dat.norm' w l lw 2 lc ''.word(colors,2) t 'FCH',\
 workhome.'../chenw/chenw2009_water_cohsex.dat.norm' w l lw 2 lc ''.word(colors,3) t 'COHSEX'
@@ -53,7 +53,16 @@ workhome.'epsilon0_3.0+alpha_xas_snap00/tmsftbroadave.dat' w l lw 2 lc ''.word(c
 #p [532:546] [0:35] \
 workhome.'../zrsun/xas-ice8/ice8/ice8expallsftNorm.dat' u 1:2:(0.05) w circle lw 2 lc ''.word(colors,1) t 'Exp.',\
 workhome.'xas_snap00/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,2) t '{/Symbol e}_0=1.7,{/Symbol a}=2.30',\
-workhome.'epsilon0_3.0+alpha_xas_snap00/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,3) t '{/Symbol e}_0=3.0,{/Symbol a}=1.24',\
+workhome.'xas_snap00_epsilon0_3.0+alpha_1.242.bak/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,3) t '{/Symbol e}_0=3.0,{/Symbol a}=1.24,bak',\
+workhome.'xas_snap00_epsilon0_3.0+alpha/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,4) t '{/Symbol e}_0=3.0,{/Symbol a}',\
+workhome.'xas_snap00_epsilon0_3.0+alpha_1.242/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,5) t '{/Symbol e}_0=3.0,{/Symbol a}=1.24'
+
+set output 'dielect.svg'
+p [532:546] [0:35] \
+workhome.'../zrsun/xas-ice8/ice8/ice8expallsftNorm.dat' u 1:2:(0.05) w circle lw 2 lc ''.word(colors,1) t 'Exp.',\
+workhome.'xas_snap00/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,2) t '{/Symbol e}_0=1.7,{/Symbol a}=2.30',\
+workhome.'xas_snap00_epsilon0_3.0+alpha_2.3/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,3) t '{/Symbol e}_0=3.0,{/Symbol a}=2.30',\
+workhome.'xas_snap00_epsilon0_3.0+alpha_1.242/tmsftbroadave.dat' w l lw 2 lc ''.word(colors,4) t '{/Symbol e}_0=3.0,{/Symbol a}=1.24'
 
 #pause -1
 #unset output
