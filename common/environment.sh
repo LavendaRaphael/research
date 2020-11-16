@@ -15,11 +15,6 @@ cdl() {
 }
 alias cpi="cp -i"
 
-#======================================[ssh-agent]
-eval "$(ssh-agent -s)"
-ssh-add ~/tianff/server/id_rsa
-ssh-add ~/tianff/server/id_ed25519
-
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
