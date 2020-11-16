@@ -3,11 +3,10 @@
 
 myserver="none"
 source ~/tianff/server/server.sh
+echo "$myserver"
 if [ "$myserver" = "none" ]; then
-    echo "$myserver"
     return
 fi
-
 
 export VIMINIT='source ~/tianff/codes/common/vimrc.me'
 cdl() {
@@ -37,7 +36,6 @@ unset env
 
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
-echo "MYUBUNTU"
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
 echo "DISPLAY="$DISPLAY
@@ -48,31 +46,41 @@ echo "vaspkit="$vaspkit
 
 #======================================[KUNLUN]
 elif [ "$myserver" = "KUNLUN" ]; then
-echo "KUNLUN"
+mycluster=sbatch
 module purge
+#ulimit -s unlimited
+#export MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
+#export FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
 #source ~/tianff/myscript/compiler_intel-compiler-2017.5.239.sh
 #source ~/tianff/myscript/mpi_intelmpi-2017.4.239.sh
-export MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
-export FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
-mycluster=sbatch
 module load compiler/intel/2017.5.239
 module load mpi/intelmpi/2017.4.239
+module load mathlib/lapack/intel/3.8.0
+module add apps/gnuplot/5.0.5/gcc-7.3.1
+module list
 
 #======================================[SPST]
 elif [ "$myserver" = "SPST" ]; then
-#echo 'spst'
 source /opt/intel/bin/compilervars.sh intel64
 source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64 
 
 #======================================[SHTU]
 elif [ "$myserver" = "SHTU" ]; then
-echo "SHTU"
+mycluster=pbs
 module purge
+#module add compiler/intel/intel-compiler-2017.5.239
+#module add mpi/intelmpi/2017.4.239
+#source /public/spst/software/profile.d/compiler_intel-compiler-2017.5.239.sh
+#source /public/spst/software/profile.d/mpi_intelmpi-2017.4.239.sh
+#module add mpi/intelmpi/2019.1.144
 module add compiler/intel/composer_xe_2019.1.053
 module add mpi/intelmpi/2019.7
 module add apps/gnuplot/5.0.6
-mycluster=pbs
-PATH=$PATH:~/tianff/software/vasp/vasp.6.1.0/bin/
+module list
+lmp_bin=~/0example/software/lammps-3Mar20/build/lmp
+echo "lmp_bin=${lmp_bin}"
+vasp_bin=~/tianff/software/vasp/vasp.6.1.0/bin/
+echo "vasp_bin=${vasp_bin}"
 
 #======================================[MAGIC3]
 elif [ "$myserver" = "MAGIC3" ]; then
