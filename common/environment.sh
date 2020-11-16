@@ -16,7 +16,7 @@ cdl() {
 }
 alias cpi="cp -i"
 #======================================[乱码]
-stty erase ^H
+#stty erase ^H
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
