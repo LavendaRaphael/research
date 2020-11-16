@@ -1,0 +1,27 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=6
+#PBS -N outxasxNUMx
+#PBS -q sbp_1
+#PBS -j oe
+
+set -eo pipefail
+source ~/tianff/environment.sh
+
+cd $PBS_O_WORKDIR
+cp $PBS_NODEFILE node
+NP=`cat node | wc -l`
+SECONDS=0
+
+dir=~/tianff/201903/tianff/xas-codes/
+cp ~/tianff/201903/tianff/Oxygen-1s-wf/fort.* ./
+
+$dir/diag_lambda.x
+tail -256  eig.dat > eigc.dat
+mpirun -np $NP $dir/xas.x > xas.out
+$dir/tmsft.x
+$dir/tmsftbroad.x
+
+rm fort.8* fort.90
+
+nodeinfo=($(sort -n node | uniq))
+echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s; CoreNum ${NP}; CoreInfo ${nodeinfo[*]} ."

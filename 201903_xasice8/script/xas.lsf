@@ -1,0 +1,32 @@
+#! /bin/bash
+#BSUB -q score
+#BSUB -n 6
+#BSUB -J outxasxNUMx
+#BSUB -o outxasxNUMx.out
+#BSUB -e outxasxNUMx.err
+
+set -eo pipefail
+#MAGIC3
+module add intel/2019
+workdir=/public/home/users/shtu011/tianff/201903/tianff
+
+rm -f node
+for host in `echo $LSB_HOSTS`
+do
+   echo $host >> node
+done
+NP=`cat node |wc -l`
+SECONDS=0
+
+cp $workdir/Oxygen-1s-wf/fort.* ./
+
+$workdir/xas-codes/diag_lambda.x
+tail -256  eig.dat > eigc.dat
+mpirun -np $NP $workdir/xas-codes/xas.x > xas.out
+$workdir/xas-codes/tmsft.x
+$workdir/xas-codes/tmsftbroad.x
+
+rm fort.8* fort.90
+
+nodeinfo=($(sort -n node | uniq))
+echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s; CoreNum ${NP}; CoreInfo ${nodeinfo[*]} ."

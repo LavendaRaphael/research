@@ -1,0 +1,37 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=6
+#PBS -l walltime=01:00:00
+#PBS -N outdosxNUMx
+#PBS -q batch 
+#PBS -j oe
+#PBS -V
+
+set -eo pipefail
+
+#物院服务器
+source /opt/intel/bin/compilervars.sh intel64
+source /opt/intel/mkl/bin/mklvars.sh intel64
+source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64
+workhome=/home/tianff/201903/tianff
+#学校服务器
+#module add compiler/intel/intel-compiler-2017.5.239
+#module add mpi/intelmpi/2017
+#workhome=
+
+cd $PBS_O_WORKDIR
+cp $PBS_NODEFILE node
+NP=`wc -l < $PBS_NODEFILE`
+SECONDS=0
+
+DOS=$workhome/GW-lf-fq-cori-ice/bin/dos.x
+
+echo $DOS
+echo $NP
+
+mpirun -np $NP -hostfile $PBS_NODEFILE $DOS < dos.in > dos.out
+
+nodeinfo=($(sort -n node | uniq))
+echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s; CoreNum ${NP}; CoreInfo ${nodeinfo[*]}."
+
+#reference
+#https://www.jianshu.com/p/2f6c799ca147
