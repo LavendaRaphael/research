@@ -7,14 +7,16 @@ echo "$myserver"
 if [ "$myserver" = "none" ]; then
     return
 fi
-
+#======================================[vim]
 export VIMINIT='source ~/tianff/codes/common/vimrc.me'
+#======================================[alias]
 cdl() {
     cd "${1}";
     ll -a;
 }
 alias cpi="cp -i"
-
+#======================================[乱码]
+stty erase ^H
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
