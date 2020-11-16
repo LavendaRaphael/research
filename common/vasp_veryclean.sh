@@ -1,6 +1,6 @@
 #!/bin/bash
 set -eo pipefail
-source ~/tianff/scripts/environment.sh
+#source ~/tianff/scripts/environment.sh
 
 rm -f *.xsd */*.xsd
 rm -f CHG */CHG
