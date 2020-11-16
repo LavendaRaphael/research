@@ -40,6 +40,7 @@ module load compiler/intel/2017.5.239
 module load mpi/intelmpi/2017.4.239
 module load mathlib/lapack/intel/3.8.0
 module add apps/gnuplot/5.0.5/gcc-7.3.1
+module add apps/git/2.9.4
 module list
 
 #======================================[SPST]
