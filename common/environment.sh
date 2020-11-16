@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -eo pipefail
 
-source ~/tianff/codes/common/server.sh
+source ~/tianff/server/server.sh
 
 export VIMINIT='source ~/tianff/codes/common/vimrc.me'
 cdl() {
