@@ -40,7 +40,6 @@ module load compiler/intel/2017.5.239
 module load mpi/intelmpi/2017.4.239
 module load mathlib/lapack/intel/3.8.0
 module add apps/gnuplot/5.0.5/gcc-7.3.1
-module add apps/git/2.9.4
 module list
 
 #======================================[SPST]
@@ -60,6 +59,7 @@ module purge
 module add compiler/intel/composer_xe_2019.1.053
 module add mpi/intelmpi/2019.7
 module add apps/gnuplot/5.0.6
+module add apps/git/2.9.4
 module list
 lmp_bin=~/0example/software/lammps-3Mar20/build/lmp
 echo "lmp_bin=${lmp_bin}"
