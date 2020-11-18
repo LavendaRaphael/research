@@ -12,7 +12,7 @@ rm -f IBZKPT */IBZKPT
 #rm -f INCAR */INCAR
 #rm -f KPOINTS  */KPOINTS
 rm -f OSZICAR */OSZICAR
-rm -f OUTCAR */OUTCAR
+#rm -f OUTCAR */OUTCAR
 rm -f PCDAT */PCDAT
 #rm -f POSCAR */POSCAR
 rm -f POTCAR */POTCAR
