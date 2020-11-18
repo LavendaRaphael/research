@@ -1,6 +1,6 @@
 #!/bin/bash
 set -eo pipefail
-source ~/tianff/environment.sh
+source ~/tianff/codes/common/environment.sh
 
 oIFS="$IFS"
 IFS=$'\n'
