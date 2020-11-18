@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eo pipefail
-source ~/tianff/environment.sh
+source ~/tianff/codes/common/environment.sh
 
 if [ ! -f "make.sys" ]; then
   ./configure

@@ -32,8 +32,10 @@ elif [ "$myserver" = "KUNLUN" ]; then
 mycluster=sbatch
 module purge
 #ulimit -s unlimited
-#export MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
-#export FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
+MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
+FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
+echo "MKL_LIB_PATH=$MKL_LIB_PATH"
+echo "FFT_LIB_PATH=$FFT_LIB_PATH"
 #source ~/tianff/myscript/compiler_intel-compiler-2017.5.239.sh
 #source ~/tianff/myscript/mpi_intelmpi-2017.4.239.sh
 module load compiler/intel/2017.5.239
