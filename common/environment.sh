@@ -43,6 +43,8 @@ module load mpi/intelmpi/2017.4.239
 module load mathlib/lapack/intel/3.8.0
 module add apps/gnuplot/5.0.5/gcc-7.3.1
 module list
+qe_cohsex_water_bin=~/tianff/software/QuatumEspresso/qe_cohsex_water/bin/
+echo "qe_cohsex_water_bin=$qe_cohsex_water_bin"
 
 #======================================[SPST]
 elif [ "$myserver" = "SPST" ]; then
