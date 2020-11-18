@@ -1,0 +1,29 @@
+#!/bin/sh
+#BSUB -q score
+#BSUB -n 6
+#BSUB -J outgwxNUMx
+#BSUB -o outgwxNUMx.out
+#BSUB -e outgwxNUMx.err
+
+set -eo pipefail
+
+#MAGIC3
+module add intel/2019
+workdir=/public/home/users/shtu011/tianff/201903/tianff
+
+rm -f node
+for host in `echo $LSB_HOSTS`
+do
+   echo $host >> node
+done
+NP=`cat node |wc -l`
+SECONDS=0
+
+CP=$workdir/GW-lf-fq-cori-ice/bin/cp.x
+echo $CP
+echo $NP
+
+mpirun -np $NP $CP < gw.in > gw.out
+
+nodeinfo=($(sort -n node | uniq))
+echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s; CoreNum ${NP}; CoreInfo ${nodeinfo[*]}."
