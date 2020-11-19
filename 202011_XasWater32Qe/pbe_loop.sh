@@ -1,26 +1,17 @@
 #!/bin/bash
 set -eo pipefail
-source ~/tianff/environment.sh
+source ~/tianff/codes/common/environment.sh
 
-subfile="pbe.$mycluster"
+source ~/codes/202011_XasWater32Qe/local_env.sh
+subfile=pbe.sh
 
-dir=~/tianff/201903/tianff/script
-for N in {1,}
-#for N in {2..64}
+for ((N = 1; N <= 1; N++))
+#for ((N = 2; N <= ${O_num}; N++))
 do
 	echo $N
 	cd Oxygen_${N}/
-	rm -rf temp/* ${subfile} node *.out fort.777 fort.13 fort.408 fort.407 g.dat cp_lambda.dat cp_wf.dat outpbe*
-	cp ${dir}/${subfile} ./
+	cp ${script_dir}/${subfile} ./
 	sed -i "s/xNUMx/$N/g"  $subfile
-	
-    if [ "$mycluster" = "slurm" ]; then
-                sbatch < $subfile
-        elif [ "$mycluster" = "pbs" ]; then
-                qsub $subfile
-        elif [ "$mycluster" = "lsf" ]; then
-                bsub < $subfile
-    fi
-
+	./$subfile
 	cd ../
 done

@@ -2,23 +2,23 @@
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 
+source ~/codes/202011_XasWater32Qe/local_env.sh
 oIFS="$IFS"
 IFS=$'\n'
 atom=($(<snap.pos))
-dir=~/tianff/201903/tianff/Templates
 
-for i in {1,}
-#for ((i = 1; i <= 2; i++))
+for ((N = 1; N <= 1; N++))
+#for ((N = 2; N <= ${O_num}; N++))
 do
 	rm -rf Oxygen_${i}
 	mkdir Oxygen_${i}
-	cp ${dir}/*.* Oxygen_${i}/
+	cp ${Templates_dir}/*.* Oxygen_${i}/
 	cd Oxygen_${i}/
 	mkdir temp
 	echo 'OO  ' ${atom[${i}-1]} >> OO_pos_${i}.dat
 	echo ${atom[${i}-1]} >> fort.10
 
-	for k in {1..64}   #copy the O atomic positions
+	for k in {1..${O_num}}   #copy the O atomic positions
 	do
 		if [ $k != ${i} ]
 		then
@@ -27,7 +27,7 @@ do
 	done
 
 
-	for k in {65..192}   #copy the H atomic positions
+	for k ((N = $[$O_num+1]; N <= $natoms; N++)) #copy the H atomic positions
 	do
 		echo 'H   ' ${atom[$k-1]} >> OO_pos_${i}.dat
 	done

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
+source ~/codes/202011_XasWater32Qe/local_env.sh
 
 jobname=gwxNUMx
 #========================================[myserver]
@@ -44,7 +45,7 @@ set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
 
-CP=\${qe_cohsex_water_bin}cp.x
+CP=${qe_cohsex_water_bin}cp.x
 echo \$CP
 
 mpirun \$CP < gw.in > gw.out

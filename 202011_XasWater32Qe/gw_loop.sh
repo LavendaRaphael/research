@@ -1,24 +1,17 @@
 #!/bin/bash
 set -eo pipefail
-source ~/tianff/environment.sh
+source ~/tianff/codes/common/environment.sh
 
-subfile="gw.$mycluster"
+source ~/codes/202011_XasWater32Qe/local_env.sh
+subfile=gw.sh
 
-dir=~/tianff/201903/tianff/script
-for ((N = 1; N <= 1; N++)); do
+for ((N = 1; N <= 1; N++))
+#for ((N = 2; N <= ${O_num}; N++))
+do
 	echo $N
 	cd Oxygen_${N}/
-	rm -f gw.pbs gw.lsf node gw.out outgw*
-	cp $dir/$subfile ./
-	sed -i "s/xNUMx/$N/g"  $subfile
-	
-    if [ "$mycluster" = "slurm" ]; then
-            sbatch < $subfile
-    elif [ "$mycluster" = "pbs" ]; then
-            qsub $subfile
-    elif [ "$mycluster" = "lsf" ]; then
-            bsub < $subfile
-    fi
-
-	cd ../
+	cp ${script_dir}/${subfile} ./
+    sed -i "s/xNUMx/$N/g"  $subfile
+    ./$subfile
+    cd ../
 done
