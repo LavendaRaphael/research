@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
-source ~/codes/202011_XasWater32Qe/local_env.sh
+source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 
 jobname=gwxNUMx
 #========================================[myserver]

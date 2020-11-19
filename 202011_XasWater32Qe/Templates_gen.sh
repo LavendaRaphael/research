@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
-source ~/codes/202011_XasWater32Qe/local_env.sh
+source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 
-cat > ${Templates_dir}scf.in <<eof
+cat >${Templates_dir}scf.in <<!
 #
 &control
   calculation   = 'scf',
@@ -39,7 +39,7 @@ H  2.01355  H_MT_PBE.UPF
 K_POINTS {Gamma}
 
 ATOMIC_POSITIONS {bohr}
-eof
+!
 cat > ${Templates_dir}cp-scf.in <<eof
 #
 &CONTROL

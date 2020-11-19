@@ -2,7 +2,7 @@
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 
-source ~/codes/202011_XasWater32Qe/local_env.sh
+source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 jobname=xasxNUMx
 #========================================[myserver]
 if [ "$myserver" = "SHTU" ]; then
@@ -44,8 +44,6 @@ cat >>${jobname}_sub.sh<<eof
 set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
-
-source ~/codes/202011_XasWater32Qe/local_env.sh
 
 cp ${Oxygen1swf_dir}fort.* ./
 
