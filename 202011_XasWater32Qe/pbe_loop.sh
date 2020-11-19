@@ -1,8 +1,7 @@
 #!/bin/bash
-set -eo pipefail
-source ~/tianff/codes/common/environment.sh
-
+set -euo pipefail
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
+cd $work_dir
 subfile=pbe.sh
 
 for ((N = 1; N <= 1; N++))

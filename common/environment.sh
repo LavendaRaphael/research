@@ -1,12 +1,8 @@
 #!/bin/bash
 #set -eo pipefail
 
-myserver="none"
+shopt -s expand_aliases
 source ~/tianff/server/server.sh
-echo "$myserver"
-if [ "$myserver" = "none" ]; then
-    return
-fi
 #======================================[vim]
 export VIMINIT='source ~/tianff/codes/common/vimrc.me'
 #======================================[alias]
@@ -15,10 +11,10 @@ cdl() {
     ll -a;
 }
 alias cpi="cp -i"
-#======================================[乱码]
-#stty erase ^H
+#==============================================================[myserver]
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
+mycluster=none
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
 echo "DISPLAY="$DISPLAY
@@ -30,8 +26,8 @@ echo "vaspkit="$vaspkit
 #======================================[KUNLUN]
 elif [ "$myserver" = "KUNLUN" ]; then
 mycluster=sbatch
+jobqueue=ssct
 module purge
-#ulimit -s unlimited
 MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
 FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
 echo "MKL_LIB_PATH=$MKL_LIB_PATH"
@@ -52,6 +48,7 @@ source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64
 #======================================[SHTU]
 elif [ "$myserver" = "SHTU" ]; then
 mycluster=pbs
+jobqueue=sbp_1
 module purge
 #module add compiler/intel/intel-compiler-2017.5.239
 #module add mpi/intelmpi/2017.4.239
@@ -74,4 +71,21 @@ module add intel/2019
 workhome=/public/home/users/shtu011/tianff/201903/tianff
 export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_libraries_2019.4.243/linux/mkl/lib/intel64
 export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
+#======================================[DEBUG]
+else
+    echo "ERROR: 'mycluster' not exist!"
+    exit
 fi
+#==========================================================[mycluster]
+if [ "$mycluster" = "pbs" ]; then
+    alias jobsub="qsub"
+elif [ "$mycluster" = "sbatch" ]; then
+    alias jobsub="sbatch <"
+elif [ "$mycluster" = "none" ]; then
+    echo ""
+else
+    echo "ERROR: 'mycluster' not exist!"
+    exit
+fi
+echo "myserver=$myserver"
+echo "mycluster=$mycluster"

@@ -1,14 +1,14 @@
 #!/bin/bash
-set -eo pipefail
+set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
+cd $work_dir
 oIFS="$IFS"
 IFS=$'\n'
 atom=($(<snap.pos))
-
-for ((N = 1; N <= 1; N++))
-#for ((N = 2; N <= ${O_num}; N++))
+for ((i = 1; i <= 1; i++))
+#for ((i = 2; i <= ${O_num}; i++))
 do
 	rm -rf Oxygen_${i}
 	mkdir Oxygen_${i}
@@ -18,7 +18,7 @@ do
 	echo 'OO  ' ${atom[${i}-1]} >> OO_pos_${i}.dat
 	echo ${atom[${i}-1]} >> fort.10
 
-	for k in {1..${O_num}}   #copy the O atomic positions
+	for ((k = 1; k <= ${O_num}; k++))   #copy the O atomic positions
 	do
 		if [ $k != ${i} ]
 		then
@@ -27,7 +27,7 @@ do
 	done
 
 
-	for k ((N = $[$O_num+1]; N <= $natoms; N++)) #copy the H atomic positions
+	for ((k = $[$O_num+1]; k <= $natoms; k++)) #copy the H atomic positions
 	do
 		echo 'H   ' ${atom[$k-1]} >> OO_pos_${i}.dat
 	done

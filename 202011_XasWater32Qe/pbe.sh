@@ -1,23 +1,11 @@
 #!/bin/bash
-set -eo pipefail
-source ~/tianff/codes/common/environment.sh
-
+set -euo pipefail
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 jobname=pbexNUMx
 jobnodes=1
 jobppn=6
-#========================================[myserver]
-if [ "$myserver" = "SHTU" ]; then
-    jobqueue=sbp_1
-elif [ "$myserver" = "KUNLUN" ]; then
-    jobqueue=ssct
-else
-    echo "ERROR: 'myserver' not exist!"
-    exit
-fi
 #========================================[mycluster]
 if [ "$mycluster" = "pbs" ]; then
-    alias jobsub="qsub"
     cat > ${jobname}_sub.sh <<eof
 #!/bin/bash
 #PBS -l nodes=${jobnodes}:ppn=${jobppn}
@@ -26,7 +14,6 @@ if [ "$mycluster" = "pbs" ]; then
 cd \$PBS_O_WORKDIR
 eof
 elif [ "$mycluster" = "sbatch" ]; then
-    alias jobsub="sbatch <"
     cat > ${jobname}_sub.sh <<eof
 #!/bin/bash
 #SBATCH -N ${jobnodes}
@@ -34,19 +21,16 @@ elif [ "$mycluster" = "sbatch" ]; then
 #SBATCH -J ${jobname}
 #SBATCH -p ${jobqueue}
 eof
-else
-    echo "ERROR: 'mycluster' not exist!"
-    exit
 fi
 #========================================[main script]
-cat >>pbe_sub.sh<<eof
+cat >> ${jobname}_sub.sh<<eof
 
-set -eo pipefail
+set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
 
-CP=\${qe_cohsex_water_bin}cp.x
-PW=\${qe_cohsex_water_bin}pw.x
+CP=${qe_cohsex_water_bin}cp.x
+PW=${qe_cohsex_water_bin}pw.x
 echo \$PW
 echo \$CP
 
@@ -69,3 +53,7 @@ tail -$nbands  temp/water.wfc > fort.407
 
 echo "TotalTime \$((\${SECONDS} / 60)) m \$((\${SECONDS} % 60)) s."
 eof
+
+if true;then
+    jobsub ${jobname}_sub.sh
+fi
