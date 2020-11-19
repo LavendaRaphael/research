@@ -1,6 +1,9 @@
 #!/bin/bash
 set -eo pipefail
 
+qe_cohsex_water_bin=~/tianff/software/QuatumEspresso/qe_cohsex_water/bin/
+echo "qe_cohsex_water_bin=$qe_cohsex_water_bin"
+
 Templates_dir=~/tianff/202011_XasWater32Qe/server/Templates/
 echo "Templates_dir=$Templates_dir"
 

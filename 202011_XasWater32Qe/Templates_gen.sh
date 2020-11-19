@@ -3,7 +3,7 @@ set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 source ~/codes/202011_XasWater32Qe/local_env.sh
 
-cat > scf.in <<eof
+cat > ${Templates_dir}scf.in <<eof
 #
 &control
   calculation   = 'scf',
@@ -40,7 +40,7 @@ K_POINTS {Gamma}
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > cp-scf.in <<eof
+cat > ${Templates_dir}cp-scf.in <<eof
 #
 &CONTROL
   calculation   = "cp-wf",
@@ -98,7 +98,7 @@ H  2.01355  H_MT_PBE.UPF
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > nscf.in <<eof
+cat > ${Templates_dir}nscf.in <<eof
 #
 &control
   calculation   = 'nscf',
@@ -132,7 +132,7 @@ H  2.01355  H_MT_PBE.UPF
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > cp-nscf.in <<eof
+cat > ${Templates_dir}cp-nscf.in <<eof
 #
 &CONTROL
   calculation   = "cp-wf-nscf",
@@ -189,7 +189,7 @@ H  2.01355  H_MT_PBE.UPF
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > cp-nscf-wf.in <<eof
+cat > ${Templates_dir}cp-nscf-wf.in <<eof
 #
 &CONTROL
   calculation   = "cp-wf-nscf",
@@ -246,7 +246,7 @@ H  2.01355  H_MT_PBE.UPF
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > gw.in <<eof
+cat > ${Templates_dir}gw.in <<eof
 #
 &CONTROL
   calculation   = 'cohsex',
@@ -304,14 +304,14 @@ H  2.01355  H_MT_PBE.UPF
 
 ATOMIC_POSITIONS {bohr}
 eof
-cat > fort.10 <<eof
+cat > ${Templates_dir}fort.10 <<eof
 ${volume}, ${celldm1}, 1.0, 1.0
 ${glines}, ${vbands}, ${cbands}
 0.0, 0.0, 0.0
 eof
-cat > fort.11 <<eof
+cat > ${Templates_dir}fort.11 <<eof
 $nbands,  $vbands, ${glines} 
 eof
-cat > fort.12 <<eof
+cat > ${Templates_dir}fort.12 <<eof
 0.4, ${cbands}
 eof
