@@ -53,3 +53,7 @@ ${xascodes_bin}tmsftbroad.x
 
 echo "TotalTime \$((\${SECONDS} / 60)) m \$((\${SECONDS} % 60)) s."
 eof
+
+if true;then
+    jobsub ${jobname}_sub.sh
+fi

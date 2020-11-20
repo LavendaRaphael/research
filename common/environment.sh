@@ -1,6 +1,7 @@
 #!/bin/bash
 #set -eo pipefail
 
+echo "-----------------------------------------------------[~/tianff/codes/common/environment.sh]"
 shopt -s expand_aliases
 source ~/tianff/server/server.sh
 #======================================[vim]
@@ -15,6 +16,7 @@ alias cpi="cp -i"
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
 mycluster=none
+maxppn=2
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
 echo "DISPLAY="$DISPLAY
@@ -27,6 +29,7 @@ echo "vaspkit="$vaspkit
 elif [ "$myserver" = "KUNLUN" ]; then
 mycluster=sbatch
 jobqueue=ssct
+maxppn=32
 module purge
 MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
 FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
@@ -89,3 +92,5 @@ else
 fi
 echo "myserver=$myserver"
 echo "mycluster=$mycluster"
+echo "maxppn=$maxppn"
+echo "========================================================================="

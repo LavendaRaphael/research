@@ -2,9 +2,6 @@
 set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 echo ==================================================================[local_env]
-work_dir=~/tianff/202011_XasWater32Qe/server/
-echo "work_dir=$work_dir"
-
 qe_cohsex_water_bin=~/tianff/software/QuatumEspresso/qe_cohsex_water/bin/
 echo "qe_cohsex_water_bin=$qe_cohsex_water_bin"
 
