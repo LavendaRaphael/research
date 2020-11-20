@@ -2,6 +2,23 @@
 set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 echo ==================================================================[local_env]
+
+#work_dir=~/tianff/202011_XasWater32Qe/server/pbe/
+work_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
+echo "work_dir=$work_dir"
+
+#subfile=pbe_sub.sh
+subfile=gw_sub.sh
+#subfile=xas_sub.sh
+echo "subfile=$subfile"
+
+nstart=1
+#nstart=2
+#nend=1
+nend=$O_num
+echo "nstart=$nstart"
+echo "nend=$nend"
+#===============================================
 qe_cohsex_water_bin=~/tianff/software/QuatumEspresso/qe_cohsex_water/bin/
 echo "qe_cohsex_water_bin=$qe_cohsex_water_bin"
 

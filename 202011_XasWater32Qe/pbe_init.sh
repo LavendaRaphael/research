@@ -5,8 +5,7 @@ cd $work_dir
 oIFS="$IFS"
 IFS=$'\n'
 atom=($(<snap.pos))
-#for ((i = 1; i <= 1; i++))
-for ((i = 2; i <= ${O_num}; i++))
+for ((i = ${nstart}; i <= ${nend}; i++))
 do
 	rm -rf Oxygen_${i}
 	mkdir Oxygen_${i}
