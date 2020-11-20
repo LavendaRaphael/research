@@ -1,14 +1,12 @@
 #!/bin/bash
 set -euo pipefail
-source ~/tianff/codes/common/environment.sh
-
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 cd $work_dir
 oIFS="$IFS"
 IFS=$'\n'
 atom=($(<snap.pos))
-for ((i = 1; i <= 1; i++))
-#for ((i = 2; i <= ${O_num}; i++))
+#for ((i = 1; i <= 1; i++))
+for ((i = 2; i <= ${O_num}; i++))
 do
 	rm -rf Oxygen_${i}
 	mkdir Oxygen_${i}

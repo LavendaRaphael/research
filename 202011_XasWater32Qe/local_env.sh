@@ -35,7 +35,7 @@ echo "celldm1=$celldm1"
 volume=`echo "${celldm1}^3"|bc`
 echo "volume=$volume"
 
-glines=?
+glines=32850
 echo "glines=$glines"
 
 xascodes_bin=~/tianff/software/QuatumEspresso/xas-codes/

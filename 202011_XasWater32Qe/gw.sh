@@ -1,6 +1,5 @@
 #!/bin/bash
-set -eo pipefail
-source ~/tianff/codes/common/environment.sh
+set -euo pipefail
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 
 jobname=gwxNUMx
@@ -41,7 +40,7 @@ fi
 #========================================[main script]
 cat >>${jobname}_sub.sh<<eof
 
-set -eo pipefail
+set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
 
