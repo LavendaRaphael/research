@@ -12,10 +12,10 @@ subfile=gw_sub.sh
 #subfile=xas_sub.sh
 echo "subfile=$subfile"
 
-nstart=1
+nstart=10
 #nstart=2
-#nend=1
-nend=$O_num
+nend=$nstart
+#nend=$O_num
 echo "nstart=$nstart"
 echo "nend=$nend"
 #===============================================

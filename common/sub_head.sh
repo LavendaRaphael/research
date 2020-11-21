@@ -9,7 +9,7 @@ jobppn=$[($ncore/$jobnodes)+($ncore%$jobnodes>0)]
 echo "jobppn=$jobppn"
 #========================================[mycluster]
 if [ "$mycluster" = "pbs" ]; then
-    cat > ${jobname}_sub.sh <<eof
+    cat > ${jobname}.sh <<eof
 #!/bin/bash
 #PBS -l nodes=${jobnodes}:ppn=${jobppn}
 #PBS -N ${jobname}
@@ -17,7 +17,7 @@ if [ "$mycluster" = "pbs" ]; then
 cd \$PBS_O_WORKDIR
 eof
 elif [ "$mycluster" = "sbatch" ]; then
-    cat > ${jobname}_sub.sh <<eof
+    cat > ${jobname}.sh <<eof
 #!/bin/bash
 #SBATCH -N ${jobnodes}
 #SBATCH --ntasks-per-node=${jobppn}
@@ -29,7 +29,7 @@ else
     exit
 fi
 
-cat >>${jobname}_sub.sh<<eof
+cat >>${jobname}.sh<<eof
 
 set -euo pipefail
 source ~/tianff/codes/common/environment.sh
