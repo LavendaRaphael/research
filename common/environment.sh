@@ -1,6 +1,9 @@
 #!/bin/bash
-#set -eo pipefail
-
+if [ $environmennt ]; then
+    return
+else
+    environmennt=true
+fi
 echo "-----------------------------------------------------[~/tianff/codes/common/environment.sh]"
 shopt -s expand_aliases
 source ~/tianff/server/server.sh

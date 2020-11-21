@@ -1,10 +1,20 @@
 #!/bin/bash
-set -euo pipefail
+if [ $local_env ]; then
+    return
+else
+    local_env=true
+fi
+set -eo pipefail
 source ~/tianff/codes/common/environment.sh
-echo ==================================================================[local_env]
+echo "=============================================[~/tianff/codes/202011_XasWater32Qe/local_env.sh]"
 
-#work_dir=~/tianff/202011_XasWater32Qe/server/pbe/
-work_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
+pbe_dir=~/tianff/202011_XasWater32Qe/server/pbe/
+echo "pbe_dir=$pbe_dir"
+
+cohsex_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
+echo "cohsex_dir=$cohsex_dir"
+
+work_dir=$cohsex_dir
 echo "work_dir=$work_dir"
 
 #subfile=pbe_sub.sh
@@ -12,12 +22,9 @@ subfile=gw_sub.sh
 #subfile=xas_sub.sh
 echo "subfile=$subfile"
 
-nstart=10
-#nstart=2
-nend=$nstart
-#nend=$O_num
-echo "nstart=$nstart"
-echo "nend=$nend"
+#loopfile=`seq 1 $O_num`
+loopfile="13 19 24 25 29 2 31 4 5 7"
+echo "loopfile=$loopfile"
 #===============================================
 qe_cohsex_water_bin=~/tianff/software/QuatumEspresso/qe_cohsex_water/bin/
 echo "qe_cohsex_water_bin=$qe_cohsex_water_bin"

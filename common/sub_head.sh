@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 echo "jobname=${jobname}"
 echo "ncore=$ncore"
@@ -31,7 +31,7 @@ fi
 
 cat >>${jobname}.sh<<eof
 
-set -euo pipefail
+set -eo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
 
