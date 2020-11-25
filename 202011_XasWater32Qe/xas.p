@@ -20,5 +20,8 @@ set ylabel "Intensity (Arb. Units)" offset 1,0
 #set xrange [532:546]
 set yrange [0:]
 p \
-workhome0.'pbe/tmsftbroad_tt.dat' w l lw 3 lc ''.word(colors,2) t 'PBE'
+workhome0.'pbe/Oxygen_1/tm.dat' w l lw 3,\
+workhome0.'pbe/Oxygen_11/tm.dat' w l lw 3,\
+workhome0.'pbe/Oxygen_21/tm.dat' w l lw 3,\
+workhome0.'pbe/Oxygen_31/tm.dat' w l lw 3,\
 }
