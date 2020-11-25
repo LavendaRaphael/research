@@ -18,10 +18,12 @@ set key height 0.5
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 #set xrange [532:546]
-set yrange [0:]
+#unset key
+#set yrange [0:]
 p \
-workhome0.'pbe/Oxygen_1/tm.dat' w l lw 3,\
-workhome0.'pbe/Oxygen_11/tm.dat' w l lw 3,\
-workhome0.'pbe/Oxygen_21/tm.dat' w l lw 3,\
-workhome0.'pbe/Oxygen_31/tm.dat' w l lw 3,\
+workhome0.'pbe/tmsftbroadave.dat' w l lw 3 lc ''.word(colors,2) t 'PBE' 
+#p \
+workhome0.'pbe/tm_tt.dat' u 1:3:(0.25) w circle
+#p for [i=1:32] \
+workhome0.'pbe/Oxygen_'.i.'/tm.dat' every ::1::2 u (i):2 t ''.i
 }

@@ -6,5 +6,6 @@ cd $work_dir
 rm -f tm_tt.dat
 for N in $loopfile
 do
-	cat Oxygen_${N}/tm.dat >> tm_tt.dat
+echo "$N `head -n 1 Oxygen_${N}/tm.dat`" >> tm_tt.dat
+#cat Oxygen_${N}/tm.dat >> tm_tt.dat
 done
