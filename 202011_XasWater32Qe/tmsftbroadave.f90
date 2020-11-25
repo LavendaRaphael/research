@@ -73,10 +73,11 @@
 !      norm = 88.3/area !tianff comment
       norm = norm_area/area !tianff add
 
-!      do i = 1, npts !tianff comment
-        do i = i1, i2 !tianff add
+      do i = 1, npts !tianff comment
+!        do i = i1, i2 !tianff add
 !         if((energy2(i) .ge. 532) .and. (energy2(i) .le. 546)) then !tianff comment
-           write(10,*) energy2(i),intensity2(i)*norm
+           write(10,*) energy2(i),intensity2(i)
+!           write(10,*) energy2(i),intensity2(i)*norm
 !         end if !tianff comment
       enddo
 
