@@ -1,9 +1,10 @@
 #!/bin/bash
-if [ $environmennt ]; then
+if [ $environment ]; then
+if $environment;then
     return
-else
-    environmennt=true
 fi
+fi
+environment=false
 echo "-----------------------------------------------------[~/tianff/codes/common/environment.sh]"
 shopt -s expand_aliases
 source ~/tianff/server/server.sh
@@ -34,8 +35,8 @@ mycluster=sbatch
 jobqueue=ssct
 maxppn=32
 module purge
-MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64
-FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib
+MKL_LIB_PATH=/opt/hpc/software/compiler/intel/intel-compiler-2017.5.239/mkl/lib/intel64/
+FFT_LIB_PATH=/public/software/mathlib/fftw/3.3.8/double/intel/lib/
 echo "MKL_LIB_PATH=$MKL_LIB_PATH"
 echo "FFT_LIB_PATH=$FFT_LIB_PATH"
 #source ~/tianff/myscript/compiler_intel-compiler-2017.5.239.sh
@@ -96,4 +97,5 @@ fi
 echo "myserver=$myserver"
 echo "mycluster=$mycluster"
 echo "maxppn=$maxppn"
+environment=true
 echo "========================================================================="

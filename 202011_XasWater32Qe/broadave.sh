@@ -1,14 +1,13 @@
 #!/bin/bash
-
 set -eo pipefail
-source ~/tianff/environment.sh
+source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 
+cd $work_dir
 rm -f tmsftbroad_tt.dat tmsftbroadave.dat
-for N in {1,}
-#for N in {1..32} 
+for N in $loopfile
 do
 	cat Oxygen_${N}/tmsftbroad.dat >> tmsftbroad_tt.dat
 done
 
-~/tianff/201903/tianff/xas-codes/tmsftbroadave.x
+${xascodes_bin}tmsftbroadave.x
 
