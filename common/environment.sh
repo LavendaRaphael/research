@@ -56,6 +56,7 @@ source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64
 elif [ "$myserver" = "SHTU" ]; then
 mycluster=pbs
 jobqueue=sbp_1
+maxppn=36
 module purge
 #module add compiler/intel/intel-compiler-2017.5.239
 #module add mpi/intelmpi/2017.4.239
