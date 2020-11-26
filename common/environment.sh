@@ -70,8 +70,10 @@ module add apps/git/2.9.4
 module list
 lmp_bin=~/0example/software/lammps-3Mar20/build/lmp
 echo "lmp_bin=${lmp_bin}"
-vasp_bin=~/tianff/software/vasp/vasp.6.1.0/bin/
+vasp_bin=~/tianff/software/vasp/vasp.6.1.2_patched/bin/
 echo "vasp_bin=${vasp_bin}"
+vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
+echo "vasp_pot=${vasp_pot}"
 
 #======================================[MAGIC3]
 elif [ "$myserver" = "MAGIC3" ]; then
