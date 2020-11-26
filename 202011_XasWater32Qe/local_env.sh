@@ -59,17 +59,17 @@ echo "pbe_dir=$pbe_dir"
 cohsex_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
 echo "cohsex_dir=$cohsex_dir"
 
-work_dir=$cohsex_dir
-#work_dir=$pbe_dir
+#work_dir=$cohsex_dir
+work_dir=$pbe_dir
 echo "work_dir=$work_dir"
 
-#subfile=pbe_sub.sh
+subfile=pbe_sub.sh
 #subfile=gw_sub.sh
 #subfile=xas_sub.sh
 echo "subfile=$subfile"
 
-loopfile=`seq 1 $O_num`
-#loopfile="1"
+#loopfile=`seq 1 $O_num`
+loopfile="8 14 31"
 echo "loopfile=$loopfile"
 echo ============================================================================
 

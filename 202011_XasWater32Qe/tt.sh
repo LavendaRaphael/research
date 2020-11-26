@@ -3,9 +3,12 @@ set -eo pipefail
 source ~/tianff/codes/202011_XasWater32Qe/local_env.sh
 
 cd $work_dir
-rm -f tm_tt.dat
+rm -f tmsftbroad_tt.dat
+rm -f tml1_O.dat
+rm -f eig_O.dat
 for N in $loopfile
 do
-echo "$N `head -n 1 Oxygen_${N}/tm.dat`" >> tm_tt.dat
-#cat Oxygen_${N}/tm.dat >> tm_tt.dat
+    cat Oxygen_${N}/tmsftbroad.dat >> tmsftbroad_tt.dat
+    echo "$N `head -n 1 Oxygen_${N}/tml1.dat`" >> tml1_O.dat
+    echo "$N `tail -n 14 Oxygen_${N}/temp/water.eig|head -n 1`" >> eig_O.dat
 done
