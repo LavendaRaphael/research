@@ -69,7 +69,7 @@ subfile=gw_sub.sh
 echo "subfile=$subfile"
 
 #loopfile=`seq 1 $O_num`
-loopfile="8 14 31"
+loopfile="8 31"
 echo "loopfile=$loopfile"
 echo ============================================================================
 
