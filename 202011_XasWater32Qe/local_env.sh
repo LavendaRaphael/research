@@ -61,14 +61,18 @@ echo "pbe_dir=$pbe_dir"
 cohsex_dir=~/tianff/202011_XasWater32Qe/server/test_cohsex/
 echo "cohsex_dir=$cohsex_dir"
 
-#work_dir=$cohsex_dir
-work_dir=$pbe_dir
+work_dir=$cohsex_dir
+#work_dir=$pbe_dir
 echo "work_dir=$work_dir"
 
 #subfile=pbe_sub.sh
-#subfile=gw_sub.sh
+subfile=gw_sub.sh
 #subfile=xas_sub.sh
-subfile=test_scf_sub.sh
+#subfile=test_scf_sub.sh
+#subfile=test_cp-scf_sub.sh
+#subfile=test_nscf_sub.sh
+#subfile=test_cp-nscf_sub.sh
+#subfile=test_cp-nscf-wf_sub.sh
 echo "subfile=$subfile"
 
 loopfile="1"
