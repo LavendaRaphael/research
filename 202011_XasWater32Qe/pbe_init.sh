@@ -12,7 +12,7 @@ do
 	cd Oxygen_${i}/
 	mkdir temp
     echo "OO  `head -n ${i} ${Templates_dir}snap.pos|tail -n 1`" >>  OO_pos_${i}.dat
-	echo "`head -n ${i} ${Templates_dir}snap.pos|tail -n 1`" >> fort.10
+	`head -n ${i} ${Templates_dir}snap.pos|tail -n 1` >> fort.10
 
 	for ((k = 1; k <= ${O_num}; k++))   #copy the O atomic positions
 	do
