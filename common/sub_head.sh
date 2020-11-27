@@ -14,6 +14,7 @@ if [ "$mycluster" = "pbs" ]; then
 #PBS -l nodes=${jobnodes}:ppn=${jobppn}
 #PBS -N ${jobname}
 #PBS -q ${jobqueue}
+#PBS -j oe
 cd \$PBS_O_WORKDIR
 eof
 elif [ "$mycluster" = "sbatch" ]; then
