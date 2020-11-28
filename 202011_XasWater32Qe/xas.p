@@ -4,7 +4,7 @@ colors='black red blue green brown'
 set term pdfcairo font "Arial,25" size 8*1,5*1
 #set term svg font "Arial-Bold,25" size 800,500
 
-mode=5
+mode=0
 #===============================[]
 if (mode==5) {
 workhome0="~/tianff/202011_XasWater32Qe/server/"
