@@ -54,31 +54,23 @@ script_dir=~/tianff/codes/202011_XasWater32Qe/
 echo "script_dir=${script_dir}"
 #=======================================================
 pbe_dir=~/tianff/202011_XasWater32Qe/server/pbe/
-#pbe_dir=~/tianff/202011_XasWater32Qe/server/test_pbe/
 echo "pbe_dir=$pbe_dir"
 
 cohsex_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
-#cohsex_dir=~/tianff/202011_XasWater32Qe/server/test_cohsex/
 echo "cohsex_dir=$cohsex_dir"
 
-#work_dir=$cohsex_dir
-work_dir=$pbe_dir
+work_dir=$cohsex_dir
+#work_dir=$pbe_dir
 echo "work_dir=$work_dir"
 
 #subfile=pbe_sub.sh
 #subfile=gw_sub.sh
-subfile=xas_sub.sh
-#subfile=test_scf_sub.sh
-#subfile=test_cp-scf_sub.sh
-#subfile=test_nscf_sub.sh
-#subfile=test_cp-nscf_sub.sh
-#subfile=test_cp-nscf-wf_sub.sh
+#subfile=xas_sub.sh
 echo "subfile=$subfile"
 
-#loopfile="1"
 loopfile=`seq 1 $O_num`
 #loopfile="8 14 31"
-#loopfile="1 2 3 4 5 6 7 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32"
+#loopfile="`seq 1 7` `seq 9 $O_num`"
 echo "loopfile=$loopfile"
 echo ============================================================================
 

@@ -9,6 +9,17 @@ rm -f eig_O.dat
 for N in $loopfile
 do
     cat Oxygen_${N}/tmsftbroad.dat >> tmsftbroad_tt.dat
-    echo "$N `head -n 1 Oxygen_${N}/tm.dat`" >> tml1_O.dat
-    echo "$N `tail -n 14 Oxygen_${N}/temp/water.eig|head -n 1`" >> eig_O.dat
+#    echo "$N `head -n 1 Oxygen_${N}/tm.dat`" >> tml1_O.dat
+#    echo "$N `tail -n 14 Oxygen_${N}/temp/water.eig|head -n 1`" >> eig_O.dat
 done
+cat > xas_alignorm.in <<eof
+datafile       "tmsftbroadsum.dat"
+e_align        535.0d0                         #eV
+area           1.d0
+e_begin        532.d0                          #eV
+e_end          546.d0                          #eV
+eof
+${xascodes_bin}tmsftbroadsum.x
+${xascodes_bin}xas_alignorm.x xas_alignorm.in
+mv tmsftbroadsum.dat.norm tmsftbroadalignorm.dat
+rm -f xas_alignorm.in

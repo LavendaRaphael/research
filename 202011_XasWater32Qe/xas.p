@@ -97,8 +97,7 @@ workhome0.'cohsex/tml1_O.dat' u 1:3:(0.25) w circle lc ''.word(colors,3) t 'COHS
 #===============================[]
 if (mode==0) {
 workhome0="~/tianff/202011_XasWater32Qe/server/"
-workhome1='~/tianff/202011_XasWater32Vasp/server/'
-set output workhome0."../log/XasWater32.pdf"
+set output workhome0."../log/XasWater.pdf"
 set samples 500
 set key box
 set key samplen 2
@@ -106,10 +105,12 @@ set key width 2
 set key height 0.5
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [532:550]
+set xrange [532:546]
 #unset key
 #set yrange [0:]
 p \
-workhome0.'pbe/tmsftbroadave.dat' w l lw 3 lc ''.word(colors,2) t 'PBE',\
-workhome0.'cohsex/tmsftbroadave.dat' w l lw 3 lc ''.word(colors,3) t 'COHSEX'
+workhome0.'pbe/tmsftbroadalignorm_32.dat' w l lw 3 lc ''.word(colors,2) t 'PBE_{32}',\
+workhome0.'cohsex/tmsftbroadalignorm_32.dat' w l lw 3 lc ''.word(colors,3) t 'COHSEX_{32}',\
+workhome0.'pbe/tmsftbroadalignorm_31.dat' w l lw 3 lc ''.word(colors,4) t 'PBE_{31}',\
+workhome0.'cohsex/tmsftbroadalignorm_31.dat' w l lw 3 lc ''.word(colors,5) t 'COHSEX_{31}'
 }
