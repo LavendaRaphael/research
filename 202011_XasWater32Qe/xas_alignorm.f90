@@ -1,6 +1,6 @@
 !==========================================================================================
 !===============================================================[VERSION]
-!2020.06.22
+!2020.12.01
 !===============================================================[NOTES]
 !===============================================================[USE]
 !./xas_alignorm.x xas_alignorm.in
@@ -10,6 +10,7 @@
 !area           10.d0
 !e_begin        532.d0                          #eV
 !e_end          546.d0                          #eV
+!predge_tolera  0.1                             #%
 !===============================================================[DATAFILE]
 !wernet2004_water.dat
 !===============================================================[OUTFILE]
@@ -33,7 +34,7 @@ integer (DP)                     :: ei_tot, i_begin, i_end
 !integer (DP), allocatable        ::
 !character (len=100), allocatable ::
 real (DP), allocatable           :: xas(:,:)
-real (DP)                        :: e_align, area, e_begin, e_end, xas_sum, e_onset
+real (DP)                        :: e_align, area, e_begin, e_end, xas_sum, e_onset, predge_tolera
 
 open (errfile_unit, file=errfile, status='replace')
 call system_clock (clock_start)
@@ -41,9 +42,9 @@ call system_clock (clock_start)
 call get_command_argument(1,infile)
 write (errfile_unit, leng//"'[READ INFILE]: "//trim(infile)//"')")
 open(infile_unit, file = infile, status = 'old')
-input_tot = 5
+input_tot = 6
 allocate(input_list(input_tot))
-input_list = (/'datafile','e_align','area','e_begin','e_end'/)
+input_list = (/'datafile','e_align','area','e_begin','e_end','predge_tolera'/)
 do i = 1, input_tot
 do while (.true.)
         read (infile_unit, *, iostat = ios) temp_char0
@@ -76,6 +77,10 @@ case (5)
         read (infile_unit, *) temp_char(1:2)
         write (errfile_unit, "(2A25)") trim(temp_char(1)), trim(temp_char(2))
         read (temp_char(2), *) e_end
+case (6)
+        read (infile_unit, *) temp_char(1:2)
+        write (errfile_unit, "(2A25)") trim(temp_char(1)), trim(temp_char(2))
+        read (temp_char(2), *) predge_tolera
 endselect
 rewind (infile_unit)
 enddo
@@ -102,10 +107,14 @@ enddo
 close(datafile_unit)
 !===============================================================[ALIGN TO PRE-EDGE]
 do i=2, ei_tot
-        if (xas(i,2) < xas(i-1,2)) exit
+        if (xas(i,2) < xas(i-1,2)) then
+            temp_real0=xas(i-1,2)/maxval(xas(:,2))
+            if (temp_real0 >predge_tolera) exit
+        endif
 enddo
 e_onset = xas(i-1,1)
 write(errfile_unit, '(A25,F25.10)') 'e_onset', e_onset
+write(errfile_unit, '(A25,F25.10)') 'predge/max', temp_real0
 xas(:,1) = xas(:,1) - e_onset + e_align
 !===============================================================[NORMALIZATION]
 do i = 1, ei_tot

@@ -11,4 +11,5 @@ do
 	sed -i "s/xNUMx/$N/g"  $subfile
 	./$subfile
 	cd ../
+    rm $subfile
 done

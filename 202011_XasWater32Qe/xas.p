@@ -1,4 +1,4 @@
-colors='black red blue green brown'
+colors='black red blue green cyan magenta yellow'
 
 #set term pdfcairo font "Arial,12"
 set term pdfcairo font "Arial,25" size 8*1,5*1
@@ -106,11 +106,12 @@ set key height 0.5
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [532:546]
-#unset key
-#set yrange [0:]
+set yrange [0:20]
 p \
-workhome0.'pbe/tmsftbroadalignorm_32.dat' w l lw 3 lc ''.word(colors,2) t 'PBE_{32}',\
-workhome0.'cohsex/tmsftbroadalignorm_32.dat' w l lw 3 lc ''.word(colors,3) t 'COHSEX_{32}',\
-workhome0.'pbe/tmsftbroadalignorm_31.dat' w l lw 3 lc ''.word(colors,4) t 'PBE_{31}',\
-workhome0.'cohsex/tmsftbroadalignorm_31.dat' w l lw 3 lc ''.word(colors,5) t 'COHSEX_{31}'
+workhome0.'../asist/zrsun/20201130_Expt_ambient.dat' u 1:2:(0.05) w circle lc ''.word(colors,1) t 'Exp.',\
+workhome0.'../asist/zrsun/20201201_XasWater32.dat.norm' w l lw 3 lc ''.word(colors,2) t 'COHSEX\_zrsun',\
+workhome0.'pbe/tmsftbroadalignorm_all.dat' w l lw 3 lc ''.word(colors,3) t 'PBE\_all',\
+workhome0.'cohsex/tmsftbroadalignorm_all.dat' w l lw 3 lc ''.word(colors,4) t 'COHSEX\_all',\
+workhome0.'pbe/tmsftbroadalignorm_no8.dat' w l lw 3 lc ''.word(colors,5) t 'PBE\_no8',\
+workhome0.'cohsex/tmsftbroadalignorm_no8.dat' w l lw 3 lc ''.word(colors,6) t 'COHSEX\_no8'
 }

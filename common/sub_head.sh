@@ -24,7 +24,7 @@ elif [ "$mycluster" = "sbatch" ]; then
 #SBATCH --ntasks-per-node=${jobppn}
 #SBATCH -J ${jobname}
 #SBATCH -p ${jobqueue}
-#SBATCH -o %x.o%j
+#SBATCH -o %x.oe%j
 eof
 else
     echo "ERROR: 'mycluster' not exist!"
