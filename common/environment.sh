@@ -16,6 +16,8 @@ cdl() {
     ll -a;
 }
 alias cpi="cp -i"
+software_bin=~/tianff/software/bin/
+echo "software_bin="${software_bin}
 #==============================================================[myserver]
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
