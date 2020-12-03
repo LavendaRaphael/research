@@ -1,6 +1,6 @@
 #!/bin/bash
-set -euo pipefail
 source ~/tianff/codes/common/environment.sh
+set -euo pipefail
 
 if [ ! -z ${local_env+x} ]; then
 if $local_env;then
