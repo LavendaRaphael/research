@@ -20,5 +20,6 @@ set xrange [514:528]
 unset key
 #set yrange [:]
 p for [i=17:32] \
-workhome0.'O_'.i.'/CORE_DIELECTRIC_IMAG.dat' w l
+workhome0.'O_'.i.'/CORE_DIELECTRIC_IMAG.dat' w l,\
+workhome0.'xas_ave.dat' w l
 }

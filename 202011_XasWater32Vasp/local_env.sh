@@ -1,12 +1,13 @@
 #!/bin/bash
-if [ $local_env ]; then
+set -euo pipefail
+source ~/tianff/codes/common/environment.sh
+
+if [ ! -z ${local_env+x} ]; then
 if $local_env;then
     return
 fi
 fi
 local_env=false
-set -eo pipefail
-source ~/tianff/codes/common/environment.sh
 echo "------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 O_num=32
 echo "O_num=$O_num"

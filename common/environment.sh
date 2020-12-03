@@ -1,5 +1,6 @@
 #!/bin/bash
-if [ $environment ]; then
+# 2020.23.03
+if [ ! -z ${environment+x} ]; then
 if $environment;then
     return
 fi

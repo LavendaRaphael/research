@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -euo pipefail
 source ~/tianff/codes/202011_XasWater32Vasp/local_env.sh
 
 jobname=xasxNUMx
