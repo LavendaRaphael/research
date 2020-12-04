@@ -39,8 +39,8 @@ rm -f xas_tt.dat
 for N in $loopfile
 do
     echo $N
-#    cat O_${N}/CORE_DIELECTRIC_IMAG.dat >> ../xas_tt.dat
-    cat O_${N}/xas_sft.dat >> xas_tt.dat
+    cat O_${N}/CORE_DIELECTRIC_IMAG.dat >> xas_tt.dat
+#    cat O_${N}/xas_sft.dat >> xas_tt.dat
 done
 echo "=============================================[ave]"
 cat > xas_ave.in <<eof
