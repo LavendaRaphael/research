@@ -13,7 +13,6 @@ do
 #    cat Oxygen_${N}/tmsftbroad.dat >> tmsftbroad_tt.dat
 #    echo "$N `head -n 1 Oxygen_${N}/tm.dat`" >> tml1_O.dat
 #    echo "$N `tail -n 14 Oxygen_${N}/temp/water.eig|head -n 1`" >> eig_O.dat
-    echo "$N `cat Oxygen_${N}/fort.777`" >> fort.777_tt
 done
 cat > xas_alignorm.in <<eof
 datafile       "tmsftbroadsum.dat"

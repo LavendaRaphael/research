@@ -11,4 +11,4 @@ cd $software_bin
 #ifort ${xascodes_dir}tmsftbroad.f90 -o tmsftbroad.x
 ifort ~/tianff/codes/202011_XasWater32Vasp/xas_ave.f90 -o xas_ave.x
 ifort ~/tianff/codes/202011_XasWater32Vasp/xas_alignorm.f90 -o xas_alignorm.x
-ifort ~/tianff/codes/202011_XasWater32Vasp/xas_sft.f90 -o xas_sft.x
+#ifort ~/tianff/codes/202011_XasWater32Vasp/xas_sft.f90 -o xas_sft.x

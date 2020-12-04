@@ -59,8 +59,8 @@ echo "pbe_dir=$pbe_dir"
 cohsex_dir=~/tianff/202011_XasWater32Qe/server/cohsex/
 echo "cohsex_dir=$cohsex_dir"
 
-work_dir=$cohsex_dir
-#work_dir=$pbe_dir
+#work_dir=$cohsex_dir
+work_dir=$pbe_dir
 echo "work_dir=$work_dir"
 
 #subfile=pbe_sub.sh
