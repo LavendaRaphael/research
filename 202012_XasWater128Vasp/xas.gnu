@@ -23,6 +23,18 @@ set xrange [532:546]
 set yrange [0:20]
 p \
 '~/tianff/202011_XasWater32Qe/asist/zrsun/20201130_Expt_ambient.dat' u 1:2:(0.05) w circle lc ''.word(colors,1) t 'Exp.',\
+workhome0.'../asist/zrsun/xas_alignorm.dat' w l lw 3 lc ''.word(colors,2) t 'COHSEX',\
+workhome0.'xas_alignorm.dat' w l lw 3 lc ''.word(colors,3) t 'SCH'
+}
+#===============================[]
+if (0==1) {
+set output workhome0."../log/XasWater128.pdf"
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [532:546]
+set yrange [0:20]
+p \
+'~/tianff/202011_XasWater32Qe/asist/zrsun/20201130_Expt_ambient.dat' u 1:2:(0.05) w circle lc ''.word(colors,1) t 'Exp.',\
 workhome2.'pbe/tmsftbroadalignorm_all.dat' w l lw 3 lc ''.word(colors,2) t 'PBE\_32',\
 workhome2.'cohsex/tmsftbroadalignorm_all.dat' w l lw 3 lc ''.word(colors,3) t 'COHSEX\_32',\
 workhome1.'xas_alignorm_nosft.dat' w l lw 3 lc ''.word(colors,4) t 'SCH\_32',\
