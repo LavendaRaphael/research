@@ -15,6 +15,6 @@ set ylabel "Intensity (Arb. Units)" offset 1,0
 unset ytics
 set xrange [280:310]
 p \
-workhome0.'../asist/XANES_Diamond/SUPERCELL_4x4x4/C_PARATEC_aligned_to_4x4x4.dat' u 1:2:(0.05) w circle lc ''.word(colors,1) t 'Exp.',\
+workhome0.'../asist/XANES_Diamond/SUPERCELL_4x4x4/C_XAS_aligned_to_4x4x4.dat' w l lw 3 lc ''.word(colors,1) t 'Exp.',\
 workhome0.'444/CORE_DIELECTRIC_IMAG.dat' w l lw 3 lc ''.word(colors,2) t 'SCH'
 }
