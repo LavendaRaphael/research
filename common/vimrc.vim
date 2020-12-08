@@ -1,3 +1,5 @@
+" Gnuplot scripts
+au BufNewFile,BufRead *.gnu         setf gnuplot
 "=======================[记录打开位置]
 if has("autocmd")                                                          
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif                                                        

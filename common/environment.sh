@@ -10,7 +10,7 @@ echo "-----------------------------------------------------[~/tianff/codes/commo
 shopt -s expand_aliases
 source ~/tianff/server/server.sh
 #======================================[vim]
-export VIMINIT='source ~/tianff/codes/common/vimrc.me'
+export VIMINIT='source ~/tianff/codes/common/vimrc.vim'
 #======================================[alias]
 cdl() {
     cd "${1}";
