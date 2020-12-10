@@ -14,6 +14,18 @@ set key noautotitle
 workhome1="~/tianff/202011_XasWater32Qe/server/"
 workhome0="~/tianff/202011_XasWater32Vasp/server/"
 #===============================[]
+if (1==1) {
+set output workhome0."../log/XasWater32.pdf"
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [532:546]
+set yrange [0:20]
+p \
+workhome1.'../asist/zrsun/20201130_Expt_ambient.dat' u 1:2:(0.05) w circle lc ''.word(colors,1) t 'Exp.',\
+workhome1.'cohsex/tmsftbroadalignorm_all.dat' w l lw 3 lc ''.word(colors,3) t 'COHSEX',\
+workhome0.'xas_alignorm_nosft.dat' w l lw 3 lc ''.word(colors,2) t 'SCH'
+}
+#===============================[]
 if (0==1) {
 set output workhome0."../log/XasWater32.pdf"
 set xlabel "Energy (eV)" offset 0,0
