@@ -29,8 +29,6 @@ export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
 echo "DISPLAY="$DISPLAY
 export PATH=/home/tianff/.local/bin:$PATH
 export PATH=/home/tianff/tianff/software/vasp/vtstscripts-966:$PATH
-export vaspkit=~/tianff/software/vasp/vaspkit.1.2.1/bin
-echo "vaspkit="$vaspkit
 
 #======================================[KUNLUN]
 elif [ "$myserver" = "KUNLUN" ]; then
