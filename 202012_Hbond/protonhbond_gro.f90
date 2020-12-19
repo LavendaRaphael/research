@@ -191,10 +191,14 @@ vecoh_cno = 0
 do i=1, proton_tot
     read (datafile_unit, *) temp_char(1:3), proton_pos(i, 1:3)
 enddo
-temp_real(8:10)=proton_pos(197,1:3)
 do i=proton_tot+1, atom_tot, water_form(0)
+    if (i<10000) then
+        temp_int0 = 3
+    else
+        temp_int0 = 2
+    endif
     do j = 1, water_form(0)
-        read (datafile_unit, *) temp_char(1:3), water_pos(j,1:3)
+        read (datafile_unit, *) temp_char(1:temp_int0), water_pos(j,1:3)
     enddo
     vecoh_water = 0
     loop1: do k=1, cno_tot
