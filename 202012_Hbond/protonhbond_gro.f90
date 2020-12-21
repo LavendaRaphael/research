@@ -170,7 +170,7 @@ allocate(vecoh_cno(1:cno_tot))
 !===============================================================[OUTPUT]
 write (errfile_unit, leng//"'[OUTPUT]: "//trim(outfile)//"')")
 open (outfile_unit, file = outfile, status = 'replace')
-write (outfile_unit, '(A1,A24,4A25)') '#',"time",'donor/acceptor','Proton','H','O'
+write (outfile_unit, '(A1,A14,4A15)') '#',"time",'donor/acceptor','Proton','H','O'
 
 do while (.true.)
 read (datafile_unit, *, iostat=ios) temp_char(1:2), time_onset
@@ -185,7 +185,7 @@ endif
 if (time_onset > time_range(2)) then
     exit
 endif
-write (errfile_unit, '(F25.10)') time_onset
+write (errfile_unit, '(F15.5)') time_onset
 
 vecoh_cno = 0
 do i=1, proton_tot
@@ -219,7 +219,7 @@ do i=proton_tot+1, atom_tot, water_form(0)
             endif
             costheta_hda = dot_product(vec_d2a, water_pos(water_form(1+j),:))
             if (costheta_hda <= costheta_cut) cycle
-            write (outfile_unit, '(F25.10,A25,3I25)') time_onset, 'Acceptor', cno_idonset, i+j, i
+            write (outfile_unit, '(F15.5,A15,3I15)') time_onset, 'Acceptor', cno_idonset, i+j, i
             cycle loop1
         enddo
         vec_d2a = -vec_d2a
@@ -230,7 +230,7 @@ do i=proton_tot+1, atom_tot, water_form(0)
             endif
             costheta_hda = dot_product(proton_pos (cno_idonset+j,1:3), vec_d2a)
             if (costheta_hda <= costheta_cut) cycle
-            write (outfile_unit, '(F25.10,A25,3I25)') time_onset, 'Donor', cno_idonset, cno_idonset+j, i
+            write (outfile_unit, '(F15.5,A15,3I15)') time_onset, 'Donor', cno_idonset, cno_idonset+j, i
             cycle loop1
         enddo
     enddo loop1
