@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/tianff/myscript/environment.sh
+source ~/tianff/codes/common/environment.sh
 set -euo pipefail
 
 rm -f e0_a.dat
@@ -23,7 +23,7 @@ Direct
 
 !
 echo "a= $i"
-${vasp_bin}vasp_std
+${software_bin}vasp_std
 E=`awk '/F=/ {print $0}' OSZICAR`
 echo $i $E  >>e0_a.dat
 done
