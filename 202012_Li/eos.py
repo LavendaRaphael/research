@@ -1,11 +1,9 @@
-#!/usr/bin/env python
-# Fit equations of state (EOS) to energy vs volume curves and optionally plot the results
-# Davide Ceresoli <dceresoli@gmail.com>, 03/22/2011
-# Inspired by ase.utils.eosase2
-# TODO: Keane
+# Fit equations of state (EOS) to energy vs volume curves and plot the results.
+# Modified from http://www.jyhuang.idv.tw/JYH_QESimulation_files/1_tutorials/1a_stropt/eos-fit.py
+# 2020.12.25 @tianff
 
 import sys, numpy, math
-from scipy.optimize import leastsq
+from scipy.optimize import least_squares
 
 # Murnaghan equation of state
 def eos_murnaghan(params, vol):
@@ -43,24 +41,8 @@ def eos_vinet(params, vol):
     return E
 
 
-# Customized input with default and accepted values
-def myinput(prompt, default, accepted):
-    while True:
-        res = input(prompt + " [default=%s]: " % (default))
-        if res == '': res = default
-        if res in accepted:
-            break
-        else:
-            print("accepted values:", accepted)
-    return res
-
-
-print("Welcome to eos-fit.py")
-print()
 #fname = input("Filename containing energy vs volume [volume.dat]: ")
-#if fname == '': fname = 'volume.dat'
-fname = input("Filename containing energy vs volume [e0_v.dat]: ")
-if fname == '': fname = 'e0_v.dat'
+fname = 'e0_a.dat'
 
 try:
     f = open(fname, 'rt')
@@ -70,14 +52,16 @@ except IOError:
 
 # read data from file
 print()
-print("Data read from file:")
+print("Data read from file:",fname)
 vol = []
 ene = []
 while True:
     line = f.readline().strip()
     if line == '': break
     if line[0] == '#' or line[0] == '!': continue
-    v, e = [float(x) for x in line.split()[:2]]
+#    v, e = [float(x) for x in line.split()[:2]]
+    v = float(line.split()[0])**3
+    e = float(line.split()[5])
     vol.append(v)
     ene.append(e)
     print(v, e)
@@ -88,27 +72,8 @@ f.close()
 vol = numpy.array(vol)
 ene = numpy.array(ene)
 
-# further questions
-is_volume = True
-ans = myinput("Volume or lattice spacing (vol/latt)", "vol", ["vol", "latt"])
-is_volume = (ans == 'vol')
-
-if is_volume:
-    vol_unit = myinput("Volume units (ang3/bohr3)", "ang3", ["ang3", "bohr3"])    
-    if vol_unit == "bohr3": vol *= 0.14818471    # convert to angstrom^3
-else:
-    vol_unit = myinput("Lattice units (ang/bohr)", "ang", ["ang", "bohr"])    
-    if vol_unit == "bohr": vol *= 0.52917721     # convert to angstrom
-    latt = myinput("Lattice type (sc/fcc/bcc)", "sc", ["sc", "bcc", "fcc"])
-    fact = 1.0
-    if latt == "fcc": fact = 0.25
-    if latt == "bcc": fact = 0.5
-    # lattice to volume
-    vol = fact * vol**3
-
-ene_unit = myinput("Energy units (eV/Ry/Ha)", "eV", ["eV", "Ry", "Ha"])
-if ene_unit == "Ry": ene *= 13.605692            # convert to eV
-if ene_unit == "Ha": ene *= 27.211383            # convert to eV
+vol_unit = "ang3"
+ene_unit = "eV"
 print()
 
 # fit a parabola to the data and get inital guess for equilibirum volume
@@ -128,23 +93,24 @@ def print_params(label, params):
     print(label, ": B0 = %f GPa" % (B0*160.21765))
     print(label, ": Bp = %f" % (Bp))
     print(label, ": V0 = %f angstrom^3" % (V0))
+    print(label, ": a0 = %f angstrom" % (V0**(1.0/3.0)))
     print()
 
 # fit the equations of state
 target = lambda params, y, x: y - eos_murnaghan(params, x)
-murn, ier = leastsq(target, x0, args=(ene,vol))
+murn = least_squares(target, x0, args=(ene,vol), method='lm').x
 print_params("Murnaghan", murn)
 
 target = lambda params, y, x: y - eos_birch_murnaghan(params, x)
-birch_murn, ier = leastsq(target, x0, args=(ene,vol))
+birch_murn = least_squares(target, x0, args=(ene,vol), method='lm').x
 print_params("Birch-Murnaghan", birch_murn)
 
 target = lambda params, y, x: y - eos_birch(params, x)
-birch, ier = leastsq(target, x0, args=(ene,vol))
+birch = least_squares(target, x0, args=(ene,vol), method='lm').x
 print_params("Birch", birch)
 
 target = lambda params, y, x: y - eos_vinet(params, x)
-vinet, ier = leastsq(target, x0, args=(ene,vol))
+vinet = least_squares(target, x0, args=(ene,vol), method='lm').x
 print_params("Vinet", vinet)
 
 
@@ -155,7 +121,8 @@ except ImportError:
     sys.exit(0)
 
 # plotting
-ans = myinput("Do you want to plot the result (yes/no)", "yes", ["yes", "no"])
+#ans = myinput("Do you want to plot the result (yes/no)", "yes", ["yes", "no"])
+ans = "yes"
 if ans == "no": sys.exit(0)
 
 import pylab
