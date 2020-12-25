@@ -23,7 +23,7 @@ Direct
 
 !
 echo "a= $i"
-${software_bin}vasp_std
+mpirun ${software_bin}vasp_std
 E=`awk '/F=/ {print $0}' OSZICAR`
 echo $i $E  >>e0_a.dat
 done
