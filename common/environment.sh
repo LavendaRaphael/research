@@ -61,15 +61,15 @@ mycluster=pbs
 jobqueue=sbp_1
 maxppn=36
 module purge
+module add compiler/intel/composer_xe_2019.1.053
+module add mpi/intelmpi/2019.7
+module add apps/gnuplot/5.0.6
+module add apps/git/2.9.4
 #module add compiler/intel/intel-compiler-2017.5.239
 #module add mpi/intelmpi/2017.4.239
 #source /public/spst/software/profile.d/compiler_intel-compiler-2017.5.239.sh
 #source /public/spst/software/profile.d/mpi_intelmpi-2017.4.239.sh
 #module add mpi/intelmpi/2019.1.144
-module add compiler/intel/composer_xe_2019.1.053
-module add mpi/intelmpi/2019.7
-module add apps/gnuplot/5.0.6
-module add apps/git/2.9.4
 module list
 lmp_bin=~/0example/software/lammps-3Mar20/build/lmp
 echo "lmp_bin=${lmp_bin}"
