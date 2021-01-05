@@ -1,5 +1,6 @@
 # Fit equations of state (EOS) to energy vs volume curves and plot the results.
 # Modified from http://www.jyhuang.idv.tw/JYH_QESimulation_files/1_tutorials/1a_stropt/eos-fit.py
+# Only for simple cubic !!
 # 2020.12.25 @tianff
 
 import sys, numpy, math
