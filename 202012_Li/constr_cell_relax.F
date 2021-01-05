@@ -41,7 +41,7 @@
 
 !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>[]
 !-----------------------------[version]
-! 2020.12.28 @tianff
+! 2021.01.05 @tianff
 !-----------------------------[notes]
 ! Only for orthogonal cell!
 !-----------------------------[ref]
@@ -49,21 +49,20 @@
 !-----------------------------[OPTCELL]
 ! 1 0 0        # x y z
 !-------------------------------------
-    REAL(q) SAVE(3)
+    REAL(q) fcell_bak(3,3)
     LOGICAL FILFLG
     INTEGER ICELL(3)
+    INTEGER I
 
     INQUIRE(FILE='OPTCELL',EXIST=FILFLG)
     IF (FILFLG) THEN
-        OPEN(67,FILE='OPTCELL',FORM='FORMATTED',STATUS='OLD')
-        READ(67,"(3I1)") (ICELL(I),I=1,3)
+        OPEN(67,FILE='OPTCELL',STATUS='OLD')
+        READ(67,*) ICELL
         CLOSE(67)
+        fcell_bak = FCELL
+        FCELL = 0.0d0
         DO I=1,3
-            SAVE(I)=FCELL(I,I)
-        ENDDO
-        FCELL=0.0d0
-        DO I=1,3
-            IF (ICELL(I)==1) FCELL(I,I)=SAVE(I)
+            IF (ICELL(I)==1) FCELL(I,I)=fell_bak(I,I)
         ENDDO
     ENDIF
 !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
