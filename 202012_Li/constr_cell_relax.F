@@ -62,7 +62,7 @@
         fcell_bak = FCELL
         FCELL = 0.0d0
         DO I=1,3
-            IF (ICELL(I)==1) FCELL(I,I)=fell_bak(I,I)
+            IF (ICELL(I)==1) FCELL(I,I)=fcell_bak(I,I)
         ENDDO
     ENDIF
 !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
