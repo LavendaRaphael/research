@@ -19,6 +19,8 @@ cdl() {
 alias cpi="cp -i"
 software_bin=~/tianff/software/bin/
 echo "software_bin="${software_bin}
+vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
+echo "vasp_pot=${vasp_pot}"
 #==============================================================[myserver]
 #======================================[MYUBUNTU]
 if [ "$myserver" = "MYUBUNTU" ]; then
@@ -47,8 +49,6 @@ module load mpi/intelmpi/2017.4.239
 module load mathlib/lapack/intel/3.8.0
 module add apps/gnuplot/5.0.5/gcc-7.3.1
 module list
-vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
-echo "vasp_pot=${vasp_pot}"
 
 #======================================[SPST]
 elif [ "$myserver" = "SPST" ]; then
@@ -74,8 +74,6 @@ module add apps/git/2.9.4
 #source /public/spst/software/profile.d/mpi_intelmpi-2017.4.239.sh
 #module add mpi/intelmpi/2019.1.144
 module list
-vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
-echo "vasp_pot=${vasp_pot}"
 
 #======================================[MAGIC3]
 elif [ "$myserver" = "MAGIC3" ]; then
@@ -85,7 +83,7 @@ export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_l
 export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
 #======================================[DEBUG]
 else
-    echo "ERROR: 'mycluster' not exist!"
+    echo "ERROR: 'myserver' not exist!"
     exit
 fi
 #==========================================================[mycluster]
