@@ -52,6 +52,9 @@ echo "vasp_pot=${vasp_pot}"
 
 #======================================[SPST]
 elif [ "$myserver" = "SPST" ]; then
+mycluster=pbs
+jobqueue=batch
+maxppn=24
 source /opt/intel/bin/compilervars.sh intel64
 source /opt/intel/impi/2017.2.174/bin64/mpivars.sh intel64 
 
@@ -98,6 +101,7 @@ else
 fi
 echo "myserver=$myserver"
 echo "mycluster=$mycluster"
+echo "jobqueue=$jobqueue"
 echo "maxppn=$maxppn"
 environment=true
 echo "========================================================================="
