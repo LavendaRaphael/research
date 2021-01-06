@@ -22,8 +22,20 @@ echo "software_bin="${software_bin}
 vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
 echo "vasp_pot=${vasp_pot}"
 #==============================================================[myserver]
+#--------------------------------------[SHTU-MD]
+if [ "$myserver" = "SHTU-MD" ]; then
+mycluster=pbs
+jobqueue=spst-lab
+maxppn=14
+module purge
+module add compiler/intel/composer_xe_2019.1.053
+module add mpi/intelmpi/2019.7
+module add apps/gnuplot/5.0.6
+module add apps/git/2.9.4
+module list
+
 #======================================[MYUBUNTU]
-if [ "$myserver" = "MYUBUNTU" ]; then
+elif [ "$myserver" = "MYUBUNTU" ]; then
 mycluster=none
 maxppn=2
 source /opt/intel/parallel_studio_xe_2020.2.108/psxevars.sh
