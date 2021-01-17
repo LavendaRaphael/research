@@ -75,6 +75,8 @@ elif [ "$myserver" = "SHTU" ]; then
 mycluster=pbs
 jobqueue=sbp_1
 maxppn=36
+#jobqueue=spst_pub
+#maxppn=24
 module purge
 module add compiler/intel/composer_xe_2019.1.053
 module add mpi/intelmpi/2019.7

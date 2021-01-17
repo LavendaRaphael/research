@@ -1,6 +1,6 @@
 #!/bin/bash
-set -eo pipefail
-source ~/tianff/scripts/environment.sh
+source ~/tianff/codes/common/environment.sh
+set -euo pipefail
 
 rm -f CHG
 rm -f CHGCAR
