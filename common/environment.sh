@@ -97,6 +97,8 @@ jobqueue=snode
 maxppn=32
 module purge
 module add intel/2019
+module add lib/fftw/intel
+module add lib/lapack
 module list
 #export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_libraries_2019.4.243/linux/mkl/lib/intel64
 #export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
