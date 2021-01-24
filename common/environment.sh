@@ -92,28 +92,24 @@ module list
 #======================================[MAGIC3]
 elif [ "$myserver" = "MAGIC3" ]; then
 module add intel/2019 
-workhome=/public/home/users/shtu011/tianff/201903/tianff
-export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_libraries_2019.4.243/linux/mkl/lib/intel64
-export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
+mycluster=bsub
+jobqueue=snode
+maxppn=32
+module purge
+module add intel/2019
+module list
+#export MKL_LIB_PATH=/public/home/users/app/compiler/intel-2019.4/compilers_and_libraries_2019.4.243/linux/mkl/lib/intel64
+#export FFT_LIB_PATH=/public/home/users/app/lib/fftw/intel/double/lib
 #======================================[DEBUG]
 else
     echo "ERROR: 'myserver' not exist!"
     exit
 fi
-#==========================================================[mycluster]
-if [ "$mycluster" = "pbs" ]; then
-    alias jobsub="qsub"
-elif [ "$mycluster" = "sbatch" ]; then
-    alias jobsub="sbatch <"
-elif [ "$mycluster" = "none" ]; then
-    echo ""
-else
-    echo "ERROR: 'mycluster' not exist!"
-    exit
-fi
+
 echo "myserver=$myserver"
 echo "mycluster=$mycluster"
 echo "jobqueue=$jobqueue"
 echo "maxppn=$maxppn"
+
 environment=true
 echo "========================================================================="

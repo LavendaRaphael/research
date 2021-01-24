@@ -5,9 +5,6 @@ set -euo pipefail
 jobname=test
 ncore=36
 source ~/tianff/codes/common/sub_head.sh
-if [ -f "INCAR" ]; then
-    sed -i "/NCORE/c\NCORE = $[($maxppn/2)]" INCAR
-fi
 #========================================[main script]
 cat >> ${jobname}.sh<<eof
 #mpirun ${software_bin}intelmpi_test.x
