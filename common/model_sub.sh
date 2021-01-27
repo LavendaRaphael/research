@@ -3,7 +3,7 @@ source ~/tianff/codes/common/environment.sh
 set -euo pipefail
 
 jobname=test
-ncore=36
+ncore=$[${mappn}*3]
 source ~/tianff/codes/common/sub_head.sh
 #========================================[main script]
 cat >> ${jobname}.sh<<eof
