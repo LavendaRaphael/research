@@ -87,6 +87,12 @@ module add apps/git/2.9.4
 #source /public/spst/software/profile.d/compiler_intel-compiler-2017.5.239.sh
 #source /public/spst/software/profile.d/mpi_intelmpi-2017.4.239.sh
 #module add mpi/intelmpi/2019.1.144
+#module add 7/compiler/intel_2019.5
+#module add 7/mpi/intel_2019.5 # no license
+#module add 7/compiler/intel_2019
+#module add 7/mpi/intel_2019 # 运行报错
+module add 7/mathlib/fftw3-double_3.3.8
+module add mathlib/lapack/3.4.2/intel
 module list
 
 #======================================[MAGIC3]
