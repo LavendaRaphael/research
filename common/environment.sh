@@ -22,6 +22,9 @@ vasp_pot=~/tianff/software/vasp/potpaw_PBE.54/
 echo "vasp_pot=${vasp_pot}"
 #---------------------------------------------[myserver]
 source ~/tianff/server/server.sh
+#---------------------------------------------[shopt]
+shopt -s direxpand #启用目录变量tab扩展
+shopt -s expand_aliases #启用非交互脚本alias
 
 environment='pass'
 echo "========================================================================="
