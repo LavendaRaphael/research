@@ -13,6 +13,7 @@ cat >> ${jobname}.sh<<eof
 echo "TotalTime \$((\${SECONDS} / 60)) m \$((\${SECONDS} % 60)) s."
 eof
 
+shopt -s expand_aliases
 if true;then
     jobsub ${jobname}.sh
 fi

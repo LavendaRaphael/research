@@ -9,7 +9,7 @@ jobppn=$[($ncore/$jobnodes)+($ncore%$jobnodes>0)]
 echo "jobppn=$jobppn"
 
 #========================================[mycluster]
-if [ "$mycluster" = "pbs" ]; then
+if [ "$mycluster" = "qsub" ]; then
     cat > ${jobname}.sh <<eof
 #!/bin/bash
 #PBS -l nodes=${jobnodes}:ppn=${jobppn}
@@ -37,7 +37,6 @@ elif [ "$mycluster" = "bsub" ]; then
 #BSUB -J ${jobname}
 eof
 
-
 else
     echo "ERROR: 'mycluster' not exist!"
     exit
@@ -46,15 +45,15 @@ fi
 #=========================================================[head]
 cat >>${jobname}.sh<<eof
 
-source ~/tianff/codes/common/environment.sh
 set -euo pipefail
+source ~/tianff/codes/common/environment.sh
 SECONDS=0
 mpirun ${software_bin}intelmpi_test.x
 
 eof
 
 #==========================================================[jobsub]
-if [ "$mycluster" = "pbs" ]; then
+if [ "$mycluster" = "qsub" ]; then
     alias jobsub="qsub"
 elif [ "$mycluster" = "sbatch" ]; then
     alias jobsub="sbatch <"
