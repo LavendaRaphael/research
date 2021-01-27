@@ -38,6 +38,35 @@
 !      FCELL=0   ! F90 style: set the whole array to zero
 !      FCELL(3,3)=SAVE
 
+
+!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>[]
+!-----------------------------[version]
+! 2021.01.05 @tianff
+!-----------------------------[notes]
+! Only for orthogonal cell!
+!-----------------------------[ref]
+! https://riptutorial.com/fortran/example/3663/implicit-variable-types
+!-----------------------------[OPTCELL]
+! 1 0 0        # x y z
+!-------------------------------------
+    REAL(q) fcell_bak(3,3)
+    LOGICAL FILFLG
+    INTEGER ICELL(3)
+    INTEGER I
+
+    INQUIRE(FILE='OPTCELL',EXIST=FILFLG)
+    IF (FILFLG) THEN
+        OPEN(67,FILE='OPTCELL',STATUS='OLD')
+        READ(67,*) ICELL
+        CLOSE(67)
+        fcell_bak = FCELL
+        FCELL = 0.0d0
+        DO I=1,3
+            IF (ICELL(I)==1) FCELL(I,I)=fcell_bak(I,I)
+        ENDDO
+    ENDIF
+!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
       RETURN
       END SUBROUTINE
 
