@@ -66,5 +66,5 @@ fi
 
 #==========================================================[vasp]
 if [ -f "INCAR" ]; then
-    sed -i "/NCORE/c\NCORE = $[($maxppn/2)]" INCAR
+    sed -i "/NCORE/c\ NCORE = $[($maxppn/2)]" INCAR
 fi
