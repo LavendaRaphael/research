@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+jobname=tianff_${jobname}
 echo "jobname=${jobname}"
 echo "ncore=$ncore"
 jobnodes=$[($ncore/$maxppn)+($ncore%$maxppn>0)]
@@ -51,18 +52,6 @@ SECONDS=0
 mpirun ${software_bin}intelmpi_test.x
 
 eof
-
-#==========================================================[jobsub]
-if [ "$mycluster" = "qsub" ]; then
-    alias jobsub="qsub"
-elif [ "$mycluster" = "sbatch" ]; then
-    alias jobsub="sbatch <"
-elif [ "$mycluster" = "bsub" ]; then
-    alias jobsub="bsub <"
-else
-    echo "ERROR: 'mycluster' not exist!"
-    exit
-fi
 
 #==========================================================[vasp]
 if [ -f "INCAR" ]; then
