@@ -1,10 +1,12 @@
-" Gnuplot scripts
+"----------------------------------[Gnuplot]
 au BufNewFile,BufRead *.gnu         setf gnuplot
-"=======================[记录打开位置]
+"----------------------------------[记录打开位置]
 if has("autocmd")                                                          
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif                                                        
 endif 
-"================================
+"----------------------------------
+set nosmartindent "自动缩进
+set noautoindent
 set tw=0 "断行
 colorscheme evening "主题
 set hlsearch "搜索高亮

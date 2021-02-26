@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-jobname=tianff_${jobname}
+jobname=tff_${jobname}
 echo "jobname=${jobname}"
 echo "ncore=$ncore"
 jobnodes=$[($ncore/$maxppn)+($ncore%$maxppn>0)]
