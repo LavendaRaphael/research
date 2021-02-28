@@ -49,7 +49,6 @@ cat >>${jobname}.sh<<eof
 set -euo pipefail
 source ~/tianff/codes/common/environment.sh
 SECONDS=0
-mpirun ${software_bin}intelmpi_test.x
 
 eof
 
