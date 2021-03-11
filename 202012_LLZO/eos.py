@@ -91,6 +91,7 @@ x0 = [E0, B0, Bp, V0]
 def print_params(label, params):
     E0, B0, Bp, V0 = params
     print(label, ": E0 = %f eV" % (E0))
+    print(label, ": B0 = %f eV*ang^-3" % (B0))
     print(label, ": B0 = %f GPa" % (B0*160.21765))
     print(label, ": Bp = %f" % (Bp))
     print(label, ": V0 = %f angstrom^3" % (V0))
