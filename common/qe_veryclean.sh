@@ -1,42 +1,48 @@
 #!/bin/bash
-set -eo pipefail
+set -euo pipefail
 
-#rm -rf cp_lambda.dat
-#rm -rf cp-nscf.in
-#rm -rf cp-nscf.out
-#rm -rf cp-nscf-wf.in
-#rm -rf cp-nscf-wf.out
-#rm -rf cp-scf.in
-#rm -rf cp-scf.out
-#rm -rf cp_wf.dat
-rm -rf diag_lambda.dat
-rm -rf eigc.dat
-rm -rf eig.dat
-#rm -rf fort.10
-#rm -rf fort.11
-#rm -rf fort.12
-#rm -rf fort.13
-rm -rf fort.20
-rm -rf fort.407
-rm -rf fort.408
-#rm -rf fort.777
-rm -rf g.dat
-#rm -rf gw.in
-#rm -rf gw.out
-#rm -rf gw.sh
-rm -rf node
-#rm -rf nscf.in
-#rm -rf nscf.out
-#rm -rf OO_pos_1.dat
-#rm -rf outgw1.o710876
-#rm -rf outpbe1.o710843
-#rm -rf outxas1.o711101
-#rm -rf pbe.sh
-#rm -rf scf.in
-#rm -rf scf.out
-rm -rf temp
-#rm -rf tm.dat
-#rm -rf tmsftbroad.dat
-#rm -rf tmsft.dat
-#rm -rf xas.out
-#rm -rf xas.sh
+ rm -rf cp_lambda.dat    */cp_lambda.dat  
+#rm -rf cp-nscf.in       */cp-nscf.in     
+#rm -rf cp-nscf.out      */cp-nscf.out    
+#rm -rf cp-nscf-wf.in    */cp-nscf-wf.in  
+#rm -rf cp-nscf-wf.out   */cp-nscf-wf.out 
+#rm -rf cp-scf.in        */cp-scf.in      
+#rm -rf cp-scf.out       */cp-scf.out     
+ rm -rf cp_wf.dat        */cp_wf.dat      
+ rm -rf diag_lambda.dat  */diag_lambda.dat
+ rm -rf eigc.dat         */eigc.dat       
+ rm -rf eig.dat          */eig.dat        
+#rm -rf fort.10          */fort.10        
+#rm -rf fort.11          */fort.11        
+#rm -rf fort.12          */fort.12        
+#rm -rf fort.13          */fort.13        
+#rm -rf fort.20          */fort.20        
+#rm -rf fort.407         */fort.407       
+#rm -rf fort.408         */fort.408       
+#rm -rf fort.777         */fort.777       
+ rm -rf g.dat            */g.dat          
+ rm -rf gw_sub.sh        */gw_sub.sh     
+#rm -rf gw.in            */gw.in          
+#rm -rf gw.out           */gw.out         
+#rm -rf gw*.sh           */gw*.sh          
+ rm -rf node             */node           
+#rm -rf nscf.in          */nscf.in        
+#rm -rf nscf.out         */nscf.out       
+#rm -rf OO_pos_1.dat     */OO_pos_1.dat   
+ rm -rf outgw*.o*        */outgw*.o*      
+ rm -rf outpbe*.o*       */outpbe*.o*     
+ rm -rf outxas*.o*       */outxas*.o*     
+ rm -rf pbe_sub.sh       */pbe_sub.sh    
+#rm -rf pbe*.sh          */pbe*.sh         
+ rm -rf pbe.sh           */pbe.sh
+ rm -rf pbe*.o*          */pbe*.o*
+#rm -rf scf.in           */scf.in         
+#rm -rf scf.out          */scf.out        
+ rm -rf slurm*.out       */slurm*.out     
+ rm -rf temp             */temp           
+#rm -rf tm.dat           */tm.dat         
+#rm -rf tmsftbroad.dat   */tmsftbroad.dat 
+#rm -rf tmsft.dat        */tmsft.dat      
+#rm -rf xas.out          */xas.out        
+#rm -rf xas*.sh          */xas*.sh        
+ rm -rf xas_sub.sh       */xas_sub.sh     
