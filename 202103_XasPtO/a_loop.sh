@@ -3,8 +3,6 @@ homedir=`find ~ -name 'server.me.sh'|xargs dirname`/
 source ${homedir}codes/common/environment.sh
 set -euo pipefail
 
-cd ${homedir}group/202103_XasPtO/server/Pt/Pt-a1b1c1_e500k0.25/
-
 i_pred=$(awk 'NR-2==0  {print $1}' template/POSCAR|tr -d '\r')
 for (( i = -20; i <= 20; i++))
 do
