@@ -3,6 +3,7 @@ homedir=`find ~ -name 'server.me.sh'|xargs dirname`/
 source ${homedir}codes/common/environment.sh
 set -euo pipefail
 
+cd ${homedir}group/202103_XasPtO/server/Pt/Pt-a1b1c1_e500k0.25/
 rm -f e0_a.dat
 for i in *
 do
