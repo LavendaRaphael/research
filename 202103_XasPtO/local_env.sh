@@ -13,8 +13,8 @@ echo "--------------------------------------------------------------------------
 
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/
-  work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/
-# work_dir=${homedir}group/202103_XasPtO/server/
+# work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/
+  work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/
 echo "work_dir=$work_dir"
 
 O_num=$(awk 'NR-7==0 {print $1+$2}' ${work_dir}template/POSCAR)
