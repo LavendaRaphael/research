@@ -12,9 +12,9 @@ local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/
-  work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/
+# work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/
-# work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/
+ work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/
 echo "work_dir=$work_dir"
 
 O_num=$(awk 'NR-7==0 {print $1+$2}' ${work_dir}template/POSCAR)
@@ -25,7 +25,7 @@ echo "subfile=$subfile"
 
 # loopfile="1"
   loopfile=`seq 1 $O_num`
-# loopfile="8 14 31"
+# loopfile="2 3 4 6 13 15 22"
 echo "loopfile=$loopfile"
 echo "#=========================================================================<<<"
 
