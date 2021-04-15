@@ -7,10 +7,50 @@ set key height 0.5
 set key noautotitle
 set encoding iso_8859_1
 
-#-------------------------------------------------------------------------------------[]
-if (1==1) {
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
+
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/xas_alignorm.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas_hch/xas_alignorm.dat'
+titl1='Pt-111p16\_O4\_vac\_fch'
+titl2='Pt-111p16\_O4\_vac\_hch'
+outfile=outdir."Pt-111_O_vac/Pt-111p16s4_O4_vac15/Xas.Pt\-111p16_O4_vac.fch_hch.pdf"
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [526:546]
+set yrange [0:0.18]
+p \
+datfile1 w l lw 2 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,3) t titl2
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_alignorm.dat'
+datfile2=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas_hch/xas_alignorm.dat'
+titl1='Pt-110p12\_O6\_vac\_fch'
+titl2='Pt-110p12\_O6\_vac\_hch'
+outfile=outdir."Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/Xas.Pt\-110p12_O6_vac.fch_hch.pdf"
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [526:546]
+set yrange [0:0.18]
+p \
+datfile1 w l lw 2 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,3) t titl2
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-111p16\_O4\_vac\_O1'
@@ -29,9 +69,7 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
+if (0==1) {
 datfile1=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/O_2/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-110p12\_O6\_vac\_O1'
@@ -50,10 +88,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/xas_ave.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-111p48\_O12\_vac\_ave'
@@ -72,10 +108,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/xas_ave.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-111p16\_O4\_vac\_ave'
@@ -94,10 +128,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/xas_ave.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/O_2/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-110p48\_O24\_vac\_ave'
@@ -116,10 +148,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_ave.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 titl1='Pt-110p12\_O6\_vac\_ave'
@@ -138,10 +168,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_alignorm.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/xas_alignorm.dat'
 titl1='Pt-110p12\_O6\_vac'
@@ -160,10 +188,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_alignorm.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110p48s4.5_O24_vac15/xas/xas_alignorm.dat'
 titl1='Pt-110p12\_O6\_vac'
@@ -182,10 +208,8 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
 datfile1=datdir.'Pt-111_O_vac/Pt-111p16s4_O4_vac15/xas/xas_alignorm.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111p48s4_O12_vac15/xas/xas_alignorm.dat'
 titl1='Pt-111p16\_O4\_vac'
