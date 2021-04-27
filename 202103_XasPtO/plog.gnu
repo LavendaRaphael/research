@@ -8,8 +8,57 @@ set key noautotitle
 set encoding iso_8859_1
 
 datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/doc/log/Xas_Pt_O_vac/"
+outdir="~/group/202103_XasPtO/log/server/"
 
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
+datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_3/CORE_DIELECTRIC_IMAG.dat'
+datfile3=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_5/CORE_DIELECTRIC_IMAG.dat'
+datfile4=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_7/CORE_DIELECTRIC_IMAG.dat'
+datfile5=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_9/CORE_DIELECTRIC_IMAG.dat'
+datfile6=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_11/CORE_DIELECTRIC_IMAG.dat'
+titl1='O1'
+titl2='O3'
+titl3='O5'
+titl4='O7'
+titl5='O9'
+titl6='O11'
+outfile=outdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/xas.Pt-110a12b2_O22_vac.O.pdf'
+set key t c
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [515:535]
+set yrange [0:5e-5]
+p \
+datfile1 w l lw 2 lc ''.word(colors,1) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,2) t titl2,\
+datfile3 w l lw 2 lc ''.word(colors,3) t titl3,\
+datfile4 w l lw 2 lc ''.word(colors,4) t titl4,\
+datfile5 w l lw 2 lc ''.word(colors,5) t titl5,\
+datfile6 w l lw 2 lc ''.word(colors,6) t titl6
+}
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/xas_alignorm.dat'
+datfile2=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_alignorm.dat'
+titl1='Pt-110a12b2\_O22\_vac'
+titl2='Pt-110a3b2\_O6\_vac'
+outfile=outdir.'Pt-110_O_vac/Xas.Pt-110_O_vac.O22_O6.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [526:546]
+set yrange [0:0.14]
+p \
+datfile1 w l lw 2 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,3) t titl2
+}
 
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
@@ -228,7 +277,7 @@ datfile2 w l lw 2 lc ''.word(colors,3) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
 titl1='KSPACING=0.25 ({\305}^{-1})'
 titl3='KSPACING=0.15 ({\305}^{-1})'
@@ -269,7 +318,7 @@ f_3(x) w l lc ''.word(colors,2) lw 1
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 
 titl1='ENCUT=500 (eV)'
 titl3='ENCUT=700 (eV)'
