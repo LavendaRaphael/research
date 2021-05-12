@@ -11,6 +11,83 @@ datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
 #-------------------------------------------------------------------------------------[]
+if (1==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test_nband664/xspectra/xanes.dat'
+titl1='nband=415'
+titl2='nband=664'
+outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/xspectra_nband.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [0:*]
+p \
+datfile1 w l lw 1 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 1 lc ''.word(colors,3) t titl2
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra_xgamma-0.45/xanes.dat'
+titl1='xgamma=0.225'
+titl2='xgamma=0.45'
+outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/xspectra_xgamma.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [0:*]
+p \
+datfile1 w l lw 2 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,3) t titl2
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra_k661/xanes.dat'
+titl1='kpoints = 3 3 1'
+titl2='kpoints = 6 6 1'
+outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/xspectra_kpoints.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [0:*]
+p \
+datfile1 w l lw 1 lc ''.word(colors,2) t titl1,\
+datfile2 w l lw 1 lc ''.word(colors,3) t titl2
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.time_vs_ncore.dat'
+titl=''
+outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf'
+set key t c
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "Core numbers" offset 1,0
+set ylabel "Wall time (min)" offset 0,0
+set xrange [*:*]
+set yrange [0:70]
+
+set style data histogram 
+set style fill solid 0.25 noborder
+p \
+datfile u 2:xtic(1),\
+datfile u 0:2:2 w labels offset char 0,0.5
+}
+
+#-------------------------------------------------------------------------------------[]
 if (0==1) {
 datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_1/CORE_DIELECTRIC_IMAG.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/O_3/CORE_DIELECTRIC_IMAG.dat'
@@ -42,7 +119,7 @@ datfile6 w l lw 2 lc ''.word(colors,6) t titl6
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/xas_alignorm.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/xas_alignorm.dat'
 titl1='Pt-110a12b2\_O22\_vac'
