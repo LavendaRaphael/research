@@ -10,6 +10,58 @@ set encoding iso_8859_1
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
+
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.wfc50/xspectra/xanes.dat'
+datfile3=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.wfc60/xspectra/xanes.dat'
+datfile4=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.wfc70/xspectra/xanes.dat'
+datfile5=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.wfc80/xspectra/xanes.dat'
+datfile6=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test.wfc120/xspectra/xanes.dat'
+titl1='wfc=40'
+titl2='wfc=50'
+titl3='wfc=60'
+titl4='wfc=70'
+titl5='wfc=80'
+titl6='wfc=120'
+outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/xspectra.test_wfc.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [0:*]
+p \
+datfile1 w l lw 2 lc ''.word(colors,1) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,2) t titl2,\
+datfile3 w l lw 2 lc ''.word(colors,3) t titl3,\
+datfile4 w l lw 2 lc ''.word(colors,4) t titl4,\
+datfile5 w l lw 2 lc ''.word(colors,5) t titl5,\
+datfile6 w l lw 2 lc ''.word(colors,6) t titl6
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+datfile2=datdir.'Pt-111_O_vac/Pt-111a6b8s4_O12_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
+titl1='Pt-111a4b4\_O4\_vac'
+titl2='Pt-111a6b8\_O12\_vac'
+outfile=outdir.'Pt-111_O_vac/xpectra.supercell.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [0:*]
+p \
+datfile1 w l lw 2 lc ''.word(colors,8) t titl1,\
+datfile2 w l lw 2 lc ''.word(colors,9) t titl2
+}
+
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
 datfile1=datdir.'../asist/20210511.exp_inplane_ysft.dat'
