@@ -24,7 +24,8 @@ echo "work_dir=$work_dir"
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
 # echo "O_num=$O_num"
 
-subfile=job_sub.sh
+# subfile=job_sub.sh
+  subfile=scf_sub.sh
 echo "subfile=$subfile"
 
 # loopfile="1"

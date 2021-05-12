@@ -9,7 +9,7 @@ do
     echo $i
     rm -rf scf_${i}
     mkdir scf_${i}
-    cp template/* scf_${i}/
+    cp -r template/* scf_${i}/
     cd scf_${i}/
 
     num1=$(awk '$1 ~ /^ATOMIC_SPECIES/ {print NR}' scf.in)
