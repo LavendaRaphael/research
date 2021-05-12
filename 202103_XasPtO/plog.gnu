@@ -1,4 +1,4 @@
-colors='black red blue green cyan magenta yellow'
+colors='black red blue green cyan magenta yellow #FE7D6A #81B8E9'
 set samples 500
 # set key box
 set key samplen 2
@@ -11,11 +11,61 @@ datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
+datfile1=datdir.'../asist/20210511.exp_inplane_ysft.dat'
+datfile2=datdir.'../asist/20210511.exp_outplane_ysft.dat'
+datfile3=datdir.'../asist/20210511.theory_inplane_ysft.dat'
+datfile4=datdir.'../asist/20210511.theory_outplane_ysft.dat'
+titl1='EXP. (in plane)'
+titl2='EXP. (out of plane)'
+titl3='Theory (in plane)'
+titl4='Theory (out of plane)'
+outfile=outdir.'../asist/20210511.2011_prl_miller_ysft.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+p \
+datfile4 w l lw 2 lc ''.word(colors,9) t titl4,\
+datfile3 w l lw 2 lc ''.word(colors,8) t titl3,\
+datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,9) t titl2,\
+datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,8) t titl1
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+datfile1=datdir.'../asist/20210511.exp_inplane.dat'
+datfile2=datdir.'../asist/20210511.exp_outplane.dat'
+datfile3=datdir.'../asist/20210511.theory_inplane.dat'
+datfile4=datdir.'../asist/20210511.theory_outplane.dat'
+titl1='EXP. (in plane)'
+titl2='EXP. (out of plane)'
+titl3='Theory (in plane)'
+titl4='Theory (out of plane)'
+outfile=outdir.'../asist/20210511.2011_prl_miller.pdf'
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [*:*]
+set yrange [*:18]
+unset ytics
+p \
+datfile4 w l lw 2 lc ''.word(colors,9) t titl4,\
+datfile3 w l lw 2 lc ''.word(colors,8) t titl3,\
+datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,9) t titl2,\
+datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,8) t titl1
+}
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/test_nband664/xspectra/xanes.dat'
-titl1='nband=415'
-titl2='nband=664'
+titl1='nband = 415'
+titl2='nband = 664'
 outfile=outdir.'Pt-111_O_vac/Pt-111a4b4s4_O4_vac15/qe_hch_scf/xspectra_nband.pdf'
 
 set term pdfcairo font "Arial,25" size 6*1,5*1
