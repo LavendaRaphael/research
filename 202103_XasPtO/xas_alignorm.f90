@@ -1,6 +1,7 @@
 !==========================================================================================
 !---------------------------------------------------------------[VERSION]
-! 2021.05.12
+! 2021.05.13
+! @FeifeiTian
 !---------------------------------------------------------------[NOTES]
 !---------------------------------------------------------------[USE]
 ! ./xas_alignorm.x xas_alignorm.in
@@ -20,21 +21,23 @@
 !==========================================================================================
 program main
 implicit none
-
-integer, parameter       :: DP = 8
-real (DP), parameter         :: pi = 3.14159265359d0, bohr2angstrom=0.529177210903d0, eang2debye=4.799d0
-integer              :: clock_start, clock_end, clock_rate
-integer (DP)             :: i, j, k, l, m, ios, temp_int0, input_tot
-real (DP)            :: temp_real0, temp_real (3)
-character (len=500)      :: temp_char0, temp_char (2), leng=" (65 ('='), ", infile, datafile, outfile="xas_alignorm.dat", errfile='my.err', logfile="xas_alignorm.log"
-integer, parameter       :: errfile_unit=11, infile_unit=12, datafile_unit=13, outfile_unit=14
-character (len=500), allocatable :: input_list(:)
-
-integer (DP)             :: ei_tot, i_begin, i_end
-!integer (DP), allocatable    ::
-!character (len=100), allocatable ::
-real (DP), allocatable       :: xas(:,:)
-real (DP)            :: e_align, area, e_begin, e_end, xas_sum, e_onset, predge_tolera
+!----------------------------------------------------------------[CommonVariable]
+integer, parameter              :: DP = 8
+real (DP), parameter            :: pi = 3.14159265359d0, bohr2angstrom=0.529177210903d0, eang2debye=4.799d0
+integer                         :: clock_start, clock_end, clock_rate
+integer (DP)                    :: i, j, k, l, m, ios, temp_int0, input_tot
+real (DP)                       :: temp_real0, temp_real (3)
+character (len=500)             :: temp_char0, temp_char (2)
+character (len=500)             :: leng=" (65 ('='), ", infile, datafile
+character (len=500)             :: outfile="xas_alignorm.dat", errfile='my.err', logfile="xas_alignorm.log"
+integer, parameter              :: errfile_unit=11, infile_unit=12, datafile_unit=13, outfile_unit=14
+character (len=500), allocatable:: input_list(:)
+!---------------------------------------------------------------[InputVariable]
+real (DP)                       :: e_align, area, e_begin, e_end, predge_tolera
+!---------------------------------------------------------------[InternalVariable] 
+integer (DP)                    :: ei_tot, i_begin, i_end
+real (DP), allocatable          :: xas(:,:)
+real (DP)                       :: xas_sum, e_onset
 
 open (errfile_unit, file=errfile, status='replace')
 call system_clock (clock_start)
@@ -90,8 +93,9 @@ write (errfile_unit, leng//"'[READ DATAFILE]: "//trim(datafile)//"')")
 open(datafile_unit, file = datafile, status = 'old')
 ei_tot = 0
 do while (.true.)
-    read (datafile_unit, *, iostat = ios)
+    read (datafile_unit, *, iostat = ios) temp_char0
     if (ios < 0) exit
+    if (temp_char0(1:1) == '#') cycle
     ei_tot = ei_tot + 1
 enddo
 write(errfile_unit, '(A25,I25)') 'ei_tot',ei_tot
@@ -99,10 +103,11 @@ rewind (datafile_unit)
 allocate( xas(ei_tot,2))
 i = 0
 do while (.true.)
-    read (datafile_unit, *, iostat = ios) temp_real(1:2)
+    read (datafile_unit, '(a)', iostat = ios) temp_char0
     if (ios < 0) exit
+    if (temp_char0(1:1) == '#') cycle
     i = i + 1
-    xas(i, 1:2) = temp_real(1:2)
+    read(temp_char0, *) xas(i, 1:2)
 enddo
 close(datafile_unit)
 !---------------------------------------------------------------[ALIGN TO PRE-EDGE]
