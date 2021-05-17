@@ -11,7 +11,7 @@ fi
 local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 
-  work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/qe_hch_scf/
+  work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas/
 # work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110p12s4.5_O6_vac15/xas_hch/
@@ -24,8 +24,14 @@ echo "work_dir=$work_dir"
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
 # echo "O_num=$O_num"
 
+# sub_dir="xspectra/"
+# sub_dir="xspectra.epsilon010/"
+sub_dir="xspectra.epsilon100/"
+echo "sub_dir=$sub_dir"
+
+  subfile=xspectra_sub.sh
 # subfile=job_sub.sh
-  subfile=scf_sub.sh
+# subfile=scf_sub.sh
 echo "subfile=$subfile"
 
 # loopfile="1"
