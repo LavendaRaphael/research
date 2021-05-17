@@ -17,9 +17,14 @@ datfile1=datdir.'../zrsun/20210512.Pt-110_ysft.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra/xas_alignorm.dat'
 datfile3=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra/xas_alignorm.dat'
 
-titl1='Exp. (Xiaobao, Li)'
-titl2='Theory-O1 {/Symbol e}-001 (Feifei, Tian)'
-titl3='Theory-O11 {/Symbol e}-001 (Feifei, Tian)'
+# titl1='Exp. (Xiaobao, Li)'
+# titl2='Theory-O1 {/Symbol e}-001 (Feifei, Tian)'
+# titl3='Theory-O11 {/Symbol e}-001 (Feifei, Tian)'
+
+titl1='Exp.'
+titl2='Theory-O1'
+titl3='Theory-O11'
+
 
 outfile=outdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1-O11_exp.pdf'
 
@@ -28,7 +33,7 @@ set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [526:546]
-set yrange [0:12.5]
+set yrange [0:*]
 p \
 datfile3 w l lw 2 lc ''.word(colors,1) t titl3,\
 datfile2 w l lw 2 lc ''.word(colors,2) t titl2,\
@@ -82,8 +87,11 @@ if (0==1) {
 datfile1=datdir.'../zrsun/20210512.Pt-111_ysft.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xas_alignorm.dat'
 
-titl1='Exp. (Xiaobao, Li)'
-titl2='Theory {/Symbol e}-001 (Feifei, Tian)'
+# titl1='Exp. (Xiaobao, Li)'
+# titl2='Theory {/Symbol e}-001 (Feifei, Tian)'
+titl1='Exp.'
+titl2='Theory'
+
 
 outfile=outdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.theory_exp.pdf'
 
@@ -104,9 +112,12 @@ datfile1=datdir.'../zrsun/20210513.Pt-111_ysft_norm.dat'
 datfile2=datdir.'../asist/20210512.exp_inplane_origin_ysft.dat'
 datfile3=datdir.'../asist/20210512.exp_outplane_origin_ysft.dat'
 
-titl1='Exp. (Xiaobao, Li)'
-titl2='Exp. in-plane (Miller PRL 2011)'
-titl3='Exp. out-of-plane (Miller PRL 2011)'
+# titl1='Exp. (Xiaobao, Li)'
+titl1='Li'
+# titl2='Exp. in-plane (Miller PRL 2011)'
+titl2='Miller (in-plane)'
+# titl3='Exp. out-of-plane (Miller PRL 2011)'
+titl3='Miller (out-of-plane)'
 
 outfile=outdir.'../zrsun/Pt-111.miller_prl_2011.pdf'
 
@@ -115,15 +126,15 @@ set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [*:*]
-set yrange [0:11]
+set yrange [0:*]
 p \
-datfile3 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,8) t titl3,\
-datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,9) t titl2,\
-datfile1 w l lw 2 lc ''.word(colors,1) t titl1,\
+datfile3 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,1) t titl3,\
+datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,2) t titl2,\
+datfile1 w l lw 2 lc ''.word(colors,5) t titl1,\
 }
 
 #-------------------------------------------------------------------------------------[]
-if (0==1) {
+if (1==1) {
 datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra/xanes.dat'
 datfile3=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_5/xspectra/xanes.dat'
@@ -144,16 +155,16 @@ set term pdfcairo font "Arial,25" size 6*1,5*1
 set output outfile
 set xlabel "hv-E_f (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [*:*]
+set xrange [-5:15]
 set yrange [0:*]
 p \
-datfile1 w l lw 1 lc ''.word(colors,1) t titl1,\
-datfile2 w l lw 1 lc ''.word(colors,2) t titl2,\
-datfile3 w l lw 1 lc ''.word(colors,3) t titl3,\
-datfile4 w l lw 1 lc ''.word(colors,4) t titl4,\
-datfile5 w l lw 1 lc ''.word(colors,5) t titl5,\
-datfile6 w l lw 1 lc ''.word(colors,6) t titl6,\
+datfile6 w l lw 2 lc ''.word(colors,1) t titl6,\
+datfile2 w l lw 2 lc ''.word(colors,5) t titl2,\
+datfile1 w l lw 2 lc ''.word(colors,2) t titl1,\
 }
+# datfile3 w l lw 1 lc ''.word(colors,3) t titl3,\
+# datfile4 w l lw 1 lc ''.word(colors,4) t titl4,\
+# datfile5 w l lw 1 lc ''.word(colors,5) t titl5,\
 
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
@@ -199,7 +210,7 @@ datfile2 w l lw 2 lc ''.word(colors,9) t titl2,\
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a6b8c4_O12_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 titl1='Pt-111a4b4\_O4\_vac'
@@ -218,7 +229,7 @@ datfile2 w l lw 2 lc ''.word(colors,2) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'../asist/20210511.exp_inplane_ysft.dat'
 datfile2=datdir.'../asist/20210511.exp_outplane_ysft.dat'
 datfile3=datdir.'../asist/20210511.theory_inplane_ysft.dat'
@@ -243,7 +254,7 @@ datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,2) t titl1
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'../asist/20210511.exp_inplane.dat'
 datfile2=datdir.'../asist/20210511.exp_outplane.dat'
 datfile3=datdir.'../asist/20210511.theory_inplane.dat'
@@ -268,7 +279,7 @@ datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,1) t titl2,\
 datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,2) t titl1
 }
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.nband664/xspectra/xanes.dat'
 titl1='nband = 415'
@@ -287,7 +298,7 @@ datfile2 w l lw 1 lc ''.word(colors,2) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.xgamma-0.45/xanes.dat'
 titl1='xgamma = 0.225'
@@ -306,7 +317,7 @@ datfile2 w l lw 2 lc ''.word(colors,2) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.k661/xanes.dat'
 titl1='kpoints = 3 3 1'
