@@ -53,7 +53,7 @@ while(<>)
          if (\$mode==5) {\$sum=(\$help[1]*\$help[1]*(\$help[4]))**0.5;}
          if (\$mode==6) {\$sum=(\$help[1]*\$help[1]*(\$help[2]+\$help[3]))**0.5;}
          if (\$mode==7) {\$sum=(\$help[1]*\$help[1]*(\$help[2]+\$help[3]+\$help[4]))**0.5;}
-         print \$help[1]," ",\$sum,"\n";
+         print \$help[1]," ",\$sum," ",\$help[2]," ",\$help[3]," ",\$help[4]," ",\$help[5]," ",\$help[6]," ",\$help[7],"\n";
       }
    }
    last if eof;

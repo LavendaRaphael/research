@@ -1,5 +1,6 @@
 #colors='black red blue green cyan magenta yellow'
-colors='#FE7D6A #81B8E9 #4D85BD #F7903D #59A95A #D22027 #384589 #7FA5B7'
+array colors=['#FE7D6A', '#81B8E9', '#4D85BD', '#F7903D', '#59A95A', '#D22027', '#384589', '#7FA5B7']
+
 set samples 500
 # set key box
 set key samplen 2
@@ -7,9 +8,129 @@ set key width 2
 set key height 0.5
 set key noautotitle
 set encoding iso_8859_1
+set style data lines
+
 
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+
+array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+
+p \
+for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+
+array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+
+p \
+for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+
+array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+
+p \
+for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
+outfile=outdir.subdir.'aimd_temperature_time.pdf'
+
+array datfile=['aimd1','aimd2', 'aimd3']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'/step.dat'}
+
+array titl=['SMASS=1.0','SMASS=0.1','SMASS=0.025']
+array num1=[0,212,212+497]
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "time (fs)" offset 0,0
+set ylabel "Free energy (eV)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+set key r b
+
+p \
+for [i=1:num] datfile[i] u (($1+num1[i])*0.5):3 w l lw 2 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
+outfile=outdir.subdir.'aimd_energy_time.pdf'
+
+array datfile=['aimd1','aimd2', 'aimd3']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'/step.dat'}
+
+array titl=['SMASS=1.0','SMASS=0.1','SMASS=0.025']
+array num1=[0,212,212+497]
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "time (fs)" offset 0,0
+set ylabel "Temperature (K)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+
+p \
+for [i=1:num] datfile[i] u (($1+num1[i])*0.5):2 w l lw 2 lc ''.colors[colornum[i]] t titl[i]
+}
 
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
@@ -134,7 +255,7 @@ datfile1 w l lw 2 lc ''.word(colors,5) t titl1,\
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 datfile1=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra/xanes.dat'
 datfile3=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_5/xspectra/xanes.dat'
