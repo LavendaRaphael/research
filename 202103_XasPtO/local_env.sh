@@ -26,7 +26,9 @@ echo "work_dir=$work_dir"
 
 # sub_dir="xspectra/"
 # sub_dir="xspectra.epsilon010/"
-sub_dir="xspectra.epsilon100/"
+# sub_dir="xspectra.epsilon100/"
+sub_dir="xspectra.epsilon110/"
+# sub_dir="xspectra.epsilon1-10/"
 echo "sub_dir=$sub_dir"
 
   subfile=xspectra_sub.sh
