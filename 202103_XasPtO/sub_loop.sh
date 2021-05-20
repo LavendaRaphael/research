@@ -7,9 +7,9 @@ cd $work_dir
 for N in $loopfile
 do
 	echo $N
-	cd scf_${N}/
+	cd scf_${N}/$sub_dir
 	sed -i "s/xNUMx/$N/g"  $subfile
 	./$subfile
     rm ${subfile}
-	cd ../
+	cd -
 done

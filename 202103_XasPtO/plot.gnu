@@ -1,5 +1,9 @@
 #colors='black red blue green cyan magenta yellow'
-array colors=['#FE7D6A', '#81B8E9', '#4D85BD', '#F7903D', '#59A95A', '#D22027', '#384589', '#7FA5B7']
+array colors2=['#FE7D6A', '#81B8E9']
+array colors3=['#4D85BD', '#F7903D', '#59A95A']
+array colors3_1=['#D22027', '#384589', '#7FA5B7']
+array colors4=['#817F00','#FB7E03','#01FD01','#00FFFF']
+array colors9=['#EE3624','#323293','#62BB47','#7E278A','#0596DB','#C3CA2F','#BC8EC0','#8EDAF8','#C7811F']
 
 set samples 500
 # set key box
@@ -10,21 +14,24 @@ set key noautotitle
 set encoding iso_8859_1
 set style data lines
 
-
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/'
-outfile=outdir.subdir.'xspectra.epsilon.pdf'
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/'
+outfile=outdir.subdir.'xspectra.hch_fch_nch.pdf'
 
-array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
-num=|datfile|
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+array mid=['qe_hch_scf','qe_fch_scf.ppold','qe_nch_scf']
+num=|mid|
 
-array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
-array colornum=[1,2,5]
+array datfile[num]
+do for [i=1:num] {datfile[i]=mid[i].'/scf_1/xspectra.epsilon010/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl=['HCH','FCH','No CH']
+
+array colornum=[1,2,3,4,5,6]
 
 set term pdfcairo font "Arial,25" size 6*1,5*1
 set output outfile
@@ -32,21 +39,109 @@ set xlabel "hv-E_f (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [-5:15]
 set yrange [0:*]
+set style line 1 lw 2
 
 p \
-for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
 }
 
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/'
-outfile=outdir.subdir.'xspectra.epsilon.pdf'
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
+outfile=outdir.subdir.'xspectra.epsilon100.pdf'
 
-array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
+array numx=['1','3','11']
+num=|numx|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra.epsilon100/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='O\_'.numx[i]}
+
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
+outfile=outdir.subdir.'xspectra.epsilon010.pdf'
+
+array numx=['1','3','11']
+num=|numx|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra.epsilon010/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='O\_'.numx[i]}
+
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
+outfile=outdir.subdir.'xspectra.epsilon001.pdf'
+
+array numx=['1','3','11']
+num=|numx|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='O\_'.numx[i]}
+
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.desmooth.pdf'
+
+array datfile=['xspectra/','xspectra.desmooth/']
 num=|datfile|
 do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
 
-array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
+array titl=['cut\_desmooth = 0.1','default (1.d-2)']
 array colornum=[1,2,5]
 
 set term pdfcairo font "Arial,25" size 6*1,5*1
@@ -63,13 +158,59 @@ for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
 #-------------------------------------------------------------------------------------[]
 if (0==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
-outfile=outdir.subdir.'xspectra.epsilon.pdf'
+outfile=outdir.subdir.'xspectra.desmooth.pdf'
 
-array datfile=['xspectra/','xspectra.epsilon010/', 'xspectra.epsilon100/']
+array datfile=['xspectra/','xspectra.desmooth/']
 num=|datfile|
 do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
 
-array titl=['{/Symbol e}-001','{/Symbol e}-010','{/Symbol e}-100']
+array titl=['cut\_desmooth = 0.1','default (1.d-2)']
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+
+p \
+for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.terminator.pdf'
+
+array datfile=['xspectra/','xspectra.terminator/']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+
+array titl=['terminator = .true.','default']
+array colornum=[1,2,5]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+
+p \
+for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.cutocc.pdf'
+
+array datfile=['xspectra/','xspectra.cutocc/']
+num=|datfile|
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i].'xanes.dat'}
+
+array titl=['cut\_occ\_states = .true.','default']
 array colornum=[1,2,5]
 
 set term pdfcairo font "Arial,25" size 6*1,5*1
@@ -85,6 +226,90 @@ for [i=1:num] datfile[i] u 1:2 lw 1 lc ''.colors[colornum[i]] t titl[i]
 
 #-------------------------------------------------------------------------------------[]
 if (1==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array mid=['001','010', '100']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors4[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array mid=['001','010', '100','110']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors4[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (1==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon.pdf'
+
+array mid=['001','010', '100','110']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+array colornum=[1,2,3,4,5,6]
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors4[colornum[i]] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (0==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
 outfile=outdir.subdir.'aimd_temperature_time.pdf'
 
@@ -109,7 +334,7 @@ for [i=1:num] datfile[i] u (($1+num1[i])*0.5):3 w l lw 2 lc ''.colors[colornum[i
 }
 
 #-------------------------------------------------------------------------------------[]
-if (1==1) {
+if (0==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
 outfile=outdir.subdir.'aimd_energy_time.pdf'
 
