@@ -7,10 +7,10 @@ cd $work_dir
 for i in $loopfile
 do
     echo $i
-    rm -rf scf_${i}
-    mkdir scf_${i}
-    cp -r template/* scf_${i}/
-    cd scf_${i}/
+    rm -rf atom_${i}
+    mkdir atom_${i}
+    cp -r template/* atom_${i}/
+    cd atom_${i}/
 
     num1=$(awk '$1 ~ /^ATOMIC_SPECIES/ {print NR}' scf.in)
     atom1=$(awk 'NR-"'$(($num1+1))'"==0 {print $1} ' scf.in)

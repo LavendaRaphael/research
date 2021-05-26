@@ -7,7 +7,7 @@ cd $work_dir
 for i in $loopfile
 do
     echo $i
-    rm -rf scf_${i}/$sub_dir
-    cp -r template/$sub_dir scf_${i}/
+    rm -rf atom_${i}/$sub_dir
+    cp -r template/$sub_dir atom_${i}/
 
 done
