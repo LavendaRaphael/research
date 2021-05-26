@@ -1,51 +1,70 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-array nplot=[30,31]
+array nplot=[46]
 do for [i=1:|nplot|] {pic[nplot[i]]=1}
 
-# 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
+#  7 Pt-110_O_vac/Pt-110p48c4.5_O24_vac15/xas/Xas_Pt-110p48_O24_vac.pdf
+
+# 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
+# 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
+# 44 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra.epsilon_exp.pdf
+# 34 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra.epsilon.pdf
+# 43 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon_exp.pdf
+# 33 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
+
 # 41 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon100.pdf
 # 40 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon010.pdf
 # 39 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon001.pdf
-# 38 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.desmooth.pdf
-# 37 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.terminator.pdf
-# 36 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.cutocc.pdf
-# 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
-# 34 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra.epsilon.pdf
-# 33 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
-# 32 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
-# 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
-# 30 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/energy_time.pdf
 # 29 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1-O11_exp.pdf
 # 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
 # 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
+
+# 15 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/xas.Pt-110a12b2_O22_vac.O.pdf
+
+#  6 Pt-110_O_vac/Pt-110p12c4.5_O6_vac15/xas/Xas_Pt-110p12_O6_vac.pdf
+# 12 Pt-110_O_vac/Pt-110p12c4.5_O6_vac15/Xas.Pt-110p12_O6_vac.fch_hch.pdf
+
+# 14 Pt-110_O_vac/Xas.Pt-110_O_vac.O22_O6.pdf
+# 10 Pt-110_O_vac/Xas_Pt-110_O_vac_O1.pdf
+#  4 Pt-110_O_vac/Xas_Pt-110_O_vac.pdf
+
+# 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
+# 30 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/energy_time.pdf
+
+# 38 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.desmooth.pdf
+# 37 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.terminator.pdf
+# 36 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.cutocc.pdf
+# 46 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.epsilon_exp.pdf
+# 32 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
+
 # 26 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.theory_exp.pdf
-# 25 ../zrsun/Pt-111.miller_prl_2011.pdf
 # 24 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.wfc_rho.pdf
 # 23 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.xniter.pdf
-# 22 Pt-111_O_vac/xspectra.supercell.pdf
-# 21 ../asist/20210511.2011_prl_miller_ysft.pdf
-# 20 ../asist/20210511.2011_prl_miller.pdf
 # 19 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.nband.pdf
 # 18 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.xgamma.pdf
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
 # 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
-# 15 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac/xas/xas.Pt-110a12b2_O22_vac.O.pdf
-# 14 Pt-110_O_vac/Xas.Pt-110_O_vac.O22_O6.pdf
+
+# 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
+
+#  9 Pt-111_O_vac/Pt-111p48c4_O12_vac15/xas/Xas_Pt-111p48_O12_vac.pdf
+
+#  8 Pt-111_O_vac/Pt-111p16c4_O4_vac15/xas/Xas_Pt-111p16_O4_vac.pdf
 # 13 Pt-111_O_vac/Pt-111p16c4_O4_vac15/Xas.Pt-111p16_O4_vac.fch_hch.pdf
-# 12 Pt-110_O_vac/Pt-110p12c4.5_O6_vac15/Xas.Pt-110p12_O6_vac.fch_hch.pdf
+
 # 11 Pt-111_O_vac/Xas_Pt-111_O_vac_O1.pdf
-# 10 Pt-110_O_vac/Xas_Pt-110_O_vac_O1.pdf
-# 9 Pt-111_O_vac/Pt-111p48c4_O12_vac15/xas/Xas_Pt-111p48_O12_vac.pdf
-# 8 Pt-111_O_vac/Pt-111p16c4_O4_vac15/xas/Xas_Pt-111p16_O4_vac.pdf
-# 7 Pt-110_O_vac/Pt-110p48c4.5_O24_vac15/xas/Xas_Pt-110p48_O24_vac.pdf
-# 6 Pt-110_O_vac/Pt-110p12c4.5_O6_vac15/xas/Xas_Pt-110p12_O6_vac.pdf
-# 5 Xas_Pt_O_vac.pdf
-# 4 Pt-110_O_vac/Xas_Pt-110_O_vac.pdf
-# 3 Pt-111_O_vac/Xas_Pt-111_O_vac.pdf
-# 2 Pt/Pt_eos_kpoints.pdf
-# 1 Pt/Pt_eos_cutoff.pdf
+# 22 Pt-111_O_vac/xspectra.supercell.pdf
+#  3 Pt-111_O_vac/Xas_Pt-111_O_vac.pdf
+
+#  2 Pt/Pt_eos_kpoints.pdf
+#  1 Pt/Pt_eos_cutoff.pdf
+
+#  5 Xas_Pt_O_vac.pdf
+
+# 25 ../zrsun/Pt-111.miller_prl_2011.pdf
+# 21 ../asist/20210511.2011_prl_miller_ysft.pdf
+# 20 ../asist/20210511.2011_prl_miller.pdf
 
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']
@@ -65,9 +84,180 @@ set style data lines
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
+#-------------------------------------------------------------------------------------[]
+if (pic[46]==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon_exp.pdf'
 
+array mid=['010', '100','110','1-10']
+num=|mid|
 
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.'../lixiaobao/20210512.Pt-111_ysft_norm.dat'
 
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+exptitl='Exp.'
+
+array colo[num]
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-5:15]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[45]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/'
+outfile=outdir.subdir.'xspectra.epsilon_exp.pdf'
+
+array mid=['010', '100','110','1-10']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.'../lixiaobao/20210512.Pt-110_ysft_norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+exptitl='Exp.'
+
+array colo[num]
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-2.576:17.424]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[44]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/'
+outfile=outdir.subdir.'xspectra.epsilon_exp.pdf'
+
+array mid=['010', '100','110','1-10']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.'../lixiaobao/20210512.Pt-110_ysft_norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+exptitl='Exp.'
+
+array colo[num]
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-2.576:17.424]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+}
+#-------------------------------------------------------------------------------------[]
+if (pic[43]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/'
+outfile=outdir.subdir.'xspectra.epsilon_exp.pdf'
+
+array mid=['010', '100','110','1-10']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xspectra.epsilon'.mid[i].'/xanes.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.'../lixiaobao/20210512.Pt-110_ysft_norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='{/Symbol e} '.mid[i]}
+exptitl='Exp.'
+
+array colo[num]
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "hv-E_f (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [-2.576:17.424]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+}
 #-------------------------------------------------------------------------------------[]
 if (pic[42]==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/'
@@ -436,17 +626,17 @@ if (pic[31]==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
 outfile=outdir.subdir.'temperature_time.pdf'
 
-array mid=['aimd1','aimd2', 'aimd3','aimd4']
+array mid=['aimd1','aimd2', 'aimd3']
 num=|mid|
 
 array datfile[num]
 do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
 do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
 
-array titl=['1.0','0.01','0.0025','0.01']
+array titl=['1.0','0.01','0.0025']
 do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
 
-array num1=[0,212,212+497,212+497+2000]
+array num1=[0,212,212+497]
 
 array colo[num]
 if (num==2) {
@@ -480,17 +670,17 @@ if (pic[30]==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/'
 outfile=outdir.subdir.'energy_time.pdf'
 
-array mid=['aimd1','aimd2', 'aimd3','aimd4']
+array mid=['aimd1','aimd2', 'aimd3']
 num=|mid|
 
 array datfile[num]
 do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
 do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
 
-array titl=['1.0','0.01','0.0025','0.01']
+array titl=['1.0','0.01','0.0025']
 do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
 
-array num1=[0,212,212+497,212+497+2000]
+array num1=[0,212,212+497]
 
 array colo[num]
 if (num==2) {
