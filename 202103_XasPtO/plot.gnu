@@ -1,10 +1,11 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-array nplot=[46]
-do for [i=1:|nplot|] {pic[nplot[i]]=1}
 
 #  7 Pt-110_O_vac/Pt-110p48c4.5_O24_vac15/xas/Xas_Pt-110p48_O24_vac.pdf
+
+pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/energy_time.pdf
+pic[47]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/temperature_time.pdf
 
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
 # 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
@@ -83,6 +84,100 @@ set style data lines
 
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
+
+#-------------------------------------------------------------------------------------[]
+if (pic[48]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
+outfile=outdir.subdir.'energy_time.pdf'
+
+array mid=['aimd1']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl=['0']
+do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
+
+array num1=[0]
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "time (fs)" offset 0,0
+set ylabel "Free energy (eV)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+set key r b
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u (($1+num1[i])*0.5):3 ls 1 lc ''.colo[i] t titl[i]
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[47]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
+outfile=outdir.subdir.'temperature_time.pdf'
+
+array mid=['aimd1']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl=['0']
+do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
+
+array num1=[0]
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 6*1,5*1
+set output outfile
+set xlabel "time (fs)" offset 0,0
+set ylabel "Temperature (K)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+set key r b
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[i] t titl[i]
+}
 
 #-------------------------------------------------------------------------------------[]
 if (pic[46]==1) {

@@ -7,10 +7,11 @@ cd $work_dir
 for i in $loopfile
 do
     echo $i
-    rm -rf O_${i}
-    mkdir O_${i}
-    cp template/* O_${i}/
-    cd O_${i}/
+    if [ ! -d "$var" ]; then
+        mkdir atom_${i}
+    fi
+    cp template/* atom_${i}/
+    cd atom_${i}/
 
     num1=$(awk 'NR-7==0 {print $1}' POSCAR)
     if [ "$num1" != "1" ];then
