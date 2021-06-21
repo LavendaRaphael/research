@@ -53,7 +53,13 @@ while(<>)
          if (\$mode==5) {\$sum=(\$help[1]*\$help[1]*(\$help[4]))**0.5;}
          if (\$mode==6) {\$sum=(\$help[1]*\$help[1]*(\$help[2]+\$help[3]))**0.5;}
          if (\$mode==7) {\$sum=(\$help[1]*\$help[1]*(\$help[2]+\$help[3]+\$help[4]))**0.5;}
-         print \$help[1]," ",\$sum," ",\$help[2]," ",\$help[3]," ",\$help[4]," ",\$help[5]," ",\$help[6]," ",\$help[7],"\n";
+         if (\$mode==11) {\$sum=\$help[2];}
+         if (\$mode==12) {\$sum=\$help[3];}
+         if (\$mode==13) {\$sum=\$help[4];}
+         if (\$mode==14) {\$sum=\$help[5];}
+         if (\$mode==15) {\$sum=\$help[6];}
+         if (\$mode==16) {\$sum=\$help[7];}
+         print \$help[1]," ",\$sum,"\n";
       }
    }
    last if eof;
@@ -85,6 +91,12 @@ else
             perl helpscript.perl 7 OUTCAR > CORE_DIELECTRIC_IMAG.dat
          else
             perl helpscript.perl 0 OUTCAR > CORE_DIELECTRIC_IMAG.dat
+            perl helpscript.perl 11 OUTCAR > CORE_DIELECTRIC_IMAG.X.dat
+            perl helpscript.perl 12 OUTCAR > CORE_DIELECTRIC_IMAG.Y.dat
+            perl helpscript.perl 13 OUTCAR > CORE_DIELECTRIC_IMAG.Z.dat
+            perl helpscript.perl 14 OUTCAR > CORE_DIELECTRIC_IMAG.XY.dat
+            perl helpscript.perl 15 OUTCAR > CORE_DIELECTRIC_IMAG.YZ.dat
+            perl helpscript.perl 16 OUTCAR > CORE_DIELECTRIC_IMAG.ZX.dat
          fi
       fi
    fi
