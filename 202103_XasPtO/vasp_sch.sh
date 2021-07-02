@@ -10,7 +10,7 @@ if [ 1 = 1 ];then
     for N in $loopfile
     do
         echo $N
-        cd O_${N}/
+        cd atom_${N}/
         ${software_bin}plot_core_imdiel.sh
         cd ..
     done
