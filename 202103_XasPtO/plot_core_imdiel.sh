@@ -59,6 +59,7 @@ while(<>)
          if (\$mode==14) {\$sum=\$help[5];}
          if (\$mode==15) {\$sum=\$help[6];}
          if (\$mode==16) {\$sum=\$help[7];}
+         if (\$mode==17) {\$sum=(\$help[2]+\$help[3])/2.0;}
          print \$help[1]," ",\$sum,"\n";
       }
    }
@@ -97,6 +98,7 @@ else
             perl helpscript.perl 14 OUTCAR > CORE_DIELECTRIC_IMAG.XY.dat
             perl helpscript.perl 15 OUTCAR > CORE_DIELECTRIC_IMAG.YZ.dat
             perl helpscript.perl 16 OUTCAR > CORE_DIELECTRIC_IMAG.ZX.dat
+            perl helpscript.perl 17 OUTCAR > CORE_DIELECTRIC_IMAG.X_Y.dat
          fi
       fi
    fi

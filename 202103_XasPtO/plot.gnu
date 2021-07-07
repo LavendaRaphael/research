@@ -2,6 +2,8 @@ array pic[100]
 do for [i=1:100] {pic[i]=0}
 
 
+  pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
+
 # pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/energy_time.pdf
 # pic[47]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/temperature_time.pdf
 
@@ -42,8 +44,8 @@ do for [i=1:100] {pic[i]=0}
 
 # 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
 
-  pic[2]=1   # Pt/Pt_eos_kpoints.pdf
-  pic[1]=1   # Pt/Pt_eos_cutoff.pdf
+# pic[2]=1   # Pt/Pt_eos_kpoints.pdf
+# pic[1]=1   # Pt/Pt_eos_cutoff.pdf
 
 # 25 ../zrsun/Pt-111.miller_prl_2011.pdf
 # 21 ../asist/20210511.2011_prl_miller_ysft.pdf
@@ -66,6 +68,57 @@ set style data lines
 
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
+
+#-------------------------------------------------------------------------------------[]
+if (pic[49]==1) {
+
+array middir=['1','3']
+num1=|middir|
+do for [j=1:num1] {
+
+subdir='Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_'.middir[j].'/'
+outfile=outdir.subdir.'sch.pdf'
+
+array mid=['Z','Y','X','XY','YZ','ZX']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='CORE_DIELECTRIC_IMAG.'.mid[i].'.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]=mid[i]}
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [512:532]
+set yrange [*:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+}
+}
+
 
 #-------------------------------------------------------------------------------------[]
 if (pic[48]==1) {
