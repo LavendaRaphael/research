@@ -1,8 +1,8 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-
-  pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
+  pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
+# pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
 
 # pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/energy_time.pdf
 # pic[47]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/temperature_time.pdf
@@ -21,6 +21,7 @@ do for [i=1:100] {pic[i]=0}
 # 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
 # 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
 
+# pic[51]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/sch.x.y.z.exp.pdf
 # pic[15]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/atom_*/sch.pdf
 
 # 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
@@ -40,6 +41,7 @@ do for [i=1:100] {pic[i]=0}
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
 # 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
 
+  pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
 # pic[8]=1   # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.pdf
 
 # 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
@@ -68,6 +70,160 @@ set style data lines
 
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
+
+#-------------------------------------------------------------------------------------[]
+if (pic[52]==1) {
+subdir='Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/'
+outfile=outdir.subdir.'sch.x_y.z.pdf'
+
+array mid=['x_y','z']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xas_ave.'.mid[i].'.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+
+array titl[num]
+do for [i=1:num] {titl[i]='Theory '.mid[i]}
+#titl[1]='Theory x\_y'
+titl[1]='Theory In-plane'
+titl[2]='Theory Out-of-plane'
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+onset=516.0133792198
+scaling=1e5
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [onset-5.0:onset+15.0]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[51]==1) {
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/'
+outfile=outdir.subdir.'sch.x.y.z.exp.pdf'
+
+array mid=['x','y','z']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='xas_ave.'.mid[i].'.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.subdir.'20210512.Pt-110_ysft.norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='Theory '.mid[i]}
+exptitl='Exp.'
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+onset=529.6647579888
+sft=onset-519.1189296348
+scaling=1e5
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [onset-5.0:onset+15.0]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[50]==1) {
+subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/'
+outfile=outdir.subdir.'sch.x_y.z.exp.pdf'
+
+array mid=['X_Y','Z']
+num=|mid|
+
+array datfile[num]
+do for [i=1:num] {datfile[i]='CORE_DIELECTRIC_IMAG.'.mid[i].'.dat'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.subdir.'20210512.Pt-111_ysft.norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='Theory '.mid[i]}
+#titl[1]='Theory X\_Y'
+titl[1]='Theory In-plane'
+titl[2]='Theory Out-of-plane'
+exptitl='Exp.'
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+sft=14.9755022276
+scaling=1e5
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [510.2359062397+sft:530.2359062397+sft]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:num] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+}
 
 #-------------------------------------------------------------------------------------[]
 if (pic[49]==1) {
@@ -1212,16 +1368,16 @@ if (num==5 || num==6) {
     do for [i=1:num] {colo[i]=colors6[i]}
 }
 
-set term pdfcairo font "Arial,25" size 7*1,5*1
+set term pdfcairo font "Arial,25" size 6*1,5*1
 set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [512:532]
-set yrange [*:*]
+set xrange [510:530]
+set yrange [0:0.12]
 set style line 1 lw 2
 
 p \
-for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
+for [i=1:num] datfile[i] u 1:($2*4e3) ls 1 lc ''.colo[i] t titl[i],\
 }
 
 #-------------------------------------------------------------------------------------[]

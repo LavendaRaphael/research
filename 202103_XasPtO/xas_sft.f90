@@ -1,10 +1,10 @@
 !==========================================================================================
 !===============================================================[VERSION]
-!2020.12.03
+!2021.07.08
 !===============================================================[NOTES]
 !===============================================================[USE]
 !./xas_sft.x xas_sft.in
-!===============================================================[xas_norm.in]
+!===============================================================[in]
 !datafile       "CORE_DIELECTRIC_IMAG.dat"
 !datafile1      "fort13"
 !datafile2      "fort777"
@@ -75,8 +75,8 @@ close (infile_unit)
 !===============================================================[READ DATAFILE]
 write (errfile_unit, leng//"'[READ DATAFILE]: "//trim(datafilen(1))//"')")
 open(datafilen_unit(1), file = datafilen(1), status = 'old')
-read(datafilen_unit(1),*) temp_char(1:2)
-write (errfile_unit, "(2A25)") trim(temp_char(1)), trim(temp_char(2))
+read(datafilen_unit(1),*) temp_char(2)
+write (errfile_unit, "(A25)") trim(temp_char(2))
 read (temp_char(2), *) fort13
 close(datafilen_unit(1))
 !===============================================================[READ DATAFILE]
@@ -87,7 +87,7 @@ write (errfile_unit, "(A25)") trim(temp_char(2))
 read (temp_char(2), *) fort777
 close(datafilen_unit(2))
 
-sft=(fort777-fort13)*hartree2ev
+sft=fort777-fort13
 write (errfile_unit, "(A25,F25.10)") "sft",sft
 !===============================================================[READ DATAFILE]
 write (errfile_unit, leng//"'[READ DATAFILE]: "//trim(datafile)//"')")

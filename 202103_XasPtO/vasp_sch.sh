@@ -1,7 +1,7 @@
 #!/bin/bash
-set -euo pipefail
 homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
 source ${homedir}codes/groupcodes/202103_XasPtO/local_env.sh
+set -euo pipefail
 
 cd $work_dir
 
@@ -16,30 +16,32 @@ if [ 1 = 1 ];then
     done
 fi
 
-if [ 0 = 1 ];then
+if [ 1 = 1 ];then
+    echo "#-------------------------------------------------[sft]"
+    cat > xas_sft.in <<eof
+datafile       "CORE_DIELECTRIC_IMAG.Z.dat"
+datafile1      "fort13"
+datafile2      "fort777"
+eof
+    for N in $loopfile
+    do
+        echo $N
+        cd atom_${N}/
+        grep energy ../atom_1/OUTCAR | tail -1 | awk '{print $7}' | tee fort13
+        grep energy OUTCAR | tail -1 | awk '{print $7}' | tee fort777
+        ${software_bin}xas_sft.x ../xas_sft.in
+        cd ..
+    done
+    rm xas_sft.in
+fi
+
+if [ 1 = 1 ];then
     echo "#-------------------------------------------------[tt]"
     rm -f xas_tt.dat
     for N in $loopfile
     do
         echo $N
-        cat O_${N}/CORE_DIELECTRIC_IMAG.dat >> xas_tt.dat
+        cat atom_${N}/xas_sft.dat >> xas_tt.dat
     done
-    echo "#-------------------------------------------------[ave]"
-    cat > xas_ave.in <<eof
-datafile       "xas_tt.dat"
-npiece         3000
-eof
-    ${software_bin}xas_ave.x xas_ave.in
-    rm xas_ave.in
-    echo "#-------------------------------------------------[alignorm]"
-    cat > xas_alignorm.in <<eof
-datafile       "xas_ave.dat"
-e_align        530                         #eV
-area           1.0
-e_begin        526.d0                          #eV
-e_end          546.d0                          #eV
-predge_tolera  0.5
-eof
-    ${software_bin}xas_alignorm.x xas_alignorm.in
-    rm xas_alignorm.in
 fi
+

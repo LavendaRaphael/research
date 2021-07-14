@@ -1,7 +1,7 @@
 #!/bin/bash
-set -euo pipefail
 homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
 source ${homedir}codes/common/environment.sh
+set -euo pipefail
 
 if [ ! -z ${local_env+x} ]; then
 if $local_env;then
@@ -39,8 +39,13 @@ echo "subfile=$subfile"
 # loopfile="1"
 # loopfile=`seq 1 $O_num`
 # loopfile="1 3 5 7 9 11"
+# loopfile="1 1 3 3 5 5 7 7 9 9 11"
   loopfile="1 3"
 echo "loopfile=$loopfile"
+
+  tensorxyz="X Y Z"
+echo "tensorxyz=$tensorxyz"
+
 echo "#=========================================================================<<<"
 
 local_env=true
