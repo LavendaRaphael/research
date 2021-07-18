@@ -12,7 +12,7 @@ do
     fi
 
 #   ls tempalte/
-#   $ INCAR POTCAR vasp_sub.sh
+#   $ INCAR POSCAR POTCAR vasp_sub.sh
     cp template/* atom_${i}/
     cd atom_${i}/
 

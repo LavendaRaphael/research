@@ -9,7 +9,7 @@ do
 	echo $N
 	cd atom_${N}/$sub_dir
 	sed -i "s/xNUMx/$N/g"  $subfile
-	./$subfile
+	bash $subfile
     rm ${subfile}
 	cd -
 done
