@@ -1,11 +1,10 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-  pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
+# pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
 # pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
 
-# pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/energy_time.pdf
-# pic[47]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/temperature_time.pdf
+ pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/aimd.pdf
 
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
 # 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
@@ -41,7 +40,7 @@ do for [i=1:100] {pic[i]=0}
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
 # 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
 
-  pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
+# pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
 # pic[8]=1   # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.pdf
 
 # 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
@@ -278,96 +277,57 @@ for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[48]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
-outfile=outdir.subdir.'energy_time.pdf'
 
-array mid=['aimd1']
+subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
+outfile=outdir.subdir.'aimd.pdf'
+
+array mid=['aimd1','aimd2','aimd3']
 num=|mid|
 
 array datfile[num]
 do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
 do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
 
-array titl=['0']
-do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
+array titl=['Free energy','Temperature']
 
-array num1=[0]
+array num1=[0,377,377+194]
 
-array colo[num]
-if (num==1) {
-    do for [i=1:num] {colo[i]='black'}
+colornum=2
+array colo[colornum]
+if (colornum==1) {
+    do for [i=1:colornum] {colo[i]='black'}
 }
-if (num==2) {
-    do for [i=1:num] {colo[i]=colors2[i]}
+if (colornum==2) {
+    do for [i=1:colornum] {colo[i]=colors2[i]}
 }
-if (num==3) {
-    do for [i=1:num] {colo[i]=colors3[i]}
+if (colornum==3) {
+    do for [i=1:colornum] {colo[i]=colors3[i]}
 }
-if (num==4) {
-    do for [i=1:num] {colo[i]=colors4[i]}
+if (colornum==4) {
+    do for [i=1:colornum] {colo[i]=colors4[i]}
 }
-if (num==5 || num==6) {
-    do for [i=1:num] {colo[i]=colors6[i]}
+if (colornum==5 || colornum==6) {
+    do for [i=1:colornum] {colo[i]=colors6[i]}
 }
 
-set term pdfcairo font "Arial,25" size 6*1,5*1
+set term pdfcairo font "Arial,25" size 7*1,5*1
 set output outfile
 set xlabel "time (fs)" offset 0,0
 set ylabel "Free energy (eV)" offset 1,0
 set xrange [*:*]
-set yrange [*:*]
+set yrange [-1306:-1290]
+set y2label "Temperature (K)" offset 1,0
+set ytics nomirror
+set y2tics
+set y2range [300:660]
 set key r b
 set style line 1 lw 2
 
 p \
-for [i=1:num] datfile[i] u (($1+num1[i])*0.5):3 ls 1 lc ''.colo[i] t titl[i]
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[47]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
-outfile=outdir.subdir.'temperature_time.pdf'
-
-array mid=['aimd1']
-num=|mid|
-
-array datfile[num]
-do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-
-array titl=['0']
-do for [i=1:num] {titl[i]='SMASS = '.titl[i]}
-
-array num1=[0]
-
-array colo[num]
-if (num==1) {
-    do for [i=1:num] {colo[i]='black'}
-}
-if (num==2) {
-    do for [i=1:num] {colo[i]=colors2[i]}
-}
-if (num==3) {
-    do for [i=1:num] {colo[i]=colors3[i]}
-}
-if (num==4) {
-    do for [i=1:num] {colo[i]=colors4[i]}
-}
-if (num==5 || num==6) {
-    do for [i=1:num] {colo[i]=colors6[i]}
-}
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "time (fs)" offset 0,0
-set ylabel "Temperature (K)" offset 1,0
-set xrange [*:*]
-set yrange [*:*]
-set key r b
-set style line 1 lw 2
-
-p \
-for [i=1:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[i] t titl[i]
+datfile[1] u ($1*0.5):3 ls 1 lc ''.colo[1] t titl[1] axis x1y1,\
+for [i=2:num] datfile[i] u (($1+num1[i])*0.5):3 ls 1 lc ''.colo[1] axis x1y1,\
+datfile[1] u ($1*0.5):2 ls 1 lc ''.colo[2] t titl[2] axis x1y2 ,\
+for [i=2:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[2] axis x1y2 ,\
 }
 
 #-------------------------------------------------------------------------------------[]
