@@ -121,7 +121,7 @@
 !@FeifeiTian
 !----------------------------------------------------!
       COMPLEX(q), ALLOCATABLE :: EPSDD_tm(:,:,:,:,:) !
-      REAL(q) ::                 FREQUENCY_tm(:,:,:) !
+      REAL(q), ALLOCATABLE ::    FREQUENCY_tm(:,:,:) !
 !----------------------------------------------------!
 
 ! input variables
@@ -265,6 +265,7 @@
       ALLOCATE(EPSDD_tm(WDES%NBANDS,WDES%NKPTS,WDES%ISPIN,3,3)) !
       ALLOCATE(FREQUENCY_tm(WDES%NBANDS,WDES%NKPTS,WDES%ISPIN)) !
       EPSDD_tm = (0.0_q,0.0_q)                                  !
+      FREQUENCY_tm = 0.0_q
 !---------------------------------------------------------------!
 
 ! loop over atoms
@@ -349,7 +350,7 @@
 
 !@FeifeiTian
 !-----------------------------------------------------------------------------------------------!
-      CALLMPI(  M_sum_z(WDES%COMM,EPSDD_tm(1,1,1,1,1),(WDES%NBANDS*WDES%NKPTS*WDES%ISPIN*3*3) ) !
+      CALLMPI(  M_sum_z(WDES%COMM,EPSDD_tm(1,1,1,1,1),(WDES%NBANDS*WDES%NKPTS*WDES%ISPIN*3*3) ))!
 !-----------------------------------------------------------------------------------------------!
 
 ! if symmetry present then symmetrize 3x3 tensor using TSYM
@@ -385,6 +386,19 @@
      &        '  ----------------------------------------------------', &
      &        '----------------------------------------------------------'/ &
      &        (7F20.12))
+
+!@FeifeiTian
+!------------------------------------------------------------------------------------------->>
+1001 FORMAT(/ &
+     &        '  [TransitionMatrix] frequency dependent IMAGINARY DIELECTRIC FUNCTION' &
+     &       ,' (independent particle, no local field effects)',A,/&
+     &        '     E(ev)  ', &
+     &        4X,'X', 9X,'Y', 9X,'Z', 8X,'XY', 8X,'YZ', 8X,'ZX', &
+     &        8X,'I_CONBANDS', 8X,'KPOINT', 8X,'W%FERWE'/ &
+     &        '  ----------------------------------------------------', &
+     &        '----------------------------------------------------------'/ &
+     &        (7F20.12,2I8,F20.12))
+
 1100 FORMAT(/ &
      &        '  frequency dependent      REAL DIELECTRIC FUNCTION' &
      &       ,' (independent particle, no local field effects)',A,/&
@@ -393,6 +407,8 @@
      &        '  ----------------------------------------------------', &
      &        '----------------------------------------------------------'/ &
      &        (7F20.12))
+!--------------------------------------------------------------------------------------------<<
+
 
 ! writing to standard out
       IF (IO%IU6>=0) THEN
@@ -405,11 +421,17 @@
 
 !@FeifeiTian
 !-------------------------------------------------------------------------------------------------------------------------------!
-         WRITE(IO%IU6,1000) "[TransitionMatrix] density-density", &                                                             !
-            (((FREQUENCY_tm(I_CONBANDS,KPOINT,ISPIN),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,1)), &                            !
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,2)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,3)), &                        !
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,2)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,3)), &                        !
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,1)), ISPIN=1,WDES%ISPIN), KPOINT=1,WDES%NKPTS), I_CONBANDS=1,WDES%NBANDS ) !
+         WRITE(IO%IU6,*) "KPOINTS%ISMEAR=",KPOINTS%ISMEAR                                                                       !
+         WRITE(IO%IU6,*) "WDES%NKPTS=",WDES%NKPTS                                                                               !
+         WRITE(IO%IU6,*) "WDES%NBANDS=",WDES%NBANDS                                                                              !
+         WRITE(IO%IU6,*) "EIG(NL_CORE)=",EIG(NL_CORE)
+         WRITE(IO%IU6,1001) " density-density", &                                                            !
+            (((FREQUENCY_tm(I_CONBANDS,KPOINT,ISPIN), &
+            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,1)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,2)), &
+            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,3)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,2)), &
+            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,3)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,1)), &
+            I_CONBANDS, KPOINT, W%FERWE(I_CONBANDS,KPOINT,ISPIN), &
+            ISPIN=1,WDES%ISPIN), KPOINT=1,WDES%NKPTS), I_CONBANDS=1,WDES%NBANDS ) !
 !-------------------------------------------------------------------------------------------------------------------------------!
 
          WRITE(IO%IU6,1100) " density-density", &
@@ -426,7 +448,7 @@
 
 !@FeifeiTian
 !----------------------------------------!
-      DEALLOCATE((EPSDD_tm,FREQUENCY_tm) !
+      DEALLOCATE(EPSDD_tm,FREQUENCY_tm)  !
 !----------------------------------------!
 
 ! End of profiling routines
