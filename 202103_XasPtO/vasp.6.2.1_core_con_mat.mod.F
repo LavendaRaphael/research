@@ -299,7 +299,7 @@
 !@FeifeiTian
 !---------------------------------------------------------------------------------------------------------------------->>
                         NB_GLOBAL=(I_CONBANDS-1)*WDES%COMM_INTER%NCPU+WDES%COMM_INTER%NODE_ME
-                        FREQUENCY_TM( NB_GLOBAL,KPOINT,ISPIN)   = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN  ),q)
+                        FREQUENCY_TM( NB_GLOBAL,KPOINT,ISPIN)   = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN  ),q)-EIG(NL_CORE)
                         OCC_TM      ( NB_GLOBAL,KPOINT,ISPIN)   =      W%FERWE(I_CONBANDS,KPOINT,ISPIN  )
                         NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,1) = WDES%COMM%NODE_ME
                         NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,2) =    NODEID_TM( NB_GLOBAL,KPOINT,ISPIN,2) + 1
