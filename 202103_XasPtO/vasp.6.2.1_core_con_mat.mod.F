@@ -119,10 +119,14 @@
       REAL(q), ALLOCATABLE ::    W_CORE(:,:)
 
 !@FeifeiTian
-!----------------------------------------------------!
-      COMPLEX(q), ALLOCATABLE :: EPSDD_tm(:,:,:,:,:) !
-      REAL(q), ALLOCATABLE ::    FREQUENCY_tm(:,:,:) !
-!----------------------------------------------------!
+!---------------------------------------------------->>
+      COMPLEX(q), ALLOCATABLE :: EPSDD_TM(:,:,:,:,:)
+      REAL(q), ALLOCATABLE ::    FREQUENCY_TM(:,:,:)
+      REAL(q), ALLOCATABLE ::    OCC_TM(:,:,:)
+      INTEGER ::                 NB_GLOBAL
+      INTEGER, ALLOCATABLE ::    NODEID_TM(:,:,:,:)
+      INTEGER              ::    IOME_IU1=-1
+!---------------------------------------------------->>
 
 ! input variables
       TYPE (type_info)           T_INFO           !type_type_info from poscar.F
@@ -261,12 +265,16 @@
       EPSDD = (0.0_q,0.0_q)
 
 !@FeifeiTian
-!---------------------------------------------------------------!
-      ALLOCATE(EPSDD_tm(WDES%NBANDS,WDES%NKPTS,WDES%ISPIN,3,3)) !
-      ALLOCATE(FREQUENCY_tm(WDES%NBANDS,WDES%NKPTS,WDES%ISPIN)) !
-      EPSDD_tm = (0.0_q,0.0_q)                                  !
-      FREQUENCY_tm = 0.0_q
-!---------------------------------------------------------------!
+!--------------------------------------------------------------->>
+      ALLOCATE( EPSDD_TM    ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN, 3, 3 ) ) 
+      ALLOCATE( FREQUENCY_TM( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN       ) )
+      ALLOCATE( OCC_TM      ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN       ) )
+      ALLOCATE( NODEID_TM   ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN, 2    ) )
+      EPSDD_TM = (0.0_q,0.0_q)
+      FREQUENCY_TM = 0.0_q
+      OCC_TM=0.0_q
+      NODEID_TM=0
+!---------------------------------------------------------------<<
 
 ! loop over atoms
       atomloop: DO NI=NIS,(NIS+T_INFO%NITYP(NT_CL)-1)
@@ -287,15 +295,19 @@
 #endif
 ! loop over conduction bands
                      condloop: DO I_CONBANDS = 1, WDES%NBANDS
+
+!@FeifeiTian
+!---------------------------------------------------------------------------------------------------------------------->>
+                        NB_GLOBAL=(I_CONBANDS-1)*WDES%COMM_INTER%NCPU+WDES%COMM_INTER%NODE_ME
+                        FREQUENCY_TM( NB_GLOBAL,KPOINT,ISPIN)   = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN  ),q)
+                        OCC_TM      ( NB_GLOBAL,KPOINT,ISPIN)   =      W%FERWE(I_CONBANDS,KPOINT,ISPIN  )
+                        NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,1) = WDES%COMM%NODE_ME
+                        NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,2) =    NODEID_TM( NB_GLOBAL,KPOINT,ISPIN,2) + 1
+!----------------------------------------------------------------------------------------------------------------------<<
+
 ! if band is occupied then cycle
                         IF (W%FERWE(I_CONBANDS,KPOINT,ISPIN) >= 0.5_q) cycle
                         ENERGY_DIFF = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN),q)-EIG(NL_CORE)-FREQUENCY
-
-!@FeifeiTian
-!----------------------------------------------------------------------------------------------------------------------!
-                        FREQUENCY_tm(I_CONBANDS,KPOINT,ISPIN) = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN),q)-EIG(NL_CORE)  !
-!----------------------------------------------------------------------------------------------------------------------!
-
 ! calculate delta function
                         CALL DELSTP(KPOINTS%ISMEAR,ENERGY_DIFF/CH_SIGMA,DELTAFUN,STEPFUN)
                         DELTAFUN = DELTAFUN/CH_SIGMA 
@@ -326,13 +338,14 @@
                                                                CMPLX(0.0_q,EPSILON_HELP,q)
 
 !@FeifeiTian
-!-------------------------------------------------------------------------------------------------------------------------------!
-                                 EPSILON_HELP = PREFACTOR/FREQUENCY_tm(I_CONBANDS,KPOINT,ISPIN)**2.0_q * &                      !
-                                                   WDES%WTKPT(KPOINT)*         &                                                !
-                                                   MECC1*CONJG(MECC2)*CH_AMPLIFICATION                                          !
-                                 EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,ALPHA,BETA)=EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,ALPHA,BETA) + &  !
-                                                                CMPLX(0.0_q,EPSILON_HELP,q)                                     !
-!-------------------------------------------------------------------------------------------------------------------------------!
+!------------------------------------------------------------------------------------------------------------------------------->>
+                                 EPSILON_HELP = PREFACTOR/FREQUENCY_TM(NB_GLOBAL,KPOINT,ISPIN) * &
+                                                   WDES%WTKPT(KPOINT)*         &
+                                                   MECC1*CONJG(MECC2)*CH_AMPLIFICATION
+                                 EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,ALPHA,BETA)= &
+                                                                EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,ALPHA,BETA) + &
+                                                                CMPLX(0.0_q,EPSILON_HELP,q)
+!-------------------------------------------------------------------------------------------------------------------------------<<
 
                               ENDDO betaloop
                            ENDDO alphaloop
@@ -349,9 +362,17 @@
       CALLMPI(  M_sum_z(WDES%COMM,EPSDD(1,1,1),CH_NEDOS*3*3) )
 
 !@FeifeiTian
-!-----------------------------------------------------------------------------------------------!
-      CALLMPI(  M_sum_z(WDES%COMM,EPSDD_tm(1,1,1,1,1),(WDES%NBANDS*WDES%NKPTS*WDES%ISPIN*3*3) ))!
-!-----------------------------------------------------------------------------------------------!
+!----------------------------------------------------------------------------------------------->>
+      EPSDD_TM=EPSDD_TM/CH_NEDOS
+      NODEID_TM(:,:,:,2)=NODEID_TM(:,:,:,2)/CH_NEDOS
+      CALLMPI( M_sum_z( WDES%COMM,    EPSDD_TM (1,1,1,1,1) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN *3*3)))
+      CALLMPI( M_sum_d( WDES%COMM,FREQUENCY_TM (1,1,1    ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
+      CALLMPI( M_sum_d( WDES%COMM,      OCC_TM (1,1,1    ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
+      CALLMPI( M_sum_i( WDES%COMM,   NODEID_TM (1,1,1,1  ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN *2  )))
+      IF (ANY(NODEID_TM(:,:,:,2)/=1)) THEN
+        CALL vtutor%error("STOP at 'core_con_mat.F' LINE=373 !!!")
+      ENDIF
+!-----------------------------------------------------------------------------------------------<<
 
 ! if symmetry present then symmetrize 3x3 tensor using TSYM
 !!      IF (SYMM%ISYM>0) THEN
@@ -361,15 +382,15 @@
          ENDDO
 
 !@FeifeiTian
-!-------------------------------------------------------------------------------------------!
-         DO ISPIN = 1, WDES%ISPIN                                                           ! 
-         DO KPOINT = 1, WDES%NKPTS                                                          ! 
-         DO I_CONBANDS = 1, WDES%NBANDS                                                     ! 
-            CALL TSYM_CMPLX(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,:,:),ISYMOP,NROTK,LATT_CUR%A)  !
-         ENDDO                                                                              !
-         ENDDO                                                                              !
-         ENDDO                                                                              !
-!-------------------------------------------------------------------------------------------!
+!------------------------------------------------------------------------------------------->>
+         DO ISPIN = 1, WDES%ISPIN 
+         DO KPOINT = 1, WDES%NKPTS                                                         
+         DO NB_GLOBAL= 1, WDES%NB_TOT
+            CALL TSYM_CMPLX(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,:,:),ISYMOP,NROTK,LATT_CUR%A) 
+         ENDDO                                                                              
+         ENDDO                                                                              
+         ENDDO
+!-------------------------------------------------------------------------------------------<<
 
       ENDIF
 
@@ -386,19 +407,6 @@
      &        '  ----------------------------------------------------', &
      &        '----------------------------------------------------------'/ &
      &        (7F20.12))
-
-!@FeifeiTian
-!------------------------------------------------------------------------------------------->>
-1001 FORMAT(/ &
-     &        '  [TransitionMatrix] frequency dependent IMAGINARY DIELECTRIC FUNCTION' &
-     &       ,' (independent particle, no local field effects)',A,/&
-     &        '     E(ev)  ', &
-     &        4X,'X', 9X,'Y', 9X,'Z', 8X,'XY', 8X,'YZ', 8X,'ZX', &
-     &        8X,'I_CONBANDS', 8X,'KPOINT', 8X,'W%FERWE'/ &
-     &        '  ----------------------------------------------------', &
-     &        '----------------------------------------------------------'/ &
-     &        (7F20.12,2I8,F20.12))
-
 1100 FORMAT(/ &
      &        '  frequency dependent      REAL DIELECTRIC FUNCTION' &
      &       ,' (independent particle, no local field effects)',A,/&
@@ -407,8 +415,6 @@
      &        '  ----------------------------------------------------', &
      &        '----------------------------------------------------------'/ &
      &        (7F20.12))
-!--------------------------------------------------------------------------------------------<<
-
 
 ! writing to standard out
       IF (IO%IU6>=0) THEN
@@ -418,22 +424,6 @@
          WRITE(IO%IU6,1000) " density-density", &
             ((EMIN+DELTAE*(I-1)),AIMAG(EPSDD(I,1,1)),AIMAG(EPSDD(I,2,2)),AIMAG(EPSDD(I,3,3)), &
             AIMAG(EPSDD(I,1,2)),AIMAG(EPSDD(I,2,3)),AIMAG(EPSDD(I,3,1)), I=1,CH_NEDOS,ISTEP)
-
-!@FeifeiTian
-!-------------------------------------------------------------------------------------------------------------------------------!
-         WRITE(IO%IU6,*) "KPOINTS%ISMEAR=",KPOINTS%ISMEAR                                                                       !
-         WRITE(IO%IU6,*) "WDES%NKPTS=",WDES%NKPTS                                                                               !
-         WRITE(IO%IU6,*) "WDES%NBANDS=",WDES%NBANDS                                                                              !
-         WRITE(IO%IU6,*) "EIG(NL_CORE)=",EIG(NL_CORE)
-         WRITE(IO%IU6,1001) " density-density", &                                                            !
-            (((FREQUENCY_tm(I_CONBANDS,KPOINT,ISPIN), &
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,1)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,2)), &
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,3)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,1,2)), &
-            AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,2,3)),AIMAG(EPSDD_tm(I_CONBANDS,KPOINT,ISPIN,3,1)), &
-            I_CONBANDS, KPOINT, W%FERWE(I_CONBANDS,KPOINT,ISPIN), &
-            ISPIN=1,WDES%ISPIN), KPOINT=1,WDES%NKPTS), I_CONBANDS=1,WDES%NBANDS ) !
-!-------------------------------------------------------------------------------------------------------------------------------!
-
          WRITE(IO%IU6,1100) " density-density", &
             ((EMIN+DELTAE*(I-1)),REAL(EPSDD(I,1,1),q),REAL(EPSDD(I,2,2),q),REAL(EPSDD(I,3,3),q), &
             REAL(EPSDD(I,1,2),q),REAL(EPSDD(I,2,3),q),REAL(EPSDD(I,3,1),q),I=1,CH_NEDOS,ISTEP)
@@ -447,9 +437,31 @@
       DEALLOCATE(EPSDD,W_CORE,A,B,N,LC,EIG,NABLA)
 
 !@FeifeiTian
-!----------------------------------------!
-      DEALLOCATE(EPSDD_tm,FREQUENCY_tm)  !
-!----------------------------------------!
+!------------------------------------------------------------------------------------------->>
+20402 FORMAT(/ &
+     &        '#  Transition Matrix: KPOINT=',I5,' ISPIN=',I1,/ &
+     &        '#     E(ev)',8X,'X', 9X,'Y', 9X,'Z', 8X,'XY', 8X,'YZ', 8X,'ZX', &
+     &        8X,'NB_GLOBAL'/ &
+     &        (7F20.12,I8))
+
+    IF (IO%IU6>0) THEN
+        IOME_IU1=20401
+        OPEN(UNIT=IOME_IU1,FILE='MYCARXAS',STATUS='REPLACE')
+        DO KPOINT=1, WDES%NKPTS
+        DO ISPIN =1, WDES%ISPIN
+            WRITE(IOME_IU1,20402) KPOINT,ISPIN, &
+                ((FREQUENCY_TM(NB_GLOBAL,KPOINT,ISPIN    ) ,&
+                AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,1,1)),AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,2,2)),&
+                AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,3,3)),AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,1,2)),&
+                AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,2,3)),AIMAG(EPSDD_TM(NB_GLOBAL,KPOINT,ISPIN,3,1)),&
+                NB_GLOBAL),&
+                NB_GLOBAL=1,WDES%NB_TOT)
+        ENDDO
+        ENDDO
+        CLOSE(IOME_IU1)
+    ENDIF
+    DEALLOCATE(EPSDD_TM,FREQUENCY_TM, OCC_TM, NODEID_TM)
+!--------------------------------------------------------------------------------------------<<
 
 ! End of profiling routines
       PROFILING_STOP('calc_core_con_mat')
