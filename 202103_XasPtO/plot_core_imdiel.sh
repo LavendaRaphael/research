@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eup pipefail
 
 cat > helpscript.perl  <<EOF
 #!/bin/perl
@@ -30,7 +31,7 @@ while(<>)
          if (\$mode==15) {\$sum=\$help[6];}
          if (\$mode==16) {\$sum=\$help[7];}
          if (\$mode==17) {\$sum=(\$help[2]+\$help[3])/2.0;}
-         \$sum=\$help[1]*\$sum
+         \$sum=\$help[1]*\$sum;
          print \$help[1]," ",\$sum,"\n";
       }
    }

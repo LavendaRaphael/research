@@ -4,7 +4,7 @@ do for [i=1:100] {pic[i]=0}
 # pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
 # pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
 
- pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/aimd.pdf
+# pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/aimd.pdf
 
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
 # 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
@@ -40,6 +40,7 @@ do for [i=1:100] {pic[i]=0}
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
 # 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
 
+  pic[53]=1  # Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.tm.exp.pdf
 # pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
 # pic[8]=1   # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.pdf
 
@@ -70,6 +71,63 @@ set style data lines
 datdir="~/group/202103_XasPtO/server/"
 outdir="~/group/202103_XasPtO/log/server/"
 
+#-------------------------------------------------------------------------------------[]
+if (pic[53]==1) {
+subdir='Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/vasp_sch/atom_1/'
+outfile=outdir.subdir.'sch.x_y.tm.exp.pdf'
+
+array mid=['x_y','TM(K1,W1)','TM(K2,W2)','TM(K3,W2)','TM(K4,W4)']
+num=|mid|
+
+array datfile[num]
+do for [i=1:1] {datfile[i]='xas.'.mid[i].'.dat'}
+do for [i=2:num] {datfile[i]='MYCARXAS'}
+do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+expfile=datdir.subdir.'20210512.Pt-111_ysft.norm.dat'
+
+array titl[num]
+do for [i=1:num] {titl[i]='Theory '.mid[i]}
+titl[1]='Theory X\_Y'
+#titl[1]='Theory In-plane'
+#titl[2]='Theory Out-of-plane'
+exptitl='Exp.'
+
+array colo[num]
+if (num==1) {
+    do for [i=1:num] {colo[i]='black'}
+}
+if (num==2) {
+    do for [i=1:num] {colo[i]=colors2[i]}
+}
+if (num==3) {
+    do for [i=1:num] {colo[i]=colors3[i]}
+}
+if (num==4) {
+    do for [i=1:num] {colo[i]=colors4[i]}
+}
+if (num==5 || num==6) {
+    do for [i=1:num] {colo[i]=colors6[i]}
+}
+
+#sft=14.9755022276
+sft=0
+scaling=1e3
+
+set term X11 persist
+#set term pdfcairo font "Arial,25" size 7*1,5*1
+#set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [510.2359062397+sft:530.2359062397+sft]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+expfile u ($1+sft):($2*scaling*500) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
+for [i=1:1] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+for [i=2:num] datfile[i] every :::(i-2)::(i-2) u ($1+sft):(($2+$3)/2.0*scaling*10) w p pt 6 ps 0.5 lw 2 lc ''.colo[i] t titl[i],\
+}
+pause -1
 #-------------------------------------------------------------------------------------[]
 if (pic[52]==1) {
 subdir='Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/'
