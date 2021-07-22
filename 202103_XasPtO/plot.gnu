@@ -4,9 +4,9 @@ do for [i=1:100] {pic[i]=0}
 # pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
 # pic[49]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/atom_*/sch.pdf
 
-  pic[54]=1   # gotowork_2.'vasp_sch_aimd3_snap329/sch.0k_snap329.pdf'
+# pic[54]=1   # gotowork_2.'vasp_sch_aimd3_snap329/sch.0k_snap329.pdf'
 
-# pic[48]=1   # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/aimd.pdf
+  pic[48]=1   # gotowork_2.'/aimd/aimd.pdf'
 
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
 # 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
@@ -394,18 +394,19 @@ for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
 if (pic[48]==1) {
 
 subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
-outfile=outdir.subdir.'aimd.pdf'
+outfile=gotolog_2.'aimd/aimd.pdf'
 
-array mid=['aimd1','aimd2','aimd3']
+array mid=['aimd1']
 num=|mid|
 
+datdir=gotowork_2.'aimd/'
 array datfile[num]
 do for [i=1:num] {datfile[i]=mid[i].'/step.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
+do for [i=1:num] {datfile[i]=datdir.datfile[i]}
 
 array titl=['Free energy','Temperature']
 
-array num1=[0,377,377+194]
+array num1=[0]
 
 colornum=2
 array colo[colornum]
@@ -440,10 +441,10 @@ set style line 1 lw 2
 
 p \
 datfile[1] u ($1*0.5):3 ls 1 lc ''.colo[1] t titl[1] axis x1y1,\
-for [i=2:num] datfile[i] u (($1+num1[i])*0.5):3 ls 1 lc ''.colo[1] axis x1y1,\
 datfile[1] u ($1*0.5):2 ls 1 lc ''.colo[2] t titl[2] axis x1y2 ,\
-for [i=2:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[2] axis x1y2 ,\
 }
+
+#for [i=2:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[2] axis x1y2 ,\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[46]==1) {
