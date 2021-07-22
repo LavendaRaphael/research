@@ -11,11 +11,7 @@ fi
 local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 # work_dir=${gotowork_3}vasp_sch/
-# work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd2000.qe_fch_scf/
-# work_dir=${homedir}group/202103_XasPtO/server/Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd2000.qe_hch_scf/
-# work_dir=${gotowork_2}sch_aimd3_snap329/
-# work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_fch_scf/
-# work_dir=${homedir}group/202103_XasPtO/server/Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/
+# work_dir=${gotowork_2}vasp_sch_aimd3_snap329/
   work_dir=${gotowork_2}vasp_sch/
 echo "work_dir=$work_dir"
 

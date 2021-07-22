@@ -19,7 +19,7 @@ fi
 if [ 1 = 1 ];then
     echo "#-------------------------------------------------[sft]"
     cat > xas_sft.in <<eof
-datafile       "CORE_DIELECTRIC_IMAG.Z.dat"
+datafile       "xas.x.dat"
 datafile1      "fort13"
 datafile2      "fort777"
 eof
