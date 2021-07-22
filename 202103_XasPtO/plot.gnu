@@ -76,46 +76,42 @@ if (pic[53]==1) {
 subdir='Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/vasp_sch/atom_1/'
 outfile=outdir.subdir.'sch.x_y.tm.exp.pdf'
 
-array mid=['x_y','TM(K1,W1)','TM(K2,W2)','TM(K3,W2)','TM(K4,W4)']
-num=|mid|
+array datfile[3]
+datfile[1]='20210512.Pt-111_ysft.norm.dat'
+datfile[2]='xas.x_y.dat'
+datfile[3]='MYCARXAS'
+do for [i=1:3] {datfile[i]=datdir.subdir.datfile[i]}
 
-array datfile[num]
-do for [i=1:1] {datfile[i]='xas.'.mid[i].'.dat'}
-do for [i=2:num] {datfile[i]='MYCARXAS'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-expfile=datdir.subdir.'20210512.Pt-111_ysft.norm.dat'
 
-array titl[num]
-do for [i=1:num] {titl[i]='Theory '.mid[i]}
-titl[1]='Theory X\_Y'
-#titl[1]='Theory In-plane'
-#titl[2]='Theory Out-of-plane'
-exptitl='Exp.'
+titlnum=6
+array titl[titlnum]
+titl[1]='Exp.'
+titl[2]='Theory X\_Y'
+titl[3]='Theory TM X'
+titl[4]='Theory TM Y'
+array band=[343,416]
+array kpoint=[4,4]
+array tm123=[1,1]
+array tmxyz=['X','Y','Z']
+titl[5]='BAND-'.band[1].' K-'.kpoint[1].' '.tmxyz[tm123[1]]
+titl[6]='BAND-'.band[2].' K-'.kpoint[2].' '.tmxyz[tm123[2]]
 
-array colo[num]
-if (num==1) {
-    do for [i=1:num] {colo[i]='black'}
+colornum=3
+array colo[colornum]
+do for [i=1:colornum] {
+    if (colornum==1) {colo[i]='black'}
+    if (colornum==2) {colo[i]=colors2[i]}
+    if (colornum==3) {colo[i]=colors3[i]}
+    if (colornum==4) {colo[i]=colors4[i]}
+    if (colornum==5 || colornum==6) {colo[i]=colors6[i]}
 }
-if (num==2) {
-    do for [i=1:num] {colo[i]=colors2[i]}
-}
-if (num==3) {
-    do for [i=1:num] {colo[i]=colors3[i]}
-}
-if (num==4) {
-    do for [i=1:num] {colo[i]=colors4[i]}
-}
-if (num==5 || num==6) {
-    do for [i=1:num] {colo[i]=colors6[i]}
-}
-
-#sft=14.9755022276
+# sft=14.9755022276
 sft=0
 scaling=1e3
 
-set term X11 persist
-#set term pdfcairo font "Arial,25" size 7*1,5*1
-#set output outfile
+#set term X11 persist
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [510.2359062397+sft:530.2359062397+sft]
@@ -123,11 +119,14 @@ set yrange [0:*]
 set style line 1 lw 2
 
 p \
-expfile u ($1+sft):($2*scaling*500) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
-for [i=1:1] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
-for [i=2:num] datfile[i] every :::(i-2)::(i-2) u ($1+sft):(($2+$3)/2.0*scaling*10) w p pt 6 ps 0.5 lw 2 lc ''.colo[i] t titl[i],\
+datfile[1] u ($1+sft):($2*scaling*500) w p pt 6 ps 0.5 lw 2 lc 'black' t titl[1],\
+datfile[2] u ($1+sft):($2*scaling) ls 1 lc ''.colo[1] t titl[2],\
+datfile[3] u ($1+sft):($2*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[2] t titl[3],\
+datfile[3] u ($1+sft):($3*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[4],\
+datfile[3] every ::(band[1]-1):(kpoint[1]-1):(band[1]-1):(kpoint[1]-1) u ($1+sft):($2*scaling*5) w p pt 9 ps 1 lw 2 lc ''.colo[tm123[1]+1] t titl[5],\
+datfile[3] every ::(band[2]-1):(kpoint[2]-1):(band[2]-1):(kpoint[2]-1) u ($1+sft):($2*scaling*5) w p pt 11 ps 1 lw 2 lc ''.colo[tm123[2]+1] t titl[6],\
 }
-pause -1
+#pause -1
 #-------------------------------------------------------------------------------------[]
 if (pic[52]==1) {
 subdir='Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/'
