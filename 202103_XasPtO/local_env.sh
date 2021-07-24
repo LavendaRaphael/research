@@ -15,8 +15,8 @@ echo "--------------------------------------------------------------------------
 # work_dir=${gotowork_2}vasp_sch/
 echo "work_dir=$work_dir"
 
-  O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
-  echo "O_num=$O_num"
+# O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
+# echo "O_num=$O_num"
 # O_num=4
 
 # sub_dir="xspectra/"
@@ -31,12 +31,12 @@ echo "sub_dir=$sub_dir"
 echo "subfile=$subfile"
 
 # loopfile="1"
-  loopfile=`seq 1 $O_num`
+# loopfile=`seq 1 $O_num`
 # loopfile="1 3 5 7 9 11"
 # loopfile="1 1 3 3 5 5 7 7 9 9 11"
 # loopfile="1 3"
 # loopfile="3 4 5 11 12 13 14 15 16 17 18 19 20 21 22"
-echo "loopfile=$loopfile"
+# echo "loopfile=$loopfile"
 
   tensorxyz="X Y Z"
 echo "tensorxyz=$tensorxyz"
