@@ -43,7 +43,7 @@ def eos_vinet(params, vol):
 
 
 #fname = input("Filename containing energy vs volume [volume.dat]: ")
-fname = 'e0_a.dat'
+fname = 'E0_a.dat'
 
 try:
     f = open(fname, 'rt')
