@@ -16,7 +16,7 @@ echo "work_dir=$work_dir"
   subfile=vasp_sub.sh
 echo "subfile=$subfile"
 
-  loopfile=$(seq 4.050 0.001 4.090)
+  loopfile=$(seq 4.130 0.001 4.170)
 echo "loopfile=$loopfile"
 
 echo "#=========================================================================<<<"
