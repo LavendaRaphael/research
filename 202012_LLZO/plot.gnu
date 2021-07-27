@@ -1,15 +1,75 @@
-colors='black red blue green cyan magenta yellow'
-set term pdfcairo font "Arial,25" size 6*1,5*1
+array pic[100]
+do for [i=1:100] {pic[i]=0}
+
+  pic[1]=1   # goto_llzo_au_log.'/Au.a1b1c1_eosfit/eosfit.pdf'
+
+array colors2=['#FE7D6A', '#81B8E9']
+array colors3=['#4D85BD', '#F7903D', '#59A95A']
+array colors3_1=['#D22027', '#384589', '#7FA5B7']
+array colors4=['#817F00','#FB7E03','#01FD01','#00FFFF']
+array colors6=['#EE3624','#323293','#62BB47','#BC8EC0','#8EDAF8','#C7811F']
+
 set samples 500
-set key box
+# set key box
 set key samplen 2
 set key width 2
 set key height 0.5
 set key noautotitle
 set encoding iso_8859_1
+set style data lines
+
+homedir="~/"
+goto_llzo_au=homedir.'group/202012_LLZO/server/Au/'
+goto_llzo_au_log=homedir.'group/202012_LLZO/log/server/Au/'
+
+#-------------------------------------------------------------------------------------[]
+if (pic[1]==1) {
+outfile=goto_llzo_au_log.'Au.a1b1c1_eosfit/eosfit.pdf'
+
+array datdir[1]
+datdir[1]=goto_llzo_au.'Au.a1b1c1_eosfit/'
+array datfile[1]
+datfile[1]=datdir[1].'E0_a.dat'
+
+titlnum=2
+array titl[titlnum]
+titl[1]='Computational Data'
+titl[2]='Birch-Murnaghan EOS'
+
+colornum=2
+array colo[colornum]
+do for [i=1:colornum] {
+    if (colornum==1) {colo[i]='black'}
+    if (colornum==2) {colo[i]=colors2[i]}
+    if (colornum==3) {colo[i]=colors3[i]}
+    if (colornum==4) {colo[i]=colors4[i]}
+    if (colornum==5 || colornum==6) {colo[i]=colors6[i]}
+}
+
+#set term X11 persist
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Volume ({\305}^3)" offset 0,0
+set ylabel "Energy (eV)" offset 1,0
+set xrange [*:*]
+set yrange [*:*]
+set format x "%7.1f"
+set format y "%7.3f"
+set style line 1 lw 2
+E0=-12.854438
+B0=132.823533/160.21765
+Bp=-4.009298
+V0=71.806323
+f(v) = E0 + 9.0*B0*V0/16.0* ((v/V0)**(2.0/3.0)-1.0)**2.0 * (6.0 + Bp*((v/V0)**(2.0/3.0)-1.0) - 4.0*(v/V0)**(2.0/3.0))
+
+p \
+datfile[1] u ($1**3):6:(0.015) w circle lw 2 lc ''.colo[1] t titl[1],\
+f(x) ls 1 lc ''.colo[2] t titl[2]
+}
+#pause -1
 
 #-------------------------------------[]
-if (4==4) {
+if (0==4) {
 workhome0="~/tianff/202012_LLZO/server/Li-bcc-001p1sn_vac/"
 set term pdfcairo font "Arial,25" size 8*1,5*1
 set output workhome0."Li_sigma.pdf"
