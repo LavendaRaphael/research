@@ -6,13 +6,15 @@ set -euo pipefail
 cd $work_dir
 
 rm -f E0_a.dat
+a0=`awk 'NR-3==0{print $1}' template/POSCAR`
 for i in ${loopfile[*]}
 do
     echo $i
-    cd a_$i
+    cd scal_$i
     E=`awk '/F=/ {print $0}' vasp.log`
     cd ..
-    echo $i $E  >>E0_a.dat
+    a=`bc <<< "scale=4;$a0*$i"`
+    echo $a $E  >>E0_a.dat
 done
 
 

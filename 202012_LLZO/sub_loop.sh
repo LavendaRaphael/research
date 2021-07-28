@@ -7,7 +7,7 @@ cd $work_dir
 for N in $loopfile
 do
 	echo $N
-	cd a_${N}
+	cd scal_${N}
 	bash $subfile
     rm ${subfile}
 	cd -

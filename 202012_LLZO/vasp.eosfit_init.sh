@@ -8,13 +8,10 @@ cd $work_dir
 for i in ${loopfile[*]}
 do
     echo $i
-    rm -rf a_$i
-    cp -r template a_$i
-    cd a_$i
+    rm -rf scal_$i
+    cp -r template scal_$i
+    cd scal_$i
     sed -i "2c $i" POSCAR
-    sed -i "3c 1.0     0.0     0.0" POSCAR
-    sed -i "4c 0.0     1.0     0.0" POSCAR
-    sed -i "5c 0.0     0.0     1.0" POSCAR
     sed -i "s/xNUMx/$i/g"  $subfile
     cd ..
 done
