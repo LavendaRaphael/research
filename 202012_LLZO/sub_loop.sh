@@ -4,7 +4,7 @@ source local_env.sh
 set -euo pipefail
 
 cd $work_dir
-for N in $loopfile
+for N in ${loopfile[*]}
 do
 	echo $N
 	cd scal_${N}
