@@ -9,6 +9,5 @@ do
 	echo $N
 	cd scal_${N}
 	bash $subfile
-    rm ${subfile}
 	cd -
 done

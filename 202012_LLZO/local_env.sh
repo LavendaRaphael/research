@@ -19,8 +19,10 @@ echo "work_dir=$work_dir"
   subfile=vasp_sub.sh
 echo "subfile=$subfile"
 
-loopfile=(0.94 0.95 0.96)
-#  loopfile=$(seq 0.90 0.01 1.10)
+# loopfile=(0.94 0.95 0.96)
+# loopfile=$(seq 0.90 0.01 1.10)
+# loopfile=$(seq 0.90 0.02 1.10)
+ loopfile=$(seq 0.91 0.02 1.09)
 echo "loopfile=$loopfile"
 
 echo "#=========================================================================<<<"
