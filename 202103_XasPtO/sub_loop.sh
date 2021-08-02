@@ -10,6 +10,5 @@ do
 	cd atom_${N}/$sub_dir
 	sed -i "s/xNUMx/$N/g"  $subfile
 	bash $subfile
-    rm ${subfile}
 	cd -
 done
