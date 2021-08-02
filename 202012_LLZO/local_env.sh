@@ -11,8 +11,10 @@ fi
 local_env=false
 echo "---------------------------------------------------------------------------[local_env.sh]"
 # work_dir=${goto_llzo_li}Li.a1b1c1_eosfit/
+# work_dir=${goto_llzo_li}Li.a1b1c1_eosfit.PBE-D3/
+# work_dir=${goto_llzo_li}Li.a1b1c1_eosfit.optB88-vdW/
 # work_dir=${goto_llzo_au}Au.a1b1c1_eosfit/
-  work_dir=${goto_llzo_llzo}Li7La3Zr2O12.a1b1c1_eosfit/
+ work_dir=${goto_llzo_llzo}Li7La3Zr2O12.a1b1c1_eosfit/
 
 echo "work_dir=$work_dir"
 
@@ -22,7 +24,8 @@ echo "subfile=$subfile"
 # loopfile=(0.94 0.95 0.96)
 # loopfile=$(seq 0.90 0.01 1.10)
 # loopfile=$(seq 0.90 0.02 1.10)
- loopfile=$(seq 0.91 0.02 1.09)
+ loopfile=$(seq 1.02 0.02 1.10)
+# loopfile=$(seq 0.91 0.02 1.09)
 echo "loopfile=$loopfile"
 
 echo "#=========================================================================<<<"
