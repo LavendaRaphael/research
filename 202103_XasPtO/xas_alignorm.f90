@@ -6,12 +6,13 @@
 !---------------------------------------------------------------[USE]
 ! ./xas_alignorm.x xas_alignorm.in
 !---------------------------------------------------------------[xas_alignorm.in]
-! datafile   "*.dat"
-! e_align    535.0d0             #eV
-! area       10.d0
-! e_begin    532.d0              #eV
-! e_end      546.d0              #eV
-! predge_tolera  0.1                 #%
+! datafile      "*.dat"
+! e_align       535.0d0             #eV
+! area          10.d0
+! e_begin       532.d0              #eV
+! e_end         546.d0              #eV
+! peak_tolera   0.1                 #%
+! peak_index    1
 !---------------------------------------------------------------[DATAFILE]
 ! *.dat
 !---------------------------------------------------------------[OUTFILE]
@@ -33,9 +34,9 @@ character (len=500)             :: outfile="xas_alignorm.dat", errfile='my.err',
 integer, parameter              :: errfile_unit=11, infile_unit=12, datafile_unit=13, outfile_unit=14
 character (len=500), allocatable:: input_list(:)
 !---------------------------------------------------------------[InputVariable]
-real (DP)                       :: e_align, area, e_begin, e_end, predge_tolera
+real (DP)                       :: e_align, area, e_begin, e_end, peak_tolera
 !---------------------------------------------------------------[InternalVariable] 
-integer (DP)                    :: ei_tot, i_begin, i_end
+integer (DP)                    :: ei_tot, i_begin, i_end, peak_index
 real (DP), allocatable          :: xas(:,:)
 real (DP)                       :: xas_sum, e_onset
 
@@ -45,9 +46,9 @@ call system_clock (clock_start)
 call get_command_argument(1,infile)
 write (errfile_unit, leng//"'[READ INFILE]: "//trim(infile)//"')")
 open(infile_unit, file = infile, status = 'old')
-input_tot = 6
+input_tot = 7
 allocate(input_list(input_tot))
-input_list = (/'datafile','e_align','area','e_begin','e_end','predge_tolera'/)
+input_list = (/'datafile','e_align','area','e_begin','e_end','peak_tolera','peak_index'/)
 do i = 1, input_tot
 do while (.true.)
     read (infile_unit, *, iostat = ios) temp_char0
@@ -83,7 +84,11 @@ case (5)
 case (6)
     read (infile_unit, *) temp_char(1:2)
     write (errfile_unit, "(2A25)") trim(temp_char(1)), trim(temp_char(2))
-    read (temp_char(2), *) predge_tolera
+    read (temp_char(2), *) peak_tolera
+case (7)
+    read (infile_unit, *) temp_char(1:2)
+    write (errfile_unit, "(2A25)") trim(temp_char(1)), trim(temp_char(2))
+    read (temp_char(2), *) peak_index
 endselect
 rewind (infile_unit)
 enddo
@@ -111,15 +116,26 @@ do while (.true.)
 enddo
 close(datafile_unit)
 !---------------------------------------------------------------[ALIGN TO PRE-EDGE]
-do i=2, ei_tot
-    if (xas(i,2) < xas(i-1,2)) then
-        temp_real0=xas(i-1,2)/maxval(xas(:,2))
-        if (temp_real0 >predge_tolera) exit
+temp_int0=0
+write (errfile_unit,'(A25)') "FIND PEAK"
+do i=2, ei_tot-1
+    if (xas(i,2) > xas(i-1,2) .AND. xas(i,2) > xas(i+1,2)) then
+        temp_real0=xas(i,2)/maxval(xas(:,2))
+        if (temp_real0 >peak_tolera) then
+            temp_int0 = temp_int0 + 1
+            write (errfile_unit,'(A25,F25.10,F25.10)') '',xas(i,1),temp_real0
+            if (temp_int0==peak_index) exit
+        endif
     endif
 enddo
-e_onset = xas(i-1,1)
+if (temp_int0/=peak_index) then
+    write (*,*) "ERROR !!! See 'my.err' for details."
+    write (errfile_unit, *) "Find peak_num ",temp_int0,"< peak_index ",peak_index,"!!!"
+    stop
+endif
+e_onset = xas(i,1)
 write(errfile_unit, '(A25,F25.10)') 'e_onset', e_onset
-write(errfile_unit, '(A25,F25.10)') 'predge/max', temp_real0
+write(errfile_unit, '(A25,F25.10)') 'peak/max', temp_real0
 xas(:,1) = xas(:,1) - e_onset + e_align
 !---------------------------------------------------------------[NORMALIZATION]
 do i = 1, ei_tot

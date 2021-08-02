@@ -6,7 +6,7 @@ do for [i=1:100] {pic[i]=0}
 
 # pic[54]=1   # gotowork_2.'vasp_sch_aimd3_snap329/sch.0k_snap329.pdf'
 
-  pic[48]=1   # gotowork_2.'/aimd/aimd.pdf'
+# pic[48]=1   # gotowork_2.'aimd/aimd.pdf'
 
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
 # 35 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon.pdf
@@ -22,7 +22,9 @@ do for [i=1:100] {pic[i]=0}
 # 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
 # 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
 
-# pic[51]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/sch.x.y.z.exp.pdf
+# pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
+# pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
+ pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
 # pic[15]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/atom_*/sch.pdf
 
 # 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
@@ -42,7 +44,7 @@ do for [i=1:100] {pic[i]=0}
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
 # 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
 
-# pic[53]=1  # gotowork_1.'vasp_sch/atom_1/sch.x_y.tm.exp.pdf'
+# pic[53]=1  # goto_work_1.'vasp_sch/atom_1/sch.x_y.tm.exp.pdf'
 # pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
 # pic[8]=1   # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.pdf
 
@@ -70,15 +72,124 @@ set key noautotitle
 set encoding iso_8859_1
 set style data lines
 
-datdir="~/group/202103_XasPtO/server/"
-outdir="~/group/202103_XasPtO/log/server/"
-
 homedir="~/"
-gotowork_1=homedir.'group/202103_XasPtO/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
- gotolog_1=homedir.'group/202103_XasPtO/log/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
-gotowork_2=homedir.'group/202103_XasPtO/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
- gotolog_2=homedir.'group/202103_XasPtO/log/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
-gotowork_3=homedir.'group/202103_XasPtO/server/Pt.111_alpha.PtO2.001_vac/Pt.111.a4b4c4_alpha.PtO2.001.a4b3c1_vac15/'
+goto_work_1=homedir.'group/202103_XasPtO/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
+ goto_log_1=homedir.'group/202103_XasPtO/log/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
+goto_work_2=homedir.'group/202103_XasPtO/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
+ goto_log_2=homedir.'group/202103_XasPtO/log/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
+goto_work_3=homedir.'group/202103_XasPtO/server/Pt.111_alpha.PtO2.001_vac/Pt.111.a4b4c4_alpha.PtO2.001.a4b3c1_vac15/'
+#-------------------------------------------------------------------------------------[]
+if (pic[56]==1) {
+outfile=goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
+
+datdir=goto_work_2.'vasp_sch/atom_11/'
+array datfile[4]
+datfile[1]='../20210512.Pt.110.ysft.norm.dat'
+datfile[2]='xas.x.dat'
+datfile[3]='xas.y.dat'
+datfile[4]='MYCARXAS'
+do for [i=1:4] {datfile[i]=datdir.datfile[i]}
+
+titlnum=5
+array titl[titlnum]
+titl[1]='Exp.'
+titl[2]='Theory X'
+titl[3]='Theory Y'
+titl[4]='Theory TM X'
+titl[5]='Theory TM Y'
+array band=[343,416]
+array kpoint=[4,4]
+array tm123=[1,1]
+array tmxyz=['X','Y','Z']
+#titl[6]='BAND-'.band[1].' K-'.kpoint[1].' '.tmxyz[tm123[1]]
+#titl[7]='BAND-'.band[2].' K-'.kpoint[2].' '.tmxyz[tm123[2]]
+
+colornum=2
+array colo[colornum]
+do for [i=1:colornum] {
+    if (colornum==1) {colo[i]='black'}
+    if (colornum==2) {colo[i]=colors2[i]}
+    if (colornum==3) {colo[i]=colors3[i]}
+    if (colornum==4) {colo[i]=colors4[i]}
+    if (colornum==5 || colornum==6) {colo[i]=colors6[i]}
+}
+  sft=529.6647579888-519.1189296348
+# sft=0
+scaling=1e3
+
+#set term X11 persist
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [510+sft:530+sft]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+datfile[1] u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t titl[1],\
+datfile[2] u ($1+sft):($2*scaling) ls 1 lc ''.colo[1] t titl[2],\
+datfile[3] u ($1+sft):($2*scaling) ls 1 lc ''.colo[2] t titl[3],\
+datfile[4] u ($1+sft):($2*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[1] t titl[4],\
+datfile[4] u ($1+sft):($3*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[2] t titl[5],\
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[55]==1) {
+outfile=goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
+
+datdir=goto_work_2.'vasp_sch/atom_1/'
+array datfile[4]
+datfile[1]='../20210512.Pt.110.ysft.norm.dat'
+datfile[2]='xas.x.dat'
+datfile[3]='xas.y.dat'
+datfile[4]='MYCARXAS'
+do for [i=1:4] {datfile[i]=datdir.datfile[i]}
+
+titlnum=5
+array titl[titlnum]
+titl[1]='Exp.'
+titl[2]='Theory X'
+titl[3]='Theory Y'
+titl[4]='Theory TM X'
+titl[5]='Theory TM Y'
+array band=[343,416]
+array kpoint=[4,4]
+array tm123=[1,1]
+array tmxyz=['X','Y','Z']
+#titl[6]='BAND-'.band[1].' K-'.kpoint[1].' '.tmxyz[tm123[1]]
+#titl[7]='BAND-'.band[2].' K-'.kpoint[2].' '.tmxyz[tm123[2]]
+
+colornum=2
+array colo[colornum]
+do for [i=1:colornum] {
+    if (colornum==1) {colo[i]='black'}
+    if (colornum==2) {colo[i]=colors2[i]}
+    if (colornum==3) {colo[i]=colors3[i]}
+    if (colornum==4) {colo[i]=colors4[i]}
+    if (colornum==5 || colornum==6) {colo[i]=colors6[i]}
+}
+  sft=529.6647579888-519.1189296348
+# sft=0
+scaling=1e3
+
+#set term X11 persist
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [510+sft:530+sft]
+set yrange [0:*]
+set style line 1 lw 2
+
+p \
+datfile[1] u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t titl[1],\
+datfile[2] u ($1+sft):($2*scaling) ls 1 lc ''.colo[1] t titl[2],\
+datfile[3] u ($1+sft):($2*scaling) ls 1 lc ''.colo[2] t titl[3],\
+datfile[4] u ($1+sft):($2*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[1] t titl[4],\
+datfile[4] u ($1+sft):($3*scaling*5) w p pt 7 ps 0.5 lw 2 lc ''.colo[2] t titl[5],\
+}
+
 #-------------------------------------------------------------------------------------[]
 if (pic[54]==1) {
 outfile=gotolog_2.'vasp_sch_aimd3_snap329/sch.0k_snap329.pdf'
@@ -237,8 +348,7 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/'
-outfile=outdir.subdir.'sch.x.y.z.exp.pdf'
+outfile=go.'sch.x.y.z.exp.pdf'
 
 array mid=['x','y','z']
 num=|mid|
@@ -393,10 +503,10 @@ for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i],\
 #-------------------------------------------------------------------------------------[]
 if (pic[48]==1) {
 
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/aimd/'
+subdir='Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/aimd/'
 outfile=gotolog_2.'aimd/aimd.pdf'
 
-array mid=['aimd1']
+array mid=['aimd1','aimd2']
 num=|mid|
 
 datdir=gotowork_2.'aimd/'
@@ -406,7 +516,7 @@ do for [i=1:num] {datfile[i]=datdir.datfile[i]}
 
 array titl=['Free energy','Temperature']
 
-array num1=[0]
+array num1=[0,377]
 
 colornum=2
 array colo[colornum]
@@ -441,10 +551,10 @@ set style line 1 lw 2
 
 p \
 datfile[1] u ($1*0.5):3 ls 1 lc ''.colo[1] t titl[1] axis x1y1,\
+for [i=2:num] datfile[i] u (($1+num1[i])*0.5):3 ls 1 lc ''.colo[1] axis x1y1 ,\
 datfile[1] u ($1*0.5):2 ls 1 lc ''.colo[2] t titl[2] axis x1y2 ,\
+for [i=2:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[2] axis x1y2 ,\
 }
-
-#for [i=2:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[2] axis x1y2 ,\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[46]==1) {
