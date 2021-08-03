@@ -22,9 +22,9 @@ do for [i=1:100] {pic[i]=0}
 # 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
 # 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
 
-# pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
-# pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
- pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+ pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
+ pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
+# pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
 # pic[15]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/atom_*/sch.pdf
 
 # 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
@@ -348,15 +348,16 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
-outfile=go.'sch.x.y.z.exp.pdf'
+outfile=goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+datdir=goto_work_2.'vasp_sch/'
 
 array mid=['x','y','z']
 num=|mid|
 
 array datfile[num]
 do for [i=1:num] {datfile[i]='xas_ave.'.mid[i].'.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-expfile=datdir.subdir.'20210512.Pt-110_ysft.norm.dat'
+do for [i=1:num] {datfile[i]=datdir.datfile[i]}
+expfile=datdir.'20210512.Pt.110.ysft.norm.dat'
 
 array titl[num]
 do for [i=1:num] {titl[i]='Theory '.mid[i]}
@@ -379,8 +380,8 @@ if (num==5 || num==6) {
     do for [i=1:num] {colo[i]=colors6[i]}
 }
 
-onset=529.6647579888
-sft=onset-519.1189296348
+onset=531.7059162567
+sft=onset-519.3231836888
 scaling=1e5
 
 set term pdfcairo font "Arial,25" size 7*1,5*1

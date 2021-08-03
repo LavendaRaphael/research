@@ -5,50 +5,67 @@ set -euo pipefail
 
 cd $work_dir
 
-echo "#-------------------------------------------------[plot_core_imdiel.sh]"
+echo "#-----------------------------------------------------[extract]"
 for N in ${loopfile[*]}
 do
     echo $N
     cd atom_${N}/
-    ${software_bin}plot_core_imdiel.sh
-    grep energy ../atom_1/OUTCAR | tail -1 | awk '{print $7}' | tee fort13
-    grep energy OUTCAR | tail -1 | awk '{print $7}' | tee fort777
+
+    nline_1=$(awk '/frequency dependent IMAGINARY/{print NR}' OUTCAR)
+    nline_2=$(awk '/frequency dependent      REAL/{print NR}' OUTCAR)
+    echo "# E(ev)      X         Y         Z        XY        YZ        ZX" > xas.dat
+    awk 'NR-'$nline_1'-2>0 && NR-'$nline_2'+1<0 {
+        $2=$2*$1;
+        $3=$3*$1;
+        $4=$4*$1;
+        $5=$5*$1;
+        $6=$6*$1;
+        $7=$7*$1;
+        printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
+    }' OUTCAR >> xas.dat
+
     cd ..
 done
 
-cat > xas_ave.in <<eof
-datafile       "xas_tt.dat"
-npiece         3000
-eof
 
-for xyz in ${tensorxyz[*]}
+echo "#-------------------------------------------------[sft]"
+for N in ${loopfile[*]}
 do
-    echo "#-------------------------------------------------[sft]"
-    cat > xas_sft.in <<eof
-datafile       "xas.$xyz.dat"
-datafile1      "fort13"
-datafile2      "fort777"
-eof
-    for N in ${loopfile[*]}
-    do
-        echo $N
-        cd atom_${N}/
-        ${software_bin}xas_sft.x ../xas_sft.in
-        cd ..
-    done
-    rm xas_sft.in
+    echo $N
+    cd atom_${N}/
+    fenergy_1=$(grep energy ../atom_1/OUTCAR | tail -1 | awk '{print $7}')
+    fenergy_2=$(grep energy OUTCAR | tail -1 | awk '{print $7}')
+    fenergy_sft=$(bc <<< "($fenergy_2)-($fenergy_1)")
+    echo fenergy_sft=$fenergy_sft
 
-    echo "#-------------------------------------------------[tt]"
-    rm -f xas_tt.dat
-    for N in ${loopfile[*]}
-    do
-        echo $N
-        cat atom_${N}/xas_sft.dat >> xas_tt.dat
-    done
+    awk '{
+        if (!NF || /^#/)
+            print $0;
+        else {
+            $1=$1+('$fenergy_sft');
+            printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
+        }
+    }' xas.dat > xas_sft.dat
+
+    awk '{
+        if (!NF || /^#/)
+            print $0;
+        else {
+            $1=$1+('$fenergy_sft');
+            printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%8d\n",$1,$2,$3,$4,$5,$6,$7,$8
+        }
+    }' MYCARXAS > xas.tm_sft.dat    
     
-    echo "#-------------------------------------------------[ave]"
-    ${software_bin}xas_ave.x xas_ave.in
-    mv xas_ave.dat xas_ave.$xyz.dat
+    cd ..
 done
 
-rm xas_tt.dat xas_ave.log xas_ave.in
+echo "#-------------------------------------------------[tt]"
+rm -f xas_tt.dat
+for N in ${loopfile[*]}
+do
+    echo $N
+    cat atom_${N}/xas_sft.dat >> xas_tt.dat
+done
+
+echo "#-------------------------------------------------[ave]"
+${software_bin}xas_ave.x xas_tt.dat

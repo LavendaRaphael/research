@@ -11,11 +11,11 @@ fi
 local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 # work_dir=${goto_work_3}vasp_sch/
- work_dir=${goto_work_2}vasp_sch.snap2.932/
-# work_dir=${goto_work_2}vasp_sch/
+# work_dir=${goto_work_2}vasp_sch.snap2.932/
+ work_dir=${goto_work_2}vasp_sch/
 echo "work_dir=$work_dir"
 
- O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
+# O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
 # echo "O_num=$O_num"
 # O_num=4
 
@@ -32,13 +32,10 @@ echo "subfile=$subfile"
 
 # loopfile="1"
 # loopfile=`seq 1 $O_num`
- loopfile=$(seq 5 9)
+# loopfile=$(seq 5 9)
 # loopfile=(1 3 5 7 9 11)
-# loopfile=(1 1 3 3 5 5 7 7 9 9 11)
+ loopfile=(1 1 3 3 5 5 7 7 9 9 11)
  echo "loopfile=$loopfile"
-
-  tensorxyz=("x" "y")
-echo "tensorxyz=$tensorxyz"
 
 echo "#=========================================================================<<<"
 
