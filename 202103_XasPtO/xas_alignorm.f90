@@ -122,6 +122,12 @@ do while (.true.)
 enddo
 write(errfile_unit, '(A25,I25)') 'columnmax',columnmax
 
+if (columnmax < datacolumn) then
+    write (*,*) "ERROR !!! See 'my.err' for details."
+    write (errfile_unit, *) " columnmax < datacolumn !!!"
+    stop
+endif
+
 rewind (datafile_unit)
 allocate( xas(ei_tot,columnmax))
 i = 0
@@ -133,8 +139,6 @@ do while (.true.)
     i = i + 1
     read(temp_char0, *) xas(i, 1:columnmax)
 enddo
-
-
 
 close(datafile_unit)
 !---------------------------------------------------------------[ALIGN TO PRE-EDGE]
