@@ -64,6 +64,7 @@ do i=1, natom
     endif
     do j=1, npiece
         read (datafile_unit, '(a)', iostat = ios) temp_char0
+        temp_char0 = adjustl(temp_char0)
         if (temp_char0(1:1)=='#' .or. ios < 0) then
             write (*,*) "ERROR!! See my.err!"
             write (errfile_unit, *) "ERROR: datafile not formated!"
