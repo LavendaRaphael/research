@@ -22,9 +22,9 @@ do for [i=1:100] {pic[i]=0}
 # 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
 # 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
 
- pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
- pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
-# pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+# pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
+# pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
+ pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
 # pic[15]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/atom_*/sch.pdf
 
 # 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
@@ -73,6 +73,7 @@ set encoding iso_8859_1
 set style data lines
 
 homedir="~/"
+   goto_exp=homedir.'group/202103_XasPtO/exp/'
 goto_work_1=homedir.'group/202103_XasPtO/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
  goto_log_1=homedir.'group/202103_XasPtO/log/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_O4_vac15/'
 goto_work_2=homedir.'group/202103_XasPtO/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
@@ -349,40 +350,31 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
 outfile=goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+
+datfilenum=4
+array datfile[datfilenum]
+datfile[1]=goto_exp.'20210512.Pt.110_norm.dat'
 datdir=goto_work_2.'vasp_sch/'
+do for [i=2:datfilenum] {datfile[i]=datdir.'xas_alignorm.dat'}
 
-array mid=['x','y','z']
-num=|mid|
+titlnum=datfilenum
+array titl=['','X','Y','Z']
+titl[1]='Exp.'
+do for [i=2:titlnum] {titl[i]='Theory '.titl[i]}
 
-array datfile[num]
-do for [i=1:num] {datfile[i]='xas_ave.'.mid[i].'.dat'}
-do for [i=1:num] {datfile[i]=datdir.datfile[i]}
-expfile=datdir.'20210512.Pt.110.ysft.norm.dat'
-
-array titl[num]
-do for [i=1:num] {titl[i]='Theory '.mid[i]}
-exptitl='Exp.'
-
-array colo[num]
-if (num==1) {
-    do for [i=1:num] {colo[i]='black'}
-}
-if (num==2) {
-    do for [i=1:num] {colo[i]=colors2[i]}
-}
-if (num==3) {
-    do for [i=1:num] {colo[i]=colors3[i]}
-}
-if (num==4) {
-    do for [i=1:num] {colo[i]=colors4[i]}
-}
-if (num==5 || num==6) {
-    do for [i=1:num] {colo[i]=colors6[i]}
+colornum=titlnum
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=3
+do for [i=1:colorwant] {
+    if (colorwant==2) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colornum==6) {colo[colorstart+i]=colors6[i]}
 }
 
 onset=531.7059162567
-sft=onset-519.3231836888
-scaling=1e5
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set output outfile
@@ -393,8 +385,8 @@ set yrange [0:*]
 set style line 1 lw 2
 
 p \
-expfile u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
-for [i=1:num] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+for [i=2:datfilenum] datfile[i] u 1:i ls 1 lc ''.colo[i] t titl[i],\
 }
 
 #-------------------------------------------------------------------------------------[]
