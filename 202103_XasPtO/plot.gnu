@@ -15,17 +15,11 @@ do for [i=1:100] {pic[i]=0}
 # 43 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon_exp.pdf
 # 33 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
 
-# 41 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon100.pdf
-# 40 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon010.pdf
-# 39 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.epsilon001.pdf
-# 29 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1-O11_exp.pdf
-# 28 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf
-# 27 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf
-
 # pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
+# pic[58]=1  # goto_log_2.'vasp_sch/atom_*/polarzation/polarzation_*.pdf'
 # pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
- pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
-# pic[15]=1  # Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/vasp_sch/atom_*/sch.pdf
+# pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+# pic[15]=1  # goto_log_2.'/vasp_sch/atom_*/sch.pdf'
 
 # 31 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/temperature_time.pdf
 # 30 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/aimd/energy_time.pdf
@@ -37,25 +31,20 @@ do for [i=1:100] {pic[i]=0}
 # 32 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
 
 # 26 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.theory_exp.pdf
-# 24 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.wfc_rho.pdf
 # 23 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.xniter.pdf
-# 19 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.nband.pdf
 # 18 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.xgamma.pdf
 # 17 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.kpoints.pdf
-# 16 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf
 
-# pic[53]=1  # goto_work_1.'vasp_sch/atom_1/sch.x_y.tm.exp.pdf'
-# pic[50]=1  # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.x_y.z.exp.pdf
-# pic[8]=1   # Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/sch.pdf
+# pic[53]=1  # goto_log_1.'vasp_sch/atom_1/sch.x_y.tm.exp.pdf'
+# pic[50]=1  # goto_log_1.'vasp_sch/atom_1/sch.x_y.z.exp.pdf'
+# pic[8]=1   # goto_log_1.'vasp_sch/atom_1/sch.pdf'
+
+# pic[57]=1  # goto_work_1.'vasp_sch/polarzation/polarzation_*.pdf'
 
 # 42 Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/xspectra.hch_fch_nch.pdf
 
 # pic[2]=1   # Pt/Pt_eos_kpoints.pdf
 # pic[1]=1   # Pt/Pt_eos_cutoff.pdf
-
-# 25 ../zrsun/Pt-111.miller_prl_2011.pdf
-# 21 ../asist/20210511.2011_prl_miller_ysft.pdf
-# 20 ../asist/20210511.2011_prl_miller.pdf
 
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']
@@ -79,6 +68,222 @@ goto_work_1=homedir.'group/202103_XasPtO/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_
 goto_work_2=homedir.'group/202103_XasPtO/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
  goto_log_2=homedir.'group/202103_XasPtO/log/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
 goto_work_3=homedir.'group/202103_XasPtO/server/Pt.111_alpha.PtO2.001_vac/Pt.111.a4b4c4_alpha.PtO2.001.a4b3c1_vac15/'
+#-------------------------------------------------------------------------------------[]
+if (pic[58]==1) {
+
+datfilenum=3
+array datfile[datfilenum]
+datfile[1]=goto_exp.'20210512.Pt.110_norm.dat'
+
+titlnum=datfilenum
+array titl[titlnum]
+titl[1]='Exp.'
+titl[3]='TM'
+
+colornum=titlnum
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=colornum-colorstart
+do for [i=1:colorwant] {
+    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
+}
+
+onset=531.7059162567
+scaling=5000.0
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [onset-5.0:onset+15.0]
+set yrange [0:10]
+set style line 1 lw 2
+
+ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
+ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
+az(theta,phi)=(cos(theta))**2.0
+axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
+ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
+azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
+
+set angles degrees
+npiece=10
+piece=180.0/npiece
+
+array natom=[1,11]
+atomnum=|natom|
+
+array nenergy=[518.6683137981, 518.4310017340]
+
+do for [iatom=1:atomnum]{
+    atomx=natom[iatom]
+    outdir=goto_log_2.'vasp_sch/atom_'.atomx.'/'
+    datdir=goto_work_2.'vasp_sch/atom_'.atomx.'/'
+    datfile[2]=datdir.'xas_alignorm.dat'
+    datfile[3]=datdir.'MYCARXAS'
+    tm_sft=onset-nenergy[iatom]
+    
+    ifile=0
+    do for [ipath=1:3]{
+        array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
+        do for [ipiece=0:npiece_end[ipath]]{
+            array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
+            array nphi=[piece*ipiece,180.0,0.0]
+            theta=ntheta[ipath]
+            phi=nphi[ipath]
+            theta=sprintf('%4.1f',theta)
+            phi=sprintf('%4.1f',phi)
+            titl[2]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi
+            
+            outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
+            ifile=ifile+1
+            set output outfile
+            
+            f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
+            
+            p \
+            datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+            datfile[2] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[2] t titl[2],\
+            datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+        }
+    }
+}
+}
+
+#-------------------------------------------------------------------------------------[]
+if (pic[57]==1) {
+
+datfilenum=3
+array datfile[datfilenum]
+datfile[1]=goto_exp.'20210512.Pt.111_norm.dat'
+datdir=goto_work_1.'vasp_sch/'
+datfile[2]=datdir.'xas_alignorm.dat'
+datfile[3]=datdir.'/atom_1/MYCARXAS'
+
+titlnum=datfilenum
+array titl[titlnum]
+titl[1]='Exp.'
+titl[3]='TM'
+colornum=titlnum
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=2
+do for [i=1:colorwant] {
+    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
+}
+
+onset=530.2114084673
+tm_sft=onset-515.2359062397
+scaling=1000.0
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [onset-5.0:onset+15.0]
+set yrange [0:*]
+set style line 1 lw 2
+
+set angles degrees
+
+npiece=10
+piece=180.0/npiece
+#------------------------------------------------------[]
+do for [ndeg1=0:npiece]{
+
+theta='90.0'
+phi=0.0+piece*ndeg1
+phi=sprintf('%4.1f',phi)
+do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
+outfile=goto_log_1.'vasp_sch/polarization/polarization_'.ndeg1.'.pdf'
+set output outfile
+
+sintheta=sin(theta)
+costheta=cos(theta)
+sinphi=sin(phi)
+cosphi=cos(phi)
+ax=sintheta**2.0*cosphi**2.0
+ay=sintheta**2.0*sinphi**2.0
+az=costheta**2.0
+axy=sintheta**2.0*sinphi*cosphi
+ayz=sintheta*costheta*sinphi
+azx=sintheta*costheta*cosphi
+f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
+
+p \
+datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
+datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+}
+#------------------------------------------------------[]
+
+do for [ndeg2=1:npiece/2]{
+
+theta=90.0-piece*ndeg2
+phi=180.0
+theta=sprintf('%4.1f',theta)
+phi=sprintf('%4.1f',phi)
+nfile=npiece+ndeg2
+do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
+outfile=goto_log_1.'vasp_sch/polarization/polarization_'.nfile.'.pdf'
+set output outfile
+
+sintheta=sin(theta)
+costheta=cos(theta)
+sinphi=sin(phi)
+cosphi=cos(phi)
+ax=sintheta**2.0*cosphi**2.0
+ay=sintheta**2.0*sinphi**2.0
+az=costheta**2.0
+axy=sintheta**2.0*sinphi*cosphi
+ayz=sintheta*costheta*sinphi
+azx=sintheta*costheta*cosphi
+f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
+
+p \
+datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
+datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+}
+#------------------------------------------------------[]
+
+do for [ndeg3=1:npiece/2]{
+
+theta=0.0+piece*ndeg3
+phi=0.0
+theta=sprintf('%4.1f',theta)
+phi=sprintf('%4.1f',phi)
+do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
+nfile=npiece+npiece/2+ndeg3
+outfile=goto_log_1.'vasp_sch/polarization/polarization_'.nfile.'.pdf'
+set output outfile
+
+sintheta=sin(theta)
+costheta=cos(theta)
+sinphi=sin(phi)
+cosphi=cos(phi)
+ax=sintheta**2.0*cosphi**2.0
+ay=sintheta**2.0*sinphi**2.0
+az=costheta**2.0
+axy=sintheta**2.0*sinphi*cosphi
+ayz=sintheta*costheta*sinphi
+azx=sintheta*costheta*cosphi
+f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
+
+p \
+datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
+datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+}
+
+}
+
 #-------------------------------------------------------------------------------------[]
 if (pic[56]==1) {
 outfile=goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
@@ -767,93 +972,6 @@ for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colo[i] t titl[i]
 }
 
 #-------------------------------------------------------------------------------------[]
-if (pic[41]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
-outfile=outdir.subdir.'xspectra.epsilon100.pdf'
-
-array numx=['1','3','11']
-num=|numx|
-
-array datfile[num]
-do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra.epsilon100/xanes.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-
-array titl[num]
-do for [i=1:num] {titl[i]='O\_'.numx[i]}
-
-array colornum=[1,2,3,4,5,6]
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [-5:15]
-set yrange [0:*]
-set style line 1 lw 2
-
-p \
-for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[40]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
-outfile=outdir.subdir.'xspectra.epsilon010.pdf'
-
-array numx=['1','3','11']
-num=|numx|
-
-array datfile[num]
-do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra.epsilon010/xanes.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-
-array titl[num]
-do for [i=1:num] {titl[i]='O\_'.numx[i]}
-
-array colornum=[1,2,3,4,5,6]
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [-5:15]
-set yrange [0:*]
-set style line 1 lw 2
-
-p \
-for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[39]==1) {
-subdir='Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/'
-outfile=outdir.subdir.'xspectra.epsilon001.pdf'
-
-array numx=['1','3','11']
-num=|numx|
-
-array datfile[num]
-do for [i=1:num] {datfile[i]='scf_'.numx[i].'/xspectra/xanes.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-
-array titl[num]
-do for [i=1:num] {titl[i]='O\_'.numx[i]}
-
-array colornum=[1,2,3,4,5,6]
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [-5:15]
-set yrange [0:*]
-set style line 1 lw 2
-
-p \
-for [i=1:num] datfile[i] u 1:2 ls 1 lc ''.colors3[colornum[i]] t titl[i]
-}
-
-#-------------------------------------------------------------------------------------[]
 if (pic[38]==1) {
 subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/'
 outfile=outdir.subdir.'xspectra.desmooth.pdf'
@@ -1175,77 +1293,6 @@ for [i=1:num] datfile[i] u (($1+num1[i])*0.5):2 ls 1 lc ''.colo[i] t titl[i]
 }
 
 #-------------------------------------------------------------------------------------[]
-if (pic[29]==1) {
-datfile1=datdir.'../zrsun/20210512.Pt-110_ysft.dat'
-datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra/xas_alignorm.dat'
-datfile3=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra/xas_alignorm.dat'
-
-# titl1='Exp. (Xiaobao, Li)'
-# titl2='Theory-O1 {/Symbol e}-001 (Feifei, Tian)'
-# titl3='Theory-O11 {/Symbol e}-001 (Feifei, Tian)'
-
-titl1='Exp.'
-titl2='Theory-O1'
-titl3='Theory-O11'
-
-
-outfile=outdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1-O11_exp.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [526:546]
-set yrange [0:*]
-p \
-datfile3 w l lw 2 lc ''.word(colors,1) t titl3,\
-datfile2 w l lw 2 lc ''.word(colors,2) t titl2,\
-datfile1 w p pt 6 ps 0.5 lw 1 lc ''.word(colors,5) t titl1,\
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[28]==1) {
-datfile1=datdir.'../zrsun/20210512.Pt-110_ysft.dat'
-datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra/xas_alignorm.dat'
-
-titl1='Exp. (Xiaobao, Li)'
-titl2='Theory-O11 {/Symbol e}-001 (Feifei, Tian)'
-
-outfile=outdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O11_exp.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [526:546]
-set yrange [0:*]
-p \
-datfile2 w l lw 2 lc ''.word(colors,9) t titl2,\
-datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,8) t titl1,\
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[27]==1) {
-datfile1=datdir.'../zrsun/20210512.Pt-110_ysft.dat'
-datfile2=datdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra/xas_alignorm.dat'
-
-titl1='Exp. (Xiaobao, Li)'
-titl2='Theory-O1 {/Symbol e}-001 (Feifei, Tian)'
-
-outfile=outdir.'Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/xspectra.theory-O1_exp.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [526:546]
-set yrange [0:12]
-p \
-datfile2 w l lw 2 lc ''.word(colors,9) t titl2,\
-datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,8) t titl1,\
-}
-
-#-------------------------------------------------------------------------------------[]
 if (pic[26]==1) {
 datfile1=datdir.'../zrsun/20210512.Pt-111_ysft.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xas_alignorm.dat'
@@ -1270,57 +1317,6 @@ datfile1 w p pt 6 ps 0.5 lw 1 lc ''.word(colors,5) t titl1,\
 }
 
 #-------------------------------------------------------------------------------------[]
-if (pic[25]==1) {
-datfile1=datdir.'../zrsun/20210513.Pt-111_ysft_norm.dat'
-datfile2=datdir.'../asist/20210512.exp_inplane_origin_ysft.dat'
-datfile3=datdir.'../asist/20210512.exp_outplane_origin_ysft.dat'
-
-# titl1='Exp. (Xiaobao, Li)'
-titl1='Li'
-# titl2='Exp. in-plane (Miller PRL 2011)'
-titl2='Miller (in-plane)'
-# titl3='Exp. out-of-plane (Miller PRL 2011)'
-titl3='Miller (out-of-plane)'
-
-outfile=outdir.'../zrsun/Pt-111.miller_prl_2011.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [*:*]
-set yrange [0:*]
-p \
-datfile3 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,1) t titl3,\
-datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,2) t titl2,\
-datfile1 w l lw 2 lc ''.word(colors,5) t titl1,\
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[24]==1) {
-datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
-datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.wfc50/xspectra/xanes.dat'
-datfile3=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.wfc40_rho400/xspectra/xanes.dat'
-
-titl1='wfc=40'
-titl2='wfc=50'
-titl3='wfc=40, rho=400'
-
-outfile=outdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.wfc_rho.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [*:*]
-set yrange [0:*]
-p \
-datfile1 w l lw 1 lc ''.word(colors,1) t titl1,\
-datfile2 w l lw 1 lc ''.word(colors,2) t titl2,\
-datfile3 w l lw 1 lc ''.word(colors,3) t titl3,\
-}
-
-#-------------------------------------------------------------------------------------[]
 if (pic[23]==1) {
 datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
 datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra_xniter/xanes.dat'
@@ -1337,75 +1333,6 @@ set yrange [0:*]
 p \
 datfile1 w l lw 2 lc ''.word(colors,8) t titl1,\
 datfile2 w l lw 2 lc ''.word(colors,9) t titl2,\
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[21]==1) {
-datfile1=datdir.'../asist/20210511.exp_inplane_ysft.dat'
-datfile2=datdir.'../asist/20210511.exp_outplane_ysft.dat'
-datfile3=datdir.'../asist/20210511.theory_inplane_ysft.dat'
-datfile4=datdir.'../asist/20210511.theory_outplane_ysft.dat'
-titl1='EXP. (in plane)'
-titl2='EXP. (out of plane)'
-titl3='Theory (in plane)'
-titl4='Theory (out of plane)'
-outfile=outdir.'../asist/20210511.2011_prl_miller_ysft.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [*:*]
-set yrange [*:*]
-p \
-datfile4 w l lw 2 lc ''.word(colors,1) t titl4,\
-datfile3 w l lw 2 lc ''.word(colors,2) t titl3,\
-datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,1) t titl2,\
-datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,2) t titl1
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[20]==1) {
-datfile1=datdir.'../asist/20210511.exp_inplane.dat'
-datfile2=datdir.'../asist/20210511.exp_outplane.dat'
-datfile3=datdir.'../asist/20210511.theory_inplane.dat'
-datfile4=datdir.'../asist/20210511.theory_outplane.dat'
-titl1='EXP. (in plane)'
-titl2='EXP. (out of plane)'
-titl3='Theory (in plane)'
-titl4='Theory (out of plane)'
-outfile=outdir.'../asist/20210511.2011_prl_miller.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [*:*]
-set yrange [*:18]
-unset ytics
-p \
-datfile4 w l lw 2 lc ''.word(colors,1) t titl4,\
-datfile3 w l lw 2 lc ''.word(colors,2) t titl3,\
-datfile2 w p pt 10 ps 0.5 lw 2 lc ''.word(colors,1) t titl2,\
-datfile1 w p pt 6 ps 0.5 lw 2 lc ''.word(colors,2) t titl1
-}
-#-------------------------------------------------------------------------------------[]
-if (pic[19]==1) {
-datfile1=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/scf_1/xspectra/xanes.dat'
-datfile2=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.nband664/xspectra/xanes.dat'
-titl1='nband = 415'
-titl2='nband = 664'
-outfile=outdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/xspectra.nband.pdf'
-
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "hv-E_f (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [-5:15]
-set yrange [0:*]
-p \
-datfile1 w l lw 1 lc ''.word(colors,1) t titl1,\
-datfile2 w l lw 1 lc ''.word(colors,2) t titl2
 }
 
 #-------------------------------------------------------------------------------------[]
@@ -1444,26 +1371,6 @@ set yrange [0:*]
 p \
 datfile1 w l lw 1 lc ''.word(colors,1) t titl1,\
 datfile2 w l lw 1 lc ''.word(colors,2) t titl2
-}
-
-#-------------------------------------------------------------------------------------[]
-if (pic[16]==1) {
-datfile=datdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.dat'
-titl=''
-outfile=outdir.'Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/qe_hch_scf/test.time_vs_ncore.pdf'
-set key t c
-set term pdfcairo font "Arial,25" size 6*1,5*1
-set output outfile
-set xlabel "Core numbers" offset 1,0
-set ylabel "Wall time (min)" offset 0,0
-set xrange [*:*]
-set yrange [0:70]
-
-set style data histogram 
-set style fill solid 0.25 noborder
-p \
-datfile u 2:xtic(1),\
-datfile u 0:2:2 w labels offset char 0,0.5
 }
 
 #-------------------------------------------------------------------------------------[]
