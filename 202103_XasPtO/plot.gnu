@@ -16,7 +16,7 @@ do for [i=1:100] {pic[i]=0}
 # 33 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
 
 # pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
-# pic[58]=1  # goto_log_2.'vasp_sch/atom_*/polarzation/polarzation_*.pdf'
+ pic[58]=1  # goto_log_2.'vasp_sch/atom_*/polarzation/polarzation_*.pdf'
 # pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
 # pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
 # pic[15]=1  # goto_log_2.'/vasp_sch/atom_*/sch.pdf'
@@ -68,6 +68,7 @@ goto_work_1=homedir.'group/202103_XasPtO/server/Pt.111_p2t2.O_vac/Pt.111.a4b4c4_
 goto_work_2=homedir.'group/202103_XasPtO/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
  goto_log_2=homedir.'group/202103_XasPtO/log/server/Pt.110_p12t2.O22_vac/Pt.110.a12b2c4.5_O22_vac15/'
 goto_work_3=homedir.'group/202103_XasPtO/server/Pt.111_alpha.PtO2.001_vac/Pt.111.a4b4c4_alpha.PtO2.001.a4b3c1_vac15/'
+
 #-------------------------------------------------------------------------------------[]
 if (pic[58]==1) {
 
@@ -96,10 +97,7 @@ onset=531.7059162567
 scaling=5000.0
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [onset-5.0:onset+15.0]
-set yrange [0:10]
+
 set style line 1 lw 2
 
 ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
@@ -110,13 +108,18 @@ ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
 azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
 
 set angles degrees
-npiece=10
+npiece=12
 piece=180.0/npiece
 
-array natom=[1,11]
+r=1.0
+rx(theta,phi)=r*sin(theta)*cos(phi)
+ry(theta,phi)=r*sin(theta)*sin(phi)
+rz(theta)=r*cos(theta)
+
+array natom=[1]
 atomnum=|natom|
 
-array nenergy=[518.6683137981, 518.4310017340]
+array nenergy=[518.6683137981]
 
 do for [iatom=1:atomnum]{
     atomx=natom[iatom]
@@ -144,14 +147,61 @@ do for [iatom=1:atomnum]{
             
             f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
             
+            set multiplot
+            
+            set size 1,1
+            set origin 0,0
+
+            set xlabel "Energy (eV)" offset 0,0
+            set ylabel "Intensity (Arb. Units)" offset 1,0
+            set xrange [onset-5.0:onset+15.0]
+            set yrange [0:10]
+
             p \
             datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
             datfile[2] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[2] t titl[2],\
             datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+
+            set size 0.5, 0.5
+            set origin 0.5,0.25
+
+            set view equal xyz
+
+            unset xlabel
+            unset ylabel
+            unset zlabel
+            set label 'x' at 1,0,0
+            set label 'y' at 0,1.2,0
+            set label 'z' at 0,0,1.2
+
+            set xrange [-1:1]
+            set yrange [-1:1]
+            set zrange [-1:1]
+
+            set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
+            
+            set zeroaxis
+            set xyplane at 0
+
+            unset tics
+            set xrange [-1:1]            
+            set yrange [-1:1]
+            set zzeroaxis
+            set zrange [-1:1]
+
+            unset border
+
+            splot NaN
+            
+            unset multiplot
+            unset arrow
+            set border
+            set tics
         }
     }
 }
 }
+
 #-------------------------------------------------------------------------------------[]
 if (pic[57]==1) {
 
