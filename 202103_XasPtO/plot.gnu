@@ -94,7 +94,7 @@ do for [i=1:colorwant] {
 }
 
 onset=531.7059162567
-scaling=5000.0
+scaling=4000.0
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 
@@ -116,10 +116,10 @@ rx(theta,phi)=r*sin(theta)*cos(phi)
 ry(theta,phi)=r*sin(theta)*sin(phi)
 rz(theta)=r*cos(theta)
 
-array natom=[1]
+array natom=[1,11]
 atomnum=|natom|
 
-array nenergy=[518.6683137981]
+array nenergy=[518.6683137981,518.4310017340]
 
 do for [iatom=1:atomnum]{
     atomx=natom[iatom]
@@ -182,26 +182,19 @@ do for [iatom=1:atomnum]{
             
             set zeroaxis
             set xyplane at 0
-
             unset tics
-            set xrange [-1:1]            
-            set yrange [-1:1]
-            set zzeroaxis
-            set zrange [-1:1]
-
             unset border
 
             splot NaN
             
             unset multiplot
-            unset arrow
             set border
             set tics
+            unset arrow
         }
     }
 }
 }
-
 #-------------------------------------------------------------------------------------[]
 if (pic[57]==1) {
 
@@ -226,14 +219,11 @@ do for [i=1:colorwant] {
     if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
 }
 
-onset=531.7059162567
-scaling=5000.0
+onset=530.2114084673
+scaling=2000.0
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
-set xlabel "Energy (eV)" offset 0,0
-set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [onset-5.0:onset+15.0]
-set yrange [0:10]
+
 set style line 1 lw 2
 
 ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
@@ -244,39 +234,94 @@ ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
 azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
 
 set angles degrees
-npiece=10
+npiece=12
 piece=180.0/npiece
 
-outdir=goto_log_1.'vasp_sch/'
-datdir=goto_work_1.'vasp_sch/'
-datfile[2]=datdir.'xas_alignorm.dat'
-datfile[3]=datdir.'MYCARXAS'
+r=1.0
+rx(theta,phi)=r*sin(theta)*cos(phi)
+ry(theta,phi)=r*sin(theta)*sin(phi)
+rz(theta)=r*cos(theta)
 
-ifile=0
-do for [ipath=1:3]{
-    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
-    do for [ipiece=0:npiece_end[ipath]]{
-        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
-        array nphi=[piece*ipiece,180.0,0.0]
-        theta=ntheta[ipath]
-        phi=nphi[ipath]
-        theta=sprintf('%4.1f',theta)
-        phi=sprintf('%4.1f',phi)
-        titl[2]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi
-        
-        outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
-        ifile=ifile+1
-        set output outfile
-        
-        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
-        
-        p \
-        datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-        datfile[2] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[2] t titl[2],\
-        datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+array natom=[1]
+atomnum=|natom|
+
+array nenergy=[515.2359062397]
+
+do for [iatom=1:atomnum]{
+    atomx=natom[iatom]
+    outdir=goto_log_1.'vasp_sch/atom_'.atomx.'/'
+    datdir=goto_work_1.'vasp_sch/atom_'.atomx.'/'
+    datfile[2]=datdir.'xas_alignorm.dat'
+    datfile[3]=datdir.'MYCARXAS'
+    tm_sft=onset-nenergy[iatom]
+    
+    ifile=0
+    do for [ipath=1:3]{
+        array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
+        do for [ipiece=0:npiece_end[ipath]]{
+            array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
+            array nphi=[piece*ipiece,180.0,0.0]
+            theta=ntheta[ipath]
+            phi=nphi[ipath]
+            theta=sprintf('%4.1f',theta)
+            phi=sprintf('%4.1f',phi)
+            titl[2]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi
+            
+            outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
+            ifile=ifile+1
+            set output outfile
+            
+            f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
+            
+            set multiplot
+            
+            set size 1,1
+            set origin 0,0
+
+            set xlabel "Energy (eV)" offset 0,0
+            set ylabel "Intensity (Arb. Units)" offset 1,0
+            set xrange [onset-5.0:onset+15.0]
+            set yrange [0:*]
+
+            p \
+            datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+            datfile[2] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[2] t titl[2],\
+            datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+
+            set size 0.5, 0.5
+            set origin 0.5,0.25
+
+            set view equal xyz
+
+            unset xlabel
+            unset ylabel
+            unset zlabel
+            set label 'x' at 1,0,0
+            set label 'y' at 0,1.2,0
+            set label 'z' at 0,0,1.2
+
+            set xrange [-1:1]
+            set yrange [-1:1]
+            set zrange [-1:1]
+
+            set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
+            
+            set zeroaxis
+            set xyplane at 0
+            unset tics
+            unset border
+
+            splot NaN
+            
+            unset multiplot
+            set border
+            set tics
+            unset arrow
+        }
     }
 }
 }
+
 #-------------------------------------------------------------------------------------[]
 if (pic[56]==1) {
 outfile=goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
