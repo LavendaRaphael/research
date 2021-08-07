@@ -152,26 +152,23 @@ do for [iatom=1:atomnum]{
     }
 }
 }
-
 #-------------------------------------------------------------------------------------[]
 if (pic[57]==1) {
 
 datfilenum=3
 array datfile[datfilenum]
 datfile[1]=goto_exp.'20210512.Pt.111_norm.dat'
-datdir=goto_work_1.'vasp_sch/'
-datfile[2]=datdir.'xas_alignorm.dat'
-datfile[3]=datdir.'/atom_1/MYCARXAS'
 
 titlnum=datfilenum
 array titl[titlnum]
 titl[1]='Exp.'
 titl[3]='TM'
+
 colornum=titlnum
 array colo[colornum]
 colo[1]='black'
 colorstart=1
-colorwant=2
+colorwant=colornum-colorstart
 do for [i=1:colorwant] {
     if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
     if (colorwant==3) {colo[colorstart+i]=colors3[i]}
@@ -179,111 +176,57 @@ do for [i=1:colorwant] {
     if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
 }
 
-onset=530.2114084673
-tm_sft=onset-515.2359062397
-scaling=1000.0
+onset=531.7059162567
+scaling=5000.0
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [onset-5.0:onset+15.0]
-set yrange [0:*]
+set yrange [0:10]
 set style line 1 lw 2
 
-set angles degrees
+ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
+ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
+az(theta,phi)=(cos(theta))**2.0
+axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
+ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
+azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
 
+set angles degrees
 npiece=10
 piece=180.0/npiece
-#------------------------------------------------------[]
-do for [ndeg1=0:npiece]{
 
-theta='90.0'
-phi=0.0+piece*ndeg1
-phi=sprintf('%4.1f',phi)
-do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
-outfile=goto_log_1.'vasp_sch/polarization/polarization_'.ndeg1.'.pdf'
-set output outfile
+outdir=goto_log_1.'vasp_sch/'
+datdir=goto_work_1.'vasp_sch/'
+datfile[2]=datdir.'xas_alignorm.dat'
+datfile[3]=datdir.'MYCARXAS'
 
-sintheta=sin(theta)
-costheta=cos(theta)
-sinphi=sin(phi)
-cosphi=cos(phi)
-ax=sintheta**2.0*cosphi**2.0
-ay=sintheta**2.0*sinphi**2.0
-az=costheta**2.0
-axy=sintheta**2.0*sinphi*cosphi
-ayz=sintheta*costheta*sinphi
-azx=sintheta*costheta*cosphi
-f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
-
-p \
-datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
-datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+ifile=0
+do for [ipath=1:3]{
+    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
+    do for [ipiece=0:npiece_end[ipath]]{
+        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
+        array nphi=[piece*ipiece,180.0,0.0]
+        theta=ntheta[ipath]
+        phi=nphi[ipath]
+        theta=sprintf('%4.1f',theta)
+        phi=sprintf('%4.1f',phi)
+        titl[2]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi
+        
+        outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
+        ifile=ifile+1
+        set output outfile
+        
+        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
+        
+        p \
+        datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
+        datfile[2] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[2] t titl[2],\
+        datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
+    }
 }
-#------------------------------------------------------[]
-
-do for [ndeg2=1:npiece/2]{
-
-theta=90.0-piece*ndeg2
-phi=180.0
-theta=sprintf('%4.1f',theta)
-phi=sprintf('%4.1f',phi)
-nfile=npiece+ndeg2
-do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
-outfile=goto_log_1.'vasp_sch/polarization/polarization_'.nfile.'.pdf'
-set output outfile
-
-sintheta=sin(theta)
-costheta=cos(theta)
-sinphi=sin(phi)
-cosphi=cos(phi)
-ax=sintheta**2.0*cosphi**2.0
-ay=sintheta**2.0*sinphi**2.0
-az=costheta**2.0
-axy=sintheta**2.0*sinphi*cosphi
-ayz=sintheta*costheta*sinphi
-azx=sintheta*costheta*cosphi
-f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
-
-p \
-datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
-datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
 }
-#------------------------------------------------------[]
-
-do for [ndeg3=1:npiece/2]{
-
-theta=0.0+piece*ndeg3
-phi=0.0
-theta=sprintf('%4.1f',theta)
-phi=sprintf('%4.1f',phi)
-do for [i=2:2] {titl[i]='Theory {/Symbol q}='.theta.', {/Symbol f}='.phi}
-nfile=npiece+npiece/2+ndeg3
-outfile=goto_log_1.'vasp_sch/polarization/polarization_'.nfile.'.pdf'
-set output outfile
-
-sintheta=sin(theta)
-costheta=cos(theta)
-sinphi=sin(phi)
-cosphi=cos(phi)
-ax=sintheta**2.0*cosphi**2.0
-ay=sintheta**2.0*sinphi**2.0
-az=costheta**2.0
-axy=sintheta**2.0*sinphi*cosphi
-ayz=sintheta*costheta*sinphi
-azx=sintheta*costheta*cosphi
-f(x,y,z,xy,yz,zx)=ax*x+ay*y+az*z+2.0*axy*xy+2.0*ayz*yz+2.0*azx*zx
-
-p \
-datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-for [i=2:2] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
-datfile[3] u ($1+tm_sft):(f($2,$3,$4,$5,$6,$7)*scaling) w p pt 7 ps 0.5 lw 2 lc ''.colo[3] t titl[3],\
-}
-
-}
-
 #-------------------------------------------------------------------------------------[]
 if (pic[56]==1) {
 outfile=goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
