@@ -11,7 +11,7 @@ for i in ${loopfile[*]}
 do
     echo $i
     cd scal_$i
-    E=`awk '/F=/ {print $0}' vasp.log`
+    E=`awk '/F=/ {print $0}' vasp.log|tail -n 1`
     cd ..
     a=`bc <<< "scale=4;$a0*$i"`
     echo $a $E  >>E0_a.dat
