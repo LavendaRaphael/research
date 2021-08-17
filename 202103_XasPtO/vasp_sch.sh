@@ -67,5 +67,5 @@ do
     cat atom_${N}/xas_sft.dat >> xas_tt.dat
 done
 
-echo "#-------------------------------------------------[ave]"
-${software_bin}xas_ave.x xas_tt.dat
+#echo "#-------------------------------------------------[ave]"
+#${software_bin}xas_ave.x xas_tt.dat
