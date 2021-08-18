@@ -124,8 +124,10 @@
       REAL(q), ALLOCATABLE ::    FREQUENCY_TM(:,:,:)
       REAL(q), ALLOCATABLE ::    OCC_TM(:,:,:)
       INTEGER ::                 NB_GLOBAL
-      INTEGER, ALLOCATABLE ::    NODEID_TM(:,:,:,:)
-      INTEGER              ::    IOME_IU1=-1
+      INTEGER, ALLOCATABLE ::    NCOUNT_TM(:,:,:)
+!      INTEGER, ALLOCATABLE ::    NODEME_ID(:,:)
+      INTEGER ::                 IOME_IU1=-1
+!      INTEGER ::                 INODE
 !---------------------------------------------------->>
 
 ! input variables
@@ -269,11 +271,29 @@
       ALLOCATE( EPSDD_TM    ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN, 3, 3 ) ) 
       ALLOCATE( FREQUENCY_TM( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN       ) )
       ALLOCATE( OCC_TM      ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN       ) )
-      ALLOCATE( NODEID_TM   ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN, 2    ) )
+      ALLOCATE( NCOUNT_TM   ( WDES%NB_TOT, WDES%NKPTS, WDES%ISPIN       ) )
       EPSDD_TM = (0.0_q,0.0_q)
       FREQUENCY_TM = 0.0_q
       OCC_TM=0.0_q
-      NODEID_TM=0
+      NCOUNT_TM=0
+
+!      ALLOCATE( NODEME_ID( WDES%COMM%NCPU, 2))
+!      NODEME_ID = 0
+!      IF (WDES%COMM%NODE_ME<1 .or. WDES%COMM%NODE_ME > WDES%COMM%NCPU) THEN
+!          CALL vtutor%error("STOP at 'core_con_mat.F', DEBUG id: TFF01")
+!      ENDIF
+!      NODEME_ID(WDES%COMM%NODE_ME,1) = WDES%COMM_KINTER%NODE_ME
+!      NODEME_ID(WDES%COMM%NODE_ME,2) = WDES%COMM_INTER%NODE_ME
+!      CALLMPI( M_sum_i( WDES%COMM, NODEME_ID (1,1), (WDES%COMM%NCPU *2)))
+!      IF (IO%IU6>0) THEN
+!          WRITE(IO%IU0,*) 'WDES%COMM%NCPU', WDES%COMM%NCPU
+!          WRITE(IO%IU0,*) 'WDES%COMM_KINTER%NCPU', WDES%COMM_KINTER%NCPU
+!          WRITE(IO%IU0,*) 'WDES%COMM_INTER%NCPU', WDES%COMM_INTER%NCPU
+!          DO INODE= 1, WDES%COMM%NCPU
+!              WRITE(IO%IU0,'(3I8)') INODE, NODEME_ID(INODE,1:2)
+!          ENDDO
+!      ENDIF
+
 !---------------------------------------------------------------<<
 
 ! loop over atoms
@@ -299,10 +319,12 @@
 !@FeifeiTian
 !---------------------------------------------------------------------------------------------------------------------->>
                         NB_GLOBAL=(I_CONBANDS-1)*WDES%COMM_INTER%NCPU+WDES%COMM_INTER%NODE_ME
-                        FREQUENCY_TM( NB_GLOBAL,KPOINT,ISPIN)   = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN  ),q)-EIG(NL_CORE)
-                        OCC_TM      ( NB_GLOBAL,KPOINT,ISPIN)   =      W%FERWE(I_CONBANDS,KPOINT,ISPIN  )
-                        NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,1) = WDES%COMM%NODE_ME
-                        NODEID_TM   ( NB_GLOBAL,KPOINT,ISPIN,2) =    NODEID_TM( NB_GLOBAL,KPOINT,ISPIN,2) + 1
+                        IF (NB_GLOBAL<1 .or. NB_GLOBAL>WDES%NB_TOT) THEN
+                            CALL vtutor%error("STOP at 'core_con_mat.F', DEBUG id: TFF02")
+                        ENDIF
+                        FREQUENCY_TM( NB_GLOBAL,KPOINT,ISPIN) = REAL(W%CELEN(I_CONBANDS,KPOINT,ISPIN),q)-EIG(NL_CORE)
+                        OCC_TM      ( NB_GLOBAL,KPOINT,ISPIN) =      W%FERWE(I_CONBANDS,KPOINT,ISPIN)
+                        NCOUNT_TM   ( NB_GLOBAL,KPOINT,ISPIN) =    NCOUNT_TM( NB_GLOBAL,KPOINT,ISPIN) + 1
 !----------------------------------------------------------------------------------------------------------------------<<
 
 ! if band is occupied then cycle
@@ -364,13 +386,12 @@
 !@FeifeiTian
 !----------------------------------------------------------------------------------------------->>
       EPSDD_TM=EPSDD_TM/CH_NEDOS
-      NODEID_TM(:,:,:,2)=NODEID_TM(:,:,:,2)/CH_NEDOS
-      CALLMPI( M_sum_z( WDES%COMM,    EPSDD_TM (1,1,1,1,1) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN *3*3)))
-      CALLMPI( M_sum_d( WDES%COMM,FREQUENCY_TM (1,1,1    ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
-      CALLMPI( M_sum_d( WDES%COMM,      OCC_TM (1,1,1    ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
-      CALLMPI( M_sum_i( WDES%COMM,   NODEID_TM (1,1,1,1  ) ,(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN *2  )))
-      IF (ANY(NODEID_TM(:,:,:,2)/=1)) THEN
-        CALL vtutor%error("STOP at 'core_con_mat.F' LINE=373 !!!")
+      CALLMPI( M_sum_z( WDES%COMM,    EPSDD_TM (1,1,1,1,1),(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN *3*3)))
+      CALLMPI( M_sum_d( WDES%COMM,FREQUENCY_TM (1,1,1    ),(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
+      CALLMPI( M_sum_d( WDES%COMM,      OCC_TM (1,1,1    ),(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
+      CALLMPI( M_sum_i( WDES%COMM,   NCOUNT_TM (1,1,1    ),(WDES%NB_TOT *WDES%NKPTS *WDES%ISPIN     )))
+      IF (ANY(NCOUNT_TM/=CH_NEDOS)) THEN
+        CALL vtutor%error("STOP at 'core_con_mat.F', DEBUG id: TFF03. Check POSCAR whether or not only 1 atom was excited!")
       ENDIF
 !-----------------------------------------------------------------------------------------------<<
 
@@ -460,7 +481,7 @@
         ENDDO
         CLOSE(IOME_IU1)
     ENDIF
-    DEALLOCATE(EPSDD_TM,FREQUENCY_TM, OCC_TM, NODEID_TM)
+    DEALLOCATE(EPSDD_TM,FREQUENCY_TM, OCC_TM, NCOUNT_TM)
 !--------------------------------------------------------------------------------------------<<
 
 ! End of profiling routines

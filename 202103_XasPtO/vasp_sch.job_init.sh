@@ -1,10 +1,10 @@
 #!/bin/bash
 homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
-source ${homedir}codes/groupcodes/202103_XasPtO/local_env.sh
+source local_env.sh
 set -euo pipefail
 
 cd $work_dir
-for i in $loopfile
+for i in ${loopfile[@]}
 do
     echo $i
     if [ ! -d "atom_${i}" ]; then
@@ -31,6 +31,8 @@ do
     line2=$(awk 'NR-"'$(($num2+$i))'"==0 {print} ' POSCAR)
     sed -i "$(($num2+1))c $line2" POSCAR
     sed -i "$(($num2+$i))c $line1" POSCAR
+
+    sed -i "s/xNUMx/$i/g"  $subfile
 
     cd ..
 done
