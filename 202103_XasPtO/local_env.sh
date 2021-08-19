@@ -10,7 +10,8 @@ fi
 fi
 local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
- work_dir=${goto_pto_110}Pt.110.x2y3z4.5_O6_vac15/
+# work_dir=${goto_pto_110}Pt.110.x2y3z4.5_O6_vac15/
+ work_dir=${goto_pto_110}Pt.110.x12y2z4.5_O22_vac15/vasp_sch/
 echo "work_dir=$work_dir"
 
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
@@ -28,9 +29,10 @@ echo "sub_dir=$sub_dir"
 # subfile=scf_sub.sh
 echo "subfile=$subfile"
 
- loopfile=(1)
+# loopfile=(1)
 # loopfile=`seq 1 $O_num`
 # loopfile=$(seq 1 22)
+ loopfile=(1 11)
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
  echo "loopfile=$loopfile"
 

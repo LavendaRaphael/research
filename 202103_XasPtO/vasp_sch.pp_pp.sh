@@ -8,8 +8,8 @@ cd $work_dir
 echo "#-----------------------------------------------------[alignorm]"
 ${software_bin}xas_alignorm.x xas_alignorm.in
 
-align_delta=$(grep align_delta xas_alignorm.log| awk '{print $2}')
-norm_scale=$(grep norm_scale xas_alignorm.log| awk '{print $2}')
+align_delta=$(awk '/align_delta/{print $2}' xas_alignorm.log)
+norm_scale=$(awk '/norm_scale/{print $2}' xas_alignorm.log)
 echo align_delta=$align_delta
 echo norm_scale=$norm_scale
 
@@ -18,7 +18,7 @@ do
     echo $N
     cd atom_${N}/
     awk '{
-        if (!NF || /^#/)
+        if (!NF || $1 ~ /^#/)
             print $0;
         else {
             $1=$1+('$align_delta');
@@ -37,24 +37,25 @@ done
 
 echo "#-----------------------------------------------------[symmetry]"
 sym=$(awk '{print $1}' xas_sym.in)
+echo sym=$sym
 case $sym in
     "triclinic")
         cat xas_alignorm.dat > xas_sym.dat
         ;;
     "monoclinic")
-            awk '{
-            if (!NF || /^#/)
+        awk '{
+            if (!NF || $1 ~ /^#/)
                 print $0;
             else {
                 $6=0.0;
                 $7=0.0;
                 printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
             }
-        }' xas_sft.dat > xas_alignorm.dat
+        }' xas_alignorm.dat > xas_sym.dat
         ;;
     "orthorhombic")
-            awk '{
-            if (!NF || /^#/)
+        awk '{
+            if (!NF || $1 ~ /^#/)
                 print $0;
             else {
                 $5=0.0;
@@ -62,11 +63,11 @@ case $sym in
                 $7=0.0;
                 printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
             }
-        }' xas_sft.dat > xas_alignorm.dat
+        }' xas_alignorm.dat > xas_sym.dat
         ;;
     "tetragonal"|"trigonal"|"hexagonal")
-            awk '{
-            if (!NF || /^#/)
+        awk '{
+            if (!NF || $1 ~ /^#/)
                 print $0;
             else {
                 $2=($2+$3)/2.0;
@@ -76,11 +77,11 @@ case $sym in
                 $7=0.0;
                 printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
             }
-        }' xas_sft.dat > xas_alignorm.dat
+        }' xas_alignorm.dat > xas_sym.dat
         ;;
     "cubic")
-            awk '{
-            if (!NF || /^#/)
+        awk '{
+            if (!NF || $1 ~ /^#/)
                 print $0;
             else {
                 $2=($2+$3+$4)/3.0;
@@ -91,7 +92,7 @@ case $sym in
                 $7=0.0;
                 printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
             }
-        }' xas_sft.dat > xas_alignorm.dat
+        }' xas_alignorm.dat > xas_sym.dat
         ;;
     *)
         echo "ERROR in xas_sym.in"

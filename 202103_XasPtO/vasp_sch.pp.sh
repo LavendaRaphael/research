@@ -39,7 +39,7 @@ do
     echo fenergy_sft=$fenergy_sft
 
     awk '{
-        if (!NF || /^#/)
+        if (!NF || $1 ~ /^#/)
             print $0;
         else {
             $1=$1+('$fenergy_sft');
@@ -48,7 +48,7 @@ do
     }' xas.dat > xas_sft.dat
 
     awk '{
-        if (!NF || /^#/)
+        if (!NF || $1 ~ /^#/)
             print $0;
         else {
             $1=$1+('$fenergy_sft');
