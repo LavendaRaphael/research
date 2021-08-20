@@ -12,7 +12,9 @@ local_env=false
 echo "---------------------------------------------------------------------------[~/tianff/codes/202011_XasWater32Vasp/local_env.sh]"
 # work_dir=${goto_pto_110}Pt.110.x2y3z4.5_O6_vac15/vasp_sch/
 # work_dir=${goto_pto_110}Pt.110.x12y2z4.5_O22_vac15/vasp_sch/
- work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O1_vac15/vasp_sch/
+# work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O1_vac15/vasp_sch/
+# work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O2x_vac15/vasp_sch/
+ work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O2y_vac15/vasp_sch/
 echo "work_dir=$work_dir"
 
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
