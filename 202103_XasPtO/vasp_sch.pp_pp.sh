@@ -36,7 +36,7 @@ do
 done
 
 echo "#-----------------------------------------------------[symmetry]"
-sym=$(awk '{print $1}' xas_sym.in)
+sym=$(awk '$1 !~ /^#/{print $1}' xas_sym.in)
 echo sym=$sym
 case $sym in
     "triclinic")
