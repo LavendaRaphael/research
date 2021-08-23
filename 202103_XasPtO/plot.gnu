@@ -1,9 +1,12 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
- pic[61]=1  # goto_pto_110_log.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/polarization/polarization_*.pdf'
-
-# pic[60]=1  # goto_pto_110_log.'Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_110_log.'Pt.110.x2y3z4.5_O3y_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_110_log.'Pt.110.x2y3z4.5_O3y_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_110_log.'Pt.110.x2y3z4.5_O2y_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_110_log.'Pt.110.x2y3z4.5_O2x_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_110_log.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/polarization/polarization_*.pdf'
+ pic[58]=1  # goto_pto_110_log.'Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf'
 
 # pic[48]=1   # gotowork_2.'aimd/aimd.pdf'
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
@@ -61,244 +64,6 @@ homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
  goto_pto_log_110=homedir.'group/202103_XasPtO/log/server/Pt.110_O_vac/'
 goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
-#-------------------------------------------------------------------------------------[]
-if (pic[61]==1) {
-
-subdir='Pt.110.x2y3z4.5_O1_vac15/vasp_sch/'
-
-datfilenum=3
-array datfile[datfilenum]
-datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-datdir=goto_pto_work_110.subdir
-datfile[2]=datdir.'xas_sym.dat'
-datfile[3]=datdir.'atom_1/xas_alignorm.dat'
-
-outdir=goto_pto_log_110.subdir
-
-titlnum=datfilenum
-array titl[titlnum]
-titl[1]='Exp.'
-titl[2]='Theory'
-titl[3]='Oxygen 1'
-
-colornum=titlnum
-array colo[colornum]
-colo[1]='black'
-colorstart=1
-colorwant=colornum-colorstart
-do for [i=1:colorwant] {
-    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
-    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
-    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
-    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
-}
-
-onset=531.7059162567
-
-set term pdfcairo font "Arial,25" size 7*1,5*1
-set style line 1 lw 2
-
-ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
-ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
-az(theta,phi)=(cos(theta))**2.0
-axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
-ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
-azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
-
-set angles degrees
-npiece=12
-piece=180.0/npiece
-
-r=1.0
-rx(theta,phi)=r*sin(theta)*cos(phi)
-ry(theta,phi)=r*sin(theta)*sin(phi)
-rz(theta)=r*cos(theta)
-
-ifile=0
-do for [ipath=1:3]{
-    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
-    do for [ipiece=0:npiece_end[ipath]]{
-        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
-        array nphi=[piece*ipiece,180.0,0.0]
-        theta=ntheta[ipath]
-        phi=nphi[ipath]
-        theta=sprintf('%4.1f',theta)
-        phi=sprintf('%4.1f',phi)
-        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
-        
-        outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
-        ifile=ifile+1
-        set output outfile
-        
-        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
-        
-        set multiplot
-        
-        set size 1,1
-        set origin 0,0
-
-        set xlabel "Energy (eV)" offset 0,0
-        set ylabel "Intensity (Arb. Units)" offset 1,0
-        set xrange [onset-5.0:onset+15.0]
-        set yrange [0:6]
-
-        p \
-            datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-            for [i=2:datfilenum] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
-
-        set size 0.5, 0.5
-        set origin 0.5,0.25
-
-        set view equal xyz
-
-        unset xlabel
-        unset ylabel
-        unset zlabel
-        set label 'x' at 1,0,0
-        set label 'y' at 0,1.2,0
-        set label 'z' at 0,0,1.2
-
-        set xrange [-1:1]
-        set yrange [-1:1]
-        set zrange [-1:1]
-        set label label_angle at -5,0,0
-
-        set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
-        
-        set zeroaxis
-        set xyplane at 0
-        unset tics
-        unset border
-
-        splot NaN
-        
-        unset multiplot
-        set border
-        set tics
-        unset arrow
-        unset label
-    }
-}
-}
-#-------------------------------------------------------------------------------------[]
-if (pic[60]==1) {
-
-subdir='Pt.110.x2y3z4.5_O6_vac15/vasp_sch/'
-
-datfilenum=3
-array datfile[datfilenum]
-datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-datdir=goto_pto_work_110.subdir
-datfile[2]=datdir.'xas_sym.dat'
-datfile[3]=datdir.'atom_1/xas_alignorm.dat'
-
-outdir=goto_pto_log_110.subdir
-
-titlnum=datfilenum
-array titl[titlnum]
-titl[1]='Exp.'
-titl[2]='Theory'
-titl[3]='Oxygen 1'
-
-colornum=titlnum
-array colo[colornum]
-colo[1]='black'
-colorstart=1
-colorwant=colornum-colorstart
-do for [i=1:colorwant] {
-    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
-    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
-    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
-    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
-}
-
-onset=531.7059162567
-
-set term pdfcairo font "Arial,25" size 7*1,5*1
-set style line 1 lw 2
-
-ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
-ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
-az(theta,phi)=(cos(theta))**2.0
-axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
-ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
-azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
-
-set angles degrees
-npiece=12
-piece=180.0/npiece
-
-r=1.0
-rx(theta,phi)=r*sin(theta)*cos(phi)
-ry(theta,phi)=r*sin(theta)*sin(phi)
-rz(theta)=r*cos(theta)
-
-ifile=0
-do for [ipath=1:3]{
-    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
-    do for [ipiece=0:npiece_end[ipath]]{
-        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
-        array nphi=[piece*ipiece,180.0,0.0]
-        theta=ntheta[ipath]
-        phi=nphi[ipath]
-        theta=sprintf('%4.1f',theta)
-        phi=sprintf('%4.1f',phi)
-        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
-        
-        outfile=outdir.'polarization/polarization_'.ifile.'.pdf'
-        ifile=ifile+1
-        set output outfile
-        
-        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
-        
-        set multiplot
-        
-        set size 1,1
-        set origin 0,0
-
-        set xlabel "Energy (eV)" offset 0,0
-        set ylabel "Intensity (Arb. Units)" offset 1,0
-        set xrange [onset-5.0:onset+15.0]
-        set yrange [0:8]
-
-        p \
-            datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-            for [i=2:datfilenum] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
-
-        set size 0.5, 0.5
-        set origin 0.5,0.25
-
-        set view equal xyz
-
-        unset xlabel
-        unset ylabel
-        unset zlabel
-        set label 'x' at 1,0,0
-        set label 'y' at 0,1.2,0
-        set label 'z' at 0,0,1.2
-
-        set xrange [-1:1]
-        set yrange [-1:1]
-        set zrange [-1:1]
-        set label label_angle at -5,0,0
-
-        set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
-        
-        set zeroaxis
-        set xyplane at 0
-        unset tics
-        unset border
-
-        splot NaN
-        
-        unset multiplot
-        set border
-        set tics
-        unset arrow
-        unset label
-    }
-}
-}
 #-------------------------------------------------------------------------------------[]
 if (pic[59]==1) {
 
@@ -373,7 +138,7 @@ do for [ipath=1:3]{
 
         set xlabel "Energy (eV)" offset 0,0
         set ylabel "Intensity (Arb. Units)" offset 1,0
-        set xrange [onset-5.0:onset+15.0]
+        set xrange [527:540]
         set yrange [0:8]
 
         p \
@@ -415,26 +180,39 @@ do for [ipath=1:3]{
     }
 }
 }
-
 #-------------------------------------------------------------------------------------[]
 if (pic[58]==1) {
 
-datfilenum=4
+ subdir='Pt.110.x2y3z4.5_O3xy_vac15/'
+# subdir='Pt.110.x2y3z4.5_O3y_vac15/'
+# subdir='Pt.110.x2y3z4.5_O2x_vac15/'
+# subdir='Pt.110.x2y3z4.5_O2y_vac15/'
+# subdir='Pt.110.x2y3z4.5_O6_vac15/'
+# subdir='Pt.110.x2y3z4.5_O1_vac15/'
+# subdir='Pt.110.x12y2z4.5_O22_vac15/'
+subdir=subdir.'vasp_sch/'
+
+ array atom=['1','2','3']
+# array atom=['1']
+atomnum=|atom|
+
+datfilenum=2+atomnum
 array datfile[datfilenum]
 datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-datdir=goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/'
+datdir=goto_pto_work_110.subdir
 datfile[2]=datdir.'xas_sym.dat'
-datfile[3]=datdir.'atom_1/xas_alignorm.dat'
-datfile[4]=datdir.'atom_11/xas_alignorm.dat'
-
-outdir=goto_pto_log_110.'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/'
+do for [i=1:atomnum] {
+    datfile[2+i]=datdir.'atom_'.atom[i].'/xas_alignorm.dat'
+}
+outdir=goto_pto_log_110.subdir
 
 titlnum=datfilenum
 array titl[titlnum]
 titl[1]='Exp.'
 titl[2]='Theory'
-titl[3]='Oxygen 1'
-titl[4]='Oxygen 11'
+do for [i=1:atomnum] {
+    titl[2+i]='Oxygen'.atom[i]
+}
 
 colornum=titlnum
 array colo[colornum]
@@ -447,8 +225,6 @@ do for [i=1:colorwant] {
     if (colorwant==4) {colo[colorstart+i]=colors4[i]}
     if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
 }
-
-onset=531.7059162567
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set style line 1 lw 2
@@ -494,12 +270,12 @@ do for [ipath=1:3]{
 
         set xlabel "Energy (eV)" offset 0,0
         set ylabel "Intensity (Arb. Units)" offset 1,0
-        set xrange [onset-5.0:onset+15.0]
-        set yrange [0:8]
+        set xrange [527:540]
+        set yrange [0:6]
 
         p \
             datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-            for [i=2:4] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
+            for [i=2:datfilenum] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
 
         set size 0.5, 0.5
         set origin 0.5,0.25
@@ -535,6 +311,7 @@ do for [ipath=1:3]{
     }
 }
 }
+
 #-------------------------------------------------------------------------------------[]
 if (pic[57]==1) {
 

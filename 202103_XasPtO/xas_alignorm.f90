@@ -1,6 +1,6 @@
 !==========================================================================================
 !---------------------------------------------------------------[VERSION]
-! 2021.08.04
+! 2021.08.23
 ! @FeifeiTian
 !---------------------------------------------------------------[NOTES]
 !---------------------------------------------------------------[USE]
@@ -10,8 +10,8 @@
 ! datacolumn    2
 ! e_align       535.0d0             # eV
 ! area          10.d0
-! e_begin       -5.d0               # eV
-! e_end         15.d0               # eV
+! e_begin       530.d0               # eV
+! e_end         545.d0               # eV
 ! peak_tolera   0.1                 # %
 ! peak_index    1
 !---------------------------------------------------------------[DATAFILE]
@@ -165,8 +165,8 @@ write(errfile_unit, '(A25,F25.10)') 'peak/max', temp_real0
 write(errfile_unit, '(A25,F25.10)') 'align_delta', e_align - e_onset
 xas(:,1) = xas(:,1) - e_onset + e_align
 !---------------------------------------------------------------[NORMALIZATION]
-e_begin = e_align + e_begin
-e_end = e_align + e_end
+! e_begin = e_align + e_begin
+! e_end = e_align + e_end
 
 do i = 1, ei_tot
     if (xas(i,1) >= e_begin) exit

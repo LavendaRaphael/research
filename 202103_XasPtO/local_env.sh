@@ -34,10 +34,9 @@ echo "sub_dir=$sub_dir"
 # subfile=scf_sub.sh
 echo "subfile=$subfile"
 
- loopfile=(2 3)
+# loopfile=(1)
 # loopfile=`seq 1 $O_num`
-# loopfile=$(seq 1 22)
-# loopfile=(1 11)
+ loopfile=$(seq 1 3)
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
  echo "loopfile=$loopfile"
 

@@ -6,6 +6,7 @@ set -euo pipefail
 cd $work_dir
 
 echo "#-----------------------------------------------------[alignorm]"
+awk '$1 ~ /^datafile/{$2="xas_ave.dat"}1' xas_alignorm.in > tmp && mv tmp xas_alignorm.in
 ${software_bin}xas_alignorm.x xas_alignorm.in
 
 align_delta=$(awk '/align_delta/{print $2}' xas_alignorm.log)
