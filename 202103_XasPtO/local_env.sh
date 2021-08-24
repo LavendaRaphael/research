@@ -21,7 +21,7 @@ echo "#=========================================================================
 # work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O3y_vac15/
 # work_dir=${goto_pto_work_110}Pt.110.x2y3z4.5_O3.136_vac15/
 # work_dir=${goto_pto_work_110}Pt.110.x2y4z4.5_O4_vac15/
-# work_dir=${work_dir}vasp_sch/
+ work_dir=${work_dir}vasp_sch/
 echo "work_dir=$work_dir"
 
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
