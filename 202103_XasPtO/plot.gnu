@@ -1,12 +1,14 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-             # goto_pto_110_log.'Pt.110.x2y3z4.5_O3y_vac15/vasp_sch/polarization/polarization_*.pdf'
-             # goto_pto_110_log.'Pt.110.x2y3z4.5_O3y_vac15/vasp_sch/polarization/polarization_*.pdf'
-             # goto_pto_110_log.'Pt.110.x2y3z4.5_O2y_vac15/vasp_sch/polarization/polarization_*.pdf'
-             # goto_pto_110_log.'Pt.110.x2y3z4.5_O2x_vac15/vasp_sch/polarization/polarization_*.pdf'
-             # goto_pto_110_log.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/polarization/polarization_*.pdf'
- pic[58]=1  # goto_pto_110_log.'Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y4z4.5_O4_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O3.123_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O3.135_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O2y_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O2x_vac15/vasp_sch/polarization/polarization_*.pdf'
+             # goto_pto_log_110.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/polarization/polarization_*.pdf'
+# pic[58]=1  # goto_pto_log_110.'Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf'
 
 # pic[48]=1   # gotowork_2.'aimd/aimd.pdf'
 # 45 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_3/xspectra.epsilon_exp.pdf
@@ -15,11 +17,11 @@ do for [i=1:100] {pic[i]=0}
 # 34 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_11/xspectra.epsilon.pdf
 # 43 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon_exp.pdf
 # 33 Pt-110_O_vac/Pt-110a12b2c4.5_O22_vac15/qe_hch_scf/scf_1/xspectra.epsilon.pdf
-# pic[59]=1  # goto_log_2.'vasp_sch.aimd2_932/polarzation/polarzation_*.pdf'
+  pic[59]=1  # goto_pto_log_110.'Pt.110.x12y2z4.5_O22_vac15/vasp_sch.aimd2_932/polarzation/polarzation_*.pdf'
 # pic[56]=1  # goto_log_2.'vasp_sch/atom_11/sch.x.y.tm.exp.pdf'
 # pic[58]=1  # goto_pto_log_110.'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/polarization/polarization_*.pdf'
 # pic[55]=1  # goto_log_2.'vasp_sch/atom_1/sch.x.y.tm.exp.pdf'
-# pic[51]=1  # goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+# pic[51]=1  # goto_pto_log_110.'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/sch.x.y.z.exp.pdf'
 # pic[15]=1  # goto_log_2.'/vasp_sch/atom_*/sch.pdf'
 
 # pic[52]=1   # Pt-111_PtO2-001_vac/Pt-111a4b4c4_PtO2-001a4b3c1_vac15/vasp_sch/sch.x_y.z.pdf
@@ -67,12 +69,14 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #-------------------------------------------------------------------------------------[]
 if (pic[59]==1) {
 
+subdir='Pt.110.x12y2z4.5_O22_vac15/'
+
 datfilenum=3
 array datfile[datfilenum]
-datfile[1]=goto_exp.'20210512.Pt.110_norm.dat'
-outdir=goto_log_2.'vasp_sch.aimd2_932/'
-datfile[2]=goto_work_2.'vasp_sch/xas_alignorm.dat'
-datfile[3]=goto_work_2.'vasp_sch.aimd2_932/xas_alignorm.dat'
+datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+outdir=goto_pto_log_110.subdir.'vasp_sch.aimd2_932/'
+datfile[2]=goto_pto_work_110.subdir.'vasp_sch/xas_sym.dat'
+datfile[3]=goto_pto_work_110.subdir.'vasp_sch.aimd2_932/xas_sym.dat'
 
 titlnum=datfilenum
 array titl[titlnum]
@@ -110,8 +114,6 @@ r=1.0
 rx(theta,phi)=r*sin(theta)*cos(phi)
 ry(theta,phi)=r*sin(theta)*sin(phi)
 rz(theta)=r*cos(theta)
-
-onset=531.7059162567
 
 ifile=0
 do for [ipath=1:3]{
@@ -183,16 +185,21 @@ do for [ipath=1:3]{
 #-------------------------------------------------------------------------------------[]
 if (pic[58]==1) {
 
- subdir='Pt.110.x2y3z4.5_O3xy_vac15/'
+# subdir='Pt.110.x2y4z4.5_O4_vac15/'
+# subdir='Pt.110.x2y3z4.5_O3.136_vac15/'
+# subdir='Pt.110.x2y3z4.5_O3xy_vac15/'
 # subdir='Pt.110.x2y3z4.5_O3y_vac15/'
 # subdir='Pt.110.x2y3z4.5_O2x_vac15/'
 # subdir='Pt.110.x2y3z4.5_O2y_vac15/'
 # subdir='Pt.110.x2y3z4.5_O6_vac15/'
 # subdir='Pt.110.x2y3z4.5_O1_vac15/'
-# subdir='Pt.110.x12y2z4.5_O22_vac15/'
+ subdir='Pt.110.x12y2z4.5_O22_vac15/'
 subdir=subdir.'vasp_sch/'
 
- array atom=['1','2','3']
+
+# array atom=['1','3']
+# array atom=['1','2','3']
+ array atom=['1','11']
 # array atom=['1']
 atomnum=|atom|
 
@@ -271,7 +278,8 @@ do for [ipath=1:3]{
         set xlabel "Energy (eV)" offset 0,0
         set ylabel "Intensity (Arb. Units)" offset 1,0
         set xrange [527:540]
-        set yrange [0:6]
+#        set yrange [0:6]
+        set yrange [0:10]
 
         p \
             datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
@@ -659,12 +667,15 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
-outfile=goto_log_2.'vasp_sch/sch.x.y.z.exp.pdf'
+
+subdir='Pt.110.x12y2z4.5_O22_vac15/vasp_sch/'
+
+outfile=goto_pto_log_110.subdir.'sch.x.y.z.exp.pdf'
 
 datfilenum=4
 array datfile[datfilenum]
-datfile[1]=goto_exp.'20210512.Pt.110_norm.dat'
-datdir=goto_work_2.'vasp_sch/'
+datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+datdir=goto_pto_work_110.subdir
 do for [i=2:datfilenum] {datfile[i]=datdir.'xas_alignorm.dat'}
 
 titlnum=datfilenum
@@ -676,21 +687,19 @@ colornum=titlnum
 array colo[colornum]
 colo[1]='black'
 colorstart=1
-colorwant=3
+colorwant=colornum-colorstart
 do for [i=1:colorwant] {
-    if (colorwant==2) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==2 || colornum==1) {colo[colorstart+i]=colors2[i]}
     if (colorwant==3) {colo[colorstart+i]=colors3[i]}
     if (colorwant==4) {colo[colorstart+i]=colors4[i]}
     if (colorwant==5 || colornum==6) {colo[colorstart+i]=colors6[i]}
 }
 
-onset=531.7059162567
-
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [onset-5.0:onset+15.0]
+set xrange [527.0:540.0]
 set yrange [0:*]
 set style line 1 lw 2
 

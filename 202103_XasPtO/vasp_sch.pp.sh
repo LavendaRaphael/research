@@ -47,15 +47,18 @@ do
         }
     }' xas.dat > xas_sft.dat
 
-    awk '{
-        if (!NF || $1 ~ /^#/)
-            print $0;
-        else {
-            $1=$1+('$fenergy_sft');
-            printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%8d\n",$1,$2,$3,$4,$5,$6,$7,$8
-        }
-    }' MYCARXAS > xas.tm_sft.dat    
-    
+    if [ -f MYCARXAS ]
+    then
+        awk '{
+            if (!NF || $1 ~ /^#/)
+                print $0;
+            else {
+                $1=$1+('$fenergy_sft');
+                printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%8d\n",$1,$2,$3,$4,$5,$6,$7,$8
+            }
+        }' MYCARXAS > xas.tm_sft.dat    
+    fi
+
     cd ..
 done
 
