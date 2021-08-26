@@ -16,11 +16,12 @@ echo "#=========================================================================
 # work_dir=Pt.110.x2y3z4.5_O1_vac15/
 # work_dir=Pt.110.x2y3z4.5_O2.12_vac15/
 # work_dir=Pt.110.x2y3z4.5_O2.13_vac15/
-  work_dir=Pt.110.x2y3z4.5_O2.14_vac15/
+# work_dir=Pt.110.x2y3z4.5_O2.14_vac15/
 # work_dir=Pt.110.x2y3z4.5_O3.123_vac15/
 # work_dir=Pt.110.x2y3z4.5_O3.135_vac15/
 # work_dir=Pt.110.x2y3z4.5_O3.136_vac15/
 # work_dir=Pt.110.x2y4z4.5_O4_vac15/
+  work_dir=Pt.110.x2y3z4.5_O4.v56_vac15/
  work_dir=${goto_pto_work_110}${work_dir}
  work_dir=${work_dir}vasp_sch/
 echo "work_dir=$work_dir"
