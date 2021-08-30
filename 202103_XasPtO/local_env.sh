@@ -9,7 +9,7 @@ if $local_env;then
 fi
 fi
 local_env=false
-echo "#--------------------------------------------------------------------------[local_env.sh]"
+echo "#=============================================================================[local_env.sh]"
 # work_dir=Pt.110.x12y2z4.5_O22_vac15/
 # work_dir=Pt.110.x12y2z4.5_O22_vac15/vasp_sch.aimd2_932/
 # work_dir=Pt.110.x2y3z4.5_O6_vac15/

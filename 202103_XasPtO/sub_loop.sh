@@ -8,7 +8,6 @@ for N in ${loopfile[*]}
 do
 	echo $N
 	cd atom_${N}/$sub_dir
-	sed -i "s/xNUMx/$N/g"  $subfile
-	bash $subfile
+	source $subfile
 	cd -
 done

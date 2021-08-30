@@ -10,11 +10,6 @@ cd template
 # POSCAR
 num1=$(awk 'NR-7==0 {print $1}' POSCAR)
 num2=$(awk 'NR-8>=0 && NR-9<=0 && $1 ~ /^D/ {print NR}' POSCAR)
-cp POSCAR POSCAR.bk
-if [ "$num1" != "1" ];then
-    awk 'NR-6==0{$1=$1" "$1}1' POSCAR > tmp && mv tmp POSCAR
-    awk 'NR-7==0{$1=1" "$1-1}1' POSCAR > tmp && mv tmp POSCAR
-fi
 
 # INCAR
 nelect=$(awk '/NELECT/{printf "%6.0f",$3}' ../../posopt/OUTCAR)
@@ -33,8 +28,6 @@ do
     cp template/* atom_${i}/
 
     cd atom_${i}/
-
-    rm POSCAR.bk
 
     #6     O   O   X   
     #7     1   3   3
@@ -55,5 +48,3 @@ do
     cd ..
 done
 
-cd template
-mv POSCAR.bk POSCAR
