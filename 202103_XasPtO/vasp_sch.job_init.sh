@@ -21,9 +21,6 @@ nelect=$(awk '/NELECT/{printf "%6.0f",$3}' ../../posopt/OUTCAR)
 echo "NELECT = "$nelect
 sed -i "/NBANDS/c\  NBANDS = $nelect" INCAR
 
-# POTCAR
-source ${software_bin}vasp_pot.sh
-
 cd ..
 
 for i in ${loopfile[@]}
@@ -59,5 +56,4 @@ do
 done
 
 cd template
-rm POTCAR
 mv POSCAR.bk POSCAR
