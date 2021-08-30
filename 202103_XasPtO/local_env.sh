@@ -1,13 +1,14 @@
 #!/bin/bash
-homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
-source ${homedir}codes/common/environment.sh
-set -euo pipefail
-
 if [ ! -z ${local_env+x} ]; then
 if $local_env;then
     return
 fi
 fi
+
+homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
+source ${homedir}codes/group/common/groupenv.sh
+set -euo pipefail
+
 local_env=false
 echo "#=============================================================================[local_env.sh]"
 # work_dir=Pt.110.x12y2z4.5_O22_vac15/
