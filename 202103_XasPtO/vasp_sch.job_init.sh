@@ -7,7 +7,7 @@ cd $work_dir
 
 num1=$(awk 'NR-7==0 {print $1}' template/POSCAR)
 num2=$(awk 'NR-8>=0 && NR-9<=0 && $1 ~ /^D/ {print NR}' template/POSCAR)
-nelect=$(awk '/NELECT/{print $3}' ../posopt/OUTCAR)
+nelect=$(awk '/NELECT/{printf "%6.0f",$3}' ../posopt/OUTCAR)
 echo "NELECT = "$nelect
 sed -i "/NBANDS/c\  NBANDS = $nelect" template/INCAR
 
