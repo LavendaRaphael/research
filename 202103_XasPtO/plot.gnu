@@ -1,6 +1,7 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
+             #      Pt.110.x4y3z4.5_O2.14_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O5_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O4.v56_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y4z4.5_O4_vac15/vasp_sch/polarization/polarization_*.pdf
@@ -89,14 +90,15 @@ if (pic[59]==1) {
 # subdir='Pt.110.x2y3z4.5_O3.136_vac15/'
 # subdir='Pt.110.x2y4z4.5_O4_vac15/'
 # subdir='Pt.110.x2y3z4.5_O4.v56_vac15/'
-  subdir='Pt.110.x2y3z4.5_O5_vac15/'
+# subdir='Pt.110.x2y3z4.5_O5_vac15/'
+  subdir='Pt.110.x4y3z4.5_O2.14_vac15/'
   subdir=subdir.'vasp_sch/'
 
 # array atom=['1','3']
 # array atom=['1','2','3']
 # array atom=['1','11']
-  array atom=['1','2','5']
-# array atom=['1']
+# array atom=['1','2','5']
+  array atom=['1']
 atomnum=|atom|
 
 datdir=goto_pto_work_110.subdir
