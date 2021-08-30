@@ -1,6 +1,7 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
+             #      Pt.110.x2y3z4.5_O5_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O4.v56_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y4z4.5_O4_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/polarization/polarization_*.pdf
@@ -9,7 +10,7 @@ do for [i=1:100] {pic[i]=0}
              #      Pt.110.x2y3z4.5_O2.13_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O2.12_vac15/vasp_sch/polarization/polarization_*.pdf
              #      Pt.110.x2y3z4.5_O1_vac15/vasp_sch/polarization/polarization_*.pdf
-# pic[59]=1  #      Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf
+  pic[59]=1  #      Pt.110.x2y3z4.5_O6_vac15/vasp_sch/polarization/polarization_*.pdf
              #  goto_pto_work_110.'
 
 # pic[48]=1  #      aimd/aimd.pdf
@@ -20,7 +21,7 @@ do for [i=1:100] {pic[i]=0}
 # pic[43]=1  #          scf_1/xspectra.epsilon_exp.pdf
 # pic[33]=1  #          scf_1/xspectra.epsilon.pdf
              #      qe_hch_scf/
-  pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
+# pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
 # pic[56]=1  #          atom_11/sch.x.y.tm.exp.pdf
 # pic[59]=1  #          polarization/polarization_*.pdf
 # pic[55]=1  #          atom_1/sch.x.y.tm.exp.pdf
@@ -77,7 +78,7 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #-------------------------------------------------------------------------------------[]
 if (pic[59]==1) {
 
- subdir='Pt.110.x12y2z4.5_O22_vac15/'
+# subdir='Pt.110.x12y2z4.5_O22_vac15/'
 # subdir='Pt.110.x2y3z4.5_O6_vac15/'
 # subdir='Pt.110.x2y3z4.5_O1_vac15/'
 # subdir='Pt.110.x2y3z4.5_O2.12_vac15/'
@@ -88,11 +89,13 @@ if (pic[59]==1) {
 # subdir='Pt.110.x2y3z4.5_O3.136_vac15/'
 # subdir='Pt.110.x2y4z4.5_O4_vac15/'
 # subdir='Pt.110.x2y3z4.5_O4.v56_vac15/'
+  subdir='Pt.110.x2y3z4.5_O5_vac15/'
   subdir=subdir.'vasp_sch/'
 
 # array atom=['1','3']
 # array atom=['1','2','3']
- array atom=['1','11']
+# array atom=['1','11']
+  array atom=['1','2','5']
 # array atom=['1']
 atomnum=|atom|
 

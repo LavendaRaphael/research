@@ -30,11 +30,11 @@ echo "work_dir=$work_dir"
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
 # echo "O_num=$O_num"
 
- loopfile=(1)
+# loopfile=(1)
 # loopfile=`seq 1 $O_num`
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
 # loopfile=$(seq 1 22)
-  loopfile=(1 2 5)
+  loopfile=(1 1 2 2 5)
  echo "loopfile=$loopfile"
 
   subfile=vasp_sub.sh
