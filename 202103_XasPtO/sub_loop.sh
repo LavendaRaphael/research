@@ -6,8 +6,8 @@ set -euo pipefail
 cd $work_dir
 for N in ${loopfile[*]}
 do
-	echo $N
-	cd atom_${N}/$sub_dir
-	source $subfile
-	cd -
+    echo $N
+    cd atom_${N}/$sub_dir
+    source $subfile
+    cd -
 done

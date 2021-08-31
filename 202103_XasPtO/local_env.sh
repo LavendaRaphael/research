@@ -26,7 +26,8 @@ echo "#=========================================================================
 # work_dir='Pt.110.x2y4z4.5_O2.13_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
-  work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+  work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O4_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
@@ -37,7 +38,7 @@ echo "work_dir=$work_dir"
 # O_num=$(awk 'NR-7==0 {print $1}' ${work_dir}template/POSCAR)
 # echo "O_num=$O_num"
 
-  loopfile=(1)
+# loopfile=(1)
 # loopfile=`seq 1 $O_num`
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
 # loopfile=$(seq 1 22)
