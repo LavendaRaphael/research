@@ -16,27 +16,31 @@ do for [i=1:100] {pic[i]=0}
              #      'Pt.110.x2y4z4.5_O2.13_vac15/'
              #      'Pt.110.x2y4z4.5_O2.15_vac15/'
              #      'Pt.110.x2y4z4.5_O2.16_vac15/'
-             #      'Pt.110.x2y4z4.5_O4_vac15/'
+             #      'Pt.110.x2y4z4.5_O3.137_vac15/'
+             #      'Pt.110.x2y4z4.5_O3.148_vac15/'
+             #      'Pt.110.x2y4z4.5_O4.1237_vac15/'
+             #      'Pt.110.x2y4z4.5_O4.1458_vac15/'
+             #      'Pt.110.x2y4z4.5_O6.v56_vac15/'
              #      'Pt.110.x4y3z4.5_O2.12_vac15/'
              #      'Pt.110.x4y3z4.5_O2.14_vac15/'
              #          vasp_sch/polarization/polarization_*.pdf
 
+             #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
 # pic[48]=1  #      aimd/aimd.pdf
+             #      qe_hch_scf/
 # pic[45]=1  #          scf_3/xspectra.epsilon_exp.pdf
 # pic[35]=1  #          scf_3/xspectra.epsilon.pdf
 # pic[44]=1  #          scf_11/xspectra.epsilon_exp.pdf
 # pic[34]=1  #          scf_11/xspectra.epsilon.pdf
 # pic[43]=1  #          scf_1/xspectra.epsilon_exp.pdf
 # pic[33]=1  #          scf_1/xspectra.epsilon.pdf
-             #      qe_hch_scf/
 # pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
+             #      vasp_sch/
 # pic[56]=1  #          atom_11/sch.x.y.tm.exp.pdf
 # pic[59]=1  #          polarization/polarization_*.pdf
 # pic[55]=1  #          atom_1/sch.x.y.tm.exp.pdf
 # pic[51]=1  #          sch.x.y.z.exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
-             #      vasp_sch/
-             #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
 
 # pic[52]=1  #      sch.x_y.z.pdf
 # pic[49]=1  #      atom_*/sch.pdf
@@ -87,7 +91,6 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 if (pic[59]==1) {
 
 # work_dir='Pt.110.x12y2z4.5_O22_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O1_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
@@ -97,19 +100,24 @@ if (pic[59]==1) {
 # work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O5_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.13_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O4_vac15/'
- work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
-# work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
+# work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
+ work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
   subdir=work_dir.'vasp_sch/'
 
-# array atom=['1','3']
-# array atom=['1','2','3']
-# array atom=['1','11']
 # array atom=['1','2','5']
-  array atom=['1']
+# array atom=['1','2','3']
+# array atom=['1','3']
+# array atom=['1','2']
+ array atom=['1']
 atomnum=|atom|
 
 datdir=goto_pto_work_110.subdir
@@ -130,7 +138,8 @@ do for [i=1:atomnum] {
     titl[2+i]='Oxygen'.atom[i]
 }
 
-colornum=titlnum
+# colornum=titlnum
+  colornum=6
 array colo[colornum]
 colo[1]='black'
 colorstart=1
