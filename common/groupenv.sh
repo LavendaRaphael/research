@@ -15,13 +15,13 @@ echo "#=========================================================================
 vasp_pot=${homedir}software/potpaw_PBE.54/
 echo "vasp_pot=${vasp_pot}"
 
-goto_llzo_code=${homedir}codes/groupcodes/202012_LLZO/
+goto_llzo_code=${homedir}codes/group/202012_LLZO/
 goto_llzo_work=${homedir}group/202012_LLZO/server/
 goto_llzo_ms=${homedir}group/202012_LLZO/structures/Li_Files/Documents/
 
 goto_pto_exp=${homedir}group/202103_XasPtO/exp/
 goto_pto_work_110=${homedir}group/202103_XasPtO/server/Pt.110_O_vac/
-goto_pto_code=${homedir}codes/groupcodes/202103_XasPtO/
+goto_pto_code=${homedir}codes/group/202103_XasPtO/
 goto_pto_ms=${homedir}group/202103_XasPtO/structures/Untitled_Files/Documents/
 
 #---------------------------------------------[path]

@@ -5,7 +5,7 @@ set -euo pipefail
 
 jobname=test
 ncore=$[${maxppn}*2]
-source ${homedir}codes/common/sub_head.sh
+source ${homedir}codes/group/common/sub_head.sh
 
 #==========================================================[main script]
 cat >> ${jobname}.sh<<eof
