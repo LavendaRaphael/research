@@ -27,8 +27,10 @@ echo "#=========================================================================
 # work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
-  work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O4_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+  work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
  work_dir=${goto_pto_work_110}${work_dir}
@@ -42,7 +44,7 @@ echo "work_dir=$work_dir"
 # loopfile=`seq 1 $O_num`
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
 # loopfile=$(seq 1 22)
-  loopfile=(1 2)
+  loopfile=(1 2 3 4)
  echo "loopfile=$loopfile"
 
   subfile=vasp_sub.sh
