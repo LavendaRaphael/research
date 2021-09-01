@@ -6,4 +6,4 @@ import sys
 cont = []
 for x in sys.argv[1:]:
     cont.extend(read(str(x),index=":"))
-view(cont,repeat=(4,2,1))
+view(cont,repeat=(3,3,1))
