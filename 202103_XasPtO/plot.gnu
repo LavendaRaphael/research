@@ -42,10 +42,11 @@ do for [i=1:100] {pic[i]=0}
 # pic[51]=1  #          sch.x.y.z.exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
 
+             #  goto_pto_work_111.'Pt.111.x4y4z4_alpha.PtO2.001.x4y3z1_vac15/vasp_sch/
 # pic[52]=1  #      sch.x_y.z.pdf
 # pic[49]=1  #      atom_*/sch.pdf
-             #  goto_pto_work_111.'Pt.111.x4y4z4_alpha.PtO2.001.x4y3z1_vac15/vasp_sch/
 
+             #  goto_pto_work_111.'Pt.111.x4y4z4_O4_vac15/
 # pic[31]=1  #      aimd/temperature_time.pdf
 # pic[30]=1  #      aimd/energy_time.pdf
 # pic[38]=1  #          scf_1/xspectra.desmooth.pdf
@@ -63,11 +64,10 @@ do for [i=1:100] {pic[i]=0}
 # pic[8]=1   #          atom_1/sch.pdf
 # pic[57]=1  #      vasp_sch/polarzation/polarzation_*.pdf
 # pic[42]=1  #      xspectra.hch_fch_nch.pdf
-             #  goto_pto_work_111.'Pt.111.x4y4z4_O4_vac15/
 
+             #  goto_pto_work.'Pt/
 # pic[2]=1   #      Pt_eos_kpoints.pdf
 # pic[1]=1   #      Pt_eos_cutoff.pdf
-             #  goto_pto_work.'Pt/
 
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']

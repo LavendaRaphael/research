@@ -32,7 +32,19 @@ do
             printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f\n",$1,$2,$3,$4,$5,$6,$7
         }
     }' xas_sft.dat > xas_alignorm.dat
-    
+
+    if [ -f xas.tm_sft.dat ]
+    then
+        awk '{
+            if (!NF || $1 ~ /^#/)
+                print $0;
+            else {
+                $1=$1+('$align_delta');
+                printf "%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%20.12f%8d\n",$1,$2,$3,$4,$5,$6,$7,$8
+            }
+        }' xas.tm_sft.dat > xas.tm_align.dat
+    fi
+
     cd ..
 done
 
