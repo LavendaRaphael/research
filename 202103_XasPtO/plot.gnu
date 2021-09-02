@@ -14,7 +14,6 @@ do for [i=1:100] {pic[i]=0}
              #      'Pt.110.x2y3z4.5_O4.v56_vac15/'
              #      'Pt.110.x2y3z4.5_O5_vac15/'
              #      'Pt.110.x2y3z4.5_O6_vac15/'
-             #      'Pt.110.x2y4z4.5_O2.13_vac15/'
              #      'Pt.110.x2y4z4.5_O2.15_vac15/'
              #      'Pt.110.x2y4z4.5_O2.16_vac15/'
              #      'Pt.110.x2y4z4.5_O3.137_vac15/'
@@ -23,7 +22,6 @@ do for [i=1:100] {pic[i]=0}
              #      'Pt.110.x2y4z4.5_O4.1458_vac15/'
              #      'Pt.110.x2y4z4.5_O6.v56_vac15/'
              #      'Pt.110.x4y3z4.5_O2.12_vac15/'
-             #      'Pt.110.x4y3z4.5_O2.14_vac15/'
              #          vasp_sch/polarization/polarization_*.pdf
 
              #  goto_pto_work_110.
