@@ -1,9 +1,7 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-
-
-# pic[59]=1  #  goto_pto_work_110.
+  pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
              #      'Pt.110.x2y3z4.5_O2.12_vac15/'
              #      'Pt.110.x2y3z4.5_O2.13_vac15/'
@@ -23,9 +21,16 @@ do for [i=1:100] {pic[i]=0}
              #      'Pt.110.x2y4z4.5_O6.v56_vac15/'
              #      'Pt.110.x4y3z4.5_O2.12_vac15/'
              #          vasp_sch/polarization/polarization_*.pdf
+             #      'Pt.110.x2y6z4.5_O2.17_vac15/'
+             #          vasp_sch.xm/
+             #          vasp_sch.xp/
+             #          vasp_sch.ym/
+             #          vasp_sch.zm/
+             #          vasp_sch.zp/
+
 
              #  goto_pto_work_110.
-  pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
+# pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
              #          atom_*/vasp_sch/polarization/polarization_*.pdf
 
              #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
@@ -225,23 +230,29 @@ if (pic[59]==1) {
 # work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
- work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
-  subdir=work_dir.'vasp_sch/'
+# work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
+  work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+#   work_dir=work_dir.'vasp_sch.xm/'
+#   work_dir=work_dir.'vasp_sch.xp/'
+#   work_dir=work_dir.'vasp_sch.ym/'
+#   work_dir=work_dir.'vasp_sch.zm/'
+   work_dir=work_dir.'vasp_sch.zp/'
+# work_dir=work_dir.'vasp_sch/'
+  work_dir=goto_pto_work_110.work_dir
 
 # array atom=['1','2','5']
 # array atom=['1','2','3']
 # array atom=['1','3']
-# array atom=['1','2']
- array atom=['1']
+ array atom=['1','2']
+# array atom=['1']
 atomnum=|atom|
 
-datdir=goto_pto_work_110.subdir
 datfilenum=2+atomnum
 array datfile[datfilenum]
 datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-datfile[2]=datdir.'xas_sym.dat'
+datfile[2]=work_dir.'xas_sym.dat'
 do for [i=1:atomnum] {
-    datfile[2+i]=datdir.'atom_'.atom[i].'/xas_alignorm.dat'
+    datfile[2+i]=work_dir.'atom_'.atom[i].'/xas_alignorm.dat'
 }
 
 titlnum=datfilenum
@@ -298,7 +309,7 @@ do for [ipath=1:1]{
         phi=sprintf('%4.1f',phi)
         label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
         
-        outfile=datdir.'polarization/polarization_'.ifile.'.pdf'
+        outfile=work_dir.'polarization/polarization_'.ifile.'.pdf'
         ifile=ifile+1
         set output outfile
                 
