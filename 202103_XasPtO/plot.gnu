@@ -1,7 +1,7 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
-  pic[59]=1  #  goto_pto_work_110.
+# pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
              #      'Pt.110.x2y3z4.5_O2.12_vac15/'
              #      'Pt.110.x2y3z4.5_O2.13_vac15/'
@@ -71,6 +71,10 @@ do for [i=1:100] {pic[i]=0}
 # pic[2]=1   #      Pt_eos_kpoints.pdf
 # pic[1]=1   #      Pt_eos_cutoff.pdf
 
+             #  goto_pto_work_110.
+  pic[61]=1  #      correlation/
+             #          polarization/polarization_*.pdf
+
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']
 array colors3_1=['#D22027', '#384589', '#7FA5B7']
@@ -89,6 +93,181 @@ set style data lines
 homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
 goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
+#-------------------------------------------------------------------------------------[]
+if (pic[61]==1) {
+
+# out_dir='correlation/'
+# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x4y3z4.5_O2.12_vac15/','Pt.110.x2y4z4.5_O2.15_vac15/','Pt.110.x2y4z4.5_O2.16_vac15/']
+# out_dir='neighbor_y/'
+# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.13_vac15/','Pt.110.x2y4z4.5_O3.137_vac15/','Pt.110.x2y3z4.5_O3.135_vac15/']
+# out_dir='neighbor_x/'
+# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.12_vac15/']
+# out_dir='neighbor_xy/'
+# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.14_vac15/','Pt.110.x2y4z4.5_O3.148_vac15/','Pt.110.x2y4z4.5_O4.1458_vac15/']
+# out_dir='neighbor_mix/'
+# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O3.123_vac15/','Pt.110.x2y4z4.5_O4.1237_vac15/','Pt.110.x2y3z4.5_O4.v56_vac15/','Pt.110.x2y4z4.5_O6.v56_vac15/','Pt.110.x2y3z4.5_O6_vac15/']
+
+# array atom=['1']
+# work_dir='Pt.110.x2y3z4.5_O1_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O2.14_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O3.135_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+# work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
+
+# array atom=['1','2']
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+#   work_dir=work_dir.'vasp_sch.xm/'
+#   work_dir=work_dir.'vasp_sch.xp/'
+#   work_dir=work_dir.'vasp_sch.ym/'
+#   work_dir=work_dir.'vasp_sch.zm/'
+#   work_dir=work_dir.'vasp_sch.zp/'
+
+# array atom=['1','3']
+# work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
+
+# array atom=['1','11']
+# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+
+# array atom=['1','2','3']
+# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
+
+# array atom=['1','2','5']
+# work_dir='Pt.110.x2y3z4.5_O5_vac15/'
+
+# out_dir=goto_pto_work_110.out_dir.'polarization/'
+# worknum=|work_dir|
+
+# datfilenum=1+worknum
+# array datfile[datfilenum]
+# datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+# do for [i=1:worknum] {
+#     datfile[1+i]=goto_pto_work_110.work_dir[i].'vasp_sch/xas_sym.dat'
+# }
+
+# array array_index=['a','b','c','d','e','f']
+
+#---------------------------------->
+work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+array array_datfile=['','','xm/','xp/','ym/','zm/','zp/']
+num_datfile=|array_datfile|
+
+out_dir=goto_pto_work_110.work_dir.'polarization/'
+
+array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+array_datfile[2]=goto_pto_work_110.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/xas_sym.dat'
+do for [i=3:num_datfile] {
+    array_datfile[i]=goto_pto_work_110.work_dir.'vasp_sch.'.array_datfile[i].'xas_sym.dat'
+}
+
+num_titl=num_datfile
+array array_titl=['','origin','x+','x-','y','z+','z-']
+#----------------------------------<
+
+array_titl[1]='Exp.'
+do for [i=2:num_titl] {
+    array_titl[i]='Theory '.array_titl[i]
+}
+
+# colornum=titlnum
+  colornum=7
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=colornum-colorstart
+do for [i=1:colorwant] {
+    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set style line 1 lw 2
+
+set angles degrees
+npiece=2
+piece=180.0/npiece
+
+ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
+ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
+az(theta,phi)=(cos(theta))**2.0
+axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
+ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
+azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
+r=1.0
+rx(theta,phi)=r*sin(theta)*cos(phi)
+ry(theta,phi)=r*sin(theta)*sin(phi)
+rz(theta)=r*cos(theta)
+
+ifile=0
+# do for [ipath=1:3]{
+do for [ipath=1:1]{
+    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
+    do for [ipiece=0:npiece_end[ipath]]{
+        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
+        array nphi=[piece*ipiece,180.0,0.0]
+        theta=ntheta[ipath]
+        phi=nphi[ipath]
+        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
+
+        outfile=out_dir.'polarization_'.ifile.'.pdf'
+        ifile=ifile+1
+        set output outfile
+                
+        set multiplot
+        
+        set size 1,1
+        set origin 0,0
+        set xlabel "Energy (eV)" offset 0,0
+        set ylabel "Intensity (Arb. Units)" offset 1,0
+        set xrange [527:540]
+        set yrange [0:10]
+        p \
+            array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
+            for [i=2:num_datfile] array_datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t array_titl[i],\
+
+        set size 0.5, 0.5
+        set origin 0.25,0.5
+        set view equal xyz
+        unset xlabel
+        unset ylabel
+        unset zlabel
+        set label 'x' at 1,0,0
+        set label 'y' at 0,1.2,0
+        set label 'z' at 0,0,1.2
+        set xrange [-1:1]
+        set yrange [-1:1]
+        set zrange [-1:1]
+#        theta=sprintf('%4.1f',theta)
+#        phi=sprintf('%4.1f',phi)
+#        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
+#        set label label_angle at -5,0,0
+        set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
+        set zeroaxis
+        set xyplane at 0
+        unset tics
+        unset border
+        splot NaN
+        
+        unset multiplot
+        set border
+        set tics
+        unset arrow
+        unset label
+    }
+}
+}
+
 #-------------------------------------------------------------------------------------[]
 if (pic[60]==1) {
 
@@ -210,41 +389,45 @@ do for [ipath=1:1]{
 #-------------------------------------------------------------------------------------[]
 if (pic[59]==1) {
 
-# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+ array atom=['1']
 # work_dir='Pt.110.x2y3z4.5_O1_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.14_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O3.135_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O5_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O6_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O2.13_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
-# work_dir='Pt.110.x4y3z4.5_O2.14_vac15/'
-  work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+
+# array atom=['1','2']
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
 #   work_dir=work_dir.'vasp_sch.xm/'
 #   work_dir=work_dir.'vasp_sch.xp/'
 #   work_dir=work_dir.'vasp_sch.ym/'
 #   work_dir=work_dir.'vasp_sch.zm/'
-   work_dir=work_dir.'vasp_sch.zp/'
-# work_dir=work_dir.'vasp_sch/'
-  work_dir=goto_pto_work_110.work_dir
+#   work_dir=work_dir.'vasp_sch.zp/'
+
+ array atom=['1','3']
+# work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
+ work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
+
+# array atom=['1','11']
+# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+
+# array atom=['1','2','3']
+# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
 
 # array atom=['1','2','5']
-# array atom=['1','2','3']
-# array atom=['1','3']
- array atom=['1','2']
-# array atom=['1']
+# work_dir='Pt.110.x2y3z4.5_O5_vac15/'
+
+ work_dir=work_dir.'vasp_sch/'
+ work_dir=goto_pto_work_110.work_dir
 atomnum=|atom|
 
 datfilenum=2+atomnum
@@ -305,10 +488,6 @@ do for [ipath=1:1]{
         phi=nphi[ipath]
         f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
 
-        theta=sprintf('%4.1f',theta)
-        phi=sprintf('%4.1f',phi)
-        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
-        
         outfile=work_dir.'polarization/polarization_'.ifile.'.pdf'
         ifile=ifile+1
         set output outfile
@@ -326,7 +505,7 @@ do for [ipath=1:1]{
             for [i=2:datfilenum] datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t titl[i],\
 
         set size 0.5, 0.5
-        set origin 0.5,0.25
+        set origin 0.25,0.5
         set view equal xyz
         unset xlabel
         unset ylabel
@@ -337,7 +516,10 @@ do for [ipath=1:1]{
         set xrange [-1:1]
         set yrange [-1:1]
         set zrange [-1:1]
-        set label label_angle at -5,0,0
+#        theta=sprintf('%4.1f',theta)
+#        phi=sprintf('%4.1f',phi)
+#        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
+#        set label label_angle at -5,0,0
         set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
         set zeroaxis
         set xyplane at 0

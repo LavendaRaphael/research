@@ -13,7 +13,6 @@ local_env=false
 echo "#=========================================================================[local_env.sh]"
 # work_dir='Pt.110.x12y2z4.5_O22_vac15/'
 # work_dir='Pt.110.x12y2z4.5_O22_vac15/vasp_sch.aimd2_932/'
-# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O1_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
@@ -23,6 +22,7 @@ echo "#=========================================================================
 # work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
 # work_dir='Pt.110.x2y3z4.5_O5_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
@@ -30,14 +30,14 @@ echo "#=========================================================================
 # work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
 # work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
-  work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+ work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
 #   work_dir=${work_dir}'vasp_sch.xm/'
 #   work_dir=${work_dir}'vasp_sch.xp/'
-#   work_dir=${work_dir}'vasp_sch.ym/'
+   work_dir=${work_dir}'vasp_sch.ym/'
 #   work_dir=${work_dir}'vasp_sch.zm/'
-   work_dir=${work_dir}'vasp_sch.zp/'
+#   work_dir=${work_dir}'vasp_sch.zp/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
-  work_dir=${goto_pto_work_110}${work_dir}
+ work_dir=${goto_pto_work_110}${work_dir}
 # work_dir=${work_dir}'vasp_sch/'
 echo "work_dir=$work_dir"
 
