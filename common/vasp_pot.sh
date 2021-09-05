@@ -12,7 +12,7 @@ for iatom in $latom
 do
     for iatompot in ${latompot[@]}
     do
-        if [ $iatom == $iatompot ] || [[ "${iatom}_"* == $iatompot ]]
+        if [ $iatom == $iatompot ] || [[ $iatompot == "${iatom}_"* ]]
         then
             echo "$iatom  $iatompot"
             cat ${vasp_pot}${iatompot}/POTCAR >> POTCAR
