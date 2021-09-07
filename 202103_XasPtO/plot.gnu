@@ -30,7 +30,7 @@ do for [i=1:100] {pic[i]=0}
 
 
              #  goto_pto_work_110.
-# pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
+ pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
              #          atom_*/vasp_sch/polarization/polarization_*.pdf
 
              #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
@@ -72,7 +72,7 @@ do for [i=1:100] {pic[i]=0}
 # pic[1]=1   #      Pt_eos_cutoff.pdf
 
              #  goto_pto_work_110.
-  pic[61]=1  #      correlation/
+# pic[61]=1  #      correlation/
              #          polarization/polarization_*.pdf
 
 array colors2=['#FE7D6A', '#81B8E9']
@@ -284,9 +284,9 @@ datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
 datfile[2]=datdir.'xas_alignorm.dat'
 datfile[3]=datdir.'xas.tm_align.dat'
 
-array band=[271,287,291]
-array kpoint=[6,6,2]
-kpoint_test=2
+array band=[271,287,291,324]
+array kpoint=[6,6,2,5]
+kpoint_test=5
 bandnum=|band|
 scaling=1.5e3
 
