@@ -278,14 +278,25 @@ latom=natom[1]
 subdir=work_dir.'vasp_sch/atom_'.latom.'/'
 
 datdir=goto_pto_work_110.subdir
+outdir=datdir.'peak_1/'
+
 datfilenum=3
 array datfile[datfilenum]
 datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
 datfile[2]=datdir.'xas_alignorm.dat'
 datfile[3]=datdir.'xas.tm_align.dat'
 
-array band=[271,287,291,324]
-array kpoint=[6,6,2,5]
+# array band=[271,287,291,324]
+# array kpoint=[6,6,2,5]
+# outdir=datdir.'peak_1/'
+# array band=[271,271,278]
+# array kpoint=[6,5,2]
+# outdir=datdir.'peak_2/'
+# array band=[291,287,297]
+# array kpoint=[2,6,4]
+ outdir=datdir.'peak_3/'
+ array band=[312,322,324]
+ array kpoint=[2,4,5]
 kpoint_test=5
 bandnum=|band|
 scaling=1.5e3
@@ -339,7 +350,7 @@ do for [ipath=1:1]{
         phi=nphi[ipath]
         f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
  
-        outfile=datdir.'polarization/polarization_'.ifile.'.pdf'
+        outfile=outdir.'polarization_'.ifile.'.pdf'
         ifile=ifile+1
         set output outfile
         

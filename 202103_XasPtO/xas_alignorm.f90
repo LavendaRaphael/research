@@ -1,6 +1,6 @@
 !==========================================================================================
 !---------------------------------------------------------------[VERSION]
-! 2021.08.23
+! 2021.09.08
 ! @FeifeiTian
 !---------------------------------------------------------------[NOTES]
 !---------------------------------------------------------------[USE]
@@ -150,18 +150,16 @@ do i=2, ei_tot-1
         if (temp_real0 >peak_tolera) then
             temp_int0 = temp_int0 + 1
             write (errfile_unit,'(A25,F25.10,F25.10)') '',xas(i,1),temp_real0
-            if (temp_int0==peak_index) exit
+            if (temp_int0==peak_index) e_onset = xas(i,1)
         endif
     endif
 enddo
-if (temp_int0/=peak_index) then
+if (temp_int0<peak_index) then
     write (*,*) "ERROR !!! See 'my.err' for details."
     write (errfile_unit, *) "Find peak_num ",temp_int0,"< peak_index ",peak_index,"!!!"
     stop
 endif
-e_onset = xas(i,1)
 write(errfile_unit, '(A25,F25.10)') 'e_onset', e_onset
-write(errfile_unit, '(A25,F25.10)') 'peak/max', temp_real0
 write(errfile_unit, '(A25,F25.10)') 'align_delta', e_align - e_onset
 xas(:,1) = xas(:,1) - e_onset + e_align
 !---------------------------------------------------------------[NORMALIZATION]
