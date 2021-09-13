@@ -11,7 +11,6 @@ cont.cell=cell
 
 generic_projection_settings = {
     'show_unit_cell': 2,
-#    'rotation': '90x',
     'rotation': '90y',
 #    'rotation': '90x,90z'
 #    'rotation': '10x,-10y'
