@@ -151,9 +151,9 @@ set view equal xyz
 unset tics
 unset border
 
-set label 1 'x' at 1.4,0.1,0
-set label 2 'y' at 0,1.4,0
-set label 3 'z' at -.2,0,1.4
+set label 1 'x' at 1.3,  0,-.1 center
+set label 2 'y' at   0,1.3,  0 center
+set label 3 'z' at -.1,  0,1.3 center
 set arrow from 0,0,0 to 1.2,0,0
 set arrow from 0,0,0 to 0,1.2,0
 set arrow from 0,0,0 to 0,0,1.2
@@ -163,12 +163,6 @@ alpha=20.0
 polarx(degr)=cos(degr)
 polary(degr)=sin(degr)*sin(alpha)
 polarz(degr)=sin(degr)*cos(alpha)
-
-set style fill transparent solid 0.8
-set pm3d depthorder hidden3d
-set pm3d implicit
-
-set palette defined (0 ''.colo[1], 1 ''.colo[2], 2 ''.colo[3])
 
 # x-ray
 set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
@@ -185,9 +179,9 @@ set view 270,270
 set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center textcolor ''.colo[2]
 
 splot \
-    sample [degr=0:360][r=0:1] '++' using (polarx(degr)*r):(polary(degr)*r):(polarz(degr)*r):(2),\
+    sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
     [degr=0:alpha] '+' using (0):(-degl*cos(degr)):(degl*sin(degr)) lw 2 lc ''.colo[2],\
-    $cube u 1:2:3:(0),\
+    $cube u 1:2:3 lw 2 lc ''.colo[1],\
 
 unset label 4
 
@@ -198,9 +192,10 @@ set view azimuth 0
 set view 0,0
 set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center textcolor ''.colo[3]
 
-splot sample [degr=0:360][r=0:1] '++' using (polarx(degr)*r):(polary(degr)*r):(polarz(degr)*r):(2) ,\
+splot \
+    $cube u 1:2:3 lw 2 lc ''.colo[1] ,\
+    [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3] ,\
     [degr=0:beta] '+' using (degl*polarx(degr)):(degl*polary(degr)):(degl*polarz(degr)) lw 2 lc ''.colo[3],\
-    $cube u 1:2:3:(0)
 
 # splot NaN
 # pause -1
