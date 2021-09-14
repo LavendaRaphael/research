@@ -1,6 +1,44 @@
 array pic[100]
 do for [i=1:100] {pic[i]=0}
 
+             #  goto_pto_work.'Pt/
+# pic[2]=1   #      Pt_eos_kpoints.pdf
+# pic[1]=1   #      Pt_eos_cutoff.pdf
+
+             #  goto_pto_work_111.'Pt.111.x4y4z4_O4_vac15/
+# pic[31]=1  #      aimd/temperature_time.pdf
+# pic[30]=1  #      aimd/energy_time.pdf
+             #      qe_hch_scf/
+# pic[38]=1  #          scf_1/xspectra.desmooth.pdf
+# pic[37]=1  #          scf_1/xspectra.terminator.pdf
+# pic[36]=1  #          scf_1/xspectra.cutocc.pdf
+# pic[46]=1  #          scf_1/xspectra.epsilon_exp.pdf
+# pic[32]=1  #          scf_1/xspectra.epsilon.pdf
+# pic[23]=1  #          xspectra.xniter.pdf
+# pic[18]=1  #          xspectra.xgamma.pdf
+# pic[17]=1  #          xspectra.kpoints.pdf
+             #      vasp_sch/
+# pic[53]=1  #          atom_1/sch.x_y.tm.exp.pdf
+# pic[50]=1  #          atom_1/sch.x_y.z.exp.pdf
+# pic[8]=1   #          atom_1/sch.pdf
+# pic[57]=1  #          polarzation/polarzation_*.pdf
+# pic[42]=1  #      xspectra.hch_fch_nch.pdf
+
+             #  goto_pto_work_111.'Pt.111.x4y4z4_alpha.PtO2.001.x4y3z1_vac15/vasp_sch/
+# pic[52]=1  #      sch.x_y.z.pdf
+# pic[49]=1  #      atom_*/sch.pdf
+
+             #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
+# pic[48]=1  #      aimd/aimd.pdf
+             #      qe_hch_scf/
+# pic[34]=1  #          scf_11/xspectra.epsilon.pdf
+# pic[33]=1  #          scf_1/xspectra.epsilon.pdf
+# pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
+             #      vasp_sch/
+# pic[59]=1  #          polarization/polarization_*.pdf
+# pic[51]=1  #          sch.x.y.z.exp.pdf
+# pic[15]=1  #          atom_*/sch.pdf
+
 # pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
              #      'Pt.110.x2y3z4.5_O2.12_vac15/'
@@ -30,50 +68,15 @@ do for [i=1:100] {pic[i]=0}
 
 
              #  goto_pto_work_110.
- pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
+# pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
              #          atom_*/vasp_sch/polarization/polarization_*.pdf
-
-             #  goto_pto_work_110.'Pt.110.x12y2z4.5_O22_vac15/
-# pic[48]=1  #      aimd/aimd.pdf
-             #      qe_hch_scf/
-# pic[34]=1  #          scf_11/xspectra.epsilon.pdf
-# pic[33]=1  #          scf_1/xspectra.epsilon.pdf
-# pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
-             #      vasp_sch/
-# pic[59]=1  #          polarization/polarization_*.pdf
-# pic[51]=1  #          sch.x.y.z.exp.pdf
-# pic[15]=1  #          atom_*/sch.pdf
-
-             #  goto_pto_work_111.'Pt.111.x4y4z4_alpha.PtO2.001.x4y3z1_vac15/vasp_sch/
-# pic[52]=1  #      sch.x_y.z.pdf
-# pic[49]=1  #      atom_*/sch.pdf
-
-             #  goto_pto_work_111.'Pt.111.x4y4z4_O4_vac15/
-# pic[31]=1  #      aimd/temperature_time.pdf
-# pic[30]=1  #      aimd/energy_time.pdf
-             #      qe_hch_scf/
-# pic[38]=1  #          scf_1/xspectra.desmooth.pdf
-# pic[37]=1  #          scf_1/xspectra.terminator.pdf
-# pic[36]=1  #          scf_1/xspectra.cutocc.pdf
-# pic[46]=1  #          scf_1/xspectra.epsilon_exp.pdf
-# pic[32]=1  #          scf_1/xspectra.epsilon.pdf
-# pic[23]=1  #          xspectra.xniter.pdf
-# pic[18]=1  #          xspectra.xgamma.pdf
-# pic[17]=1  #          xspectra.kpoints.pdf
-             #      vasp_sch/
-# pic[53]=1  #          atom_1/sch.x_y.tm.exp.pdf
-# pic[50]=1  #          atom_1/sch.x_y.z.exp.pdf
-# pic[8]=1   #          atom_1/sch.pdf
-# pic[57]=1  #          polarzation/polarzation_*.pdf
-# pic[42]=1  #      xspectra.hch_fch_nch.pdf
-
-             #  goto_pto_work.'Pt/
-# pic[2]=1   #      Pt_eos_kpoints.pdf
-# pic[1]=1   #      Pt_eos_cutoff.pdf
 
              #  goto_pto_work_110.
 # pic[61]=1  #      correlation/
              #          polarization/polarization_*.pdf
+
+ pic[62]=1  #  ~/group/202103_XasPtO/doc/
+             #      exp.pdf
 
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']
@@ -93,56 +96,131 @@ set style data lines
 homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
 goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
+
+#-------------------------------------------------------------------------------------[]
+
+# sample
+$cube << EOD
+-1 -1 0
+ 1 -1 0
+ 1  1 0
+-1  1 0
+-1 -1 0
+
+-1 -1 -0.5
+ 1 -1 -0.5
+ 1  1 -0.5
+-1  1 -0.5
+-1 -1 -0.5
+EOD
+
+#if (pic[62]==1) {
+
+out_dir='~/group/202103_XasPtO/doc/'
+outfile=out_dir.'exp.pdf'
+set output outfile 
+
+colornum=7
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=colornum-colorstart
+do for [i=1:colorwant] {
+    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
+}
+# set term x11 persist
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set style line 1 lw 2
+set angles degrees
+set view equal xyz
+
+set lmargin 0.0
+set rmargin 0.0
+set tmargin 0.0
+set bmargin 0.0
+
+set label 1 'x' at 1.4,0.1,0
+set label 2 'y' at 0,1.4,0
+set label 3 'z' at -.2,0,1.4
+set arrow from 0,0,0 to 1.2,0,0
+set arrow from 0,0,0 to 0,1.2,0
+set arrow from 0,0,0 to 0,0,1.2
+
+set xrange [-1.1:1.1]
+set yrange [-1.1:1.1]
+set zrange [-1.1:1.1]
+unset tics
+unset border
+
+alpha=20.0
+
+polarx(degr)=cos(degr)
+polary(degr)=sin(degr)*sin(alpha)
+polarz(degr)=sin(degr)*cos(alpha)
+
+# sample
+# set object polygon from -1,-1,0 to 1,-1,0 to 1,1,0 to -1,1,0 to -1,-1,0 fillstyle solid 0.5 fillcolor ''.colors6[2]
+# set object polygon from 1,0,0 to 0,sin(alpha),cos(alpha) to -1,0,0 to 0,-sin(alpha),-cos(alpha) to 1,0,0 fillstyle solid 0.9 fillcolor ''.colors6[3]
+
+# x-ray
+set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
+degl=0.4
+
+# polarization
+beta=40.0
+set arrow from 0,0,0 to polarx(beta),polary(beta),polarz(beta) lc ''.colo[3]
+
+# set multiplot
+#---------------------------------------------------[]
+# set size 0.5,1
+# set origin 0,0
+outfile=out_dir.'exp_tv.pdf'
+set output outfile
+set view azimuth 90
+set view 270,270
+set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center
+
+splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
+    [degr=0:alpha] '+' using (0):(-degl*cos(degr)):(degl*sin(degr)) lw 2 lc ''.colo[2],\
+    $cube u 1:2:3 lc ''.colo[1]
+unset label 4
+
+#---------------------------------------------------[]
+# set size 0.5,1
+# set origin 0.5,0
+outfile=out_dir.'exp_sv.pdf'
+set output outfile
+set view azimuth 0
+set view 0,0
+set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center
+
+splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
+    [degr=0:beta] '+' using (degl*polarx(degr)):(degl*polary(degr)):(degl*polarz(degr)) lw 2 lc ''.colo[3],\
+    $cube u 1:2:3 lc ''.colo[1]
+
+#splot NaN
+#pause -1
+#}
 #-------------------------------------------------------------------------------------[]
 if (pic[61]==1) {
 
 # out_dir='correlation/'
 # array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x4y3z4.5_O2.12_vac15/','Pt.110.x2y4z4.5_O2.15_vac15/','Pt.110.x2y4z4.5_O2.16_vac15/']
+
 # out_dir='neighbor_y/'
 # array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.13_vac15/','Pt.110.x2y4z4.5_O3.137_vac15/','Pt.110.x2y3z4.5_O3.135_vac15/']
+
 # out_dir='neighbor_x/'
 # array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.12_vac15/']
+
 # out_dir='neighbor_xy/'
 # array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.14_vac15/','Pt.110.x2y4z4.5_O3.148_vac15/','Pt.110.x2y4z4.5_O4.1458_vac15/']
+
 # out_dir='neighbor_mix/'
 # array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O3.123_vac15/','Pt.110.x2y4z4.5_O4.1237_vac15/','Pt.110.x2y3z4.5_O4.v56_vac15/','Pt.110.x2y4z4.5_O6.v56_vac15/','Pt.110.x2y3z4.5_O6_vac15/']
-
-# array atom=['1']
-# work_dir='Pt.110.x2y3z4.5_O1_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O2.14_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O3.135_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
-# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O2.15_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O2.16_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
-# work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
-
-# array atom=['1','2']
-# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
-# work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
-#   work_dir=work_dir.'vasp_sch.xm/'
-#   work_dir=work_dir.'vasp_sch.xp/'
-#   work_dir=work_dir.'vasp_sch.ym/'
-#   work_dir=work_dir.'vasp_sch.zm/'
-#   work_dir=work_dir.'vasp_sch.zp/'
-
-# array atom=['1','3']
-# work_dir='Pt.110.x2y3z4.5_O3.136_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
-
-# array atom=['1','11']
-# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
-
-# array atom=['1','2','3']
-# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
-# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
-
-# array atom=['1','2','5']
-# work_dir='Pt.110.x2y3z4.5_O5_vac15/'
 
 # out_dir=goto_pto_work_110.out_dir.'polarization/'
 # worknum=|work_dir|
