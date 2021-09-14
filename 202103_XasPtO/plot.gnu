@@ -101,20 +101,32 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 
 # sample
 $cube << EOD
--1 -1 0
- 1 -1 0
- 1  1 0
--1  1 0
--1 -1 0
+-1 -1   0
+ 1 -1   0
+ 1  1   0
+-1  1   0
+-1 -1   0
 
--1 -1 -0.5
- 1 -1 -0.5
- 1  1 -0.5
--1  1 -0.5
--1 -1 -0.5
+-1 -1 -.5
+ 1 -1 -.5
+ 1  1 -.5
+-1  1 -.5
+-1 -1 -.5
+
+-1 -1   0
+ 1 -1   0
+ 1 -1 -.5
+-1 -1 -.5
+-1 -1   0
+
+-1  1   0
+ 1  1   0
+ 1  1 -.5
+-1  1 -.5
+-1  1   0
 EOD
 
-if (pic[62]==1) {
+#if (pic[62]==1) {
 
 out_dir='~/group/202103_XasPtO/doc/'
 outfile=out_dir.'exp.pdf'
@@ -131,8 +143,8 @@ do for [i=1:colorwant] {
     if (colorwant==4) {colo[colorstart+i]=colors4[i]}
     if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
 }
- set term x11 persist
-#set term pdfcairo font "Arial,25" size 5*1,5*1
+#set term x11 persist
+set term pdfcairo font "Arial,25" size 5*1,5*1
 set style line 1 lw 2
 set angles degrees
 set view equal xyz
@@ -152,8 +164,12 @@ polarx(degr)=cos(degr)
 polary(degr)=sin(degr)*sin(alpha)
 polarz(degr)=sin(degr)*cos(alpha)
 
-# cube
-set object polygon from -1,-1,0 to 1,-1,0 to 1,1,0 to -1,1,0 to -1,-1,0
+set style fill transparent solid 0.8
+set pm3d depthorder hidden3d
+set pm3d implicit
+unset hidden3d
+
+set palette defined (0 ''.colo[1], 1 ''.colo[2], 2 ''.colo[3])
 
 # x-ray
 set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
@@ -169,9 +185,11 @@ set view azimuth 90
 set view 270,270
 set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center textcolor ''.colo[2]
 
-splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
+splot \
+    sample [degr=0:360][r=0:1] '++' using (polarx(degr)*r):(polary(degr)*r):(polarz(degr)*r):(2),\
     [degr=0:alpha] '+' using (0):(-degl*cos(degr)):(degl*sin(degr)) lw 2 lc ''.colo[2],\
-#    $cube u 1:2:3 lc ''.colo[1]
+    $cube u 1:2:3:(0),\
+
 unset label 4
 
 #---------------------------------------------------[]
@@ -181,13 +199,13 @@ set view azimuth 0
 set view 0,0
 set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center textcolor ''.colo[3]
 
-splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
+splot sample [degr=0:360][r=0:1] '++' using (polarx(degr)*r):(polary(degr)*r):(polarz(degr)*r):(2) ,\
     [degr=0:beta] '+' using (degl*polarx(degr)):(degl*polary(degr)):(degl*polarz(degr)) lw 2 lc ''.colo[3],\
-#    $cube u 1:2:3 lc ''.colo[1]
+    $cube u 1:2:3:(0)
 
-#splot NaN
-pause -1
-}
+# splot NaN
+# pause -1
+#}
 #-------------------------------------------------------------------------------------[]
 if (pic[61]==1) {
 
