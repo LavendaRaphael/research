@@ -167,7 +167,6 @@ polarz(degr)=sin(degr)*cos(alpha)
 set style fill transparent solid 0.8
 set pm3d depthorder hidden3d
 set pm3d implicit
-unset hidden3d
 
 set palette defined (0 ''.colo[1], 1 ''.colo[2], 2 ''.colo[3])
 
