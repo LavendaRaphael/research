@@ -114,13 +114,13 @@ $cube << EOD
 -1 -1 -0.5
 EOD
 
-#if (pic[62]==1) {
+if (pic[62]==1) {
 
 out_dir='~/group/202103_XasPtO/doc/'
 outfile=out_dir.'exp.pdf'
 set output outfile 
 
-colornum=7
+colornum=3
 array colo[colornum]
 colo[1]='black'
 colorstart=1
@@ -131,13 +131,14 @@ do for [i=1:colorwant] {
     if (colorwant==4) {colo[colorstart+i]=colors4[i]}
     if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
 }
-# set term x11 persist
-set term pdfcairo font "Arial,25" size 7*1,5*1
+ set term x11 persist
+#set term pdfcairo font "Arial,25" size 5*1,5*1
 set style line 1 lw 2
 set angles degrees
 set view equal xyz
-
-set lmargin 0.0
+unset tics
+unset border
+set pm3d
 
 set label 1 'x' at 1.4,0.1,0
 set label 2 'y' at 0,1.4,0
@@ -146,21 +147,11 @@ set arrow from 0,0,0 to 1.2,0,0
 set arrow from 0,0,0 to 0,1.2,0
 set arrow from 0,0,0 to 0,0,1.2
 
-set xrange [-1.1:1.1]
-set yrange [-1.1:1.1]
-set zrange [-1.1:1.1]
-unset tics
-unset border
-
 alpha=20.0
 
 polarx(degr)=cos(degr)
 polary(degr)=sin(degr)*sin(alpha)
 polarz(degr)=sin(degr)*cos(alpha)
-
-# sample
-# set object polygon from -1,-1,0 to 1,-1,0 to 1,1,0 to -1,1,0 to -1,-1,0 fillstyle solid 0.5 fillcolor ''.colors6[2]
-# set object polygon from 1,0,0 to 0,sin(alpha),cos(alpha) to -1,0,0 to 0,-sin(alpha),-cos(alpha) to 1,0,0 fillstyle solid 0.9 fillcolor ''.colors6[3]
 
 # x-ray
 set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
@@ -169,38 +160,32 @@ degl=0.4
 # polarization
 beta=40.0
 set arrow from 0,0,0 to polarx(beta),polary(beta),polarz(beta) lc ''.colo[3]
-
-# set multiplot
 #---------------------------------------------------[]
-# set size 0.5,1
-# set origin 0,0
 outfile=out_dir.'exp_tv.pdf'
 set output outfile
 set view azimuth 90
 set view 270,270
-set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center
+set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center textcolor ''.colo[2]
 
 splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
     [degr=0:alpha] '+' using (0):(-degl*cos(degr)):(degl*sin(degr)) lw 2 lc ''.colo[2],\
-    $cube u 1:2:3 lc ''.colo[1]
+    $cube u 1:2:3:(0) lc ''.colo[1]
 unset label 4
 
 #---------------------------------------------------[]
-# set size 0.5,1
-# set origin 0.5,0
 outfile=out_dir.'exp_sv.pdf'
 set output outfile
 set view azimuth 0
 set view 0,0
-set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center
+set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center textcolor ''.colo[3]
 
 splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
     [degr=0:beta] '+' using (degl*polarx(degr)):(degl*polary(degr)):(degl*polarz(degr)) lw 2 lc ''.colo[3],\
-    $cube u 1:2:3 lc ''.colo[1]
+    $cube u 1:2:3:(1) lc ''.colo[1]
 
 #splot NaN
-#pause -1
-#}
+pause -1
+}
 #-------------------------------------------------------------------------------------[]
 if (pic[61]==1) {
 
