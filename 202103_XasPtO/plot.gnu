@@ -138,9 +138,6 @@ set angles degrees
 set view equal xyz
 
 set lmargin 0.0
-set rmargin 0.0
-set tmargin 0.0
-set bmargin 0.0
 
 set label 1 'x' at 1.4,0.1,0
 set label 2 'y' at 0,1.4,0
