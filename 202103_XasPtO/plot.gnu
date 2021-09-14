@@ -138,7 +138,6 @@ set angles degrees
 set view equal xyz
 unset tics
 unset border
-set pm3d
 
 set label 1 'x' at 1.4,0.1,0
 set label 2 'y' at 0,1.4,0
@@ -152,6 +151,9 @@ alpha=20.0
 polarx(degr)=cos(degr)
 polary(degr)=sin(degr)*sin(alpha)
 polarz(degr)=sin(degr)*cos(alpha)
+
+# cube
+set object polygon from -1,-1,0 to 1,-1,0 to 1,1,0 to -1,1,0 to -1,-1,0
 
 # x-ray
 set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
@@ -169,7 +171,7 @@ set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0
 
 splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
     [degr=0:alpha] '+' using (0):(-degl*cos(degr)):(degl*sin(degr)) lw 2 lc ''.colo[2],\
-    $cube u 1:2:3:(0) lc ''.colo[1]
+#    $cube u 1:2:3 lc ''.colo[1]
 unset label 4
 
 #---------------------------------------------------[]
@@ -181,7 +183,7 @@ set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*
 
 splot sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
     [degr=0:beta] '+' using (degl*polarx(degr)):(degl*polary(degr)):(degl*polarz(degr)) lw 2 lc ''.colo[3],\
-    $cube u 1:2:3:(1) lc ''.colo[1]
+#    $cube u 1:2:3 lc ''.colo[1]
 
 #splot NaN
 pause -1
