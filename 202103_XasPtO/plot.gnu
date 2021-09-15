@@ -129,8 +129,8 @@ EOD
 #if (pic[62]==1) {
 
 out_dir='~/group/202103_XasPtO/doc/'
-outfile=out_dir.'exp.pdf'
-set output outfile 
+# outfile=out_dir.'exp.pdf'
+# set output outfile 
 
 colornum=3
 array colo[colornum]
@@ -150,6 +150,9 @@ set angles degrees
 set view equal xyz
 unset tics
 unset border
+scaling=1.4
+set size scaling,scaling
+set origin .5-scaling/2.0,.5-scaling/2.0
 
 set label 1 'x' at 1.3,  0,-.1 center
 set label 2 'y' at   0,1.3,  0 center
@@ -167,16 +170,18 @@ polarz(degr)=sin(degr)*cos(alpha)
 # x-ray
 set arrow from 0,-cos(alpha),sin(alpha) to 0,0,0 linecolor ''.colo[2]
 degl=0.4
+set label 6 'X-ray' at .2,-cos(alpha)+0.2,sin(alpha)+0.2 center textcolor ''.colo[2]
 
 # polarization
-beta=40.0
+beta=90.0
 set arrow from 0,0,0 to polarx(beta),polary(beta),polarz(beta) lc ''.colo[3]
+set label 7 'Polarization' at polarx(beta)-0.4,polary(beta)+0.1,polarz(beta) center textcolor ''.colo[3]
 #---------------------------------------------------[]
-outfile=out_dir.'exp_tv.pdf'
+outfile=out_dir.'labframe_tv.pdf'
 set output outfile
 set view azimuth 90
 set view 270,270
-set label 4 '{/Symbol a}' at 0,-(degl+0.3)*cos(alpha*0.5),(degl+0.3)*sin(alpha*0.5) center textcolor ''.colo[2]
+set label 4 '{/Symbol a}' at 0,-(degl+0.1)*cos(alpha*0.5),(degl+0.1)*sin(alpha*0.5) center textcolor ''.colo[2]
 
 splot \
     sample [degr=0:360] '+' using (polarx(degr)):(polary(degr)):(polarz(degr)) lw 2 lc ''.colo[3],\
@@ -186,11 +191,11 @@ splot \
 unset label 4
 
 #---------------------------------------------------[]
-outfile=out_dir.'exp_sv.pdf'
+outfile=out_dir.'labframe_sv.pdf'
 set output outfile
 set view azimuth 0
 set view 0,0
-set label 5 '{/Symbol b}' at (degl+0.3)*polarx(beta*0.5),(degl+0.3)*polary(beta*0.5),(degl+0.3)*polarz(beta*0.5) center textcolor ''.colo[3]
+set label 5 '{/Symbol b}' at (degl+0.15)*polarx(beta*0.5),(degl+0.15)*polary(beta*0.5),(degl+0.15)*polarz(beta*0.5) center textcolor ''.colo[3]
 
 splot \
     $cube u 1:2:3 lw 2 lc ''.colo[1] ,\
