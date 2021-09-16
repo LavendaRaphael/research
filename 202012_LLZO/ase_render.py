@@ -15,16 +15,16 @@ for latom in array_atom:
     cont.extend(Atoms(latom, positions=[(0,0,posz)]))
     posz+=fdist
 
-#cont=read(str(sys.argv[1]))
+cont=read(str(sys.argv[1]))
 cell=cont.cell
 cont=cont*(1,1,1)
 cont.cell=cell
 
 generic_projection_settings = {
-#   'rotation': rot,  # text string with rotation (default='' )
-#   'rotation': '90y',
-   'rotation': '90x,90z',
+#    'rotation': '90y',
+    'rotation': '90x,90z',
 #   'rotation': '-90x,-90z',
+#   'rotation': '-90y,180z',
 #   'rotation': '10x,-10y',
 #   'rotation': '-72x',
     'radii': .85,  # float, or a list with one float per atom
@@ -38,10 +38,10 @@ povray_settings={
 #   'transparent': False,  # Transparent background
 #   'canvas_width': None,  # Width of canvas in pixels
 #    'canvas_height': 1000,  # Height of canvas in pixels
-    'canvas_height': 100,  # Height of canvas in pixels
+    'canvas_height': 500,  # Height of canvas in pixels
 #   'camera_dist': 50.,  # Distance from camera to front atom
 #   'image_plane': None,  # Distance from front atom to image plane
-#   'camera_type': 'perspective',  # orthographic, perspective, ultra_wide_angle
+    'camera_type': 'perspective',  # orthographic, perspective, ultra_wide_angle
     'point_lights': [],             # [[loc1, color1], [loc2, color2],...]
     'area_light': [(2., 3., 40.),  # location
                    'White',       # color
