@@ -49,6 +49,15 @@ for tup_filex in list_files[1:]:
         obj_logfile.write('Error: len(tup_filex) != int_lenxas')
         sys.exit()
 
+obj_outfile = open('xas_mix.dat','w')
+obj_outfile.write(f'#   Energy  Intensity\n')
+int_count = 0
+for int_count in range(int_lenxas):
+    obj_outfile.write(f'{list_xas_e[int_count]} {list_xas_i[int_count]}\n')
+    int_count += 1
+
+obj_outfile.close()
+
 # for i in range(len(file_list)):
 #     data_list[i] = open(file_list[i][0],"r")
 #     data_list_read=data_list[i].readlines()
