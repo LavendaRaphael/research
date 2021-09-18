@@ -11,10 +11,11 @@ def def_weight (alpha,beta):
     result.append (math.cos(alpha)**2 * math.sin(beta)**2)
     return result
 
-# str_datfile = 'xas_ave.dat'
-str_datfile = 'xas_alignorm.dat'
+#alpha=20
 alpha = 41
 float_frac = 0.7
+#str_datfile = 'xas_ave.dat'
+str_datfile = 'xas_alignorm.a'+str(alpha)+'.dat'
 
 beta = 90
 str_prefix = 'xas_mix.a' +str(alpha) +'_b' +str(beta)

@@ -106,7 +106,7 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #if (pic[63]==1) {
 
 array array_str=['20','41']
-str_i=array_str[1]
+str_i=array_str[2]
 
 work_dir='Pt.110.x12y2z4.5_O22_vac15/'
 work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
