@@ -1,6 +1,6 @@
 #!/bin/bash
 homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
-source ${homedir}code/common/environment.sh
+source ${homedir}codes/common/environment.sh
 set -euo pipefail
 
 echo "#-----------------------------------------------------[alignorm]"
