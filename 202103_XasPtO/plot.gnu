@@ -38,6 +38,8 @@ do for [i=1:100] {pic[i]=0}
 # pic[59]=1  #          polarization/polarization_*.pdf
 # pic[51]=1  #          sch.x.y.z.exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
+  pic[63]=1  #          a20.pdf
+             #          a40.pdf
 
 # pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
@@ -75,8 +77,9 @@ do for [i=1:100] {pic[i]=0}
 # pic[61]=1  #      correlation/
              #          polarization/polarization_*.pdf
 
- pic[62]=1  #  ~/group/202103_XasPtO/doc/
+# pic[62]=1  #  ~/group/202103_XasPtO/doc/
              #      exp.pdf
+
 
 array colors2=['#FE7D6A', '#81B8E9']
 array colors3=['#4D85BD', '#F7903D', '#59A95A']
@@ -96,6 +99,59 @@ set style data lines
 homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
 goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
+
+#=====================================================================================[]
+
+#-------------------------------------------------------------------------------------[]
+if (pic[63]==1) {
+
+array_str=['20','41']
+str_i=array_str[1]
+
+work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+
+out_dir=goto_pto_work_110.work_dir
+outfile=out_dir.'a'.str_i.'.pdf'
+
+array array_datfile=['','b90','b45','frac']
+num_datfile=|array_datfile|
+array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+do for [i=2:num_datfile] {
+    array_datfile[i]=goto_pto_work_110.work_dir.'xas_mix.a'.str_i.'_'.array_datfile[i].'.dat'
+}
+
+num_titl=num_datfile
+array array_titl=['','horizon','plane','0.7+0.3']
+array_titl[1]='Exp.'
+do for [i=2:num_titl] {
+    array_titl[i]='Theory '.array_titl[i]
+}
+
+colornum=titlnum
+# colornum=7
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=colornum-colorstart
+do for [i=1:colorwant] {
+    if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colorwant==6) {colo[colorstart+i]=colors6[i]}
+}
+
+set term pdfcairo font "Arial,25" size 7*1,5*1
+set style line 1 lw 2
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [527:540]
+set yrange [0:10]
+p \
+    array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
+    for [i=2:num_datfile] array_datfile[i]  ls 1 lc ''.colo[i] t array_titl[i],\
+
+}
 
 #-------------------------------------------------------------------------------------[]
 
