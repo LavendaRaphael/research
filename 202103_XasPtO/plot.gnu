@@ -38,7 +38,7 @@ do for [i=1:100] {pic[i]=0}
 # pic[59]=1  #          polarization/polarization_*.pdf
 # pic[51]=1  #          sch.x.y.z.exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
-  pic[63]=1  #          a20.pdf
+  pic[63]=1  #          xas_mix.a20.pdf
              #          a40.pdf
 
 # pic[59]=1  #  goto_pto_work_110.
@@ -103,21 +103,22 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #=====================================================================================[]
 
 #-------------------------------------------------------------------------------------[]
-if (pic[63]==1) {
+#if (pic[63]==1) {
 
-array_str=['20','41']
+array array_str=['20','41']
 str_i=array_str[1]
 
 work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
 
-out_dir=goto_pto_work_110.work_dir
-outfile=out_dir.'a'.str_i.'.pdf'
+out_dir=work_dir
+outfile=out_dir.'xas_mix.a'.str_i.'.pdf'
 
 array array_datfile=['','b90','b45','frac']
 num_datfile=|array_datfile|
 array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
 do for [i=2:num_datfile] {
-    array_datfile[i]=goto_pto_work_110.work_dir.'xas_mix.a'.str_i.'_'.array_datfile[i].'.dat'
+    array_datfile[i]=work_dir.'xas_mix.a'.str_i.'_'.array_datfile[i].'.dat'
 }
 
 num_titl=num_datfile
@@ -127,7 +128,7 @@ do for [i=2:num_titl] {
     array_titl[i]='Theory '.array_titl[i]
 }
 
-colornum=titlnum
+colornum=num_titl
 # colornum=7
 array colo[colornum]
 colo[1]='black'
@@ -149,9 +150,9 @@ set xrange [527:540]
 set yrange [0:10]
 p \
     array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
-    for [i=2:num_datfile] array_datfile[i]  ls 1 lc ''.colo[i] t array_titl[i],\
+    for [i=2:num_datfile] array_datfile[i] ls 1 lc ''.colo[i] t array_titl[i],\
 
-}
+#}
 
 #-------------------------------------------------------------------------------------[]
 
@@ -182,7 +183,7 @@ $cube << EOD
 -1  1   0
 EOD
 
-#if (pic[62]==1) {
+if (pic[62]==1) {
 
 out_dir='~/group/202103_XasPtO/doc/'
 # outfile=out_dir.'exp.pdf'
@@ -260,7 +261,7 @@ splot \
 
 # splot NaN
 # pause -1
-#}
+}
 #-------------------------------------------------------------------------------------[]
 if (pic[61]==1) {
 
