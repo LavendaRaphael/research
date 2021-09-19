@@ -4,16 +4,20 @@
 # 2021.09.18
 #===============================================<<
 
-
 def def_xas_findpeaks(str_file, float_relheight):
 #------------------------------[]
 #------------------------------[]
+    from scipy.signal import find_peaks
+    print("#--------------------[xas_findpeaks]\n")
+
     str_prefix = 'xas_findpeaks'
     str_logfile = str_prefix + '.log'
     str_outfile = str_prefix + '.dat'
+    obj_logfile.write(f'str_prefix = {str_prefix}\n')
 
     obj_logfile = open(str_logfile,'w')
-    print("#--------------------[xas_findpeaks]\n")
+    obj_logfile.write(f'str_file = {str_file}\n')
+    obj_logfile.write(f'float_relheight = {float_relheight}\n')
 
     list_xas_e=[]
     list_xas_i=[]
@@ -24,8 +28,17 @@ def def_xas_findpeaks(str_file, float_relheight):
         list_xas_e.append (str_line.split()[0])
         list_xas_i.append (float(str_line.split()[1]) )
     int_lenxas=len(list_xas_e)
-    obj_logfile.write(f'int_lenxas {int_lenxas}\n')
+    obj_logfile.write(f'int_lenxas = {int_lenxas}\n'
 
+    float_i_max = max(list_xas_i)
+    height = float_relheight * float_i_max
+
+    list_peaks_indices, dict_properties = find_peaks( list_xas_i, height = height )
+    
+    list_peaks = []
+    for i in list_peaks_indices:
+        list_peaks.append((list_xas_e[i], list_xas_i[i], list_xas_i[i]/float_i_max))
+    
 
     obj_outfile = open(str_outfile, 'w')
     obj_outfile.write(f'#   Energy  Intensity\n')
@@ -35,9 +48,9 @@ def def_xas_findpeaks(str_file, float_relheight):
         int_count += 1
     obj_outfile.close()
 
-    print("#--------------------<<\n")
     obj_logfile.close()
 
+    print("#--------------------<<\n")
     return
 
 
