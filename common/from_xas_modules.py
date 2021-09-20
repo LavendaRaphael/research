@@ -4,7 +4,7 @@
 # 2021.09.18
 #===============================================<<
 
-def def_xas_findpeaks(str_file, float_relheight, str_prefix):
+def def_xas_findpeaks(str_file, float_relheight, float_relprominence, str_prefix):
 #------------------------------[]
 #------------------------------[]
     from scipy.signal import find_peaks
@@ -14,10 +14,9 @@ def def_xas_findpeaks(str_file, float_relheight, str_prefix):
 
     str_logfile = str_prefix + '.log'
     str_outfile = str_prefix + '.csv'
-    obj_logfile.write(f'str_prefix = {str_prefix}\n')
 
     obj_logfile = open(str_logfile,'w')
-    obj_logfile.write(f'str_file = {str_file}\n')
+    obj_logfile.write(f'str_prefix = {str_prefix}\n')
     obj_logfile.write(f'float_relheight = {float_relheight}\n')
 
     list_xas_e=[]
@@ -34,14 +33,18 @@ def def_xas_findpeaks(str_file, float_relheight, str_prefix):
     float_i_max = max(list_xas_i)
     height = float_relheight * float_i_max
 
-    list_peaks_indices, dict_properties = find_peaks( list_xas_i, height = height )
+    prominence = float_relprominence * float_i_max
+
+    list_peaks_indices, dict_properties = find_peaks( list_xas_i, height = height, prominence=prominence )
     
     with open( str_outfile, 'w', newline='' ) as obj_csvfile:
         obj_csvwriter = csv.writer( obj_csvfile)
-        obj_csvwriter.writerow( ['# Energy (eV)', 'Intensity/Max'] )
+        obj_csvwriter.writerow( ['# Energy (eV)', 'Intensity/Max','prominences/Max'] )
+        int_count = 0
         for i in list_peaks_indices:
-            obj_csvwriter.writerow( [list_xas_e[i], list_xas_i[i]/float_i_max] )
-    
+            obj_csvwriter.writerow( [list_xas_e[i], list_xas_i[i]/float_i_max, dict_properties['prominences'][int_count]/float_i_max] )
+            int_count += 1
+
     print("#--------------------<<\n")
     return
 
