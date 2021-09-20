@@ -8,11 +8,13 @@ def def_xas_findpeaks(str_file, float_relheight):
 #------------------------------[]
 #------------------------------[]
     from scipy.signal import find_peaks
+    import csv
+
     print("#--------------------[xas_findpeaks]\n")
 
     str_prefix = 'xas_findpeaks'
     str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.dat'
+    str_outfile = str_prefix + '.csv'
     obj_logfile.write(f'str_prefix = {str_prefix}\n')
 
     obj_logfile = open(str_logfile,'w')
@@ -35,21 +37,12 @@ def def_xas_findpeaks(str_file, float_relheight):
 
     list_peaks_indices, dict_properties = find_peaks( list_xas_i, height = height )
     
-    list_peaks = []
-    for i in list_peaks_indices:
-        list_peaks.append((list_xas_e[i], list_xas_i[i], list_xas_i[i]/float_i_max))
+    with open( str_outfile, 'w', newline='' ) as obj_csvfile:
+        obj_csvwriter = csv.writer( obj_csvfile)
+        obj_csvwriter.writerow( '# Energy (eV)', 'Intensity', 'Intensity/max' )
+        for i in list_peaks_indices:
+            obj_csvwriter.writerow( [list_xas_e[i], list_xas_i[i], list_xas_i[i]/float_i_max] )
     
-
-    obj_outfile = open(str_outfile, 'w')
-    obj_outfile.write(f'#   Energy  Intensity\n')
-    int_count = 0
-    for int_count in range(int_lenxas):
-        obj_outfile.write(f'{list_xas_e[int_count]} {list_xas_i[int_count]}\n')
-        int_count += 1
-    obj_outfile.close()
-
-    obj_logfile.close()
-
     print("#--------------------<<\n")
     return
 
