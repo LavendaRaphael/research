@@ -103,7 +103,7 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #=====================================================================================[]
 
 #-------------------------------------------------------------------------------------[]
-#if (pic[63]==1) {
+if (pic[63]==1) {
 
 array array_str=['20','41']
 str_i=array_str[2]
@@ -116,13 +116,13 @@ outfile=out_dir.'xas_mix.a'.str_i.'.pdf'
 
 array array_datfile=['','b90','b45','frac']
 num_datfile=|array_datfile|
-array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+array_datfile[1]=goto_pto_exp.'20210918.Pt.110_a'.str_i.'.alignorm.dat'
 do for [i=2:num_datfile] {
     array_datfile[i]=work_dir.'xas_mix.a'.str_i.'_'.array_datfile[i].'.dat'
 }
 
 num_titl=num_datfile
-array array_titl=['','horizon','plane','0.7+0.3']
+array array_titl=['','horizon','polar plane','0.7+0.3']
 array_titl[1]='Exp.'
 do for [i=2:num_titl] {
     array_titl[i]='Theory '.array_titl[i]
@@ -152,7 +152,7 @@ p \
     array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
     for [i=2:num_datfile] array_datfile[i] ls 1 lc ''.colo[i] t array_titl[i],\
 
-#}
+}
 
 #-------------------------------------------------------------------------------------[]
 
