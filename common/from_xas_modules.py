@@ -4,40 +4,50 @@
 # 2021.09.21
 #===============================================<<
 
-'''
-def def_xas_scale( str_file, float_scaling, str_prefix ):
+def def_xas_sft( str_datfile, float_sft, str_prefix ):
+    dict_logfile = { 'dict_args': locals() }
+    import csv
+    import json
+
+    print("#--------------------[xas_sft]\n")
+    str_logfile = str_prefix + '_log.json'
+    str_outfile = str_prefix + '_out.csv'
+
+    with open( str_outfile, 'w' ) obj_outfile:
+        obj_outwriter = csv.writer( obj_outfile, delimiter=',')
+        with open( str_datfile, 'r' ) as obj_datfile:
+            obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
+            for list_line in obj_datreader:
+                list_line[0] += float_sft
+                obj_outwriter.writerow(list_line)
+
+    with open(str_logfile,'w') as obj_logfile:
+        json.dump( obj=dict_logfile, fp=obj_logfile, indent=4 )
+    print("#--------------------<<\n")
+    return
+
+def def_xas_scale( str_datfile, float_scaling, str_prefix ):
     dict_logfile = { 'dict_args': locals() }
     import csv
     import json
 
     print("#--------------------[xas_scale]\n")
     str_logfile = str_prefix + '_log.json'
-    str_outfile = str_prefix + '_out.json'
+    str_outfile = str_prefix + '_out.csv'
 
-    list_xas_e=[]
-    list_xas_i=[]
-
-    with open( str_file, 'r' ) as obj_csvfile:
-        obj_csvreader = csv.reader( filter( lambda row: row[0]!='#', obj_csvfile ) )
-        for list_line in obj_csvreader:
-            float_x = float(list_line[0])
-            if ( float_x > tuple_xrange[0] and float_x < tuple_xrange[1] ):
-                list_xas_e.append( float(list_line[0]) )
-                list_xas_i.append( float(list_line[1]) )
-
-    float_area = trapz( y=list_xas_i, x=list_xas_e )
-    dict_logfile['float_area'] = float_area
-
-    dict_area = {'float_area': float_area}
-    with open( str_outfile, 'w' ) as obj_outfile:
-        json.dump(dict_area, obj_outfile, indent=4)
-
+    with open( str_outfile, 'w' ) obj_outfile:
+        obj_outwriter = csv.writer( obj_outfile, delimiter=',')
+        with open( str_datfile, 'r' ) as obj_datfile:
+            obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
+            for list_line in obj_datreader:
+                for int_i in range(1, len(list_line)):
+                    list_line[int_i] *= float_scaling
+                obj_outwriter.writerow(list_line)
+            
     with open(str_logfile,'w') as obj_logfile:
         json.dump( obj=dict_logfile, fp=obj_logfile, indent=4 )
-    #obj_logfile.close()
     print("#--------------------<<\n")
     return
-'''
 
 #------------------------------[]
 # http://kbyanc.blogspot.com/2007/07/python-aggregating-function-arguments.html
@@ -83,7 +93,6 @@ def def_xas_findarea( str_file, tuple_xrange, str_prefix ):
 
     with open(str_logfile,'w') as obj_logfile:
         json.dump( obj=dict_logfile, fp=obj_logfile, indent=4 )
-    #obj_logfile.close()
     print("#--------------------<<\n")
     return
 
@@ -94,8 +103,8 @@ def def_xas_findpeaks(str_file, float_relheight, float_relprominence, str_prefix
     import csv
 
     print("#--------------------[xas_findpeaks]\n")
-    str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.csv'
+    str_logfile = str_prefix + '_log.json'
+    str_outfile = str_prefix + '_out.csv'
     obj_logfile = open(str_logfile,'w')
 
     obj_logfile.write(f'str_prefix = {str_prefix}\n')
@@ -121,7 +130,7 @@ def def_xas_findpeaks(str_file, float_relheight, float_relprominence, str_prefix
     
     with open( str_outfile, 'w', newline='' ) as obj_csvfile:
         obj_csvwriter = csv.writer( obj_csvfile)
-        obj_csvwriter.writerow( ['# Energy (eV)', 'Intensity/Max','prominences/Max'] )
+        #obj_csvwriter.writerow( ['# Energy (eV)', 'Intensity/Max','prominences/Max'] )
         int_count = 0
         for i in list_peaks_indices:
             obj_csvwriter.writerow( [list_xas_e[i], list_xas_i[i]/float_i_max, dict_properties['prominences'][int_count]/float_i_max] )
@@ -142,8 +151,8 @@ def def_xas_mix(list_files, str_prefix):
     import csv
 
     print("#--------------------[xas_mix]\n")
-    str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.csv'
+    str_logfile = str_prefix + '_log.json'
+    str_outfile = str_prefix + '_out.csv'
     obj_logfile = open(str_logfile,'w')
     
     list_xas_e=[]
