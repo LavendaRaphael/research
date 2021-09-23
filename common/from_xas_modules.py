@@ -15,12 +15,12 @@ def def_xas_sft( str_datfile, float_sft, str_prefix ):
     obj_logfile = open(str_logfile,'w')
     json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
 
-    with open( str_outfile, 'w' ) obj_outfile:
+    with open( str_outfile, 'w' ) as obj_outfile:
         obj_outwriter = csv.writer( obj_outfile, delimiter=',')
         with open( str_datfile, 'r' ) as obj_datfile:
             obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
             for list_line in obj_datreader:
-                list_line[0] += float_sft
+                list_line[0] = float(list_line[0]) + float_sft
                 obj_outwriter.writerow(list_line)
 
     obj_logfile.close()
@@ -38,13 +38,13 @@ def def_xas_scale( str_datfile, float_scaling, str_prefix ):
     obj_logfile = open(str_logfile,'w')
     json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
 
-    with open( str_outfile, 'w' ) obj_outfile:
+    with open( str_outfile, 'w' ) as obj_outfile:
         obj_outwriter = csv.writer( obj_outfile, delimiter=',')
         with open( str_datfile, 'r' ) as obj_datfile:
             obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
             for list_line in obj_datreader:
                 for int_i in range(1, len(list_line)):
-                    list_line[int_i] *= float_scaling
+                    list_line[int_i] = float(list_line[int_i]) * float_scaling
                 obj_outwriter.writerow(list_line)
     
     obj_logfile.close()
@@ -89,7 +89,7 @@ def def_xas_findarea( str_datfile, tuple_xrange, str_prefix ):
                 list_xas_i.append( float(list_line[1]) )
 
     float_area = trapz( y=list_xas_i, x=list_xas_e )
-    obj_logfile.write(f'float_area: float_area\n')
+    obj_logfile.write(f'float_area: {float_area}\n')
 
     dict_area = {'float_area': float_area}
     with open( str_outfile, 'w' ) as obj_outfile:
@@ -193,7 +193,7 @@ def def_xas_mix(list_files, str_prefix):
             sys.exit()
     
     with open( str_outfile, 'w', newline='' ) as obj_outfile:
-        obj_outwriter = csv.writer( obj_outfile, delimiter=' ')
+        obj_outwriter = csv.writer( obj_outfile, delimiter=',')
         #obj_outwriter.writerow( ['# Energy (eV)', 'Intensity'] )
         for i in range(int_lenxas):
             obj_outwriter.writerow( [list_xas_e[i], list_xas_i[i]] )
