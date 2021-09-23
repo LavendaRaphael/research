@@ -2,11 +2,11 @@
 from from_xas_modules import *
 import json
 
-#str_temp = '20210918.Pt.110.a20'
-#list_files = [ ('20210918.Pt110-XAS.CSV', 6, 7, 1.0) ]
+str_temp = '20210918.Pt.110.a20'
+list_files = [ ('20210918.Pt110-XAS.CSV', 6, 7, 1.0) ]
 
-str_temp = '20210918.Pt.110.a41'
-list_files = [ ('20210918.Pt110-XAS.CSV', 9, 10, 1.0) ]
+#str_temp = '20210918.Pt.110.a41'
+#list_files = [ ('20210918.Pt110-XAS.CSV', 9, 10, 1.0) ]
 
 str_prefix = str_temp
 def_xas_mix( list_files=list_files, str_prefix=str_prefix )
