@@ -3,6 +3,26 @@
 # @FeifeiTian
 # 2021.09.21
 #===============================================<<
+def def_vasp_finalenergy(str_prefix):
+    dict_args = locals()
+    import json
+    from ase.io import read as ase_read
+
+    print("#--------------------[vasp_finalenergy]\n")
+    str_logfile = str_prefix + '.log'
+    str_outfile = str_prefix + '.json'
+    obj_logfile = open(str_logfile,'w')
+    json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
+
+    float_finalenergy = ase_read( filename='OUTCAR' )
+
+    dict_output = {'float_finalenergy': float_finalenergy}
+    with open( str_outfile, 'w' ) as obj_outfile:
+        json.dump( obj=dict_output, fp=obj_outfile, indent=4 )
+
+    obj_logfile.close()
+    print("#--------------------<<\n")
+    return
 
 def def_vasp_outcar2xas(str_prefix):
     dict_args = locals()
@@ -37,7 +57,6 @@ def def_vasp_outcar2xas(str_prefix):
     obj_logfile.close()
     print("#--------------------<<\n")
     return
-
 
 def def_xas_sft( str_datfile, float_sft, str_prefix ):
     dict_args = locals() 
@@ -189,8 +208,8 @@ def def_xas_mix(list_files, str_prefix):
 #------------------------------[]
 # str_prefix = 'xas_mix'
 # list_files = []
-# list_files.append( ('filea', 0, 1, 0.3) )
-# list_files.append( ('fileb', 0, 2, 0.7) )
+# list_files.append( ('filea', (0, 1), 0.3) )
+# list_files.append( ('fileb', (0, 2), 0.7) )
 #------------------------------[]
     dict_args = locals()
     import csv
