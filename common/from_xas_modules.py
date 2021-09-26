@@ -238,6 +238,16 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
         obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter= ' ', skipinitialspace=True )
         list_line = next(obj_datreader)
+        list_line = next(obj_datreader)
+        if (',' in list_line[0]):
+            delimiter=','
+        else:
+            delimiter=' '
+    print(f'delimiter: {delimiter}')
+
+    with open( str_datfile, 'r', newline='' ) as obj_datfile:
+        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
+        list_line = next(obj_datreader)
         str_xheader = list_line[int_xcolumn]
         list_yheaders = [ list_line[i] for i in list_ycolumns ]
         print( f'str_xheader: {str_xheader}' )

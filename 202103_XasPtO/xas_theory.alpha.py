@@ -1,6 +1,7 @@
 #!/bin/env python
 import math
 from from_xas_modules import *
+import os
 
 def def_weight (alpha,beta):
     alpha = math.radians (alpha)
@@ -11,55 +12,84 @@ def def_weight (alpha,beta):
     result.append (math.cos(alpha)**2 * math.sin(beta)**2)
     return result
 
+list_dirs=[]
+list_dirs.append('Pt.110.x12y2z4.5_O22_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O1_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O2.13_vac15/')
+list_dirs.append('Pt.110.x2y4z4.5_O3.137_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O3.135_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O2.12_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O2.14_vac15/')
+list_dirs.append('Pt.110.x2y4z4.5_O3.148_vac15/')
+list_dirs.append('Pt.110.x2y4z4.5_O4.1458_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O3.123_vac15/')
+list_dirs.append('Pt.110.x2y4z4.5_O4.1237_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O4.v56_vac15/')
+list_dirs.append('Pt.110.x2y4z4.5_O6.v56_vac15/')
+list_dirs.append('Pt.110.x2y3z4.5_O6_vac15/')
 
-str_datfile = 'xas_ave.dat'
+for str_dir in list_dirs:
+    str_dir = '/home/faye/group/202103_XasPtO/server/Pt.110_O_vac/'+str_dir+'vasp_sch/'
+    os.chdir(str_dir)
 
-int_xcolumn = 0
-list_ycolumns = [1,2,3]
-_, _, list_xdata_origin, list_ydatas_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
-
-list_datas = [ (list_xdata_origin, list_ydatas_origin, [2], 1.0) ]
-list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas=list_datas )
-
-list_xdata = list_xdata_mix
-list_ydatas = list_ydatas_mix
-float_relheight = 0.4
-float_relprominence = 0.02
-list_peaks = def_xas_findpeaks( list_xdata=list_xdata, list_ydatas=list_ydatas, float_relheight=float_relheight, float_relprominence=float_relprominence )
-
-list_xdata = list_xdata_mix
-float_onset = 529.6
-float_sft = float_onset - list_peaks[0]
-list_xdata_sft = def_xas_sft( list_xdata=list_xdata, float_sft=float_sft)
-
-alpha=20
-str_outfile = 'xas_a20_b90.csv'
-#alpha = 41
-#str_outfile = 'xas_a41_b90.csv'
-
-beta = 90
-list_xdata = list_xdata_sft
-list_ydatas = list_ydatas_origin
-list_weight = def_weight (alpha,beta)
-list_datas = []
-list_datas.append( (list_xdata, list_ydatas, [0], list_weight[0]) )
-list_datas.append( (list_xdata, list_ydatas, [1], list_weight[1]) )
-list_datas.append( (list_xdata, list_ydatas, [2], list_weight[2]) )
-list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas=list_datas)
-
-list_xdata = list_xdata_mix
-list_ydatas = list_ydatas_mix
-tuple_xrange = (527.0, 540.0)
-float_area = def_xas_findarea( list_xdata=list_xdata, list_ydatas=list_ydatas, tuple_xrange=tuple_xrange)
-
-float_normarea = 20.0
-float_scaling = float_normarea/float_area
-list_datas=[]
-list_datas.append( [list_xdata, list_ydatas, [0], float_scaling] )
-list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas )
-
-list_xdata = list_xdata_mix
-list_ydatas = list_ydatas_mix
-str_xheader = 'E(eV)'
-list_yheaders = ['Intensity']
-def_xas_writedata( list_xdata=list_xdata, list_ydatas=list_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+    #----------------------------------[Pt.111]
+    #str_datfile = 'xas.dat'
+    #float_onset = 530.1
+    
+    #----------------------------------[Pt.110]
+    str_datfile = 'xas_ave.dat'
+    float_onset = 529.6
+    
+    #--------------------------------------------------[extract]
+    int_xcolumn = 0
+    list_ycolumns = [1,2,3]
+    _, _, list_xdata_origin, list_ydatas_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
+    
+    #--------------------------------------------------[sft]
+    list_datas = [ (list_xdata_origin, list_ydatas_origin, [2], 1.0) ]
+    list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas=list_datas )
+    
+    list_xdata = list_xdata_mix
+    list_ydatas = list_ydatas_mix
+    float_relheight = 0.4
+    float_relprominence = 0.02
+    list_peaks = def_xas_findpeaks( list_xdata=list_xdata, list_ydatas=list_ydatas, float_relheight=float_relheight, float_relprominence=float_relprominence )
+    
+    list_xdata = list_xdata_mix
+    float_sft = float_onset - list_peaks[0]
+    list_xdata_sft = def_xas_sft( list_xdata=list_xdata, float_sft=float_sft)
+    
+    #--------------------------------------------------[mix]
+    beta = 90
+    
+    list_alpha=[20,41]
+    
+    for alpha in list_alpha:
+        str_outfile = 'xas_a'+str(alpha)+'_b'+str(beta)+'.csv'
+        list_xdata = list_xdata_sft
+        list_ydatas = list_ydatas_origin
+        list_weight = def_weight (alpha,beta)
+        list_datas = []
+        list_datas.append( (list_xdata, list_ydatas, [0], list_weight[0]) )
+        list_datas.append( (list_xdata, list_ydatas, [1], list_weight[1]) )
+        list_datas.append( (list_xdata, list_ydatas, [2], list_weight[2]) )
+        list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas=list_datas)
+        
+        #--------------------------------------------------[norm]
+        list_xdata = list_xdata_mix
+        list_ydatas = list_ydatas_mix
+        tuple_xrange = (527.0, 540.0)
+        float_area = def_xas_findarea( list_xdata=list_xdata, list_ydatas=list_ydatas, tuple_xrange=tuple_xrange)
+        
+        float_normarea = 20.0
+        float_scaling = float_normarea/float_area
+        list_datas=[]
+        list_datas.append( [list_xdata, list_ydatas, [0], float_scaling] )
+        list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas )
+        
+        #--------------------------------------------------[write]
+        list_xdata = list_xdata_mix
+        list_ydatas = list_ydatas_mix
+        str_xheader = 'E(eV)'
+        list_yheaders = ['Intensity']
+        def_xas_writedata( list_xdata=list_xdata, list_ydatas=list_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)

@@ -19,7 +19,7 @@ do for [i=1:100] {pic[i]=0}
 # pic[17]=1  #          xspectra.kpoints.pdf
              #      vasp_sch/
 # pic[53]=1  #          atom_1/sch.x_y.tm.exp.pdf
-# pic[50]=1  #          atom_1/sch.x_y.z.exp.pdf
+# pic[50]=1  #          atom_1/xas.xy_z_exp_a20.pdf
 # pic[8]=1   #          atom_1/sch.pdf
 # pic[57]=1  #          polarzation/polarzation_*.pdf
 # pic[42]=1  #      xspectra.hch_fch_nch.pdf
@@ -36,9 +36,8 @@ do for [i=1:100] {pic[i]=0}
 # pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
              #      vasp_sch/
 # pic[59]=1  #          polarization/polarization_*.pdf
-  pic[51]=1  #          xas.xy_z_exp.pdf
+# pic[51]=1  #          xas.xy_z_exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
-# pic[63]=1  #          xas_b90.pdf
 
 # pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
@@ -67,6 +66,55 @@ do for [i=1:100] {pic[i]=0}
              #          vasp_sch.zm/
              #          vasp_sch.zp/
 
+# pic[51]=1  
+# goto_pto_work_110.
+#
+# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O1_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O3.135_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.14_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
+#
+#   'xas.xy_z_exp.pdf'
+
+ pic[63]=1  
+# goto_pto_work_110.
+#
+# work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+#
+ work_dir='Pt.110.x2y3z4.5_O1_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.13_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.137_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O3.135_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.12_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O2.14_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O3.148_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+#
+# work_dir='Pt.110.x2y3z4.5_O3.123_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O4.1237_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O4.v56_vac15/'
+# work_dir='Pt.110.x2y4z4.5_O6.v56_vac15/'
+# work_dir='Pt.110.x2y3z4.5_O6_vac15/'
+#
+#   'xas.a_b90.pdf'
 
              #  goto_pto_work_110.
 # pic[60]=1  #      'Pt.110.x2y3z4.5_O1_vac15'
@@ -99,20 +147,19 @@ set datafile separator ","
 homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
 goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
-
+goto_pto_work_111=homedir.'group/202103_XasPtO/server/Pt.111_O_vac/'
 #=====================================================================================[]
 
 #-------------------------------------------------------------------------------------[]
 if (pic[63]==1) {
 
-array array_deg=['20','41']
+array array_deg=['41','20']
 num_deg=|array_deg|
 
-work_dir='Pt.110.x12y2z4.5_O22_vac15/'
 work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
 
 out_dir=work_dir
-outfile=out_dir.'xas_b90.pdf'
+outfile=out_dir.'xas.a_b90.pdf'
 
 num_datfile=num_deg*2
 array array_datfile[num_datfile]
@@ -124,8 +171,8 @@ do for [i=1:num_deg] {
 num_titl=num_datfile
 array array_titl[num_titl]
 do for [i=1:num_deg] {
-    array_titl[i] = 'Exp. '.array_deg[i]
-    array_titl[i+num_deg] = 'Theory '.array_deg[i]
+    array_titl[i] = 'Exp. '.array_deg[i].'{\260}'
+    array_titl[i+num_deg] = 'Theory '.array_deg[i].'{\260}'
 }
 
 colornum=num_deg
@@ -146,7 +193,7 @@ set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [527:540]
-set yrange [0:6]
+set yrange [0:*]
 p \
     for [i=1:num_deg] array_datfile[i] skip 1 w p pt 6 ps 0.5 lw 2 lc ''.colo[i] t array_titl[i] ,\
     for [i=num_deg+1:num_datfile] array_datfile[i] skip 1 ls 1 lc ''.colo[i-num_deg] t array_titl[i] ,\
@@ -264,53 +311,61 @@ splot \
 #-------------------------------------------------------------------------------------[]
 if (pic[61]==1) {
 
-# out_dir='correlation/'
-# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x4y3z4.5_O2.12_vac15/','Pt.110.x2y4z4.5_O2.15_vac15/','Pt.110.x2y4z4.5_O2.16_vac15/']
+#outfile='xas.a90_b45.pdf'
+#datfile='xas_a90_b45.csv'
+#subtitl='X\_Y'
 
-# out_dir='neighbor_y/'
-# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.13_vac15/','Pt.110.x2y4z4.5_O3.137_vac15/','Pt.110.x2y3z4.5_O3.135_vac15/']
+outfile='xas.a0_b90.pdf'
+datfile='xas_a0_b90.csv'
+subtitl='Z'
 
-# out_dir='neighbor_x/'
-# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.12_vac15/']
+ out_dir='neighbor_y/'
+ array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.13_vac15/','Pt.110.x2y4z4.5_O3.137_vac15/','Pt.110.x2y3z4.5_O3.135_vac15/']
 
-# out_dir='neighbor_xy/'
-# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.14_vac15/','Pt.110.x2y4z4.5_O3.148_vac15/','Pt.110.x2y4z4.5_O4.1458_vac15/']
+ out_dir='neighbor_x/'
+ array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.12_vac15/']
 
-# out_dir='neighbor_mix/'
-# array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O3.123_vac15/','Pt.110.x2y4z4.5_O4.1237_vac15/','Pt.110.x2y3z4.5_O4.v56_vac15/','Pt.110.x2y4z4.5_O6.v56_vac15/','Pt.110.x2y3z4.5_O6_vac15/']
+ out_dir='neighbor_xy/'
+ array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O2.14_vac15/','Pt.110.x2y4z4.5_O3.148_vac15/','Pt.110.x2y4z4.5_O4.1458_vac15/']
 
-# out_dir=goto_pto_work_110.out_dir.'polarization/'
-# worknum=|work_dir|
+ out_dir='neighbor_mix/'
+ array work_dir=['Pt.110.x2y3z4.5_O1_vac15/','Pt.110.x2y3z4.5_O3.123_vac15/','Pt.110.x2y4z4.5_O4.1237_vac15/','Pt.110.x2y3z4.5_O4.v56_vac15/','Pt.110.x2y4z4.5_O6.v56_vac15/','Pt.110.x2y3z4.5_O6_vac15/']
 
-# datfilenum=1+worknum
-# array datfile[datfilenum]
-# datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-# do for [i=1:worknum] {
-#     datfile[1+i]=goto_pto_work_110.work_dir[i].'vasp_sch/xas_sym.dat'
-# }
+out_dir=goto_pto_work_110.out_dir
+outfile = out_dir.outfile
 
-# array array_index=['a','b','c','d','e','f']
+num_workdir=|work_dir|
 
-#---------------------------------->
-work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
-array array_datfile=['','','xm/','xp/','ym/','zm/','zp/']
-num_datfile=|array_datfile|
-
-out_dir=goto_pto_work_110.work_dir.'polarization/'
-
-array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-array_datfile[2]=goto_pto_work_110.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/xas_sym.dat'
-do for [i=3:num_datfile] {
-    array_datfile[i]=goto_pto_work_110.work_dir.'vasp_sch.'.array_datfile[i].'xas_sym.dat'
+num_datfile=1+num_workdir
+array array_datfile[num_datfile]
+array_datfile[1]=goto_pto_exp.'20210924.Pt.110.a20.csv'
+do for [i=1:num_workdir] {
+    array_datfile[1+i]=goto_pto_work_110.work_dir[i].'vasp_sch/'.datfile
 }
 
+array array_titl=['','a','b','c','d','e','f']
 num_titl=num_datfile
-array array_titl=['','origin','x+','x-','y','z+','z-']
+
+#---------------------------------->
+#work_dir='Pt.110.x2y6z4.5_O2.17_vac15/'
+#array array_datfile=['','','xm/','xp/','ym/','zm/','zp/']
+#num_datfile=|array_datfile|
+#
+#out_dir=goto_pto_work_110.work_dir.'polarization/'
+#
+#array_datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
+#array_datfile[2]=goto_pto_work_110.'Pt.110.x2y3z4.5_O1_vac15/vasp_sch/xas_sym.dat'
+#do for [i=3:num_datfile] {
+#    array_datfile[i]=goto_pto_work_110.work_dir.'vasp_sch.'.array_datfile[i].'xas_sym.dat'
+#}
+#
+#num_titl=num_datfile
+#array array_titl=['','origin','x+','x-','y','z+','z-']
 #----------------------------------<
 
-array_titl[1]='Exp.'
+array_titl[1]='Exp. 20{\260}'
 do for [i=2:num_titl] {
-    array_titl[i]='Theory '.array_titl[i]
+    array_titl[i]='Theory '.subtitl.' '.array_titl[i]
 }
 
 # colornum=titlnum
@@ -328,79 +383,15 @@ do for [i=1:colorwant] {
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set style line 1 lw 2
+set output outfile
+set xlabel "Energy (eV)" offset 0,0
+set ylabel "Intensity (Arb. Units)" offset 1,0
+set xrange [527:540]
+set yrange [0:6]
+p \
+    array_datfile[1] skip 1 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
+    for [i=2:num_datfile] array_datfile[i] skip 1 ls 1 lc ''.colo[i] t array_titl[i],\
 
-set angles degrees
-npiece=2
-piece=180.0/npiece
-
-ax(theta,phi)=(sin(theta))**2.0*(cos(phi))**2.0
-ay(theta,phi)=(sin(theta))**2.0*(sin(phi))**2.0
-az(theta,phi)=(cos(theta))**2.0
-axy(theta,phi)=(sin(theta))**2.0*(sin(phi))*(cos(phi))
-ayz(theta,phi)=(sin(theta))*(cos(theta))*(sin(phi))
-azx(theta,phi)=(sin(theta))*(cos(theta))*(cos(phi))
-r=1.0
-rx(theta,phi)=r*sin(theta)*cos(phi)
-ry(theta,phi)=r*sin(theta)*sin(phi)
-rz(theta)=r*cos(theta)
-
-ifile=0
-# do for [ipath=1:3]{
-do for [ipath=1:1]{
-    array npiece_end=[npiece-1,npiece/2-1,npiece/2-1]
-    do for [ipiece=0:npiece_end[ipath]]{
-        array ntheta=[90.0,90.0-piece*ipiece,piece*ipiece]
-        array nphi=[piece*ipiece,180.0,0.0]
-        theta=ntheta[ipath]
-        phi=nphi[ipath]
-        f(x,y,z,xy,yz,zx)=ax(theta,phi)*x+ay(theta,phi)*y+az(theta,phi)*z+2.0*axy(theta,phi)*xy+2.0*ayz(theta,phi)*yz+2.0*azx(theta,phi)*zx
-
-        outfile=out_dir.'polarization_'.ifile.'.pdf'
-        ifile=ifile+1
-        set output outfile
-                
-        set multiplot
-        
-        set size 1,1
-        set origin 0,0
-        set xlabel "Energy (eV)" offset 0,0
-        set ylabel "Intensity (Arb. Units)" offset 1,0
-        set xrange [527:540]
-        set yrange [0:10]
-        p \
-            array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
-            for [i=2:num_datfile] array_datfile[i] u 1:(f($2,$3,$4,$5,$6,$7)) ls 1 lc ''.colo[i] t array_titl[i],\
-
-        set size 0.5, 0.5
-        set origin 0.25,0.5
-        set view equal xyz
-        unset xlabel
-        unset ylabel
-        unset zlabel
-        set label 'x' at 1,0,0
-        set label 'y' at 0,1.2,0
-        set label 'z' at 0,0,1.2
-        set xrange [-1:1]
-        set yrange [-1:1]
-        set zrange [-1:1]
-#        theta=sprintf('%4.1f',theta)
-#        phi=sprintf('%4.1f',phi)
-#        label_angle='{/Symbol q}='.theta.', {/Symbol f}='.phi
-#        set label label_angle at -5,0,0
-        set arrow to rx(theta,phi),ry(theta,phi),rz(theta) ls 1
-        set zeroaxis
-        set xyplane at 0
-        unset tics
-        unset border
-        splot NaN
-        
-        unset multiplot
-        set border
-        set tics
-        unset arrow
-        unset label
-    }
-}
 }
 
 #-------------------------------------------------------------------------------------[]
@@ -908,7 +899,6 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
 
-work_dir='Pt.110.x12y2z4.5_O22_vac15/'
 work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
 
 out_dir=work_dir
@@ -950,58 +940,52 @@ p \
 datfile[1] skip 1 w p pt 6 ps 0.5 lw 2 lc ''.colo[1] t titl[1],\
 for [i=2:datfilenum] datfile[i] skip 1 ls 1 lc ''.colo[i] t titl[i],\
 }
-
 #-------------------------------------------------------------------------------------[]
 if (pic[50]==1) {
-subdir='Pt-111_O_vac/Pt-111a4b4c4_O4_vac15/vasp_sch/atom_1/'
-outfile=outdir.subdir.'sch.x_y.z.exp.pdf'
 
-array mid=['X_Y','Z']
-num=|mid|
+work_dir='Pt.111.x4y4z4_O4_vac15/'
+work_dir=goto_pto_work_111.work_dir.'vasp_sch/atom_1/'
 
-array datfile[num]
-do for [i=1:num] {datfile[i]='CORE_DIELECTRIC_IMAG.'.mid[i].'.dat'}
-do for [i=1:num] {datfile[i]=datdir.subdir.datfile[i]}
-expfile=datdir.subdir.'20210512.Pt-111_ysft.norm.dat'
+out_dir=work_dir
+outfile=out_dir.'xas.xy_z_exp_a20.pdf'
 
-array titl[num]
-do for [i=1:num] {titl[i]='Theory '.mid[i]}
-#titl[1]='Theory X\_Y'
-titl[1]='Theory In-plane'
-titl[2]='Theory Out-of-plane'
-exptitl='Exp.'
+datfilenum=4
+array datfile[datfilenum]
+datfile[1]=goto_pto_exp.'20210926.Pt.111.a20.csv'
+datdir=work_dir
+datfile[2]=datdir.'xas_a20_b90.csv'
+datfile[3]=datdir.'xas_a90_b45.csv'
+datfile[4]=datdir.'xas_a0_b90.csv'
 
-array colo[num]
-if (num==1) {
-    do for [i=1:num] {colo[i]='black'}
-}
-if (num==2) {
-    do for [i=1:num] {colo[i]=colors2[i]}
-}
-if (num==3) {
-    do for [i=1:num] {colo[i]=colors3[i]}
-}
-if (num==4) {
-    do for [i=1:num] {colo[i]=colors4[i]}
-}
-if (num==5 || num==6) {
-    do for [i=1:num] {colo[i]=colors6[i]}
-}
+titlnum=datfilenum
+array titl=['','20{\260}','X\_Y','Z']
+titl[1]='Exp. 20{\260}'
+do for [i=2:titlnum] {titl[i]='Theory '.titl[i]}
 
-sft=14.9755022276
-scaling=1e5
+colornum=titlnum
+array colo[colornum]
+colo[1]='black'
+colorstart=1
+colorwant=colornum-colorstart
+do for [i=1:colorwant] {
+    if (colorwant==2 || colornum==1) {colo[colorstart+i]=colors2[i]}
+    if (colorwant==3) {colo[colorstart+i]=colors3[i]}
+    if (colorwant==4) {colo[colorstart+i]=colors4[i]}
+    if (colorwant==5 || colornum==6) {colo[colorstart+i]=colors6[i]}
+}
 
 set term pdfcairo font "Arial,25" size 7*1,5*1
 set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
-set xrange [510.2359062397+sft:530.2359062397+sft]
+set xrange [527.0:540.0]
 set yrange [0:*]
 set style line 1 lw 2
 
 p \
-expfile u ($1+sft):($2*scaling) w p pt 6 ps 0.5 lw 2 lc 'black' t exptitl,\
-for [i=1:num] datfile[i] u ($1+sft):($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
+datfile[1] skip 1 w p pt 6 ps 0.5 lw 2 lc ''.colo[1] t titl[1],\
+for [i=2:datfilenum] datfile[i] skip 1 ls 1 lc ''.colo[i] t titl[i],\
+
 }
 
 #-------------------------------------------------------------------------------------[]

@@ -1,6 +1,14 @@
 #!/bin/env python
 from from_xas_modules import *
-#import json
+
+str_datfile = '20210926.Pt111-XAS.CSV'
+
+str_outfile = '20210926.Pt.111.a20.csv'
+int_xcolumn = 0
+list_ycolumns = [2]
+
+'''
+str_datfile = '20210924.Pt110-XAS.CSV'
 
 str_outfile = '20210924.Pt.110.a20.csv'
 int_xcolumn = 6
@@ -9,8 +17,8 @@ list_ycolumns = [8]
 str_outfile = '20210924.Pt.110.a41.csv'
 int_xcolumn = 10
 list_ycolumns = [12]
+'''
 
-str_datfile = '20210924.Pt110-XAS.CSV'
 str_xheader, list_yheaders, list_xdata, list_ydatas = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
 
 float_relheight = 0.4
