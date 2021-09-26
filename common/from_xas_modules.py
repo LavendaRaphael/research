@@ -58,56 +58,42 @@ def def_vasp_outcar2xas(str_prefix):
     print("#--------------------<<\n")
     return
 
-def def_xas_sft( str_datfile, float_sft, str_prefix ):
+def def_xas_sft( list_xdata, float_sft):
     dict_args = locals() 
-    import csv
     import json
 
     print("#--------------------[xas_sft]\n")
-    str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.csv'
-    obj_logfile = open(str_logfile,'w')
-    json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
+    print(json.dumps( obj=dict_args, indent=4 ))
 
-    with open( str_outfile, 'w', newline='' ) as obj_outfile:
-        obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
-        with open( str_datfile, 'r', newline='' ) as obj_datfile:
-            obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
-            list_headers = next(obj_datreader)
-            obj_outwriter.writerow( list_headers )
-            for list_line in obj_datreader:
-                list_line[0] = float(list_line[0]) + float_sft
-                obj_outwriter.writerow(list_line)
+    list_xdata_sft = []
+    for float_x in list_xdata:
+        list_xdata_sft.append( float_x + float_sft)
 
-    obj_logfile.close()
     print("#--------------------<<\n")
-    return
+    return list_xdata_sft
 
-def def_xas_scale( str_datfile, float_scaling):
+def def_xas_writedata( list_xdata, list_ydatas, str_xheader, list_yheaders, str_outfile):
     dict_args = locals()
+    from numpy import trapz
     import csv
     import json
 
-    print("#--------------------[xas_scale]\n")
-    print( json.dumps( obj=dict_args, fp=obj_logfile, indent=4 ))
+    print("#--------------------[xas_findarea]\n")
+    print(json.dumps( obj=dict_args, indent=4 ))
 
-        with open( str_datfile, 'r', newline='') as obj_datfile:
-            obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
-            list_headers = next(obj_datreader)
-            obj_outwriter.writerow( list_headers )
-            for list_line in obj_datreader:
-                for int_i in range(1, len(list_line)):
-                    list_line[int_i] = float(list_line[int_i]) * float_scaling
-                obj_outwriter.writerow(list_line)
-    
-    obj_logfile.close()
+    with open( str_outfile, 'w', newline='' ) as obj_outfile:
+        obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
+        obj_outwriter.writerow( [str_xheader] + list_yheaders )
+        for int_i in range(len( list_xdata )):
+            obj_outwriter.writerow( [ list_xdata[int_i] ] + list_ydatas[int_i] )
+
     print("#--------------------<<\n")
     return
 
+def arguments():
 #------------------------------[]
 # http://kbyanc.blogspot.com/2007/07/python-aggregating-function-arguments.html
 #------------------------------[]
-def arguments():
     """Returns tuple containing dictionary of calling function's
        named arguments and a list of calling function's unnamed
        positional arguments.
@@ -121,7 +107,6 @@ def arguments():
 def def_xas_findarea( list_xdata, list_ydatas, tuple_xrange):
     dict_args = locals()
     from numpy import trapz
-    import csv
     import json
 
     print("#--------------------[xas_findarea]\n")
@@ -152,7 +137,6 @@ def def_xas_findpeaks( list_xdata, list_ydatas, float_relheight, float_relpromin
 #------------------------------[]
     dict_args = locals()
     from scipy.signal import find_peaks
-    import csv
     import json
 
     print("#--------------------[xas_findpeaks]\n")
@@ -180,6 +164,63 @@ def def_xas_findpeaks( list_xdata, list_ydatas, float_relheight, float_relpromin
     print("#--------------------<<\n")
     return list_peaks
 
+def def_xas_mix(list_datas):
+#------------------------------[]
+# list_datas = []
+# list_datas.append( [list_xdata, list_ydatas, [1, 3], 0.3] )
+#------------------------------[]
+    dict_args = locals()
+    import json
+
+    print("#--------------------[xas_mix]\n")
+    print(json.dumps( obj=dict_args,  indent=4 ))
+    
+    list_ydatas_mix = []
+
+    list_datai = list_datas[0]
+    list_xdata = list_datai[0]
+    list_ydatas = list_datai[1]
+    list_ycolumns = list_datai[2]
+    float_scaling = list_datai[3]
+    #list_yheaders = [ list_line[i] for i in list_ycolumn ]
+    #print( f'list_yheaders: {list_yheaders}' )
+    for list_line in list_ydatas:
+        list_temp = []
+        for int_i in list_ycolumns:
+            list_temp.append( list_line[int_i] * float_scaling)
+        list_ydatas_mix.append( list_temp )
+
+    int_lendata = len(list_ydatas)
+    print(f'int_lendata: {int_lendata}\n')
+    
+    for list_datai in list_datas[1:]:
+        list_ydatas = list_datai[1]
+        list_ycolumns = list_datai[2]
+        float_scaling = list_datai[3]
+        int_line = 0
+        for list_line in list_ydatas:
+            list_temp = []
+            for int_i in list_ycolumns:
+                list_temp.append( list_line[int_i] *  float_scaling )
+            for i in range(len(list_ycolumns)):
+                list_ydatas_mix[int_line][i] += list_temp[i]
+            int_line += 1
+
+        if ((int_line - int_lendata) != 0):
+            print (f'{int_line}')
+            print ('Error: len(tup_filex) != int_lendata')
+            sys.exit()
+
+    #if (len(list_ycolumn)==1):
+    #    list_temp = []
+    #    for i in list_ydatas:
+    #        list_temp += i
+    #    list_ydatas = list_temp
+
+    list_xdata_mix = list_xdata
+
+    print("#--------------------<<\n")
+    return list_xdata_mix, list_ydatas_mix
 
 def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
 #------------------------------[]
@@ -195,18 +236,18 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
     list_ydatas = []
 
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
-        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ) )
+        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter= ' ', skipinitialspace=True )
         list_line = next(obj_datreader)
         str_xheader = list_line[int_xcolumn]
-        list_yheaders = [ list_line[i] for i in list_ycolumn ]
+        list_yheaders = [ list_line[i] for i in list_ycolumns ]
         print( f'str_xheader: {str_xheader}' )
         print( f'list_yheaders: {list_yheaders}' )
         for list_line in obj_datreader:
             if ( not list_line[ int_xcolumn ] ): continue
             list_xdata.append( float(list_line[int_xcolumn]) )
             list_temp = []
-            for int_i in list_ycolumn:
-                list_temp.append( float(list_line[int_i]) * float_scaling)
+            for int_i in list_ycolumns:
+                list_temp.append( float(list_line[int_i]) )
             list_ydatas.append( list_temp )
 
     int_lendata = len(list_xdata)
@@ -215,58 +256,3 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
     print("#--------------------<<\n")
     return str_xheader, list_yheaders, list_xdata, list_ydatas
 
-def def_xas_mix(list_datas):
-#------------------------------[]
-# list_datas = []
-# list_datas.append( (list_xdata, list_ydatas, (1, 3), 0.3) )
-#------------------------------[]
-    dict_args = locals()
-    import csv
-    import json
-
-    print("#--------------------[xas_mix]\n")
-    print(json.dumps( obj=dict_args,  indent=4 ))
-    
-    list_ydatas_mix = []
-
-    tup_datai = list_datas[0]
-    list_ydatas = tup_datai[1]
-    list_ycolumns = tup_datai[2]
-    float_scaling = tup_datai[3]
-    #list_yheaders = [ list_line[i] for i in list_ycolumn ]
-    #print( f'list_yheaders: {list_yheaders}' )
-    for list_line in list_ydatas:
-        list_temp = []
-        for int_i in list_ycolumns:
-            list_temp.append( list_line[int_i] * float_scaling)
-        list_ydatas_mix.append( list_temp )
-
-    int_lendata = len(list_xdata)
-    print(f'int_lendata: {int_lendata}\n')
-    
-    for tup_datai in list_datas[1:]:
-        list_ydatas = tup_datai[1]
-        list_ycolumns = tup_datai[2]
-        float_scaling = tup_datai[3]
-        int_line = 0
-        for list_line in list_ydatas:
-            list_temp = []
-            for int_i in list_ycolumns:
-                list_temp.append( list_line[int_i] *  float_scaling )
-            for i in range(len(list_ycolumns)):
-                list_ydatas_mix[int_line][i] += list_temp[i]
-            int_line += 1
-
-        if ((int_line - int_lenxas) != 0):
-            print (f'{int_line}')
-            print ('Error: len(tup_filex) != int_lenxas')
-            sys.exit()
-
-    #if (len(list_ycolumn)==1):
-    #    list_temp = []
-    #    for i in list_ydatas:
-    #        list_temp += i
-    #    list_ydatas = list_temp
-
-    print("#--------------------<<\n")
-    return list_xdata, list_ydatas_mix

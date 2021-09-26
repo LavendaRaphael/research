@@ -2,42 +2,34 @@
 from from_xas_modules import *
 #import json
 
-str_temp = '20210918.Pt.110.a20'
+str_outfile = '20210924.Pt.110.a20.csv'
+int_xcolumn = 6
+list_ycolumns = [8]
 
-list_files = [ ('20210924.Pt110-XAS.CSV', 6, (8,), 1.0) ]
+str_outfile = '20210924.Pt.110.a41.csv'
+int_xcolumn = 10
+list_ycolumns = [12]
 
-#str_temp = '20210918.Pt.110.a41'
-#list_files = [ ('20210918.Pt110-XAS.CSV', 9, 10, 1.0) ]
-
-str_xheader, list_yheaders, list_xdata, list_ydata = def_xas_mix( list_files=list_files )
+str_datfile = '20210924.Pt110-XAS.CSV'
+str_xheader, list_yheaders, list_xdata, list_ydatas = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
 
 float_relheight = 0.4
 float_relprominence = 0.02
-list_peaks = def_xas_findpeaks( list_xdata=list_xdata, list_ydata=list_ydata, float_relheight=float_relheight, float_relprominence=float_relprominence )
+list_peaks = def_xas_findpeaks( list_xdata=list_xdata, list_ydatas=list_ydatas, float_relheight=float_relheight, float_relprominence=float_relprominence )
 
 tuple_xrange = (527.0, 540.0)
-float_area = def_xas_findarea( list_xdata=list_xdata, list_ydata=list_ydata, tuple_xrange=tuple_xrange)
+float_area = def_xas_findarea( list_xdata=list_xdata, list_ydatas=list_ydatas, tuple_xrange=tuple_xrange)
 
+float_normarea = 20.0
+float_scaling = float_normarea/float_area
+list_datas=[]
+list_datas.append( [list_xdata, list_ydatas, [0], float_scaling] )
+list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas )
 
-#str_datfile = str_temp+'.csv'
-#float_relheight = 0.4
-#float_relprominence = 0.02
-#str_prefix = str_temp+'.findpeaks'
-#def_xas_findpeaks( str_datfile=str_datfile, float_relheight=float_relheight, float_relprominence=float_relprominence, str_prefix=str_prefix )
-#
-#str_datfile = str_temp+'.csv'
-#tuple_xrange = (527.0, 540.0)
-#str_prefix = str_temp+'.findarea'
-#def_xas_findarea( str_datfile=str_datfile, tuple_xrange=tuple_xrange, str_prefix=str_prefix )
-#str_outfile = str_prefix+'.json'
-#with open( str_outfile, 'r' ) as obj_outfile:
-#    dict_outfile = json.load( fp=obj_outfile )
-#    float_area = dict_outfile['float_area']
-#
-#str_datfile = str_temp+'.csv'
-#float_normarea = 20.0
-#float_scaling = float_normarea/float_area
-#str_prefix = str_temp+'.scale'
-#def_xas_scale( str_datfile=str_datfile, float_scaling=float_scaling, str_prefix=str_prefix )
-#
-#
+list_xdata = list_xdata_mix
+list_ydatas = list_ydatas_mix
+str_xheader = 'E(eV)'
+list_yheaders = ['Intensity']
+str_outfile = str_outfile
+def_xas_writedata( list_xdata=list_xdata, list_ydatas=list_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+
