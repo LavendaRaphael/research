@@ -36,10 +36,9 @@ do for [i=1:100] {pic[i]=0}
 # pic[58]=1  #      vasp_sch.aimd2_932/polarzation/polarzation_*.pdf
              #      vasp_sch/
 # pic[59]=1  #          polarization/polarization_*.pdf
-# pic[51]=1  #          sch.x.y.z.exp.pdf
+  pic[51]=1  #          xas.xy_z_exp.pdf
 # pic[15]=1  #          atom_*/sch.pdf
-  pic[63]=1  #          xas_mix.a20.pdf
-             #          a40.pdf
+# pic[63]=1  #          xas_b90.pdf
 
 # pic[59]=1  #  goto_pto_work_110.
              #      'Pt.110.x2y3z4.5_O1_vac15/'
@@ -95,6 +94,7 @@ set key height 0.5
 set key noautotitle
 set encoding iso_8859_1
 set style data lines
+set datafile separator ","
 
 homedir="~/"
      goto_pto_exp=homedir.'group/202103_XasPtO/exp/'
@@ -105,34 +105,33 @@ goto_pto_work_110=homedir.'group/202103_XasPtO/server/Pt.110_O_vac/'
 #-------------------------------------------------------------------------------------[]
 if (pic[63]==1) {
 
-array array_str=['20','41']
-str_i=array_str[2]
+array array_deg=['20','41']
+num_deg=|array_deg|
 
 work_dir='Pt.110.x12y2z4.5_O22_vac15/'
 work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
 
 out_dir=work_dir
-outfile=out_dir.'xas_mix.a'.str_i.'.pdf'
+outfile=out_dir.'xas_b90.pdf'
 
-array array_datfile=['','b90','b45','frac']
-num_datfile=|array_datfile|
-array_datfile[1]=goto_pto_exp.'20210918.Pt.110_a'.str_i.'.alignorm.dat'
-do for [i=2:num_datfile] {
-    array_datfile[i]=work_dir.'xas_mix.a'.str_i.'_'.array_datfile[i].'.dat'
+num_datfile=num_deg*2
+array array_datfile[num_datfile]
+do for [i=1:num_deg] {
+    array_datfile[i] = goto_pto_exp.'20210924.Pt.110.a'.array_deg[i].'.csv'
+    array_datfile[i+num_deg] = work_dir.'xas_a'.array_deg[i].'_b90.csv'
 }
 
 num_titl=num_datfile
-array array_titl=['','horizon','polar plane','0.7+0.3']
-array_titl[1]='Exp.'
-do for [i=2:num_titl] {
-    array_titl[i]='Theory '.array_titl[i]
+array array_titl[num_titl]
+do for [i=1:num_deg] {
+    array_titl[i] = 'Exp. '.array_deg[i]
+    array_titl[i+num_deg] = 'Theory '.array_deg[i]
 }
 
-colornum=num_titl
+colornum=num_deg
 # colornum=7
 array colo[colornum]
-colo[1]='black'
-colorstart=1
+colorstart=0
 colorwant=colornum-colorstart
 do for [i=1:colorwant] {
     if (colorwant==2 || colorwant==1) {colo[colorstart+i]=colors2[i]}
@@ -147,10 +146,10 @@ set output outfile
 set xlabel "Energy (eV)" offset 0,0
 set ylabel "Intensity (Arb. Units)" offset 1,0
 set xrange [527:540]
-set yrange [0:10]
+set yrange [0:6]
 p \
-    array_datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t array_titl[1],\
-    for [i=2:num_datfile] array_datfile[i] ls 1 lc ''.colo[i] t array_titl[i],\
+    for [i=1:num_deg] array_datfile[i] skip 1 w p pt 6 ps 0.5 lw 2 lc ''.colo[i] t array_titl[i] ,\
+    for [i=num_deg+1:num_datfile] array_datfile[i] skip 1 ls 1 lc ''.colo[i-num_deg] t array_titl[i] ,\
 
 }
 
@@ -909,19 +908,22 @@ for [i=1:num] datfile[i] u 1:($2*scaling) ls 1 lc ''.colo[i] t titl[i],\
 #-------------------------------------------------------------------------------------[]
 if (pic[51]==1) {
 
-subdir='Pt.110.x12y2z4.5_O22_vac15/vasp_sch/'
+work_dir='Pt.110.x12y2z4.5_O22_vac15/'
+work_dir=goto_pto_work_110.work_dir.'vasp_sch/'
 
-outfile=goto_pto_log_110.subdir.'sch.x.y.z.exp.pdf'
+out_dir=work_dir
+outfile=out_dir.'xas.xy_z_exp.pdf'
 
-datfilenum=4
+datfilenum=3
 array datfile[datfilenum]
-datfile[1]=goto_pto_exp.'20210512.Pt.110_norm.dat'
-datdir=goto_pto_work_110.subdir
-do for [i=2:datfilenum] {datfile[i]=datdir.'xas_alignorm.dat'}
+datfile[1]=goto_pto_exp.'20210924.Pt.110.a20.csv'
+datdir=work_dir
+datfile[2]=datdir.'xas_a90_b45.csv'
+datfile[3]=datdir.'xas_a0_b90.csv'
 
 titlnum=datfilenum
-array titl=['','X','Y','Z']
-titl[1]='Exp.'
+array titl=['','X\_Y','Z']
+titl[1]='Exp. 20{\260}'
 do for [i=2:titlnum] {titl[i]='Theory '.titl[i]}
 
 colornum=titlnum
@@ -945,8 +947,8 @@ set yrange [0:*]
 set style line 1 lw 2
 
 p \
-datfile[1] u 1:2 w p pt 6 ps 0.5 lw 2 lc colo[1] t titl[1],\
-for [i=2:datfilenum] datfile[i] u 1:i ls 1 lc ''.colo[i] t titl[i],\
+datfile[1] skip 1 w p pt 6 ps 0.5 lw 2 lc ''.colo[1] t titl[1],\
+for [i=2:datfilenum] datfile[i] skip 1 ls 1 lc ''.colo[i] t titl[i],\
 }
 
 #-------------------------------------------------------------------------------------[]

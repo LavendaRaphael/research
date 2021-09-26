@@ -33,9 +33,9 @@ float_sft = float_onset - list_peaks[0]
 list_xdata_sft = def_xas_sft( list_xdata=list_xdata, float_sft=float_sft)
 
 alpha=20
-str_outfile = 'xas_a20_b90.dat'
-alpha = 41
-str_outfile = 'xas_a41_b90.dat'
+str_outfile = 'xas_a20_b90.csv'
+#alpha = 41
+#str_outfile = 'xas_a41_b90.csv'
 
 beta = 90
 list_xdata = list_xdata_sft
