@@ -3,10 +3,14 @@
 # @FeifeiTian
 # 2021.09.21
 #===============================================<<
+import csv
+import json
+import ase
+import scipy
+import numpy
+
 def def_vasp_finalenergy(str_prefix):
     dict_args = locals()
-    import json
-    from ase.io import read as ase_read
 
     print("#--------------------[vasp_finalenergy]\n")
     str_logfile = str_prefix + '.log'
@@ -14,7 +18,7 @@ def def_vasp_finalenergy(str_prefix):
     obj_logfile = open(str_logfile,'w')
     json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
 
-    float_finalenergy = ase_read( filename='OUTCAR' )
+    float_finalenergy = ase.io.read( filename='OUTCAR' )
 
     dict_output = {'float_finalenergy': float_finalenergy}
     with open( str_outfile, 'w' ) as obj_outfile:
@@ -24,35 +28,39 @@ def def_vasp_finalenergy(str_prefix):
     print("#--------------------<<\n")
     return
 
-def def_vasp_outcar2xas(str_prefix):
+def def_vasp_outcar2xas():
     dict_args = locals()
-    import csv
-    import json
 
     print("#--------------------[vasp_outcar2xas]\n")
-    str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.csv'
-    obj_logfile = open(str_logfile,'w')
-    json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
+    print(json.dumps( obj=dict_args, indent=4 ))
+
+    list_xdata = []
+    list_ydatas = []
 
     with open( 'OUTCAR', 'r' ) as obj_datfile:
         for str_line in obj_datfile:
             if (str_line.strip() == 'frequency dependent IMAGINARY DIELECTRIC FUNCTION (independent particle, no local field effects) density-density'):
                 break
-        with open( str_outfile, 'w', newline='' ) as obj_outfile:
-            obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
-            #obj_datreader = csv.reader( obj_datfile, delimiter=' ' )
-            list_headers = next(obj_datfile).split()
-            obj_outwriter.writerow( list_headers )
-            obj_logfile.write( f'list_headers: {list_headers}\n' )
-            list_line = next(obj_datfile)
-            int_count = 0
-            for str_line in obj_datfile:
-                if ( not str_line.strip() ):
-                    break
-                obj_outwriter.writerow( str_line.split() )
-                int_count += 1
-            obj_logfile.write( f'int_count: {int_count}\n' )
+        obj_datreader = csv.reader( obj_datfile, delimiter= ' ', skipinitialspace=True )
+        list_line = next(obj_datreader)
+        str_xheader = list_line[0]
+        list_yheaders = list_line[1:]
+        str_line = next(obj_datfile)
+        int_count = 0
+        list_line = next( obj_datreader )
+        list_temp = []
+        for str_temp in list_line:
+            list_temp.append( float(str_temp) )
+        array_xdata = numpy.array( [list_temp[0]] )
+        for list_line in obj_datreader:
+            if ( len(list_line)==0 ):
+                break
+            list_temp = []
+            for str_temp in list_line:
+                list_temp.append( float(str_temp) )
+
+            int_count += 1
+        print( f'int_count: {int_count}\n' )
 
     obj_logfile.close()
     print("#--------------------<<\n")
@@ -60,7 +68,6 @@ def def_vasp_outcar2xas(str_prefix):
 
 def def_xas_sft( list_xdata, float_sft):
     dict_args = locals() 
-    import json
 
     print("#--------------------[xas_sft]\n")
     print(json.dumps( obj=dict_args, indent=4 ))
@@ -106,8 +113,6 @@ def arguments():
 
 def def_xas_findarea( list_xdata, list_ydatas, tuple_xrange):
     dict_args = locals()
-    from numpy import trapz
-    import json
 
     print("#--------------------[xas_findarea]\n")
     print(json.dumps( obj=dict_args, indent=4 ))
@@ -126,32 +131,31 @@ def def_xas_findarea( list_xdata, list_ydatas, tuple_xrange):
             list_x_new.append( float_x )
             list_y_new.append( float_y )
 
-    float_area = trapz( y=list_y_new, x=list_x_new )
+    float_area = numpy.trapz( y=list_y_new, x=list_x_new )
     print(f'float_area: {float_area}\n')
 
     print("#--------------------<<\n")
     return float_area
 
-def def_xas_findpeaks( list_xdata, list_ydatas, float_relheight, float_relprominence ):
+def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprominence ):
 #------------------------------[]
 #------------------------------[]
     dict_args = locals()
-    from scipy.signal import find_peaks
-    import json
 
     print("#--------------------[xas_findpeaks]\n")
     print( json.dumps( obj=dict_args, indent=4 ))
 
-    list_ydata = []
-    for list_temp in list_ydatas:
-        list_ydata += list_temp
+    #array_ydata = []
+    #for list_temp in list_ydatas:
+    #    array_ydata += list_temp
+    array_ydata = numpy.reshape( a=array_ydatas, newshape=-1 )
 
     float_y_max = max(list_ydata)
     height = float_relheight * float_y_max
 
     prominence = float_relprominence * float_y_max
 
-    list_peaks_indices, dict_properties = find_peaks( list_ydata, height = height, prominence=prominence )
+    list_peaks_indices, dict_properties = scipy.signal.find_peaks( list_ydata, height = height, prominence=prominence )
     
     print( ['Energy (eV)', 'Intensity/Max','prominences/Max'] )
     int_count = 0
@@ -170,7 +174,6 @@ def def_xas_mix(list_datas):
 # list_datas.append( [list_xdata, list_ydatas, [1, 3], 0.3] )
 #------------------------------[]
     dict_args = locals()
-    import json
 
     print("#--------------------[xas_mix]\n")
     print(json.dumps( obj=dict_args,  indent=4 ))
@@ -226,8 +229,6 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
 #------------------------------[]
 #------------------------------[]
     dict_args = locals()
-    import csv
-    import json
 
     print("#--------------------[xas_mix]\n")
     print(json.dumps( obj=dict_args,  indent=4 ))
@@ -259,10 +260,12 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
             for int_i in list_ycolumns:
                 list_temp.append( float(list_line[int_i]) )
             list_ydatas.append( list_temp )
+    array_xdata = numpy.array( list_xdata )
+    array_ydatas = numpy.array( list_ydatas )
 
     int_lendata = len(list_xdata)
     print(f'int_lendata: {int_lendata}\n')
     
     print("#--------------------<<\n")
-    return str_xheader, list_yheaders, list_xdata, list_ydatas
+    return str_xheader, list_yheaders, array_xdata, array_ydatas
 
