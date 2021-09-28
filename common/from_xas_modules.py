@@ -6,7 +6,7 @@
 import csv
 import json
 import ase
-import scipy
+import scipy.signal
 import numpy
 
 def def_vasp_finalenergy(str_prefix):
@@ -111,28 +111,28 @@ def arguments():
     args.update(args.pop(kwname, []))
     return args, posargs
 
-def def_xas_findarea( list_xdata, list_ydatas, tuple_xrange):
+def def_xas_findarea( array_xdata, array_ydatas, tuple_xrange):
     dict_args = locals()
+    del dict_args['array_xdata']
+    del dict_args['array_ydatas']
 
     print("#--------------------[xas_findarea]\n")
     print(json.dumps( obj=dict_args, indent=4 ))
 
-    list_ydata = []
-    for list_temp in list_ydatas:
-        list_ydata += list_temp
+    array_ydata = numpy.reshape( a=array_ydatas, newshape=-1 )
  
-    list_x_new=[]
-    list_y_new=[]
+    array_x_new=[]
+    array_y_new=[]
 
-    for int_i in range(len(list_xdata)):
-        float_x = list_xdata[int_i]
-        float_y = list_ydata[int_i]
+    for int_i in range(len(array_xdata)):
+        float_x = array_xdata[int_i]
+        float_y = array_ydata[int_i]
         if ( float_x > tuple_xrange[0] and float_x < tuple_xrange[1] ):
-            list_x_new.append( float_x )
-            list_y_new.append( float_y )
+            array_x_new.append( float_x )
+            array_y_new.append( float_y )
 
-    float_area = numpy.trapz( y=list_y_new, x=list_x_new )
-    print(f'float_area: {float_area}\n')
+    float_area = numpy.trapz( y=array_y_new, x=array_x_new )
+    print(json.dumps( obj={'float_area':float_area}, indent=4))
 
     print("#--------------------<<\n")
     return float_area
@@ -141,57 +141,57 @@ def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprom
 #------------------------------[]
 #------------------------------[]
     dict_args = locals()
+    del dict_args['array_xdata']
+    del dict_args['array_ydatas']
 
     print("#--------------------[xas_findpeaks]\n")
     print( json.dumps( obj=dict_args, indent=4 ))
 
-    #array_ydata = []
-    #for list_temp in list_ydatas:
-    #    array_ydata += list_temp
     array_ydata = numpy.reshape( a=array_ydatas, newshape=-1 )
 
-    float_y_max = max(list_ydata)
+    float_y_max = max(array_ydata)
     height = float_relheight * float_y_max
 
     prominence = float_relprominence * float_y_max
 
-    list_peaks_indices, dict_properties = scipy.signal.find_peaks( list_ydata, height = height, prominence=prominence )
+    list_peaks_indices, dict_properties = scipy.signal.find_peaks( array_ydata, height = height, prominence=prominence )
     
-    print( ['Energy (eV)', 'Intensity/Max','prominences/Max'] )
+    list_print = []
+    list_print.append( ['Energy (eV)', 'Intensity/Max','prominences/Max'] )
     int_count = 0
     list_peaks = []
     for i in list_peaks_indices:
-        list_peaks.append( list_xdata[i] )
-        print( [list_xdata[i], list_ydata[i]/float_y_max, dict_properties['prominences'][int_count]/float_y_max] )
+        list_peaks.append( array_xdata[i] )
+        list_print.append( [array_xdata[i], array_ydata[i]/float_y_max, dict_properties['prominences'][int_count]/float_y_max] )
         int_count += 1
+    print( json.dumps( obj=list_print, indent=4 ) )
 
     print("#--------------------<<\n")
     return list_peaks
 
 def def_xas_mix(list_datas):
 #------------------------------[]
-# list_datas = []
-# list_datas.append( [list_xdata, list_ydatas, [1, 3], 0.3] )
 #------------------------------[]
     dict_args = locals()
+    for list_temp in dict_args['list_datas']:
+        del list_temp[0:2]
 
     print("#--------------------[xas_mix]\n")
     print(json.dumps( obj=dict_args,  indent=4 ))
     
-    list_ydatas_mix = []
+    array_ydatas_mix = []
 
-    list_datai = list_datas[0]
-    list_xdata = list_datai[0]
-    list_ydatas = list_datai[1]
+    array_datai = array_datas[0]
+    array_xdata = array_datai[0]
+    array_ydatas = array_datai[1]
     list_ycolumns = list_datai[2]
     float_scaling = list_datai[3]
-    #list_yheaders = [ list_line[i] for i in list_ycolumn ]
-    #print( f'list_yheaders: {list_yheaders}' )
-    for list_line in list_ydatas:
-        list_temp = []
-        for int_i in list_ycolumns:
-            list_temp.append( list_line[int_i] * float_scaling)
-        list_ydatas_mix.append( list_temp )
+    #for list_line in list_ydatas:
+    #    list_temp = []
+    #    for int_i in list_ycolumns:
+    #        list_temp.append( list_line[int_i] * float_scaling)
+    #    list_ydatas_mix.append( list_temp )
+    
 
     int_lendata = len(list_ydatas)
     print(f'int_lendata: {int_lendata}\n')

@@ -13,7 +13,7 @@ int_xcolumn = 0
 list_ycolumns = [2]
 
 '''
-#--------------------------------------------------[Pt.111]
+#--------------------------------------------------[Pt.110]
 str_datfile = '20210924.Pt110-XAS.CSV'
 
 str_outfile = '20210924.Pt.110.a20.csv'
@@ -31,18 +31,17 @@ str_xheader, list_yheaders, array_xdata, array_ydatas = def_xas_extract( str_dat
 float_relheight = 0.4
 float_relprominence = 0.02
 list_peaks = def_xas_findpeaks( array_xdata=array_xdata, array_ydatas=array_ydatas, float_relheight=float_relheight, float_relprominence=float_relprominence )
-'''
 #--------------------------------------------------[findarea]
 tuple_xrange = (527.0, 540.0)
-float_area = def_xas_findarea( list_xdata=list_xdata, list_ydatas=list_ydatas, tuple_xrange=tuple_xrange)
+float_area = def_xas_findarea( array_xdata=array_xdata, array_ydatas=array_ydatas, tuple_xrange=tuple_xrange)
 
 #--------------------------------------------------[norm]
 float_normarea = 20.0
 float_scaling = float_normarea/float_area
 list_datas=[]
-list_datas.append( [list_xdata, list_ydatas, [0], float_scaling] )
-list_xdata_mix, list_ydatas_mix = def_xas_mix( list_datas )
-
+list_datas.append( [array_xdata, array_ydatas, [0], float_scaling] )
+array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas )
+'''
 #--------------------------------------------------[writedata]
 list_xdata = list_xdata_mix
 list_ydatas = list_ydatas_mix
