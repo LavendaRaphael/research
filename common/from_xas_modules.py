@@ -8,11 +8,105 @@ import json
 import ase
 import scipy.signal
 import numpy
+import copy
+import sys
+import inspect
+
+def def_weight (alpha,beta):
+    alpha = math.radians (alpha)
+    beta = math.radians (beta)
+    result = []
+    result.append (0.5 * (math.cos(beta)**2 + math.sin(alpha)**2 * math.sin(beta)**2))
+    result.append (result[0])
+    result.append (math.cos(alpha)**2 * math.sin(beta)**2)
+    return result
+
+def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onset )
+    dict_args = locals()
+    del dict_args['array_xdata']
+
+    def_startfunc()
+    print(json.dumps( obj=dict_args, indent=4 ))
+
+    #--------------------------------------------------[extract]
+    int_xcolumn = 0
+    list_ycolumns = [1,2,3]
+    _, _, array_xdata_origin, array_ydatas_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
+    
+    #--------------------------------------------------[sft]
+    list_datas = [ (array_xdata_origin, array_ydatas_origin, [2], 1.0) ]
+    array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas=list_datas )
+    
+    array_xdata = array_xdata_mix
+    array_ydatas = array_ydatas_mix
+    float_relheight = 0.4
+    float_relprominence = 0.02
+    list_peaks = def_xas_findpeaks( array_xdata=array_xdata, array_ydatas=array_ydatas, float_relheight=float_relheight, float_relprominence=float_relprominence )
+    
+    array_xdata = array_xdata_mix
+    float_sft = float_onset - list_peaks[0]
+    array_xdata_sft = def_xas_sft( array_xdata=array_xdata, float_sft=float_sft)
+    #--------------------------------------------------[norm]
+    alpha = list_normangle[0]
+    beta = list_normangle[1]
+    array_xdata = array_xdata_sft
+    array_ydatas = array_ydatas_origin
+    list_weight = def_weight (alpha,beta)
+    list_datas = []
+    list_datas.append( (array_xdata, array_ydatas, [0], list_weight[0]) )
+    list_datas.append( (array_xdata, array_ydatas, [1], list_weight[1]) )
+    list_datas.append( (array_xdata, array_ydatas, [2], list_weight[2]) )
+    array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
+    
+    array_xdata = array_xdata_mix
+    array_ydatas = array_ydatas_mix
+    tuple_xrange = (527.0, 540.0)
+    float_area = def_xas_findarea( array_xdata=array_xdata, array_ydatas=array_ydatas, tuple_xrange=tuple_xrange)
+    
+    array_ydatas = array_ydatas_origin
+    float_normarea = 20.0
+    float_scaling = float_normarea/float_area
+    list_datas=[]
+    list_datas.append( [array_xdata, array_ydatas, [0,1,2], float_scaling] )
+    array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas )
+    #--------------------------------------------------[mix]
+    array_xdata_save = array_xdata_mix
+    array_ydatas_save = array_ydatas_mix
+    
+    for list_resultanlge in list_resultangles:
+        alpha = list_resultanlge[0]
+        beta = list_resultanlge[1]
+        str_outfile = 'xas_a'+str(alpha)+'_b'+str(beta)+'.csv'
+        
+        array_xdata = array_xdata_save
+        array_ydatas = array_ydatas_save
+    
+        list_weight = def_weight (alpha,beta)
+        list_datas = []
+        list_datas.append( (array_xdata, array_ydatas, [0], list_weight[0]) )
+        list_datas.append( (array_xdata, array_ydatas, [1], list_weight[1]) )
+        list_datas.append( (array_xdata, array_ydatas, [2], list_weight[2]) )
+        _, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
+        array_ydatas_mix = numpy.reshape( a=array_ydatas_mix, (len(array_ydatas_mix),1))
+        array_ydatas_final = numpy.append( array_ydatas_final, array_ydatas_mix, axis=1 )
+   
+     array_xdata = array_xdata_mix
+     array_ydatas = array_ydatas_mix
+     str_xheader = 'E(eV)'
+     list_yheaders = ['Intensity(a'+str(alpha)+'b'+str(beta)+')']
+     def_xas_writedata( array_xdata=array_xdata, array_ydatas=array_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+
+def def_startfunc():
+    this_function_name = inspect.currentframe().f_back.f_code.co_name
+    print("#"+'-'*20+"["+this_function_name+"]\n")
+
+def def_endfunc():
+    print("#"+'-'*20+"<<\n")
 
 def def_vasp_finalenergy(str_prefix):
     dict_args = locals()
 
-    print("#--------------------[vasp_finalenergy]\n")
+    def_startfunc()
     str_logfile = str_prefix + '.log'
     str_outfile = str_prefix + '.json'
     obj_logfile = open(str_logfile,'w')
@@ -25,98 +119,60 @@ def def_vasp_finalenergy(str_prefix):
         json.dump( obj=dict_output, fp=obj_outfile, indent=4 )
 
     obj_logfile.close()
-    print("#--------------------<<\n")
+    def_endfunc()
     return
 
 def def_vasp_outcar2xas():
-    dict_args = locals()
-
-    print("#--------------------[vasp_outcar2xas]\n")
-    print(json.dumps( obj=dict_args, indent=4 ))
-
-    list_xdata = []
-    list_ydatas = []
+    def_startfunc()
 
     with open( 'OUTCAR', 'r' ) as obj_datfile:
         for str_line in obj_datfile:
             if (str_line.strip() == 'frequency dependent IMAGINARY DIELECTRIC FUNCTION (independent particle, no local field effects) density-density'):
                 break
-        obj_datreader = csv.reader( obj_datfile, delimiter= ' ', skipinitialspace=True )
-        list_line = next(obj_datreader)
-        str_xheader = list_line[0]
-        list_yheaders = list_line[1:]
-        str_line = next(obj_datfile)
-        int_count = 0
-        list_line = next( obj_datreader )
-        list_temp = []
-        for str_temp in list_line:
-            list_temp.append( float(str_temp) )
-        array_xdata = numpy.array( [list_temp[0]] )
-        for list_line in obj_datreader:
-            if ( len(list_line)==0 ):
-                break
-            list_temp = []
-            for str_temp in list_line:
-                list_temp.append( float(str_temp) )
+        with open( 'outcar2xas.tmp', 'w' ) as obj_tmp: 
+            str_line = next(obj_datfile)
+            obj_tmp.write( str_line )
+            str_line = next(obj_datfile)
+            for str_line in obj_datfile:
+                if (not str_line.strip()): break
+                obj_tmp.write( str_line )
 
-            int_count += 1
-        print( f'int_count: {int_count}\n' )
-
-    obj_logfile.close()
-    print("#--------------------<<\n")
+    def_endfunc()
     return
 
-def def_xas_sft( list_xdata, float_sft):
-    dict_args = locals() 
+def def_xas_sft( array_xdata, float_sft):
+    dict_args = locals()
+    del dict_args['array_xdata'] 
 
-    print("#--------------------[xas_sft]\n")
+    def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
-    list_xdata_sft = []
-    for float_x in list_xdata:
-        list_xdata_sft.append( float_x + float_sft)
+    array_xdata_sft = array_xdata + float_sft
 
-    print("#--------------------<<\n")
-    return list_xdata_sft
+    def_endfunc()
+    return array_xdata_sft
 
-def def_xas_writedata( list_xdata, list_ydatas, str_xheader, list_yheaders, str_outfile):
+def def_xas_writedata( array_xdata, array_ydatas, str_xheader, list_yheaders, str_outfile):
     dict_args = locals()
-    from numpy import trapz
-    import csv
-    import json
+    del dict_args['array_xdata']
+    del dict_args['array_ydatas']
 
-    print("#--------------------[xas_findarea]\n")
     print(json.dumps( obj=dict_args, indent=4 ))
 
     with open( str_outfile, 'w', newline='' ) as obj_outfile:
         obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
         obj_outwriter.writerow( [str_xheader] + list_yheaders )
-        for int_i in range(len( list_xdata )):
-            obj_outwriter.writerow( [ list_xdata[int_i] ] + list_ydatas[int_i] )
+        for int_i in range(len( array_xdata )):
+            obj_outwriter.writerow( [ array_xdata[int_i] ] + array_ydatas[int_i].tolist() )
 
-    print("#--------------------<<\n")
     return
-
-def arguments():
-#------------------------------[]
-# http://kbyanc.blogspot.com/2007/07/python-aggregating-function-arguments.html
-#------------------------------[]
-    """Returns tuple containing dictionary of calling function's
-       named arguments and a list of calling function's unnamed
-       positional arguments.
-    """
-    from inspect import getargvalues, stack
-    posname, kwname, args = getargvalues(stack()[1][0])[-3:]
-    posargs = args.pop(posname, [])
-    args.update(args.pop(kwname, []))
-    return args, posargs
 
 def def_xas_findarea( array_xdata, array_ydatas, tuple_xrange):
     dict_args = locals()
     del dict_args['array_xdata']
     del dict_args['array_ydatas']
 
-    print("#--------------------[xas_findarea]\n")
+    def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
     array_ydata = numpy.reshape( a=array_ydatas, newshape=-1 )
@@ -134,7 +190,7 @@ def def_xas_findarea( array_xdata, array_ydatas, tuple_xrange):
     float_area = numpy.trapz( y=array_y_new, x=array_x_new )
     print(json.dumps( obj={'float_area':float_area}, indent=4))
 
-    print("#--------------------<<\n")
+    def_endfunc()
     return float_area
 
 def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprominence ):
@@ -144,7 +200,7 @@ def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprom
     del dict_args['array_xdata']
     del dict_args['array_ydatas']
 
-    print("#--------------------[xas_findpeaks]\n")
+    def_startfunc()
     print( json.dumps( obj=dict_args, indent=4 ))
 
     array_ydata = numpy.reshape( a=array_ydatas, newshape=-1 )
@@ -166,71 +222,53 @@ def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprom
         int_count += 1
     print( json.dumps( obj=list_print, indent=4 ) )
 
-    print("#--------------------<<\n")
+    def_endfunc()
     return list_peaks
 
 def def_xas_mix(list_datas):
 #------------------------------[]
+# list_datas = []
+# list_datas.append( [ array_xdatas, array_ydatas, [0,2], 0.7 ] )
 #------------------------------[]
-    dict_args = locals()
+    dict_args = copy.deepcopy(locals())
     for list_temp in dict_args['list_datas']:
         del list_temp[0:2]
 
-    print("#--------------------[xas_mix]\n")
+    def_startfunc()
     print(json.dumps( obj=dict_args,  indent=4 ))
     
     array_ydatas_mix = []
 
-    array_datai = array_datas[0]
-    array_xdata = array_datai[0]
-    array_ydatas = array_datai[1]
+    list_datai = list_datas[0]
+
+    array_xdata = list_datai[0]
+    array_ydatas = list_datai[1]
     list_ycolumns = list_datai[2]
     float_scaling = list_datai[3]
-    #for list_line in list_ydatas:
-    #    list_temp = []
-    #    for int_i in list_ycolumns:
-    #        list_temp.append( list_line[int_i] * float_scaling)
-    #    list_ydatas_mix.append( list_temp )
-    
+ 
+    array_ydatas_mix = array_ydatas[ :, list_ycolumns ] * float_scaling
 
-    int_lendata = len(list_ydatas)
-    print(f'int_lendata: {int_lendata}\n')
+    int_lendata = len(array_xdata)
+    print( json.dumps( {'int_lendata': int_lendata}, indent=4 ) )
     
     for list_datai in list_datas[1:]:
-        list_ydatas = list_datai[1]
+        array_ydatas = list_datai[1]
         list_ycolumns = list_datai[2]
         float_scaling = list_datai[3]
         int_line = 0
-        for list_line in list_ydatas:
-            list_temp = []
-            for int_i in list_ycolumns:
-                list_temp.append( list_line[int_i] *  float_scaling )
-            for i in range(len(list_ycolumns)):
-                list_ydatas_mix[int_line][i] += list_temp[i]
-            int_line += 1
+        array_ydatas_mix += array_ydatas[ :, list_ycolumns ] * float_scaling
 
-        if ((int_line - int_lendata) != 0):
-            print (f'{int_line}')
-            print ('Error: len(tup_filex) != int_lendata')
-            sys.exit()
+    array_xdata_mix = array_xdata
 
-    #if (len(list_ycolumn)==1):
-    #    list_temp = []
-    #    for i in list_ydatas:
-    #        list_temp += i
-    #    list_ydatas = list_temp
-
-    list_xdata_mix = list_xdata
-
-    print("#--------------------<<\n")
-    return list_xdata_mix, list_ydatas_mix
+    def_endfunc()
+    return array_xdata_mix, array_ydatas_mix
 
 def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
 #------------------------------[]
 #------------------------------[]
     dict_args = locals()
 
-    print("#--------------------[xas_mix]\n")
+    def_startfunc()
     print(json.dumps( obj=dict_args,  indent=4 ))
     
     list_xdata = []
@@ -244,15 +282,15 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
             delimiter=','
         else:
             delimiter=' '
-    print(f'delimiter: {delimiter}')
+    print(json.dumps({'delimiter': delimiter},indent=4))
 
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
         obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
         list_line = next(obj_datreader)
         str_xheader = list_line[int_xcolumn]
         list_yheaders = [ list_line[i] for i in list_ycolumns ]
-        print( f'str_xheader: {str_xheader}' )
-        print( f'list_yheaders: {list_yheaders}' )
+        print(json.dumps({'str_xheader': str_xheader},indent=4))
+        print(json.dumps({'list_yheaders': list_yheaders}, indent=4))
         for list_line in obj_datreader:
             if ( not list_line[ int_xcolumn ] ): continue
             list_xdata.append( float(list_line[int_xcolumn]) )
@@ -264,8 +302,8 @@ def def_xas_extract( str_datfile, int_xcolumn, list_ycolumns ):
     array_ydatas = numpy.array( list_ydatas )
 
     int_lendata = len(list_xdata)
-    print(f'int_lendata: {int_lendata}\n')
-    
-    print("#--------------------<<\n")
+    print(json.dumps({ 'int_lendata': int_lendata },indent=4))
+ 
+    def_endfunc()
     return str_xheader, list_yheaders, array_xdata, array_ydatas
 
