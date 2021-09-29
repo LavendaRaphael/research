@@ -32,14 +32,22 @@ for str_dir in list_dirs:
     float_onset = 529.6
     str_dir = str_110+str_dir+'vasp_sch/'
 
-    os.chdir(str_dir)
-    
-    list_normangle = [20, 90]
+    #----------------------------------[
+    #list_normangle = [20, 90]
+    #list_resultangles = []
+    #list_resultangles.append( list_normangle )
+    #list_resultangles.append( [ 90, 45 ] )
+    #list_resultangles.append( [  0, 90 ] )
+
+    #----------------------------------[
+    list_normangle = [41, 90]
     list_resultangles = []
     list_resultangles.append( list_normangle )
-    list_resultangles.append( [ 90, 45 ] )
-    list_resultangles.append( [  0, 90 ] )
-    #str_outfile = 'xas.a'+str(alpha)+'_b'+str(beta)+'.csv'
-    str_outfile = 'test.csv'
+
+    #----------------------------------[
+    os.chdir(str_dir)
+
+    str_outfile = 'xas.a'+str(list_normangle[0])+'_b'+str(list_normangle[1])+'.csv'
+    #str_outfile = 'test.csv'
     def_xas_alignorm( list_normangle=list_normangle, list_resultangles=list_resultangles, str_datfile=str_datfile, float_onset=float_onset, str_outfile=str_outfile) 
     
