@@ -1,33 +1,46 @@
 #!/bin/env python
 #===============================================[README]
 # @FeifeiTian
-# 2021.09.21
+# 2021.09.29
 #===============================================<<
 import csv
 import json
-import ase
+import ase.io
 import scipy.signal
 import numpy
 import copy
 import sys
 import inspect
 import math
+import tempfile
+import os
 
 def def_weight (alpha,beta):
+#----------------------------------------------[]
+# Suitable for Dichroism.
+#-------------------------[in]
+# alpha: float, degree angle
+# beta:  float, degree angle
+#-------------------------[out]
+# list_weight:  list, shape(3)
+#               list_weight[1] = list_weight[0]
+#               sigma = [sigma_x, sigma_y, sigma_z]*list_weight
+#----------------------------------------------[]
     alpha = math.radians (alpha)
     beta = math.radians (beta)
-    result = []
-    result.append (0.5 * (math.cos(beta)**2 + math.sin(alpha)**2 * math.sin(beta)**2))
-    result.append (result[0])
-    result.append (math.cos(alpha)**2 * math.sin(beta)**2)
-    return result
+    list_weight = []
+    list_weight.append (0.5 * (math.cos(beta)**2 + math.sin(alpha)**2 * math.sin(beta)**2))
+    list_weight.append (list_weight[0])
+    list_weight.append (math.cos(alpha)**2 * math.sin(beta)**2)
+    return list_weight
 
-def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onset, str_outfile, tuple_xrange = (527.0, 540.0), float_normarea = 20.0 ):
+def def_xas_alignorm( list_alignangle, list_normangle, list_resultangles, str_datfile, float_onset, str_outfile, tuple_xrange = (527.0, 540.0), float_normarea = 20.0 ):
 #----------------------------------------------[]
-# list_normangle = [ alpha0, beta0 ]
+# list_alignangle = [ alpha0, beta0 ]
+# list_normangle = [ alpha1, beta1 ]
 # list_resultangles = []
-# list_resultangles.append( [ alpha1, beta1 ] )
 # list_resultangles.append( [ alpha2, beta2 ] )
+# list_resultangles.append( [ alpha3, beta3 ] )
 # float_onset = 530.6
 #----------------------------------------------[]
     dict_args = locals()
@@ -40,9 +53,16 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
     list_ycolumns = [1,2,3]
     _, _, array_xdata_origin, array_ydatas_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
     
-    #--------------------------------------------------[sft]
+    #--------------------------------------------------[align]
+    alpha = list_alignangle[0]
+    beta = list_alignangle[1]
+    array_xdata = array_xdata_origin
+    array_ydatas = array_ydatas_origin
+    list_weight = def_weight (alpha,beta)
     list_datas = []
-    list_datas.append( [array_xdata_origin, array_ydatas_origin, [2], 1.0] )
+    list_datas.append( [array_xdata, array_ydatas, [0], list_weight[0]] )
+    list_datas.append( [array_xdata, array_ydatas, [1], list_weight[1]] )
+    list_datas.append( [array_xdata, array_ydatas, [2], list_weight[2]] )
     array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas=list_datas )
     
     array_xdata = array_xdata_mix
@@ -53,11 +73,11 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
     
     array_xdata = array_xdata_mix
     float_sft = float_onset - list_peaks[0]
-    array_xdata_sft = def_xas_sft( array_xdata=array_xdata, float_sft=float_sft)
+    array_xdata_align = def_xas_sft( array_xdata=array_xdata, float_sft=float_sft)
     #--------------------------------------------------[norm]
     alpha = list_normangle[0]
     beta = list_normangle[1]
-    array_xdata = array_xdata_sft
+    array_xdata = array_xdata_align
     array_ydatas = array_ydatas_origin
     list_weight = def_weight (alpha,beta)
     list_datas = []
@@ -66,7 +86,7 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
     list_datas.append( [array_xdata, array_ydatas, [2], list_weight[2]] )
     _, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
     
-    array_xdata = array_xdata_sft
+    array_xdata = array_xdata_align
     array_ydatas = array_ydatas_mix
     float_area = def_xas_findarea( array_xdata=array_xdata, array_ydatas=array_ydatas, tuple_xrange=tuple_xrange)
     
@@ -88,7 +108,7 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
         str_yheader = 'a'+str(alpha)+'_b'+str(beta)
         list_yheaders.append( str_yheader )
    
-        array_xdata = array_xdata_sft
+        array_xdata = array_xdata_align
         array_ydatas = array_ydatas_save
     
         list_weight = def_weight (alpha,beta)
@@ -99,9 +119,12 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
         _, array_ydatas_mix = def_xas_mix( list_datas=list_datas )
         array_ydatas_final[:,int_i] = array_ydatas_mix[:,0]
     
-    array_xdata = array_xdata_sft
+    array_xdata = array_xdata_align
     array_ydatas = array_ydatas_final
     def_xas_writedata( array_xdata=array_xdata, array_ydatas=array_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+
+    def_endfunc()
+    return
 
 def def_startfunc():
     this_function_name = inspect.currentframe().f_back.f_code.co_name
@@ -110,42 +133,40 @@ def def_startfunc():
 def def_endfunc():
     print("#"+'-'*20+"<<\n")
 
-def def_vasp_finalenergy(str_prefix):
+def def_vasp_finalenergy():
     dict_args = locals()
 
     def_startfunc()
-    str_logfile = str_prefix + '.log'
-    str_outfile = str_prefix + '.json'
-    obj_logfile = open(str_logfile,'w')
-    json.dump( obj=dict_args, fp=obj_logfile, indent=4 )
 
-    float_finalenergy = ase.io.read( filename='OUTCAR' )
+    float_finalenergy = ase.io.read( filename='OUTCAR' ).get_total_energy()
+    print( json.dumps({'float_finalenergy': float_finalenergy}, indent=4))
 
-    dict_output = {'float_finalenergy': float_finalenergy}
-    with open( str_outfile, 'w' ) as obj_outfile:
-        json.dump( obj=dict_output, fp=obj_outfile, indent=4 )
-
-    obj_logfile.close()
     def_endfunc()
-    return
+    return float_finalenergy
 
 def def_vasp_outcar2xas():
     def_startfunc()
 
+    str_tempfile = 'outcar2xas.tmp'
     with open( 'OUTCAR', 'r' ) as obj_datfile:
         for str_line in obj_datfile:
             if (str_line.strip() == 'frequency dependent IMAGINARY DIELECTRIC FUNCTION (independent particle, no local field effects) density-density'):
                 break
-        with open( 'outcar2xas.tmp', 'w' ) as obj_tmp: 
+        with open( str_tempfile, mode='w' ) as obj_tmp: 
             str_line = next(obj_datfile)
             obj_tmp.write( str_line )
             str_line = next(obj_datfile)
             for str_line in obj_datfile:
                 if (not str_line.strip()): break
                 obj_tmp.write( str_line )
+    str_datfile = str_tempfile
+    int_xcolumn = 0
+    list_ycolumns = [1,2,3]
+    str_xheader, list_yheaders, array_xdata, array_ydatas = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
+    os.remove( str_tempfile )
 
     def_endfunc()
-    return
+    return str_xheader, list_yheaders, array_xdata, array_ydatas
 
 def def_xas_sft( array_xdata, float_sft):
     dict_args = locals()
