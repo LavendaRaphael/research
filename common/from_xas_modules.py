@@ -11,6 +11,7 @@ import numpy
 import copy
 import sys
 import inspect
+import math
 
 def def_weight (alpha,beta):
     alpha = math.radians (alpha)
@@ -21,9 +22,15 @@ def def_weight (alpha,beta):
     result.append (math.cos(alpha)**2 * math.sin(beta)**2)
     return result
 
-def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onset )
+def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onset, str_outfile, tuple_xrange = (527.0, 540.0), float_normarea = 20.0 ):
+#----------------------------------------------[]
+# list_normangle = [ alpha0, beta0 ]
+# list_resultangles = []
+# list_resultangles.append( [ alpha1, beta1 ] )
+# list_resultangles.append( [ alpha2, beta2 ] )
+# float_onset = 530.6
+#----------------------------------------------[]
     dict_args = locals()
-    del dict_args['array_xdata']
 
     def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
@@ -34,7 +41,8 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
     _, _, array_xdata_origin, array_ydatas_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list_ycolumns=list_ycolumns )
     
     #--------------------------------------------------[sft]
-    list_datas = [ (array_xdata_origin, array_ydatas_origin, [2], 1.0) ]
+    list_datas = []
+    list_datas.append( [array_xdata_origin, array_ydatas_origin, [2], 1.0] )
     array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas=list_datas )
     
     array_xdata = array_xdata_mix
@@ -53,48 +61,47 @@ def def_xas_alignorm( list_normangle, list_resultangles, str_datfile, float_onse
     array_ydatas = array_ydatas_origin
     list_weight = def_weight (alpha,beta)
     list_datas = []
-    list_datas.append( (array_xdata, array_ydatas, [0], list_weight[0]) )
-    list_datas.append( (array_xdata, array_ydatas, [1], list_weight[1]) )
-    list_datas.append( (array_xdata, array_ydatas, [2], list_weight[2]) )
-    array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
+    list_datas.append( [array_xdata, array_ydatas, [0], list_weight[0]] )
+    list_datas.append( [array_xdata, array_ydatas, [1], list_weight[1]] )
+    list_datas.append( [array_xdata, array_ydatas, [2], list_weight[2]] )
+    _, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
     
-    array_xdata = array_xdata_mix
+    array_xdata = array_xdata_sft
     array_ydatas = array_ydatas_mix
-    tuple_xrange = (527.0, 540.0)
     float_area = def_xas_findarea( array_xdata=array_xdata, array_ydatas=array_ydatas, tuple_xrange=tuple_xrange)
     
     array_ydatas = array_ydatas_origin
-    float_normarea = 20.0
     float_scaling = float_normarea/float_area
     list_datas=[]
     list_datas.append( [array_xdata, array_ydatas, [0,1,2], float_scaling] )
-    array_xdata_mix, array_ydatas_mix = def_xas_mix( list_datas )
+    _, array_ydatas_mix = def_xas_mix( list_datas )
+
+    array_ydatas_save = array_ydatas_mix 
     #--------------------------------------------------[mix]
-    array_xdata_save = array_xdata_mix
-    array_ydatas_save = array_ydatas_mix
-    
-    for list_resultanlge in list_resultangles:
-        alpha = list_resultanlge[0]
-        beta = list_resultanlge[1]
-        str_outfile = 'xas_a'+str(alpha)+'_b'+str(beta)+'.csv'
-        
-        array_xdata = array_xdata_save
+ 
+    str_xheader = 'E(eV)'
+    list_yheaders = []
+    array_ydatas_final = numpy.empty( shape=(len(array_xdata), len(list_resultangles)) )
+  
+    for int_i in range(len(list_resultangles)):
+        alpha, beta = list_resultangles[int_i]
+        str_yheader = 'a'+str(alpha)+'_b'+str(beta)
+        list_yheaders.append( str_yheader )
+   
+        array_xdata = array_xdata_sft
         array_ydatas = array_ydatas_save
     
         list_weight = def_weight (alpha,beta)
         list_datas = []
-        list_datas.append( (array_xdata, array_ydatas, [0], list_weight[0]) )
-        list_datas.append( (array_xdata, array_ydatas, [1], list_weight[1]) )
-        list_datas.append( (array_xdata, array_ydatas, [2], list_weight[2]) )
-        _, array_ydatas_mix = def_xas_mix( list_datas=list_datas)
-        array_ydatas_mix = numpy.reshape( a=array_ydatas_mix, (len(array_ydatas_mix),1))
-        array_ydatas_final = numpy.append( array_ydatas_final, array_ydatas_mix, axis=1 )
-   
-     array_xdata = array_xdata_mix
-     array_ydatas = array_ydatas_mix
-     str_xheader = 'E(eV)'
-     list_yheaders = ['Intensity(a'+str(alpha)+'b'+str(beta)+')']
-     def_xas_writedata( array_xdata=array_xdata, array_ydatas=array_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+        list_datas.append( [array_xdata, array_ydatas, [0], list_weight[0]] )
+        list_datas.append( [array_xdata, array_ydatas, [1], list_weight[1]] )
+        list_datas.append( [array_xdata, array_ydatas, [2], list_weight[2]] )
+        _, array_ydatas_mix = def_xas_mix( list_datas=list_datas )
+        array_ydatas_final[:,int_i] = array_ydatas_mix[:,0]
+    
+    array_xdata = array_xdata_sft
+    array_ydatas = array_ydatas_final
+    def_xas_writedata( array_xdata=array_xdata, array_ydatas=array_ydatas, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
 
 def def_startfunc():
     this_function_name = inspect.currentframe().f_back.f_code.co_name
@@ -157,6 +164,7 @@ def def_xas_writedata( array_xdata, array_ydatas, str_xheader, list_yheaders, st
     del dict_args['array_xdata']
     del dict_args['array_ydatas']
 
+    def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
     with open( str_outfile, 'w', newline='' ) as obj_outfile:
@@ -165,6 +173,7 @@ def def_xas_writedata( array_xdata, array_ydatas, str_xheader, list_yheaders, st
         for int_i in range(len( array_xdata )):
             obj_outwriter.writerow( [ array_xdata[int_i] ] + array_ydatas[int_i].tolist() )
 
+    def_endfunc()
     return
 
 def def_xas_findarea( array_xdata, array_ydatas, tuple_xrange):
