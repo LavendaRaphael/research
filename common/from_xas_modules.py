@@ -320,7 +320,47 @@ def def_xas_findpeaks( array_xdata, array_ydatas, float_relheight, float_relprom
     def_endfunc()
     return list_peaks
 
-def def_xas_mix(list_datas):
+def def_xas_interp(list2d_data):
+#------------------------------[]
+# list2d_data = []
+# list_data.append( [ array1d_xdata, array2d_ydata ] )
+#------------------------------[]
+    def_startfunc()
+
+    float_xl = float('-inf')
+    float_xr = float('+inf')
+    for list1d_data in list2d_data:
+        array1d_xdata = list1d_data[0]
+        float_xl = max( float_xl, numpy.amin( array1d_xdata ))
+        float_xr = min( float_xr, numpy.amax( array1d_xdata ))
+
+    dict_json = {}
+    dict_json[ 'float_xl' ] = float_xl
+    dict_json[ 'float_xr' ] = float_xr
+    print( json.dumps( dict_json, indent=4 ) )
+
+    int_shape1dxdata = numpy.shape(array1d_xdata)[0]
+    dict_json = {}
+    dict_json[ 'int_shape1dxdata' ] = int_shape1dxdata
+    print( json.dumps( dict_json, indent=4 ) )
+
+    array1d_xdata_interp = numpy.linspace( start=float_xl, stop=float_xr, num=int_shape1dxdata )
+
+    list1d_ydata_interp = []
+    for list1d_data in list2d_data:
+        array1d_xdata = list1d_data[0]
+        array2d_ydata = list1d_data[1]
+        int_shape2dydata_1 = numpy.shape( array2d_ydata )[1]
+        array2d_temp = numpy.emtpy( shape=(int_shape1dxdata, int_shape2dydata_1) )
+        for int_i in range(int_shape2dydata_1):
+            array2d_temp[:,int_i] = numpy.interp( x=array1d_xdata_interp, xp=array1d_xdata, fp=array2d_ydata[:,int_i] )
+
+        list1d_ydata_interp.append( array2d_temp )
+
+    def_endfunc()
+    return array1d_xdata_interp, list1d_ydata_interp
+
+def def_xas_mix(list2d_data):
 #------------------------------[]
 # list_datas = []
 # list_datas.append( [ array_xdata, array_ydatas, [0,2], 0.7 ] )
@@ -332,26 +372,10 @@ def def_xas_mix(list_datas):
     def_startfunc()
     print(json.dumps( obj=dict_args,  indent=4 ))
     
-    float_xl = float('-inf')
-    float_xr = float('+inf')
-    for list_data in list_datas:
-        array_xdata = list_data[0]
-        float_xl = max( float_xl, numpy.amin( array_xdata ))
-        float_xr = min( float_xr, numpy.amax( array_xdata )) 
-    
-    dict_json = {}
-    dict_json[ 'float_xl' ] = float_xl
-    dict_json[ 'float_xr' ] = float_xr
-    print( json.dumps( dict_json, indent=4 ) )
-    
-    int_lendata = len(array_xdata)
-    int_lenycolumns = len(list_datas[0][2])
-    dict_json = {}
-    dict_json[ 'int_lendata' ] = int_lendata
-    dict_json[ 'int_lenycolumns' ] = int_lenycolumns
-    print( json.dumps( dict_json, indent=4 ) )
-    
-    array_xdata_mix = numpy.linspace( start=float_xl, stop=float_xr, num=int_lendata )
+    int_len2ddata = len(list2d_data)
+    list2d_xydata = []
+    for int_i in range(int_len2ddata):
+        list2d_xydata.append( [  ] )
 
     array_ydatas_mix = numpy.zeros( shape=(int_lendata, int_lenycolumns) )
     for list_datai in list_datas:
