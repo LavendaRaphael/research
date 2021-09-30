@@ -1,21 +1,8 @@
 #!/bin/env python
 from from_xas_modules import *
 import os
-
-str_exp=os.environ['goto_pto_exp']
-str_110=os.environ['goto_pto_work_110']
-
-#----------------------------------[list_atoms]
-dict_structures={}
-str_workdir='Pt.110.x12y2z4.5_O22_vac15/'
-list_atoms = []
-list_atoms.append([ 1,2.0])
-list_atoms.append([ 3,2.0])
-list_atoms.append([ 5,2.0])
-list_atoms.append([ 7,2.0])
-list_atoms.append([ 9,2.0])
-list_atoms.append([11,1.0])
-dict_structures[ str_workdir ] = { 'list_atoms': list_atoms }
+sys.path.append(r'./')
+from from_dict_structures import dict_structures 
 
 list_workdirs=[]
 #----------------------------------[Pt.110]
@@ -33,16 +20,17 @@ list_workdirs.append('Pt.110.x12y2z4.5_O22_vac15/')
 #list_workdirs.append('Pt.110.x2y3z4.5_O4.v56_vac15/')
 #list_workdirs.append('Pt.110.x2y4z4.5_O6.v56_vac15/')
 #list_workdirs.append('Pt.110.x2y3z4.5_O6_vac15/')
-str_headdir=str_110
 
 #----------------------------------[Pt.111]
 
 #----------------------------------[loop]
 
 for str_workdir in list_workdirs:
-    str_cddir = str_headdir+str_workdir+'vasp_sch/'
+    str_chdir = dict_structures[ str_workdir ].str_chdir
+    str_cddir = str_chdir+'vasp_sch/'
+
     os.chdir(str_cddir)
     print(os.getcwd())
 
-    list_atoms = dict_structures[ str_workdir ][ 'list_atoms' ]
-    def_xas_ave( list_atoms )
+    list_atoms = dict_structures[ str_workdir ].list_atoms
+    def_xas_ave( list_atoms)

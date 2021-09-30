@@ -12,8 +12,28 @@ import copy
 import sys
 import inspect
 import math
-import tempfile
 import os
+
+class class_structures(object):
+
+    @property
+    def str_chdir(self):
+        return self._str_chdir
+    @str_chdir.setter
+    def str_chdir(self, str_temp):
+        self._str_chdir = str_temp
+  
+    @property
+    def list_atoms(self):
+        return self._list_atoms
+
+    @list_atoms.setter
+    def list_atoms(self, list_temp):
+        float_sum = 0
+        for list_i in list_temp: float_sum += list_i[1]
+        for list_i in list_temp: list_i[1] /= float_sum
+        for list_i in list_temp: list_i[0] = 'atom_'+str(list_i[0])
+        self._list_atoms = list_temp
 
 def def_xas_ave( list_atoms, str_outfile = 'xas.ave.csv' ):
 #----------------------------------------------[]
@@ -28,7 +48,8 @@ def def_xas_ave( list_atoms, str_outfile = 'xas.ave.csv' ):
     for list_i in list_atoms: float_sum += list_i[1]
     for list_i in list_atoms: list_i[1] /= float_sum
 
-    os.chdir('atom_1/')
+    str_chdir=list_atoms[0][0]
+    os.chdir(str_chdir)
     print(os.getcwd())
     
     float_finalenergy_1 = def_vasp_finalenergy()
@@ -37,9 +58,9 @@ def def_xas_ave( list_atoms, str_outfile = 'xas.ave.csv' ):
     list_datas = []
     for list_atom in list_atoms:
 
-        int_atom = list_atom[0]
+        str_chdir = list_atom[0]
         float_scaling = list_atom[1]
-        os.chdir('atom_'+str(int_atom))
+        os.chdir(str_chdir)
         print(os.getcwd())
 
         str_xheader, list_yheaders, array_xdata, array_ydatas = def_vasp_outcar2xas()
