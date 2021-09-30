@@ -15,6 +15,48 @@ import math
 import tempfile
 import os
 
+def def_xas_ave( list_atoms, str_outfile = 'xas.ave.csv' ):
+#----------------------------------------------[]
+# list_atoms = []
+# list_atoms.append([ 1,2.0])
+#----------------------------------------------[]
+    dict_args = locals()
+    def_startfunc()
+    print(json.dumps( obj=dict_args, indent=4 ))
+    
+    float_sum = 0
+    for list_i in list_atoms: float_sum += list_i[1]
+    for list_i in list_atoms: list_i[1] /= float_sum
+
+    os.chdir('atom_1/')
+    print(os.getcwd())
+    
+    float_finalenergy_1 = def_vasp_finalenergy()
+    os.chdir('..')
+
+    list_datas = []
+    for list_atom in list_atoms:
+
+        int_atom = list_atom[0]
+        float_scaling = list_atom[1]
+        os.chdir('atom_'+str(int_atom))
+        print(os.getcwd())
+
+        str_xheader, list_yheaders, array_xdata, array_ydatas = def_vasp_outcar2xas()
+
+        float_finalenergy = def_vasp_finalenergy()
+        float_sft = float_finalenergy-float_finalenergy_1 
+        array_xdata_sft = def_xas_sft( array_xdata=array_xdata, float_sft=float_sft)
+
+        array_xdata = array_xdata_sft
+        list_ycolums = list(range(len(array_ydatas[0])))
+        list_datas.append( [ array_xdata, array_ydatas, list_ycolums, float_scaling ] )
+
+        os.chdir('..')
+
+    array_xdata_mix, array_ydatas_mix = def_xas_mix(list_datas=list_datas)
+    def_xas_writedata( array_xdata=array_xdata_mix, array_ydatas=array_ydatas_mix, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
+
 def def_weight (alpha,beta):
 #----------------------------------------------[]
 # Suitable for Dichroism.
@@ -44,7 +86,6 @@ def def_xas_alignorm( list_alignangle, list_normangle, list_resultangles, str_da
 # float_onset = 530.6
 #----------------------------------------------[]
     dict_args = locals()
-
     def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
@@ -192,7 +233,7 @@ def def_xas_writedata( array_xdata, array_ydatas, str_xheader, list_yheaders, st
     print(json.dumps( obj=dict_args, indent=4 ))
 
     with open( str_outfile, 'w', newline='' ) as obj_outfile:
-        obj_outwriter = csv.writer( obj_outfile, delimiter=' ' )
+        obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
         obj_outwriter.writerow( [str_xheader] + list_yheaders )
         for int_i in range(len( array_xdata )):
             obj_outwriter.writerow( [ array_xdata[int_i] ] + array_ydatas[int_i].tolist() )
