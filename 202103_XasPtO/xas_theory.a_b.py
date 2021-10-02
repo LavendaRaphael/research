@@ -30,23 +30,23 @@ float_onset = 529.6
 #float_onset = 530.1
 
 #----------------------------------[20]
-#list_normangle = [20, 90]
-#list_resultangles = []
-#list_resultangles.append( list_normangle )
-#list_resultangles.append( [ 90, 45 ] )
-#list_resultangles.append( [  0, 90 ] )
-
-#----------------------------------[41]
-list_normangle = [41, 90]
+list_normangle = [20, 90]
 list_resultangles = []
 list_resultangles.append( list_normangle )
+list_resultangles.append( [ 90, 45 ] )
+list_resultangles.append( [  0, 90 ] )
+
+#----------------------------------[41]
+#list_normangle = [41, 90]
+#list_resultangles = []
+#list_resultangles.append( list_normangle )
 
 #----------------------------------[loop]
 list_alignangle = [20,90]
 str_datfile = 'xas_ave.dat'
 
 str_outfile = 'xas.a'+str(list_normangle[0])+'_b'+str(list_normangle[1])+'.csv'
-#str_outfile = 'test.csv'
+str_outfile = 'test.csv'
 
 for str_workdir in list_workdirs:
     str_workdir = str_headdir+str_workdir+'vasp_sch/'
