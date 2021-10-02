@@ -372,16 +372,17 @@ def def_xas_mix(list2d_data):
     def_startfunc()
     print(json.dumps( obj=dict_args,  indent=4 ))
     
-    int_len2ddata = len(list2d_data)
+
     list2d_xydata = []
     for list1d_data in list2d_data:
         list2d_xydata.append( [ list1d_data[0], list1d_data[1] ] )
-
     array1d_xdata_interp, list1d_ydata_interp = def_xas_interp( list2d_xydata )
 
-    int_len1dxdata = len( list2d_data[0][0] )
+    int_len1dxdata = len( array1d_xdata_interp )
     int_lenycolumn = len( list2d_data[0][2] )
     array2d_ydata_mix = numpy.zeros( shape=(int_len1dxdata, int_lenycolumn) )
+
+    int_len2ddata = len(list2d_data)
     for int_i in range(int_len2ddata):
         list1d_ycolumn = list2d_data[int_i][2]
         array2d_ydata = list1d_ydata_interp[ int_i][:, list1d_ycolumn ]
