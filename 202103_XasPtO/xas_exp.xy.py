@@ -31,4 +31,4 @@ for int_i in range( int_len1dxdata ):
     array1d_temp *= 0
     for int_j in range( int_lenalpha ):
         array1d_temp[int_j] = list1d_ydata_interp[int_j][int_i]
-    print( array1d_temp )
+        
