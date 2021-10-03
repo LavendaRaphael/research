@@ -14,6 +14,12 @@ import inspect
 import math
 import os
 
+def def_print_paras( dict_localpara, list_paraname ):
+    dict_paraprint = {}
+    for str_paraname in list_paraname:
+        dict_paraprint[ str_paraname ] = dict_localpara[ str_paraname ]
+    print(json.dumps( dict_paraprint, indent=4 ))
+
 class class_structures(object):
 
     @property
