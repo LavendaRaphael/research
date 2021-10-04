@@ -14,11 +14,63 @@ import inspect
 import math
 import os
 
+def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
+#----------------------------------------------[]
+# list2d_alpha = []
+# list2d_alpha.append( [20, '20210924.Pt.110.a20.csv'] )
+# list2d_alpha.append( [41, '20210924.Pt.110.a41.csv'] )
+#----------------------------------------------[]
+    dict_args = locals()
+    def_startfunc()
+    print(json.dumps( obj=dict_args, indent=4 ))
+
+    int_lenalpha = len(list2d_alpha)
+    array1d_alpha = numpy.empty( shape=(int_lenalpha) )
+    list2d_data = []
+    for int_i in range(int_lenalpha):
+        array1d_alpha[int_i] = list2d_alpha[ int_i ][ 0 ]
+        str_datfile = list2d_alpha[ int_i ][ 1 ]
+        str_xheader, list1d_yheader, array1d_xdata, array2d_ydata = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1] )
+        list2d_data.append( [ array1d_xdata, array2d_ydata] )
+
+    array1d_cosalpha2 = numpy.cos( numpy.radians( array1d_alpha ) ) **2
+    def_print_paras( locals(), ['array1d_cosalpha2'] )
+
+    array1d_xdata_interp, list1d_ydata_interp = def_xas_interp( list2d_data )
+
+    int_len1dxdata = len( array1d_xdata_interp )
+    def_print_paras( locals(), ['int_len1dxdata'] )
+
+    array1d_ydata_fit = numpy.empty( shape=(int_len1dxdata) )    
+    array1d_temp = numpy.empty( shape=(int_lenalpha) )
+    for int_i in range( int_len1dxdata ):
+        for int_j in range( int_lenalpha ):
+            array1d_temp[int_j] = list1d_ydata_interp[int_j][int_i]
+        polyfit = numpy.polynomial.Polynomial.fit( array1d_cosalpha2, array1d_temp, 1 )
+        array1d_ydata_fit[ int_i ] = numpy.sum( polyfit.convert().coef )
+
+    array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
+    def_xas_writedata( array1d_xdata=array1d_xdata_interp, array2d_ydata=array2d_ydata, str_xheader='E(eV)', list_yheaders=['sigma_xyfit'], str_outfile=str_outfile)
+
+class NumpyEncoder(json.JSONEncoder):
+#----------------------------------------------[]
+# https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
+#----------------------------------------------[]
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, numpy.integer):
+            return int(obj)
+        elif isinstance(obj, numpy.floating):
+            return float(obj)
+        elif isinstance(obj, numpy.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
 def def_print_paras( dict_localpara, list_paraname ):
     dict_paraprint = {}
     for str_paraname in list_paraname:
         dict_paraprint[ str_paraname ] = dict_localpara[ str_paraname ]
-    print(json.dumps( dict_paraprint, indent=4 ))
+    print(json.dumps( dict_paraprint, indent=4, cls=NumpyEncoder ))
 
 class class_structures(object):
 
@@ -345,7 +397,7 @@ def def_xas_interp(list2d_data):
     dict_json[ 'float_xr' ] = float_xr
     print( json.dumps( dict_json, indent=4 ) )
 
-    int_shape1dxdata = numpy.shape(array1d_xdata)[0]
+    int_shape1dxdata = numpy.shape(list2d_data[0][0])[0]
     dict_json = {}
     dict_json[ 'int_shape1dxdata' ] = int_shape1dxdata
     print( json.dumps( dict_json, indent=4 ) )
