@@ -33,8 +33,8 @@ def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
         str_xheader, list1d_yheader, array1d_xdata, array2d_ydata = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1] )
         list2d_data.append( [ array1d_xdata, array2d_ydata] )
 
-    array1d_cosalpha2 = numpy.cos( numpy.radians( array1d_alpha ) ) **2
-    def_print_paras( locals(), ['array1d_cosalpha2'] )
+    array1d_sinalpha2 = numpy.sin( numpy.radians( array1d_alpha ) ) **2
+    def_print_paras( locals(), ['array1d_sinalpha2'] )
 
     array1d_xdata_interp, list1d_ydata_interp = def_xas_interp( list2d_data )
 
@@ -46,7 +46,7 @@ def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
     for int_i in range( int_len1dxdata ):
         for int_j in range( int_lenalpha ):
             array1d_temp[int_j] = list1d_ydata_interp[int_j][int_i]
-        polyfit = numpy.polynomial.Polynomial.fit( array1d_cosalpha2, array1d_temp, 1 )
+        polyfit = numpy.polynomial.Polynomial.fit( array1d_sinalpha2, array1d_temp, 1 )
         array1d_ydata_fit[ int_i ] = numpy.sum( polyfit.convert().coef )
 
     array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
