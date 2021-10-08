@@ -32,6 +32,5 @@ plt.xlim( 527,540 )
 plt.ylim( bottom=0 )
 plt.xlabel( 'Energy (eV)' )
 plt.ylabel( "Intensity (Arb. Units)" )
-
-plt.show()
 plt.savefig( 'xas_exp.xyfit.pdf',bbox_inches='tight' )
+plt.show()
