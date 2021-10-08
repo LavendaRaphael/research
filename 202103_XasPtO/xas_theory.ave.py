@@ -27,9 +27,9 @@ list_workdirs.append('Pt.110.x12y2z4.5_O22_vac15/')
 
 for str_workdir in list_workdirs:
     str_chdir = dict_structures[ str_workdir ].str_chdir
-    str_cddir = str_chdir+'vasp_sch/'
+    str_chdir = str_chdir+'vasp_sch/'
 
-    os.chdir(str_cddir)
+    os.chdir(str_chdir)
     print(os.getcwd())
 
     list_atoms = dict_structures[ str_workdir ].list_atoms

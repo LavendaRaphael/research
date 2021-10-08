@@ -26,7 +26,6 @@ str_headdir=str_110
 float_onset = 529.6
 
 #----------------------------------[Pt.111]
-#str_datfile = 'xas.dat'
 #float_onset = 530.1
 
 #----------------------------------[20]
@@ -43,13 +42,12 @@ list_resultangles.append( [  0, 90 ] )
 
 #----------------------------------[loop]
 list_alignangle = [20,90]
-str_datfile = 'xas_ave.dat'
 
 str_outfile = 'xas.a'+str(list_normangle[0])+'_b'+str(list_normangle[1])+'.csv'
-str_outfile = 'test.csv'
+#str_outfile = 'test.csv'
 
 for str_workdir in list_workdirs:
     str_workdir = str_headdir+str_workdir+'vasp_sch/'
     os.chdir(str_workdir)
-    def_xas_alignorm( list_alignangle=list_alignangle, list_normangle=list_normangle, list_resultangles=list_resultangles, str_datfile=str_datfile, float_onset=float_onset, str_outfile=str_outfile) 
+    def_xas_alignorm( list_alignangle=list_alignangle, list_normangle=list_normangle, list_resultangles=list_resultangles, float_onset=float_onset, str_outfile=str_outfile) 
     
