@@ -15,7 +15,7 @@ import math
 import os
 
 list_resultangles=[[0,90],[90,45]]
-str_outfile='xas.alignorm.csv'
+str_outfile='xas.aligscaling.csv'
 str_tmoutfile='xas_tm.alignscale.csv'
 
 def def_xas_alignscaling_atom( list_atoms, str_alignfile='xas.align.json', str_scalingfile='xas.a20_b90.json'):
@@ -46,12 +46,11 @@ def def_xas_alignscaling_atom( list_atoms, str_alignfile='xas.align.json', str_s
         print(os.getcwd())
         #----------------------------------------------[extract]
         str_xheader, list_yheaders, array1d_xdata, array2d_ydata = def_vasp_outcar2xas()
-        #----------------------------------------------[align]
+        #----------------------------------------------[alignscaling]
         float_finalenergy = def_vasp_finalenergy()
         float_sft = float_finalenergy-float_finalenergy_1
         float_sft += float_align
         array1d_xdata_align = array1d_xdata + float_sft
-        #----------------------------------------------[norm]
         array2d_ydata_scaling = array2d_ydata * float_scaling
         #----------------------------------------------[tm]
         list2d_datatm = def_xas_extract_tm()
@@ -244,13 +243,76 @@ def def_weight (alpha,beta):
     list_weight.append (math.cos(alpha)**2 * math.sin(beta)**2)
     return list_weight
 
-def def_xas_alignorm( list_alignangle, list_normangle, list_resultangles,float_onset,str_outfile, str_datfile='xas.ave.csv', tuple_xrange = (527.0, 540.0), float_normarea = 20.0, str_alignfile='xas.align.json' ):
+def def_xas_alphabeta( list2d_angle, array2d_ydata ):
+    dict_args = locals()
+    del dict_args['array2d_ydata']
+    def_startfunc()
+    print(json.dumps( obj=dict_args, indent=4 ))
+
+    int_shape2dydata0 = numpy.shape(array2d_ydata)[0]
+    def_print_paras( locals(), ['int_shape2dydata0'] )
+    array2d_ydata_alphabeta = numpy.empty( shape=(int_shape2dydata0, len(list_angles)) )
+    list_yheaders = []
+    for int_i in range(len(list2d_angle)):
+        alpha, beta = list2d_angle[int_i]
+        str_yheader = 'a'+str(alpha)+'_b'+str(beta)
+        list_yheaders.append( str_yheader )
+    
+        list_weight = def_weight (alpha,beta)
+        array1d_ydata_dot = numpy.dot(array2d_ydata, list_weight)
+
+        array2d_ydata_alphabeta[:,int_i] = array1d_ydata_dot
+
+    return array2d_ydata_alphabeta
+
+def def_xas_alignscaling( array1d_xdata, array2d_ydata, list1d_alignangle, list1d_scalingangle, float_onset, tuple_xrange = (527.0, 540.0), float_scalingarea = 20.0, str_alignfile='xas.align.json' ):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
-# list_normangle = [ alpha1, beta1 ]
-# list_resultangles = []
-# list_resultangles.append( [ alpha2, beta2 ] )
-# list_resultangles.append( [ alpha3, beta3 ] )
+# list_scalingangle = [ alpha1, beta1 ]
+# float_onset = 530.6
+#----------------------------------------------[]
+    dict_args = locals()
+    del dict_args['array1d_xdata']
+    del dict_args['array2d_ydata']
+    def_startfunc()
+    print(json.dumps( obj=dict_args, indent=4 ))
+    
+    str_scalingfile = str_outfile[:-3]+'json'
+    array1d_xdata_origin = array1d_xdata
+    array2d_ydata_origin = array2d_ydata
+    #--------------------------------------------------[align]
+    array2d_alphabeta = def_xas_alphabeta( list2d_angle=[list1d_alignangle], array2d_ydata=array2d_ydata )
+    
+    array1d_xdata = array1d_xdata_origin
+    array2d_ydata = array2d_alphabeta
+    float_relheight = 0.4
+    float_relprominence = 0.02
+    list_peaks = def_xas_findpeaks( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, float_relheight=float_relheight, float_relprominence=float_relprominence )
+    
+    array1d_xdata = array1d_xdata_origin
+    float_align = float_onset - list_peaks[0]
+    array1d_xdata_align = array1d_xdata + float_align
+    with open( str_alignfile, 'w' ) as obj_jsonfile:
+        json.dump( obj={'float_align': float_align}, fp=obj_jsonfile )
+    #--------------------------------------------------[scaling]
+    array2d_ydata = array2d_ydata_origin
+    array2d_alphabeta = def_xas_alphabeta(list2d_angle=[list1d_scalingangle], array2d_ydata=array2d_ydata )
+    
+    array1d_xdata = array1d_xdata_align
+    array2d_ydata = array2d_alphabeta
+    float_area = def_xas_findarea( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, tuple_xrange=tuple_xrange)
+    float_scaling = float_scalingarea/float_area
+    with open( str_scalingfile, 'w' ) as obj_jsonfile:
+        json.dump( obj={'float_scaling': float_scaling}, fp=obj_jsonfile )
+
+    array2d_ydata_scaling=array2d_ydata_origin*float_scaling
+
+    def_endfunc()
+    return array1d_xdata_align, array2d_ydata_scaling
+def def_xas_abworkflow( array1d_xdata, array2d_ydata, list1d_alignangle, list1d_scalingangle,  float_onset, list2d_angle, tuple_xrange = (527.0, 540.0), float_scalingarea = 20.0, str_alignfile='xas.align.json' ):
+#----------------------------------------------[]
+# list_alignangle = [ alpha0, beta0 ]
+# list_scalingangle = [ alpha1, beta1 ]
 # float_onset = 530.6
 #----------------------------------------------[]
     dict_args = locals()
@@ -263,76 +325,13 @@ def def_xas_alignorm( list_alignangle, list_normangle, list_resultangles,float_o
     list1d_ycolumn = [1,2,3]
     _, _, array1d_xdata_origin, array2d_ydata_origin = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list1d_ycolumn=list1d_ycolumn )
     
-    #--------------------------------------------------[align]
-    alpha = list_alignangle[0]
-    beta = list_alignangle[1]
-    array1d_xdata = array1d_xdata_origin
-    array2d_ydata = array2d_ydata_origin
-    list_weight = def_weight (alpha,beta)
-    list2d_data = []
-    list2d_data.append( [array1d_xdata, array2d_ydata, [0], list_weight[0]] )
-    list2d_data.append( [array1d_xdata, array2d_ydata, [1], list_weight[1]] )
-    list2d_data.append( [array1d_xdata, array2d_ydata, [2], list_weight[2]] )
-    array1d_xdata_mix, array2d_ydata_mix = def_xas_mix( list2d_data=list2d_data )
-    
-    array1d_xdata = array1d_xdata_mix
-    array2d_ydata = array2d_ydata_mix
-    float_relheight = 0.4
-    float_relprominence = 0.02
-    list_peaks = def_xas_findpeaks( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, float_relheight=float_relheight, float_relprominence=float_relprominence )
-    
-    array1d_xdata = array1d_xdata_mix
-    float_align = float_onset - list_peaks[0]
-    array1d_xdata_align = def_xas_sft( array1d_xdata=array1d_xdata, float_sft=float_align)
-    with open( str_alignfile, 'w' ) as obj_jsonfile:
-        json.dump( obj={'float_align': float_align}, fp=obj_jsonfile )
-    #--------------------------------------------------[norm]
-    alpha = list_normangle[0]
-    beta = list_normangle[1]
-    array1d_xdata = array1d_xdata_align
-    array2d_ydata = array2d_ydata_origin
-    list_weight = def_weight (alpha,beta)
-    list2d_data = []
-    list2d_data.append( [array1d_xdata, array2d_ydata, [0], list_weight[0]] )
-    list2d_data.append( [array1d_xdata, array2d_ydata, [1], list_weight[1]] )
-    list2d_data.append( [array1d_xdata, array2d_ydata, [2], list_weight[2]] )
-    _, array2d_ydata_mix = def_xas_mix( list2d_data=list2d_data)
-    
-    array1d_xdata = array1d_xdata_align
-    array2d_ydata = array2d_ydata_mix
-    float_area = def_xas_findarea( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, tuple_xrange=tuple_xrange)
-    
-    array2d_ydata = array2d_ydata_origin
-    float_scaling = float_normarea/float_area
-    with open( str_scalingfile, 'w' ) as obj_jsonfile:
-        json.dump( obj={'float_scaling': float_scaling}, fp=obj_jsonfile )
-    list2d_data=[]
-    list2d_data.append( [array1d_xdata, array2d_ydata, [0,1,2], float_scaling] )
-    _, array2d_ydata_mix = def_xas_mix( list2d_data )
-
-    array2d_ydata_save = array2d_ydata_mix 
     #--------------------------------------------------[mix]
  
     str_xheader = 'E(eV)'
-    list_yheaders = []
-    array2d_ydata_final = numpy.empty( shape=(len(array1d_xdata), len(list_resultangles)) )
-  
-    for int_i in range(len(list_resultangles)):
-        alpha, beta = list_resultangles[int_i]
-        str_yheader = 'a'+str(alpha)+'_b'+str(beta)
-        list_yheaders.append( str_yheader )
-   
-        array1d_xdata = array1d_xdata_align
-        array2d_ydata = array2d_ydata_save
-    
-        list_weight = def_weight (alpha,beta)
-        list2d_data = []
-        list2d_data.append( [array1d_xdata, array2d_ydata, [0], list_weight[0]] )
-        list2d_data.append( [array1d_xdata, array2d_ydata, [1], list_weight[1]] )
-        list2d_data.append( [array1d_xdata, array2d_ydata, [2], list_weight[2]] )
-        _, array2d_ydata_mix = def_xas_mix( list2d_data=list2d_data )
-        array2d_ydata_final[:,int_i] = array2d_ydata_mix[:,0]
-    
+    array1d_xdata = array1d_xdata_origin
+    array2d_ydata = array2d_ydata_origin
+    array1d_xdata_align, array2d_ydata_scaling = def_xas_alignscaling( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, list1d_alignangle=list1d_alignangle, list1d_scalingangle=list1d_scalingangle, float_onset=float_onset, tuple_xrange = (527.0, 540.0), float_scalingarea = 20.0, str_alignfile='xas.align.json' )
+    #mark
     array1d_xdata = array1d_xdata_align
     array2d_ydata = array2d_ydata_final
     def_xas_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list_yheaders=list_yheaders, str_outfile=str_outfile)
@@ -387,7 +386,7 @@ def def_vasp_outcar2xas():
 
 def def_xas_sft( array1d_xdata, float_sft):
     dict_args = locals()
-    del dict_args['array1d_xdata'] 
+    del dict_args['array1d_xdata']
     def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
@@ -400,7 +399,6 @@ def def_xas_writedata( array1d_xdata, array2d_ydata, str_xheader, list_yheaders,
     dict_args = locals()
     del dict_args['array1d_xdata']
     del dict_args['array2d_ydata']
-
     def_startfunc()
     print(json.dumps( obj=dict_args, indent=4 ))
 
@@ -516,7 +514,7 @@ def def_xas_mix(list2d_data):
 # list2d_data = []
 # list2d_data.append( [ array1d_xdata, array2d_ydata, [0,2], 0.7 ] )
 #------------------------------[]
-    dict_args = copy.deepcopy(locals())
+    dict_args = copy.deepcopy(locals()) 
     for list_temp in dict_args['list2d_data']:
         del list_temp[0:2]
 
