@@ -14,18 +14,33 @@ import inspect
 import math
 import os
 
-def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_scaling=1.0):
+def def_xas_findtm( array1d_xdata, array1d_ydata, float_onset, float_xwidth=0.5, int_ ):
+    def_startfunc( locals(), ['array1d_xdata', 'array1d_ydata'] )
+
+    list1d_band = []
+    float_yheight = numpy.amax( array1d_ydata ) * float_yrevheight
+    for int_i in range( shape(array1d_xdata) ):
+        float_x = array1d_xdata[ int_i ]
+        if ( float_x < float_onset-float_xwidth or float_x > float_onset+float_xwidth): continue
+        float_y = array1d_ydata[ int_i ]
+        if ( float_y < float_yheight ): continue
+        list1d_band.append( [int_i+1, float_x, float_y] )
+    print( json.dump( [] ) )
+
+def def_xas
+    for int_k in range(1):
+        int_k += 1
+        str_datfile = 'xas_tm.a20_b90.K'+str(int_k)+'.csv'
+        _, _, array1d_xdata, array2d_ydata = from_xas_modules.def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1] )
+
+def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_scaling=5.0):
 #----------------------------------------------[]
 #----------------------------------------------[]
     def_startfunc( locals() )
-#anrk
-    str_dirwork=os.getcwd()
 
-    os.chdir('..')
-    os.chdir(str_chdir)
     dict_jsonfile={}
     with open(str_jsonfile) as obj_jsonfile:
-        json.load( dict_jsonfile, fp=obj_jsonfile )
+        dict_jsonfile = json.load( fp=obj_jsonfile )
     float_align = dict_jsonfile['float_align']
     float_scaling = dict_jsonfile['float_scaling']
 
@@ -35,17 +50,14 @@ def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_
     float_finalenergy_1 = def_vasp_finalenergy()
     os.chdir('..')
 
-    os.chdir(str_dirwork)
-
     str_abname=str_jsonfile[4:-5]
     def_print_paras( locals(), ['str_abname'] )
     for list1d_atom in list2d_atom:
-
         str_chdir = list1d_atom[0]
         os.chdir(str_chdir)
         print(os.getcwd())
         #----------------------------------------------[extract]
-        str_xheader, array1d_xdata_align, array2d_ydata_scaling, list2d_tm_data_alignscaling = def_xas_atom_alignscaling()
+        str_xheader, array1d_xdata_align, array2d_ydata_scaling, list2d_tm_data_alignscaling = def_xas_atom_alignscaling( float_align=float_align, float_scaling=float_scaling, float_finalenergy_1=float_finalenergy_1 )
 
         array2d_ydata = array2d_ydata_scaling
         list1d_yheader, array2d_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
@@ -69,7 +81,7 @@ def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_
 
         os.chdir('..')
 
-def def_xas_atom_alignscaling(str_jsonfile):
+def def_xas_atom_alignscaling(float_align, float_scaling, float_finalenergy_1):
 #----------------------------------------------[]
 #----------------------------------------------[]
     def_startfunc( locals() )
@@ -128,7 +140,7 @@ def def_xas_tm_extract( str_datfile='MYCARXAS' ):
             int_i += 1
             if (int_i != int_nband):
                 raise RuntimeError(f'int_i {int_i} != int_nband {int_nband}')
-            list2d_data.append( [array1d_xdata, array2d_ydata] )
+            list2d_data.append( [array1d_xdata.copy(), array2d_ydata.copy()] )
 
     int_len2ddata = len(list2d_data)
     def_print_paras( locals(), ['int_len2ddata'] )
@@ -265,7 +277,7 @@ def def_xas_abworkflow( list1d_alignangle, list1d_scalingangle, float_onset, lis
     #--------------------------------------------------[alignscaling]
  
     str_abname = def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1])
-    str_jsonfile = 'xas.'.str_abname+'.json'
+    str_jsonfile = 'xas.'+str_abname+'.json'
     array1d_xdata = array1d_xdata_origin
     array2d_ydata = array2d_ydata_origin
     array1d_xdata_align, array2d_ydata_scaling = def_xas_alignscaling( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, list1d_alignangle=list1d_alignangle, list1d_scalingangle=list1d_scalingangle, float_onset=float_onset, str_jsonfile=str_jsonfile )
@@ -535,7 +547,7 @@ def def_xas_mix(list2d_data):
     def_endfunc()
     return array1d_xdata_interp, array2d_ydata_mix
 
-def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn ):
+def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn, log_head=True ):
 #------------------------------[]
 #------------------------------[]
     def_startfunc( locals() )
@@ -544,8 +556,9 @@ def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn ):
     list_ydatas = []
 
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
-        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter= ' ', skipinitialspace=True )
-        list1d_line = next(obj_datreader)
+        obj_datreader = csv.reader( filter( lambda row: (row[0]!='#' and not row), obj_datfile ), delimiter= ' ', skipinitialspace=True )
+        if log_head:
+            list1d_line = next(obj_datreader)
         list1d_line = next(obj_datreader)
         if (',' in list1d_line[0]):
             delimiter=','
@@ -554,10 +567,14 @@ def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn ):
     print(json.dumps({'delimiter': delimiter},indent=4))
 
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
-        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
-        list1d_line = next(obj_datreader)
-        str_xheader = list1d_line[int_xcolumn]
-        list1d_yheader = [ list1d_line[i] for i in list1d_ycolumn ]
+        obj_datreader = csv.reader( filter( lambda row: (row[0]!='#' and not row), obj_datfile ), delimiter=delimiter, skipinitialspace=True )
+        if log_head:
+            list1d_line = next(obj_datreader)
+            str_xheader = list1d_line[int_xcolumn]
+            list1d_yheader = [ list1d_line[i] for i in list1d_ycolumn ]
+        else:
+            str_xheader = ''
+            list1d_yheader = [ '' for i in list1d_ycolumn ]
         print(json.dumps({'str_xheader': str_xheader},indent=4))
         print(json.dumps({'list1d_yheader': list1d_yheader}, indent=4))
         for list1d_line in obj_datreader:
@@ -576,7 +593,7 @@ def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn ):
     def_endfunc()
     return str_xheader, list1d_yheader, array1d_xdata, array2d_ydata
 
-def def_abname( alpha, beta )
+def def_abname( alpha, beta ):
     str_abname = 'a'+str(alpha)+'_b'+str(beta)
     return str_abname
 

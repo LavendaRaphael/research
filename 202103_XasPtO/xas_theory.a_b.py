@@ -43,8 +43,9 @@ list2d_angle.append( [  0, 90 ] )
 #----------------------------------[loop]
 list1d_alignangle = [20,90]
 
-#str_outfile = 'xas.a'+str(list1d_scalingangle[0])+'_b'+str(list1d_scalingangle[1])+'.csv'
-str_outfile = 'test.csv'
+str_abname = from_xas_modules.def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1] )
+str_outfile = 'xas.'+str_abname+'.csv'
+#str_outfile = 'test.csv'
 
 for str_workdir in list1d_workdir:
     str_workdir = str_headdir+str_workdir+'vasp_sch/'
