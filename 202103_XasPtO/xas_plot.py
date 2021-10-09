@@ -1,12 +1,8 @@
 #!/bin/env python
 from from_xas_modules import *
 import os
-import numpy
-import json
 import matplotlib.pyplot as plt
 import matplotlib
-
-print(matplotlib.matplotlib_fname())
 
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
