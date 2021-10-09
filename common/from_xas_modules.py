@@ -97,6 +97,7 @@ def def_xas_atom_alignscaling(float_align, float_scaling, float_finalenergy_1):
     #----------------------------------------------[tm]
     list2d_tm_data = def_xas_tm_extract()
     list2d_tm_data_alignscaling = []
+    # todo
     for list1d_tm_data in list2d_tm_data:
         array1d_tm_xdata_align = list1d_tm_data[0] + float_sft
         array2d_tm_ydata_scaling = list1d_tm_data[1] * float_scaling
@@ -112,41 +113,30 @@ def def_xas_tm_extract( str_datfile='MYCARXAS' ):
     delimiter = ' '
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
         obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
-        int_nband = 0
+        int_nb = 0
+        int_nk = 0
         for list1d_line in obj_datreader:
             if (list1d_line): break
+        int_nk += 1
         for list1d_line in obj_datreader:
             if (not list1d_line): break
-            int_nband += 1
-    int_nband += 1
-    def_print_paras( locals(), ['int_nband'] )
+            int_nb += 1
+    int_nb += 1
+    def_print_paras( locals(), ['int_nk','int_nb'] )
+    array2d_tm_kb = numpy.empty( shape=(int_nb*int_nk), dtype= numpy.int8 )
+
+    _, _, array1d_tm_xdata, array2d_tm_ydata = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1,2,3], log_head=False)
     
-    list2d_data = []
-    array1d_xdata = numpy.empty( shape=(int_nband) )
-    array2d_ydata = numpy.empty( shape=(int_nband, 3) )
+    _, _, _, array2d_tm_kb[:,1] = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[7], log_head=False)
 
-    with open( str_datfile, 'r', newline='' ) as obj_datfile:
-        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
-        for list1d_line in obj_datreader:
-            if (not list1d_line): continue
-            int_i = 0
-            array1d_xdata[ int_i ] = list1d_line[0]
-            array2d_ydata[ int_i ] = numpy.array( list1d_line[1:4] )
-            for list1d_line in obj_datreader:
-                if (not list1d_line): break
-                int_i += 1
-                array1d_xdata[ int_i ] = list1d_line[0]
-                array2d_ydata[ int_i ] = numpy.array( list1d_line[1:4] )
+    int_i = 0
+    for int_k in range(int_nk):
+        for int_b in range(int_nk):
+            array2d_tm_kb[ int_i, 0 ] = int_k + 1
             int_i += 1
-            if (int_i != int_nband):
-                raise RuntimeError(f'int_i {int_i} != int_nband {int_nband}')
-            list2d_data.append( [array1d_xdata.copy(), array2d_ydata.copy()] )
 
-    int_len2ddata = len(list2d_data)
-    def_print_paras( locals(), ['int_len2ddata'] )
- 
     def_endfunc()
-    return list2d_data
+    return array1d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
 
 def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 #----------------------------------------------[]
