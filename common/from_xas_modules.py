@@ -13,7 +13,7 @@ import sys
 import inspect
 import math
 import os
-
+'''
 def def_xas_findtm( array1d_xdata, array1d_ydata, float_onset, float_xwidth=0.5, int_ ):
     def_startfunc( locals(), ['array1d_xdata', 'array1d_ydata'] )
 
@@ -26,13 +26,7 @@ def def_xas_findtm( array1d_xdata, array1d_ydata, float_onset, float_xwidth=0.5,
         if ( float_y < float_yheight ): continue
         list1d_band.append( [int_i+1, float_x, float_y] )
     print( json.dump( [] ) )
-
-def def_xas
-    for int_k in range(1):
-        int_k += 1
-        str_datfile = 'xas_tm.a20_b90.K'+str(int_k)+'.csv'
-        _, _, array1d_xdata, array2d_ydata = from_xas_modules.def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1] )
-
+'''
 def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_scaling=5.0):
 #----------------------------------------------[]
 #----------------------------------------------[]
@@ -56,28 +50,27 @@ def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_
         str_chdir = list1d_atom[0]
         os.chdir(str_chdir)
         print(os.getcwd())
-        #----------------------------------------------[extract]
-        str_xheader, array1d_xdata_align, array2d_ydata_scaling, list2d_tm_data_alignscaling = def_xas_atom_alignscaling( float_align=float_align, float_scaling=float_scaling, float_finalenergy_1=float_finalenergy_1 )
-
+        #----------------------------------------------[alignscaling]
+        array1d_xdata_align, array2d_ydata_scaling, array1d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_xas_atom_alignscaling( float_align=float_align, float_scaling=float_scaling, float_finalenergy_1=float_finalenergy_1 )
+        #----------------------------------------------[
         array2d_ydata = array2d_ydata_scaling
         list1d_yheader, array2d_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
 
+        str_xheader=['E(eV)']
         array1d_xdata = array1d_xdata_align
         array2d_ydata = array2d_ydata_alphabeta
         str_outfile = 'xas.'+str_abname+'.csv'
         def_xas_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
+        #----------------------------------------------[
+        array2d_ydata = array2d_tm_ydata_scaling
+        list1d_yheader, array2d_tm_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
 
-        int_i = 1
-        for list1d_tm_data_alignscaling in list2d_tm_data_alignscaling:
-            array1d_tm_xdata_align, array2d_tm_ydata_scaling = list1d_tm_data_alignscaling
-            array2d_ydata = array2d_tm_ydata_scaling
-            list1d_yheader, array2d_tm_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
-
-            array1d_xdata = array1d_tm_xdata_align
-            array2d_ydata = array2d_tm_ydata_alphabeta * float_tm_scaling
-            str_outfile = 'xas_tm.'+str_abname+'.K'+str(int_i)+'.csv'
-            int_i += 1
-            def_xas_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
+        array1d_xdata = array1d_tm_xdata_align
+        array2d_ydata = array2d_tm_ydata_alphabeta * float_tm_scaling
+        int_i=1
+        str_outfile = 'xas_tm.'+str_abname+'.K'+str(int_i)+'.csv'
+        int_i += 1
+        def_xas_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
 
         os.chdir('..')
 
@@ -87,7 +80,7 @@ def def_xas_atom_alignscaling(float_align, float_scaling, float_finalenergy_1):
     def_startfunc( locals() )
 
     #----------------------------------------------[extract]
-    str_xheader, _, array1d_xdata, array2d_ydata = def_vasp_outcar2xas()
+    _, _, array1d_xdata, array2d_ydata = def_vasp_outcar2xas()
     #----------------------------------------------[alignscaling]
     float_finalenergy = def_vasp_finalenergy()
     float_sft = float_finalenergy-float_finalenergy_1
@@ -95,48 +88,42 @@ def def_xas_atom_alignscaling(float_align, float_scaling, float_finalenergy_1):
     array1d_xdata_align = array1d_xdata + float_sft
     array2d_ydata_scaling = array2d_ydata * float_scaling
     #----------------------------------------------[tm]
-    list2d_tm_data = def_xas_tm_extract()
-    list2d_tm_data_alignscaling = []
-    # todo
-    for list1d_tm_data in list2d_tm_data:
-        array1d_tm_xdata_align = list1d_tm_data[0] + float_sft
-        array2d_tm_ydata_scaling = list1d_tm_data[1] * float_scaling
-        list2d_tm_data_alignscaling.append( [ array1d_tm_xdata_align, array2d_tm_ydata_scaling] )
+    array1d_tm_xdata, array2d_tm_ydata, array2d_tm_kb = def_xas_tm_extract()
+    array1d_tm_xdata_align = array1d_tm_xdata + float_sft
+    array2d_tm_ydata_scaling = array2d_tm_ydata * float_scaling
 
-    return str_xheader, array1d_xdata_align, array2d_ydata_scaling, list2d_tm_data_alignscaling
+    return array1d_xdata_align, array2d_ydata_scaling, array1d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb
 
 def def_xas_tm_extract( str_datfile='MYCARXAS' ):
 #------------------------------[]
 #------------------------------[]
     def_startfunc( locals() )
 
-    delimiter = ' '
-    with open( str_datfile, 'r', newline='' ) as obj_datfile:
-        obj_datreader = csv.reader( filter( lambda row: row[0]!='#', obj_datfile ), delimiter=delimiter, skipinitialspace=True )
-        int_nb = 0
-        int_nk = 0
-        for list1d_line in obj_datreader:
-            if (list1d_line): break
-        int_nk += 1
-        for list1d_line in obj_datreader:
-            if (not list1d_line): break
-            int_nb += 1
-    int_nb += 1
     def_print_paras( locals(), ['int_nk','int_nb'] )
-    array2d_tm_kb = numpy.empty( shape=(int_nb*int_nk), dtype= numpy.int8 )
-
-    _, _, array1d_tm_xdata, array2d_tm_ydata = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1,2,3], log_head=False)
     
-    _, _, _, array2d_tm_kb[:,1] = def_xas_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[7], log_head=False)
+    list1d_column = [0]
+    str_datfile = str_datfile
+    _, array2d_tm_xdata = def_xas_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False )
+    
+    list1d_column = [1,2,3]
+    str_datfile = str_datfile
+    _, array2d_tm_ydata = def_xas_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False )
 
-    int_i = 0
+    list1d_column = [7]
+    str_datfile = str_datfile
+    _, array2d_tm_band = def_xas_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False )
+
+    int_lenline = numpy.shape( array2d_tm_band )[0]
+    int_nb = numpy.amax( array2d_tm_band )
+    int_nk = int_lenline//int_nb
+    def_print_paras( locals(), ['int_lenline','int_nb','int_nk'] )
+    array2d_tm_kb = numpy.empty( shape=(int_lenline, 2), dtype= numpy.int8 )
+    array2d_tm_kb[:,1:2] = array2d_tm_band
     for int_k in range(int_nk):
-        for int_b in range(int_nk):
-            array2d_tm_kb[ int_i, 0 ] = int_k + 1
-            int_i += 1
+        array2d_tm_kb[ int_nb*int_k:int_nb*(int_k+1) ,1] = int_k+1
 
     def_endfunc()
-    return array1d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
+    return array2d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
 
 def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 #----------------------------------------------[]
@@ -173,26 +160,6 @@ def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 
     array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
     def_xas_writedata( array1d_xdata=array1d_xdata_interp, array2d_ydata=array2d_ydata, str_xheader='E(eV)', list1d_yheader=['sigma_xyfit'], str_outfile=str_outfile)
-
-class NumpyEncoder(json.JSONEncoder):
-#----------------------------------------------[]
-# https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
-#----------------------------------------------[]
-    """ Special json encoder for numpy types """
-    def default(self, obj):
-        if isinstance(obj, numpy.integer):
-            return int(obj)
-        elif isinstance(obj, numpy.floating):
-            return float(obj)
-        elif isinstance(obj, numpy.ndarray):
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
-
-def def_print_paras( dict_localpara, list_paraname ):
-    dict_paraprint = {}
-    for str_paraname in list_paraname:
-        dict_paraprint[ str_paraname ] = dict_localpara[ str_paraname ]
-    print(json.dumps( dict_paraprint, indent=4, cls=NumpyEncoder ))
 
 class class_structures(object):
 
@@ -387,17 +354,23 @@ def def_vasp_outcar2xas():
             for str_line in obj_datfile:
                 if (not str_line.strip()): break
                 obj_tmp.write( str_line )
+
+    list1d_column = [0]
     str_datfile = str_tempfile
-    int_xcolumn = 0
-    list1d_ycolumn = [1,2,3]
-    str_xheader, list1d_yheader, array1d_xdata, array2d_ydata = def_xas_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list1d_ycolumn=list1d_ycolumn )
-    for int_i in range(len(array1d_xdata)):
-        array2d_ydata[int_i,:] *= array1d_xdata[int_i]
+    list1d_xheader, array2d_xdata = def_xas_extract( str_datfile=str_datfile, list1d_column=list1d_column )
+
+    list1d_column = [1,2,3]
+    list1d_yheader, array2d_ydata = def_xas_extract( str_datfile=str_datfile, list1d_column=list1d_column )
+
+    int_shapexdata = numpy.shape(array2d_xdata)[0]
+    def_print_paras( locals(),['int_shapexdata'] )
+    for int_i in range(int_shapexdata):
+        array2d_ydata[int_i,:] *= array2d_xdata[int_i][0]
 
     os.remove( str_tempfile )
 
     def_endfunc()
-    return str_xheader, list1d_yheader, array1d_xdata, array2d_ydata
+    return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata
 
 def def_xas_sft( array1d_xdata, float_sft):
     def_startfunc( locals(), ['array1d_xdata'] )
@@ -407,14 +380,24 @@ def def_xas_sft( array1d_xdata, float_sft):
     def_endfunc()
     return array1d_xdata_sft
 
-def def_xas_writedata( array1d_xdata, array2d_ydata, str_xheader, list1d_yheader, str_outfile):
-    def_startfunc( locals(), ['array1d_xdata', 'array2d_ydata'] )
+def def_xas_writedata( list2d_header, list3d_data, str_outfile):
+    def_startfunc( locals(), ['list3d_data'] )
 
     with open( str_outfile, 'w', newline='' ) as obj_outfile:
         obj_outwriter = csv.writer( obj_outfile, delimiter=',' )
-        obj_outwriter.writerow( [str_xheader] + list1d_yheader )
-        for int_i in range(len( array1d_xdata )):
-            obj_outwriter.writerow( [ array1d_xdata[int_i] ] + array2d_ydata[int_i].tolist() )
+        # header
+        list1d_header = []
+        for list1d_temp in list2d_header: 
+            list1d_header.extend( list1d_temp )
+        obj_outwriter.writerow( list1d_header )
+        
+        int_lenline = numpy.shape( list3d_data[0] )[0]
+        def_print_paras( locals(),['int_lenline'] )
+        for int_i in range(int_lenline):
+            list1d_data = []
+            for array2d_temp in list3d_data:
+                list1d_data.extend( array2d_temp[int_i]  ) 
+            obj_outwriter.writerow( list1d_data )
 
     def_endfunc()
     return
@@ -516,7 +499,6 @@ def def_xas_mix(list2d_data):
     for list_temp in dict_args['list2d_data']:
         del list_temp[0:2]
     def_startfunc( dict_args )
-    
 
     list2d_xydata = []
     for list1d_data in list2d_data:
@@ -537,13 +519,10 @@ def def_xas_mix(list2d_data):
     def_endfunc()
     return array1d_xdata_interp, array2d_ydata_mix
 
-def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn, log_head=True ):
+def def_xas_extract( str_datfile, list1d_column, log_head=True ):
 #------------------------------[]
 #------------------------------[]
     def_startfunc( locals() )
-    
-    list_xdata = []
-    list_ydatas = []
 
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
         obj_datreader = csv.reader( filter( lambda row: (row[0]!='#' and not row), obj_datfile ), delimiter= ' ', skipinitialspace=True )
@@ -554,38 +533,56 @@ def def_xas_extract( str_datfile, int_xcolumn, list1d_ycolumn, log_head=True ):
             delimiter=','
         else:
             delimiter=' '
-    print(json.dumps({'delimiter': delimiter},indent=4))
+    def_print_paras( locals(),['delimiter'] )
 
+    list1d_header = []
+    list2d_data = []
     with open( str_datfile, 'r', newline='' ) as obj_datfile:
         obj_datreader = csv.reader( filter( lambda row: (row[0]!='#' and not row), obj_datfile ), delimiter=delimiter, skipinitialspace=True )
         if log_head:
             list1d_line = next(obj_datreader)
-            str_xheader = list1d_line[int_xcolumn]
-            list1d_yheader = [ list1d_line[i] for i in list1d_ycolumn ]
+            list1d_header = [ list1d_line[i] for i in list1d_column ]
         else:
-            str_xheader = ''
-            list1d_yheader = [ '' for i in list1d_ycolumn ]
-        print(json.dumps({'str_xheader': str_xheader},indent=4))
-        print(json.dumps({'list1d_yheader': list1d_yheader}, indent=4))
-        for list1d_line in obj_datreader:
-            if ( not list1d_line[ int_xcolumn ] ): continue
-            list_xdata.append( float(list1d_line[int_xcolumn]) )
-            list_temp = []
-            for int_i in list1d_ycolumn:
-                list_temp.append( float(list1d_line[int_i]) )
-            list_ydatas.append( list_temp )
-    array1d_xdata = numpy.array( list_xdata )
-    array2d_ydata = numpy.array( list_ydatas )
+            list1d_header = [ '' for i in list1d_column ]
+        def_print_paras( locals(),['list1d_yheader'] )
 
-    int_lendata = len(list_xdata)
-    print(json.dumps({ 'int_lendata': int_lendata },indent=4))
+        for list1d_line in obj_datreader:
+            if ( not list1d_line[ list1d_column ] ): continue
+            list_temp = []
+            for int_i in list1d_column:
+                list_temp.append( float(list1d_line[int_i]) )
+            list2d_data.append( list_temp )
+    array2d_data = numpy.array( list2d_data )
+
+    tup_shapedata = numpy.shape(array2d_data)
+    def_print_paras( locals(),['tup_shapedata'] )
  
     def_endfunc()
-    return str_xheader, list1d_yheader, array1d_xdata, array2d_ydata
+    return list1d_header, array2d_data
 
 def def_abname( alpha, beta ):
     str_abname = 'a'+str(alpha)+'_b'+str(beta)
     return str_abname
+
+def def_print_paras( dict_localpara, list_paraname ):
+    dict_paraprint = {}
+    for str_paraname in list_paraname:
+        dict_paraprint[ str_paraname ] = dict_localpara[ str_paraname ]
+    print(json.dumps( dict_paraprint, indent=4, cls=NumpyEncoder ))
+
+class NumpyEncoder(json.JSONEncoder):
+#----------------------------------------------[]
+# https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
+#----------------------------------------------[]
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, numpy.integer):
+            return int(obj)
+        elif isinstance(obj, numpy.floating):
+            return float(obj)
+        elif isinstance(obj, numpy.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 def def_startfunc( dict_args={}, list1d_del=[] ):
     this_function_name = inspect.currentframe().f_back.f_code.co_name
