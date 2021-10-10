@@ -31,7 +31,7 @@ def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_
 #----------------------------------------------[]
 #----------------------------------------------[]
     def_startfunc( locals() )
-
+#mark
     dict_jsonfile={}
     with open(str_jsonfile) as obj_jsonfile:
         dict_jsonfile = json.load( fp=obj_jsonfile )
@@ -124,7 +124,7 @@ def def_xas_tm_extract( str_datfile='MYCARXAS' ):
 
     def_endfunc()
     return array2d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
-
+#mark
 def def_xas_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 #----------------------------------------------[]
 # list2d_alpha = []
@@ -246,7 +246,7 @@ def def_xas_abworkflow( list1d_alignangle, list1d_scalingangle, float_onset, lis
     array2d_ydata = array2d_ydata_alphabeta
     def_xas_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
 
-    def_endfunc()
+    def_endfunc() 
     return
 
 def def_xas_alignscaling( array1d_xdata, array2d_ydata, list1d_alignangle, list1d_scalingangle, float_onset,str_jsonfile, tuple_xrange = (527.0, 540.0), float_scalingarea = 20.0 ):
