@@ -14,9 +14,10 @@ import inspect
 import math
 import os
 
-def def_xas_findtm( array2d_xdata, array2d_ydata, array2d_kb, float_onset, int_ntm=2, float_xwidth=0.5, str_jsonfile='xas.findtm.json' ):
+def def_xas_findtm( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
 
+    str_jsonfile = 'xas_tm.'+str_abname+'.findtm.json'
     list1d_index_xwidth = []
     for int_i in range( numpy.shape(array2d_xdata)[0] ):
         float_x = array2d_xdata[ int_i ][0]
