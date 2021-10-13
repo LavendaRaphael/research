@@ -31,7 +31,7 @@ def def_xas_kb_chgrdf( int_k, int_b ):
     def_endfunc()
     return
 
-def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.07 ):
+def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.05 ):
     def_startfunc( locals() )
 
     obj_chgcar = vasp.VaspChargeDensity(filename=str_chgfile)
