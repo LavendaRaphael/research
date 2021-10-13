@@ -13,7 +13,6 @@ import copy
 import inspect
 import math
 import os
-import math
 
 def def_xas_kb_chgrdf( int_k, int_b ):
     def_startfunc( locals() )
