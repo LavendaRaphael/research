@@ -5,6 +5,7 @@
 #===============================================<<
 import csv
 import json
+from ase.calculators import vasp
 import ase.io
 import scipy.signal
 import numpy
@@ -17,16 +18,24 @@ import math
 def def_xas_kb_chgrdf( int_k, int_b ):
     def_startfunc( locals() )
 
-    str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')
+    str_chgfile = 'WFN_SQUARED_B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.vasp'
     def_print_paras( locals(), ['str_chgfile'] )
 
-    def_xas_chgrdf( str_chgfile=str_chgfile)
-#mark
+    array1d_r, array1d_rdf = def_xas_chgrdf( str_chgfile=str_chgfile)
 
-def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.04 ):
+    def_xas_writedata( 
+            list2d_header = [ ['r(ang)'], ['chgrdf'] ],
+            list3d_data = [ array1d_r, array1d_rdf ],
+            str_outfile = 'chgrdf.B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.csv'
+            )
+
+    def_endfunc()
+    return
+
+def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.07 ):
     def_startfunc( locals() )
 
-    obj_chgcar = ase.calculators.vasp.VaspChargeDensity(filename=str_chgfile)
+    obj_chgcar = vasp.VaspChargeDensity(filename=str_chgfile)
     obj_atoms = obj_chgcar.atoms[0]
     array3d_chg = obj_chgcar.chg[0]
 
@@ -46,7 +55,7 @@ def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.04 ):
     array1d_cell = obj_atoms.cell.cellpar()[0:3]
     array1d_gridpara = array1d_cell/array1d_cell_grid
     array1d_atom1pos_grid = array1d_atom1pos/array1d_gridpara
-    def_print_paras( locals(), ['array1d_atom1pos', 'array1d_cell'] )
+    def_print_paras( locals(), ['array1d_atom1pos','array1d_gridpara', 'array1d_cell'] )
 
     int_nslice = int(float_r0 // float_slice)+1
     array1d_rdf = numpy.zeros( shape=(int_nslice) )
@@ -480,6 +489,9 @@ def def_xas_writedata( list2d_header, list3d_data, str_outfile):
         
         int_lenline = numpy.shape( list3d_data[0] )[0]
         def_print_paras( locals(),['int_lenline'] )
+        for int_i in range(len(list3d_data)):
+            if ( list3d_data[int_i].ndim == 2 ): continue
+            list3d_data[int_i] = list3d_data[int_i].reshape(int_lenline,1)
         for int_i in range(int_lenline):
             list1d_data = []
             for array2d_temp in list3d_data:
@@ -667,7 +679,7 @@ class NumpyEncoder(json.JSONEncoder):
         elif isinstance(obj, numpy.floating):
             return float(obj)
         elif isinstance(obj, numpy.ndarray):
-            return obj.tolist()ll
+            return obj.tolist()
         elif isinstance(obj, type):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
