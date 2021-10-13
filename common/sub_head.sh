@@ -9,6 +9,7 @@ echo "jobnodes=$jobnodes"
 jobppn=$[($ncore/$jobnodes)+($ncore%$jobnodes>0)]
 echo "jobppn=$jobppn"
 
+str_nodefile=${jobname}.nodelist
 #========================================[mycluster]
 if [ "$mycluster" = "qsub" ]; then
     cat > ${jobname}.sh <<eof
@@ -19,7 +20,7 @@ if [ "$mycluster" = "qsub" ]; then
 #PBS -q ${jobqueue}
 #PBS -j oe
 cd \$PBS_O_WORKDIR
-cat \$PBS_NODEFILE > nodelist.log
+cat \$PBS_NODEFILE > ${str_nodefile}
 eof
 
 elif [ "$mycluster" = "sbatch" ]; then
@@ -30,7 +31,7 @@ elif [ "$mycluster" = "sbatch" ]; then
 #SBATCH -J ${jobname}
 #SBATCH -p ${jobqueue}
 #SBATCH -o %x.oe%j
-cat \$SLURM_JOB_NODELIST > nodelist.log
+cat \$SLURM_JOB_NODELIST > ${str_nodefile}
 eof
 
 elif [ "$mycluster" = "bsub" ]; then
@@ -51,7 +52,7 @@ cat >>${jobname}.sh<<eof
 source ${homedir}codes/common/environment.sh
 set -euo pipefail
 SECONDS=0
-sort -u nodelist.log > tmp && mv tmp nodelist.log
+sort -u ${str_nodefile} > tmp && mv tmp ${str_nodefile}
 
 eof
 

@@ -9,7 +9,7 @@ source ${homedir}codes/group/common/sub_head.sh
 
 #==========================================================[main script]
 cat >> ${jobname}.sh<<eof
-mpirun ${software_bin}intelmpi_test.x > nodetest.log
+mpirun ${software_bin}intelmpi_test.x
 
 echo "TotalTime \$((\${SECONDS} / 60)) m \$((\${SECONDS} % 60)) s."
 eof
