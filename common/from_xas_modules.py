@@ -1,7 +1,7 @@
 #!/bin/env python
 #===============================================[README]
 # @FeifeiTian
-# 2021.09.29
+# 2021.10.13
 #===============================================<<
 import csv
 import json
@@ -9,10 +9,84 @@ import ase.io
 import scipy.signal
 import numpy
 import copy
-import sys
 import inspect
 import math
 import os
+import math
+
+def def_xas_kb_chgrdf( int_k, int_b ):
+    def_startfunc( locals() )
+
+    str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')
+    def_print_paras( locals(), ['str_chgfile'] )
+
+    def_xas_chgrdf( str_chgfile=str_chgfile)
+#mark
+
+def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.04 ):
+    def_startfunc( locals() )
+
+    obj_chgcar = ase.calculators.vasp.VaspChargeDensity(filename=str_chgfile)
+    obj_atoms = obj_chgcar.atoms[0]
+    array3d_chg = obj_chgcar.chg[0]
+
+    float_chg_sum=numpy.sum(array3d_chg)
+    array1d_cell_grid=numpy.array(numpy.shape(array3d_chg))
+    array1d_cell_gridhalf= array1d_cell_grid / 2
+    int_ngrid = 1
+    for int_i in array1d_cell_grid:
+        int_ngrid *= int_i
+    float_volume=obj_atoms.get_volume()
+    float_vol1grid = float_volume/int_ngrid
+    float_chgsum_t_vol1grid = float_chg_sum * float_vol1grid
+    float_chgsum_t_volume = float_chg_sum * float_volume
+    def_print_paras( locals(), ['array1d_cell_grid', 'float_volume', 'float_chgsum_t_vol1grid', 'float_chgsum_t_volume'] )
+
+    array1d_atom1pos = obj_atoms.get_positions()[0]
+    array1d_cell = obj_atoms.cell.cellpar()[0:3]
+    array1d_gridpara = array1d_cell/array1d_cell_grid
+    array1d_atom1pos_grid = array1d_atom1pos/array1d_gridpara
+    def_print_paras( locals(), ['array1d_atom1pos', 'array1d_cell'] )
+
+    int_nslice = int(float_r0 // float_slice)+1
+    array1d_rdf = numpy.zeros( shape=(int_nslice) )
+    float_r0_new = float_slice * int_nslice
+    array1d_r0_grid = float_r0_new/array1d_gridpara
+    array1d_sort = numpy.argsort( array1d_cell_grid )
+    def_print_paras( locals(), ['int_nslice','float_r0_new','array1d_sort'] )
+
+    int_sort0 = array1d_sort[0]
+    int_sort1 = array1d_sort[1]
+    int_sort2 = array1d_sort[2]
+    array1d_dist_grid = numpy.empty( shape=(3) )
+    array1d_grid = numpy.empty( shape=(3), dtype=int )
+
+    for array1d_grid[ int_sort2 ] in range( array1d_cell_grid[ int_sort2 ] ):
+        array1d_dist_grid[ int_sort2 ] = ( array1d_grid[ int_sort2 ] - array1d_atom1pos_grid[ int_sort2 ] ) % array1d_cell_gridhalf[ int_sort2 ]
+        if (array1d_dist_grid[ int_sort2 ] > array1d_r0_grid[ int_sort2 ] ): continue
+        for array1d_grid[ int_sort1 ] in range( array1d_cell_grid[ int_sort1 ] ):
+            array1d_dist_grid[ int_sort1 ] = ( array1d_grid[ int_sort1 ] - array1d_atom1pos_grid[ int_sort1 ] ) % array1d_cell_gridhalf[ int_sort1 ]
+            if (array1d_dist_grid[ int_sort1 ] > array1d_r0_grid[ int_sort1 ]): continue
+            for array1d_grid[ int_sort0 ] in range( array1d_cell_grid[ int_sort0 ] ):
+                array1d_dist_grid[ int_sort0 ] = ( array1d_grid[ int_sort0 ] - array1d_atom1pos_grid[ int_sort0 ] ) % array1d_cell_gridhalf[ int_sort0 ]
+                if (array1d_dist_grid[ int_sort0 ] > array1d_r0_grid[ int_sort0 ]): continue
+                array1d_dist = array1d_dist_grid * array1d_gridpara
+                float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
+                if (float_dist >= float_r0_new): continue
+                int_temp = int( float_dist // float_slice)
+                array1d_rdf[ int_temp ] += array3d_chg[ array1d_grid[0], array1d_grid[1], array1d_grid[2] ]
+
+    for int_i in range( int_nslice ):
+        array1d_rdf[int_i] /= 3*int_i**2 + 3*int_i + 1
+    array1d_rdf /= 4/3 * math.pi * float_slice**3
+    float_rho0 = float_chg_sum/float_volume
+    array1d_rdf /= float_rho0
+
+    array1d_r = numpy.linspace( 0, float_r0_new, num=int_nslice, endpoint=False )
+    array1d_r += float_slice/2
+
+    def_endfunc()
+    return array1d_r, array1d_rdf
 
 def def_xas_findtm( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
