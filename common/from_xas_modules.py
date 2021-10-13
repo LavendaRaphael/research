@@ -589,11 +589,11 @@ class NumpyEncoder(json.JSONEncoder):
     """ Special json encoder for numpy types """
     def default(self, obj):
         if isinstance(obj, numpy.integer):
-            return ['numpy.integer', int(obj)]
+            return int(obj)
         elif isinstance(obj, numpy.floating):
-            return ['numpy.integer', float(obj)]
+            return float(obj)
         elif isinstance(obj, numpy.ndarray):
-            return ['numpy.ndarray', obj.tolist()]
+            return obj.tolist()ll
         elif isinstance(obj, type):
             return str(obj)
         return json.JSONEncoder.default(self, obj)
