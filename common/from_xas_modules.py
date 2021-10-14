@@ -14,13 +14,50 @@ import inspect
 import math
 import os
 
-def def_xas_kb_chgrdf( int_k, int_b ):
+def def_atom_findpeak( list1d_angle ):
     def_startfunc( locals() )
 
-    str_chgfile = 'WFN_SQUARED_B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.vasp'
+    _, _, array2d_xdata, array2d_ydata = def_vasp_outcar2xas()
+
+    float_eigcore = -514.703961144
+
+    _, array2d_ydata_alphabeta = def_xas_alphabeta( 
+        list2d_angle = [list1d_angle], 
+        array2d_ydata = array2d_ydata 
+        )
+    dict_peaks = def_xas_findpeaks(
+        array1d_xdata=array2d_xdata, 
+        array1d_ydata=array2d_ydata_alphabeta
+        )
+    array1d_energy_pcore = dict_peaks[ 'E(eV)' ] + float_eigcore
+    def_print_paras( locals(), ['array1d_energy_pcore'])
+
+    def_endfunc()
+
+def def_chgrdf_workflow():
+    def_startfunc( locals() )
+
+    array1d_r, array1d_rdf = def_chgrdf()
+
+    def_xas_writedata( 
+            list2d_header = [ ['r(ang)'], ['chgrdf'] ],
+            list3d_data = [ array1d_r, array1d_rdf ],
+            str_outfile = 'chgrdf.csv'
+            )
+
+    def_endfunc()
+    return
+
+def def_chgrdf_bk_workflow( int_k, int_b ):
+    def_startfunc( locals() )
+
+    #str_chgfile = 'WFN_SQUARED_B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.vasp'
+    #str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')
+    str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')+'.vasp'
+
     def_print_paras( locals(), ['str_chgfile'] )
 
-    array1d_r, array1d_rdf = def_xas_chgrdf( str_chgfile=str_chgfile)
+    array1d_r, array1d_rdf = def_chgrdf( str_chgfile=str_chgfile)
 
     def_xas_writedata( 
             list2d_header = [ ['r(ang)'], ['chgrdf'] ],
@@ -31,64 +68,79 @@ def def_xas_kb_chgrdf( int_k, int_b ):
     def_endfunc()
     return
 
-def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.05 ):
+def def_chgrdf( 
+        str_chgfile='PARCHG', 
+        float_r0=3, 
+        float_slice = 0.1 
+        ):
     def_startfunc( locals() )
 
     obj_chgcar = vasp.VaspChargeDensity(filename=str_chgfile)
     obj_atoms = obj_chgcar.atoms[0]
-    array3d_chg = obj_chgcar.chg[0]
+    array3d_chgdens = obj_chgcar.chg[0]
 
-    float_chg_sum=numpy.sum(array3d_chg)
-    array1d_cell_grid=numpy.array(numpy.shape(array3d_chg))
-    array1d_cell_gridhalf= array1d_cell_grid / 2
+    array1d_cell_ngrid = numpy.array(numpy.shape(array3d_chgdens))
+    array1d_cell_ngridhalf= array1d_cell_ngrid / 2
     int_ngrid = 1
-    for int_i in array1d_cell_grid:
+    for int_i in array1d_cell_ngrid:
         int_ngrid *= int_i
     float_volume=obj_atoms.get_volume()
-    float_vol1grid = float_volume/int_ngrid
-    float_chgsum_t_vol1grid = float_chg_sum * float_vol1grid
-    float_chgsum_t_volume = float_chg_sum * float_volume
-    def_print_paras( locals(), ['array1d_cell_grid', 'float_volume', 'float_chgsum_t_vol1grid', 'float_chgsum_t_volume'] )
+    float_chgsum = numpy.sum(array3d_chgdens) * float_volume / int_ngrid
+    #float_chgsum_t_volume = float_chg_sum * float_volume
+    def_print_paras( locals(), ['array1d_cell_ngrid', 'float_volume', 'float_chgsum'] )
 
-    array1d_atom1pos = obj_atoms.get_positions()[0]
-    array1d_cell = obj_atoms.cell.cellpar()[0:3]
-    array1d_gridpara = array1d_cell/array1d_cell_grid
-    array1d_atom1pos_grid = array1d_atom1pos/array1d_gridpara
-    def_print_paras( locals(), ['array1d_atom1pos','array1d_gridpara', 'array1d_cell'] )
+    array1d_atom1_pos = obj_atoms.get_positions()[0]
+    array1d_cell_paras = obj_atoms.cell.cellpar()[0:3]
+    array1d_grid_paras = array1d_cell_paras/array1d_cell_ngrid
+    array1d_atom1_ngrid = array1d_atom1_pos/array1d_grid_paras
+    def_print_paras( locals(), ['array1d_atom1_pos','array1d_grid_paras', 'array1d_cell_paras','array1d_atom1_ngrid'] )
 
-    int_nslice = int(float_r0 // float_slice)+1
+    int_nslice = int(float_r0 // float_slice) + 1
     array1d_rdf = numpy.zeros( shape=(int_nslice) )
     float_r0_new = float_slice * int_nslice
-    array1d_r0_grid = float_r0_new/array1d_gridpara
-    array1d_sort = numpy.argsort( array1d_cell_grid )
-    def_print_paras( locals(), ['int_nslice','float_r0_new','array1d_sort'] )
+    array1d_r0_ngrid = float_r0_new/array1d_grid_paras
+    def_print_paras( locals(), ['int_nslice','float_r0_new','array1d_r0_ngrid'] )
 
+    array1d_rangel = numpy.ceil(array1d_atom1_ngrid - array1d_r0_ngrid).astype(int)
+    array1d_ranger = numpy.floor(array1d_atom1_ngrid + array1d_r0_ngrid).astype(int)
+    def_print_paras( locals(), ['array1d_rangel','array1d_ranger'] )
+
+    array1d_ngrid = numpy.empty( shape=(3), dtype=int )
+    for array1d_ngrid[0] in range( array1d_rangel[0], array1d_ranger[0] ):
+        print(array1d_ngrid[0])
+        for array1d_ngrid[1] in range( array1d_rangel[1], array1d_ranger[1] ):
+            for array1d_ngrid[2] in range( array1d_rangel[2], array1d_ranger[2] ):
+                array1d_dist = ( array1d_ngrid - array1d_atom1_ngrid ) * array1d_grid_paras
+                float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
+                if (float_dist >= float_r0_new): continue
+                int_temp = int( float_dist // float_slice)
+                array1d_ngrid %= array1d_cell_ngrid
+                array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+    '''
+    array1d_sort = numpy.argsort( array1d_cell_ngrid )
     int_sort0 = array1d_sort[0]
     int_sort1 = array1d_sort[1]
     int_sort2 = array1d_sort[2]
     array1d_dist_grid = numpy.empty( shape=(3) )
     array1d_grid = numpy.empty( shape=(3), dtype=int )
 
-    for array1d_grid[ int_sort2 ] in range( array1d_cell_grid[ int_sort2 ] ):
-        array1d_dist_grid[ int_sort2 ] = ( array1d_grid[ int_sort2 ] - array1d_atom1pos_grid[ int_sort2 ] ) % array1d_cell_gridhalf[ int_sort2 ]
+    for array1d_grid[ int_sort2 ] in range( array1d_cell_ngrid[ int_sort2 ] ):
+        array1d_dist_grid[ int_sort2 ] = ( array1d_grid[ int_sort2 ] - array1d_atom1pos_grid[ int_sort2 ] ) % array1d_cell_ngridhalf[ int_sort2 ]
         if (array1d_dist_grid[ int_sort2 ] > array1d_r0_grid[ int_sort2 ] ): continue
-        for array1d_grid[ int_sort1 ] in range( array1d_cell_grid[ int_sort1 ] ):
-            array1d_dist_grid[ int_sort1 ] = ( array1d_grid[ int_sort1 ] - array1d_atom1pos_grid[ int_sort1 ] ) % array1d_cell_gridhalf[ int_sort1 ]
+        for array1d_grid[ int_sort1 ] in range( array1d_cell_ngrid[ int_sort1 ] ):
+            array1d_dist_grid[ int_sort1 ] = ( array1d_grid[ int_sort1 ] - array1d_atom1pos_grid[ int_sort1 ] ) % array1d_cell_ngridhalf[ int_sort1 ]
             if (array1d_dist_grid[ int_sort1 ] > array1d_r0_grid[ int_sort1 ]): continue
-            for array1d_grid[ int_sort0 ] in range( array1d_cell_grid[ int_sort0 ] ):
-                array1d_dist_grid[ int_sort0 ] = ( array1d_grid[ int_sort0 ] - array1d_atom1pos_grid[ int_sort0 ] ) % array1d_cell_gridhalf[ int_sort0 ]
+            for array1d_grid[ int_sort0 ] in range( array1d_cell_ngrid[ int_sort0 ] ):
+                array1d_dist_grid[ int_sort0 ] = ( array1d_grid[ int_sort0 ] - array1d_atom1pos_grid[ int_sort0 ] ) % array1d_cell_ngridhalf[ int_sort0 ]
                 if (array1d_dist_grid[ int_sort0 ] > array1d_r0_grid[ int_sort0 ]): continue
                 array1d_dist = array1d_dist_grid * array1d_gridpara
                 float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
                 if (float_dist >= float_r0_new): continue
                 int_temp = int( float_dist // float_slice)
                 array1d_rdf[ int_temp ] += array3d_chg[ array1d_grid[0], array1d_grid[1], array1d_grid[2] ]
+    '''
 
-    for int_i in range( int_nslice ):
-        array1d_rdf[int_i] /= 3*int_i**2 + 3*int_i + 1
-    array1d_rdf /= 4/3 * math.pi * float_slice**3
-    float_rho0 = float_chg_sum/float_volume
-    array1d_rdf /= float_rho0
+    array1d_rdf *= float_volume / int_ngrid / float_slice
 
     array1d_r = numpy.linspace( 0, float_r0_new, num=int_nslice, endpoint=False )
     array1d_r += float_slice/2
@@ -96,7 +148,7 @@ def def_xas_chgrdf( str_chgfile, float_r0=2.99, float_slice = 0.05 ):
     def_endfunc()
     return array1d_r, array1d_rdf
 
-def def_xas_findtm( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
+def def_tm_findmax( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
 
     str_jsonfile = 'xas_tm.'+str_abname+'.findtm.json'
@@ -388,6 +440,14 @@ def def_xas_alignscaling( array1d_xdata, array2d_ydata, list1d_alignangle, list1
     return array1d_xdata_align, array2d_ydata_scaling
 
 def def_xas_alphabeta( list2d_angle, array2d_ydata ):
+#----------------------------------------------[]
+# list2d_angle = []
+# list2d_angle.append( [alpha1, beta1] )
+# list2d_angle.append( [alpha2, beta2] )
+# array2d_ydata:
+#   x,y,z
+#   ...
+#----------------------------------------------[]
     def_startfunc( locals(), ['array2d_ydata'] )
 
     int_shape2dydata0 = numpy.shape(array2d_ydata)[0]
@@ -521,32 +581,35 @@ def def_xas_findarea( array1d_xdata, array2d_ydata, tuple_xrange):
     def_endfunc()
     return float_area
 
-def def_xas_findpeaks( array1d_xdata, array2d_ydata, float_relheight = 0.4, float_relprominence = 0.02):
+def def_xas_findpeaks( 
+        array1d_xdata, 
+        array1d_ydata, 
+        float_relheight = 0.4, 
+        float_relprominence = 0.02
+        ):
 #------------------------------[]
 #------------------------------[]
-    def_startfunc( locals(), ['array1d_xdata', 'array2d_ydata'] )
+    def_startfunc( locals(), ['array1d_xdata', 'array1d_ydata'] )
 
-    array_ydata = numpy.reshape( a=array2d_ydata, newshape=-1 )
+    array1d_xdata = numpy.reshape( a=array1d_xdata, newshape=-1 )
+    array1d_ydata = numpy.reshape( a=array1d_ydata, newshape=-1 )
 
-    float_y_max = max(array_ydata)
-    height = float_relheight * float_y_max
+    float_y_max = max(array1d_ydata)
 
-    prominence = float_relprominence * float_y_max
-
-    list1d_peakx_indices, dict_properties = scipy.signal.find_peaks( array_ydata, height = height, prominence=prominence )
+    array1d_peak_indices, dict_properties = scipy.signal.find_peaks( 
+        array1d_ydata, 
+        height = float_relheight * float_y_max, 
+        prominence = float_relprominence * float_y_max
+        )
     
-    list_print = []
-    list_print.append( ['Energy (eV)', 'Intensity/Max','prominences/Max'] )
-    int_count = 0
-    list1d_peakx = []
-    for i in list1d_peakx_indices:
-        list1d_peakx.append( array1d_xdata[i] )
-        list_print.append( [array1d_xdata[i], array_ydata[i]/float_y_max, dict_properties['prominences'][int_count]/float_y_max] )
-        int_count += 1
-    print( json.dumps( obj=list_print, indent=4 ) )
+    dict_peaks = {}
+    dict_peaks[ 'E(eV)' ] = array1d_xdata[ array1d_peak_indices ]
+    dict_peaks[ 'relheight' ] = dict_properties[ 'peak_heights' ] / float_y_max
+    dict_peaks[ 'relprominence' ] = dict_properties[ 'prominences' ] / float_y_max
+    def_print_paras( locals(),['dict_peaks'])
 
     def_endfunc()
-    return list1d_peakx
+    return dict_peaks
 
 def def_xas_interp(list2d_data):
 #------------------------------[]
