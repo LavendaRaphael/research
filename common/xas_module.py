@@ -34,42 +34,35 @@ def def_atom_findpeak( list1d_angle ):
 
     def_endfunc()
 
-def def_chgrdf_workflow():
+def def_chgrdf_workflow( 
+        str_chgfile
+        ):
     def_startfunc( locals() )
 
-    array1d_r, array1d_rdf = def_chgrdf()
-
-    def_xas_writedata( 
-            list2d_header = [ ['r(ang)'], ['chgrdf'] ],
-            list3d_data = [ array1d_r, array1d_rdf ],
-            str_outfile = 'chgrdf.csv'
-            )
-
-    def_endfunc()
-    return
-
-def def_chgrdf_bk_workflow( int_k, int_b ):
-    def_startfunc( locals() )
-
-    #str_chgfile = 'WFN_SQUARED_B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.vasp'
-    #str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')
-    str_chgfile = 'PARCHG.'+format( int_b, '04d' )+'.'+format(int_k,'04d')+'.vasp'
-
-    def_print_paras( locals(), ['str_chgfile'] )
+    if ( def_has_numbers(str_chgfile) ):
+        str_outfile = 'chgrdf.csv'
+    elif ( str_chgfile[:6] == 'PARCHG' ):
+        str_outfile = 'chgrdf.B' + str_chgfile[ 7:11] + '_K' + str_chgfile[12:16] + '.csv'
+    elif ( str_chgfile[:3] == 'WFN'):
+        str_outfile = 'chgrdf.B' + str_chgfile[13:17] + '_K' + str_chgfile[19:23] + '.csv'
+    def_print_paras( locals(), ['str_outfile'] )
 
     array1d_r, array1d_rdf = def_chgrdf( str_chgfile=str_chgfile)
 
     def_xas_writedata( 
             list2d_header = [ ['r(ang)'], ['chgrdf'] ],
             list3d_data = [ array1d_r, array1d_rdf ],
-            str_outfile = 'chgrdf.B'+format( int_b, '04d' )+'_K'+format(int_k,'04d')+'.csv'
+            str_outfile = str_outfile
             )
 
     def_endfunc()
     return
 
+def def_has_numbers(inputString):
+    return any(char.isdigit() for char in inputString)
+
 def def_chgrdf( 
-        str_chgfile='PARCHG', 
+        str_chgfile, 
         float_r0=3, 
         float_slice = 0.05
         ):
@@ -80,13 +73,16 @@ def def_chgrdf(
     array3d_chgdens = obj_chgcar.chg[0]
 
     array1d_cell_ngrid = numpy.array(numpy.shape(array3d_chgdens))
-    array1d_cell_ngridhalf= array1d_cell_ngrid / 2
     int_ngrid = 1
     for int_i in array1d_cell_ngrid:
         int_ngrid *= int_i
     float_volume=obj_atoms.get_volume()
-    float_chgsum = numpy.sum(array3d_chgdens) * float_volume / int_ngrid
-    #float_chgsum_t_volume = float_chg_sum * float_volume
+    if ( 'CHG' in str_chgfile ):
+        float_chgsum = numpy.sum(array3d_chgdens) * float_volume / int_ngrid
+    elif ( 'WFN' in str_chgfile ):
+        float_chgsum = numpy.sum(array3d_chgdens) * float_volume * 2
+    else:
+        raise ValueError('str_chgfile not clear!')
     def_print_paras( locals(), ['array1d_cell_ngrid', 'float_volume', 'float_chgsum'] )
 
     array1d_atom1_pos = obj_atoms.get_positions()[0]
@@ -116,31 +112,11 @@ def def_chgrdf(
                 int_temp = int( float_dist // float_slice)
                 array1d_ngrid %= array1d_cell_ngrid
                 array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
-    '''
-    array1d_sort = numpy.argsort( array1d_cell_ngrid )
-    int_sort0 = array1d_sort[0]
-    int_sort1 = array1d_sort[1]
-    int_sort2 = array1d_sort[2]
-    array1d_dist_grid = numpy.empty( shape=(3) )
-    array1d_grid = numpy.empty( shape=(3), dtype=int )
-
-    for array1d_grid[ int_sort2 ] in range( array1d_cell_ngrid[ int_sort2 ] ):
-        array1d_dist_grid[ int_sort2 ] = ( array1d_grid[ int_sort2 ] - array1d_atom1pos_grid[ int_sort2 ] ) % array1d_cell_ngridhalf[ int_sort2 ]
-        if (array1d_dist_grid[ int_sort2 ] > array1d_r0_grid[ int_sort2 ] ): continue
-        for array1d_grid[ int_sort1 ] in range( array1d_cell_ngrid[ int_sort1 ] ):
-            array1d_dist_grid[ int_sort1 ] = ( array1d_grid[ int_sort1 ] - array1d_atom1pos_grid[ int_sort1 ] ) % array1d_cell_ngridhalf[ int_sort1 ]
-            if (array1d_dist_grid[ int_sort1 ] > array1d_r0_grid[ int_sort1 ]): continue
-            for array1d_grid[ int_sort0 ] in range( array1d_cell_ngrid[ int_sort0 ] ):
-                array1d_dist_grid[ int_sort0 ] = ( array1d_grid[ int_sort0 ] - array1d_atom1pos_grid[ int_sort0 ] ) % array1d_cell_ngridhalf[ int_sort0 ]
-                if (array1d_dist_grid[ int_sort0 ] > array1d_r0_grid[ int_sort0 ]): continue
-                array1d_dist = array1d_dist_grid * array1d_gridpara
-                float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
-                if (float_dist >= float_r0_new): continue
-                int_temp = int( float_dist // float_slice)
-                array1d_rdf[ int_temp ] += array3d_chg[ array1d_grid[0], array1d_grid[1], array1d_grid[2] ]
-    '''
-
-    array1d_rdf *= float_volume / int_ngrid / float_slice
+    
+    if ( 'CHG' in str_chgfile ):
+        array1d_rdf *= float_volume / int_ngrid / float_slice
+    elif ('WFN' in str_chgfile):
+        array1d_rdf *= float_volume * 2 / float_slice
 
     array1d_r = numpy.linspace( 0, float_r0_new, num=int_nslice, endpoint=False )
     array1d_r += float_slice/2
