@@ -71,7 +71,7 @@ def def_chgrdf_bk_workflow( int_k, int_b ):
 def def_chgrdf( 
         str_chgfile='PARCHG', 
         float_r0=3, 
-        float_slice = 0.1 
+        float_slice = 0.05
         ):
     def_startfunc( locals() )
 
