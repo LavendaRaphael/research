@@ -52,7 +52,7 @@ cat >>${jobname}.sh<<eof
 source ${homedir}codes/common/environment.sh
 set -euo pipefail
 SECONDS=0
-sort -u ${str_nodefile} > tmp && mv tmp ${str_nodefile}
+sort -u ${str_nodefile} > ${str_nodefile}.tmp && mv ${str_nodefile}.tmp ${str_nodefile}
 
 eof
 
