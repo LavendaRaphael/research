@@ -2,7 +2,7 @@
 import groupmodule
 
 str_jobname = 'test'
-int_ncore = 58
+int_ncore = 1
 str_excute = 'mpirun ${software_bin}intelmpi_test.x'
 
 groupmodule.def_serversub(

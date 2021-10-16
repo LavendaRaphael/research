@@ -1,5 +1,6 @@
 import os
 import math
+import subprocess
 
 def def_serversub( 
          str_jobname,
@@ -11,6 +12,7 @@ def def_serversub(
     str_jobqueue = os.environ[ 'jobqueue' ]
     int_maxppn = int(os.environ[ 'maxppn' ])
 
+    str_jobname = 'tff.'+str_jobname
     int_nodes = math.ceil( int_ncore/int_maxppn )
     int_ppn = math.ceil( int_ncore/int_nodes )
     str_nodefile = str_jobname+'.nodelist'
@@ -44,4 +46,5 @@ def def_serversub(
         obj_subfile.write( str_excute )
         obj_subfile.write( '\n' )
         obj_subfile.write( str_timecount )
-    print( dict_jobsub[ str_mycluster ])
+    subprocess.run( dict_jobsub[ str_mycluster ].split()  )
+
