@@ -39,7 +39,7 @@ def def_chgrdf_workflow(
         ):
     def_startfunc( locals() )
 
-    if ( def_has_numbers(str_chgfile) ):
+    if ( not def_has_numbers(str_chgfile) ):
         str_outfile = 'chgrdf.csv'
     elif ( str_chgfile[:6] == 'PARCHG' ):
         str_outfile = 'chgrdf.B' + str_chgfile[ 7:11] + '_K' + str_chgfile[12:16] + '.csv'
@@ -62,7 +62,7 @@ def def_has_numbers(inputString):
     return any(char.isdigit() for char in inputString)
 
 def def_chgrdf( 
-        str_chgfile, 
+        str_chgfile,    
         float_r0=3, 
         float_slice = 0.05
         ):
