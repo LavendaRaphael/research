@@ -1,16 +1,22 @@
 import os
 import math
 import subprocess
+import server
 
 def def_serversub( 
          str_jobname,
          int_ncore,
-         str_excute
+         str_excute,
+         str_jobqueue = None,
+         int_maxppn = None
          ):
     str_homedir = os.environ[ 'homedir' ]
     str_mycluster = os.environ[ 'mycluster' ]
-    str_jobqueue = os.environ[ 'jobqueue' ]
-    int_maxppn = int(os.environ[ 'maxppn' ])
+
+    if (str_jobqueue is None):
+        str_jobqueue = server.str_jobqueue
+    if (int_maxppn is None):
+        int_maxppn = server.dict_maxppn[ str_jobqueue ]
 
     str_jobname = 'tff.'+str_jobname
     int_nodes = math.ceil( int_ncore/int_maxppn )
@@ -40,9 +46,17 @@ def def_serversub(
         'sort -u '+str_nodefile+' > '+str_nodefile+'.tmp && mv '+str_nodefile+'.tmp '+str_nodefile+'\n'
         )
 
+    str_subvasp = (
+        'if [ -f "INCAR" ]; then\n'+
+        '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_maxppn/2)) +'" INCAR\n'+
+        'fi\n'
+        )
+
     with open( str_subfile, 'w' ) as obj_subfile:
         obj_subfile.write( dict_subconfig[ str_mycluster ] ) 
         obj_subfile.write( str_subhead )
+        if ('vasp' in str_excute):
+            obj_subfile.write( str_subvasp)
         obj_subfile.write( str_excute )
         obj_subfile.write( '\n' )
         obj_subfile.write( str_timecount )
