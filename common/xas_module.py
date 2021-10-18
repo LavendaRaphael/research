@@ -103,18 +103,20 @@ def def_chgrdf(
 
     array3d_chgdens_test = numpy.zeros( shape=array1d_cell_ngrid )
 
-    array1d_ngrid = numpy.empty( shape=(3), dtype=int )
-    for array1d_ngrid[0] in range( array1d_rangel[0], array1d_ranger[0]+1 ):
-        print(array1d_ngrid[0])
-        for array1d_ngrid[1] in range( array1d_rangel[1], array1d_ranger[1]+1 ):
-            for array1d_ngrid[2] in range( array1d_rangel[2], array1d_ranger[2]+1 ):
+    for int_x in range( array1d_rangel[0], array1d_ranger[0]+1 ):
+        print(int_x)
+        for int_y in range( array1d_rangel[1], array1d_ranger[1]+1 ):
+            for int_z in range( array1d_rangel[2], array1d_ranger[2]+1 ):
+                array1d_ngrid = numpy.array( [int_x, int_y, int_z] )
                 array1d_dist = ( array1d_ngrid - array1d_atom1_ngrid ) * array1d_grid_paras
                 float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
                 if (float_dist >= float_r0_new): continue
                 int_temp = int( float_dist // float_slice)
-                array1d_ngrid %= array1d_cell_ngrid
+                array1d_ngrid = array1d_ngrid % array1d_cell_ngrid
                 array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
-                array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+                array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = (
+                    array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+                    )
 
     del array3d_chgdens
     obj_chgcar.chg[0] = array3d_chgdens_test
