@@ -101,7 +101,7 @@ def def_chgrdf(
     array1d_ranger = numpy.floor(array1d_atom1_ngrid + array1d_r0_ngrid).astype(int)
     def_print_paras( locals(), ['array1d_rangel','array1d_ranger'] )
 
-    array3d_chgdens_test = numpy.zeros( shape=array1d_cell_ngrid )
+    #array3d_chgdens_test = numpy.zeros( shape=array1d_cell_ngrid )
 
     for int_x in range( array1d_rangel[0], array1d_ranger[0]+1 ):
         print(int_x)
@@ -114,13 +114,13 @@ def def_chgrdf(
                 int_temp = int( float_dist // float_slice)
                 array1d_ngrid = array1d_ngrid % array1d_cell_ngrid
                 array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
-                array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = (
-                    array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
-                    )
+                #array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = (
+                #    array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+                #    )
 
     del array3d_chgdens
-    obj_chgcar.chg[0] = array3d_chgdens_test
-    obj_chgcar.write( filename='CHG_test.vasp' )
+    #obj_chgcar.chg[0] = array3d_chgdens_test
+    #obj_chgcar.write( filename='CHG_test.vasp' )
 
     if ( 'CHG' in str_chgfile ):
         array1d_rdf *= float_volume / int_ngrid / float_slice
