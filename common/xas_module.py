@@ -47,11 +47,11 @@ def def_chgrdf_workflow(
         str_outfile = 'chgrdf.B' + str_chgfile[13:17] + '_K' + str_chgfile[19:23] + '.csv'
     def_print_paras( locals(), ['str_outfile'] )
 
-    array1d_r, array1d_rdf = def_chgrdf( str_chgfile=str_chgfile)
+    array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density = def_chgrdf( str_chgfile=str_chgfile)
 
     def_xas_writedata( 
-            list2d_header = [ ['r(ang)'], ['chgrdf'] ],
-            list3d_data = [ array1d_r, array1d_rdf ],
+            list2d_header = [ ['r(ang)'], ['chgrdf'], ['chgrdf_integral'], ['chgrdf_density'] ],
+            list3d_data = [ array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density ],
             str_outfile = str_outfile
             )
 
@@ -101,28 +101,49 @@ def def_chgrdf(
     array1d_ranger = numpy.floor(array1d_atom1_ngrid + array1d_r0_ngrid).astype(int)
     def_print_paras( locals(), ['array1d_rangel','array1d_ranger'] )
 
+    array3d_chgdens_test = numpy.zeros( shape=array1d_cell_ngrid )
+
     array1d_ngrid = numpy.empty( shape=(3), dtype=int )
-    for array1d_ngrid[0] in range( array1d_rangel[0], array1d_ranger[0] ):
+    for array1d_ngrid[0] in range( array1d_rangel[0], array1d_ranger[0]+1 ):
         print(array1d_ngrid[0])
-        for array1d_ngrid[1] in range( array1d_rangel[1], array1d_ranger[1] ):
-            for array1d_ngrid[2] in range( array1d_rangel[2], array1d_ranger[2] ):
+        for array1d_ngrid[1] in range( array1d_rangel[1], array1d_ranger[1]+1 ):
+            for array1d_ngrid[2] in range( array1d_rangel[2], array1d_ranger[2]+1 ):
                 array1d_dist = ( array1d_ngrid - array1d_atom1_ngrid ) * array1d_grid_paras
                 float_dist = numpy.sqrt( array1d_dist.dot( array1d_dist ) )
                 if (float_dist >= float_r0_new): continue
                 int_temp = int( float_dist // float_slice)
                 array1d_ngrid %= array1d_cell_ngrid
                 array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
-    
+                array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+
+    del array3d_chgdens
+    obj_chgcar.chg[0] = array3d_chgdens_test
+    obj_chgcar.write( filename='CHG_test.vasp' )
+
     if ( 'CHG' in str_chgfile ):
         array1d_rdf *= float_volume / int_ngrid / float_slice
     elif ('WFN' in str_chgfile):
         array1d_rdf *= float_volume * 2 / float_slice
+    array1d_rdf /= float_chgsum
 
     array1d_r = numpy.linspace( 0, float_r0_new, num=int_nslice, endpoint=False )
     array1d_r += float_slice/2
 
+    array1d_rdf_integral = numpy.empty( shape=(int_nslice) ) 
+    array1d_rdf_integral[ 0 ] = array1d_rdf[ 0 ]
+    for int_i in range( 1, int_nslice ):
+        array1d_rdf_integral[ int_i ] = array1d_rdf_integral[ int_i-1 ] + array1d_rdf[ int_i ]
+    for int_i in range( int_nslice ):
+        array1d_rdf_integral[ int_i ] -= array1d_rdf[ int_i ]/2
+    array1d_rdf_integral *= float_slice
+
+    array1d_rdf_density = numpy.empty( shape=(int_nslice) )
+    for int_i in range( int_nslice ):
+        array1d_rdf_density[ int_i ] = array1d_rdf[int_i] / ( 3*int_i**2 + 3*int_i + 1 )
+    array1d_rdf_density /= 4/3 * math.pi * float_slice**2
+
     def_endfunc()
-    return array1d_r, array1d_rdf
+    return array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density
 
 def def_tm_findmax( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
