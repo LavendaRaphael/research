@@ -5,11 +5,13 @@ import server
 
 def def_serversub( 
          str_jobname,
-         int_ncore,
          str_excute,
+         int_ncore = None,
+         int_nodes = None,
          str_jobqueue = None,
          int_maxppn = None
          ):
+
     str_homedir = os.environ[ 'homedir' ]
     str_mycluster = os.environ[ 'mycluster' ]
 
@@ -17,10 +19,13 @@ def def_serversub(
         str_jobqueue = server.str_jobqueue
     if (int_maxppn is None):
         int_maxppn = server.dict_maxppn[ str_jobqueue ]
+    if ( int_nodes is None ):
+        int_nodes = math.ceil( int_ncore/int_maxppn )
+        int_ppn = math.ceil( int_ncore/int_nodes )
+    if ( int_ncore is None ):
+        int_ppn = int_maxppn
 
     str_jobname = 'tff.'+str_jobname
-    int_nodes = math.ceil( int_ncore/int_maxppn )
-    int_ppn = math.ceil( int_ncore/int_nodes )
     str_nodefile = str_jobname+'.nodelist'
     str_subfile = str_jobname + '.sh'
 
