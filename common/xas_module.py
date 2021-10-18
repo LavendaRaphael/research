@@ -13,13 +13,20 @@ import copy
 import inspect
 import math
 import os
+import local_module
 
-def def_atom_findpeak( list1d_angle ):
+def def_atom_findpeak( 
+        list1d_angle,
+        str_workdir,
+        str_jsonfile
+        ):
     def_startfunc( locals() )
 
     _, _, array2d_xdata, array2d_ydata = def_vasp_outcar2xas()
 
-    float_eigcore = -514.703961144
+    float_eigcore = -array2d_xdata[0][0] / 0.9
+    # float_eigcore = -514.703961144
+    def_print_paras( locals(), ['float_eigcore'])
 
     _, array2d_ydata_alphabeta = def_xas_alphabeta( 
         list2d_angle = [list1d_angle], 
@@ -29,13 +36,31 @@ def def_atom_findpeak( list1d_angle ):
         array1d_xdata=array2d_xdata, 
         array1d_ydata=array2d_ydata_alphabeta
         )
-    array1d_energy_pcore = dict_peaks[ 'E(eV)' ] + float_eigcore
-    def_print_paras( locals(), ['array1d_energy_pcore'])
+    
+    str_cwddir = os.getcwd()
+    os.chdir('..')
+    with open(str_jsonfile) as obj_jsonfile:
+        float_align = json.load( fp=obj_jsonfile )['float_align']
+    dict_structures = local_module.def_dict_structures()
+    str_chdir = dict_structures[ str_workdir ].list2d_atom[0][0]
+    os.chdir(str_chdir)
+    float_finalenergy_1 = def_vasp_finalenergy()
+    os.chdir( str_cwddir )
+    float_finalenergy = def_vasp_finalenergy()
+    float_sft = float_finalenergy-float_finalenergy_1
+    float_sftplusalign = float_sft + float_align
+    def_print_paras( locals(), ['float_align','float_sft','float_sftplusalign'])
+
+    array1d_energy_origin = dict_peaks[ 'E(eV)' ]
+    array1d_energy_pluscore = dict_peaks[ 'E(eV)' ] + float_eigcore
+    array1d_energy_sftplusalign = dict_peaks[ 'E(eV)' ] + float_sftplusalign
+    def_print_paras( locals(), ['array1d_energy_origin','array1d_energy_pluscore', 'array1d_energy_sftplusalign'])
 
     def_endfunc()
 
 def def_chgrdf_workflow( 
-        str_chgfile
+        str_chgfile,
+        str_outdir='',
         ):
     def_startfunc( locals() )
 
@@ -47,12 +72,12 @@ def def_chgrdf_workflow(
         str_outfile = 'chgrdf.B' + str_chgfile[13:17] + '_K' + str_chgfile[19:23] + '.csv'
     def_print_paras( locals(), ['str_outfile'] )
 
-    array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density = def_chgrdf( str_chgfile=str_chgfile)
+    array1d_r, array1d_rpd, array1d_rpi, array1d_rdf = def_chgrdf( str_chgfile=str_chgfile)
 
     def_xas_writedata( 
-            list2d_header = [ ['r(ang)'], ['chgrdf'], ['chgrdf_integral'], ['chgrdf_density'] ],
-            list3d_data = [ array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density ],
-            str_outfile = str_outfile
+            list2d_header = [ ['r(ang)'], ['chgrpd'], ['chgrpi'], ['chgrdf'] ],
+            list3d_data = [ array1d_r, array1d_rpd, array1d_rpi, array1d_rdf ],
+            str_outfile = str_outdir+str_outfile
             )
 
     def_endfunc()
@@ -92,7 +117,7 @@ def def_chgrdf(
     def_print_paras( locals(), ['array1d_atom1_pos','array1d_grid_paras', 'array1d_cell_paras','array1d_atom1_ngrid'] )
 
     int_nslice = int(float_r0 // float_slice) + 1
-    array1d_rdf = numpy.zeros( shape=(int_nslice) )
+    array1d_rpd = numpy.zeros( shape=(int_nslice) )
     float_r0_new = float_slice * int_nslice
     array1d_r0_ngrid = float_r0_new/array1d_grid_paras
     def_print_paras( locals(), ['int_nslice','float_r0_new','array1d_r0_ngrid'] )
@@ -113,7 +138,7 @@ def def_chgrdf(
                 if (float_dist >= float_r0_new): continue
                 int_temp = int( float_dist // float_slice)
                 array1d_ngrid = array1d_ngrid % array1d_cell_ngrid
-                array1d_rdf[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
+                array1d_rpd[ int_temp ] += array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
                 #array3d_chgdens_test[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ] = (
                 #    array3d_chgdens[ array1d_ngrid[0], array1d_ngrid[1], array1d_ngrid[2] ]
                 #    )
@@ -123,31 +148,40 @@ def def_chgrdf(
     #obj_chgcar.write( filename='CHG_test.vasp' )
 
     if ( 'CHG' in str_chgfile ):
-        array1d_rdf *= float_volume / int_ngrid / float_slice
+        array1d_rpd *= float_volume / int_ngrid / float_slice
     elif ('WFN' in str_chgfile):
-        array1d_rdf *= float_volume * 2 / float_slice
-    array1d_rdf /= float_chgsum
+        array1d_rpd *= float_volume * 2 / float_slice
+    array1d_rpd /= float_chgsum
 
     array1d_r = numpy.linspace( 0, float_r0_new, num=int_nslice, endpoint=False )
     array1d_r += float_slice/2
 
-    array1d_rdf_integral = numpy.empty( shape=(int_nslice) ) 
-    array1d_rdf_integral[ 0 ] = array1d_rdf[ 0 ]
+    array1d_rpi = numpy.empty( shape=(int_nslice) ) 
+    array1d_rpi[ 0 ] = array1d_rpd[ 0 ]
     for int_i in range( 1, int_nslice ):
-        array1d_rdf_integral[ int_i ] = array1d_rdf_integral[ int_i-1 ] + array1d_rdf[ int_i ]
+        array1d_rpi[ int_i ] = array1d_rpi[ int_i-1 ] + array1d_rpd[ int_i ]
     for int_i in range( int_nslice ):
-        array1d_rdf_integral[ int_i ] -= array1d_rdf[ int_i ]/2
-    array1d_rdf_integral *= float_slice
+        array1d_rpi[ int_i ] -= array1d_rpd[ int_i ]/2
+    array1d_rpi *= float_slice
 
-    array1d_rdf_density = numpy.empty( shape=(int_nslice) )
+    array1d_rdf = numpy.empty( shape=(int_nslice) )
     for int_i in range( int_nslice ):
-        array1d_rdf_density[ int_i ] = array1d_rdf[int_i] / ( 3*int_i**2 + 3*int_i + 1 )
-    array1d_rdf_density /= 4/3 * math.pi * float_slice**2
+        array1d_rdf[ int_i ] = array1d_rpd[int_i] / ( 3*int_i**2 + 3*int_i + 1 )
+    array1d_rdf /= 4/3 * math.pi * float_slice**2
+    #float_rho0 = 1 / float_volume
+    #array1d_rdf /= float_rho0
 
     def_endfunc()
-    return array1d_r, array1d_rdf, array1d_rdf_integral, array1d_rdf_density
+    return array1d_r, array1d_rpd, array1d_rpi, array1d_rdf
 
-def def_tm_findmax( array2d_xdata, array2d_ydata, array2d_kb, float_onset, str_abname, int_ntm=2, float_xwidth=0.5 ):
+def def_tm_findmax( 
+        array2d_xdata, 
+        array2d_ydata, 
+        array2d_kb, 
+        float_onset, 
+        str_abname, 
+        int_ntm=2, 
+        float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
 
     str_jsonfile = 'xas_tm.'+str_abname+'.findtm.json'
@@ -200,7 +234,11 @@ def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_
         os.chdir(str_chdir)
         print(os.getcwd())
         #----------------------------------------------[alignscaling]
-        array2d_xdata_align, array2d_ydata_scaling, array2d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_xas_atom_alignscaling( float_align=float_align, float_scaling=float_scaling, float_finalenergy_1=float_finalenergy_1 )
+        array2d_xdata_align, array2d_ydata_scaling, array2d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_xas_atom_alignscaling( 
+            float_align=float_align, 
+            float_scaling=float_scaling, 
+            float_finalenergy_1=float_finalenergy_1 
+            )
         #----------------------------------------------[
         array2d_ydata = array2d_ydata_scaling
         list1d_yheader, array2d_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )

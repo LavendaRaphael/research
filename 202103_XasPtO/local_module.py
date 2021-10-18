@@ -1,11 +1,11 @@
 #!/user/bin/env python
 
-import xas_modules
+import xas_module
 import os
 import json
 from ase.io import read,write
 
-def def_dict_structures()
+def def_dict_structures():
     str_exp=os.environ['goto_pto_exp']
     str_110=os.environ['goto_pto_work_110']
 
@@ -22,7 +22,7 @@ def def_dict_structures()
 
     str_chdir = str_110 + str_workdir
 
-    dict_structures[ str_workdir ] = xas_modules.class_structures()
+    dict_structures[ str_workdir ] = xas_module.class_structures()
     dict_structures[ str_workdir ].list2d_atom = list2d_atom
     dict_structures[ str_workdir ].str_chdir = str_chdir
 
