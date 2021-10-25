@@ -1,8 +1,12 @@
 import xas_module
 import os
+import local_module
 
-str_110=os.environ['goto_pto_work_110']
-str_chdir = str_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11'
+dict_structures = local_module.def_dict_structures()
+
+str_workdir = 'Pt.110.x12y2z4.5_O22_vac15/'
+str_chdir = dict_structures[ str_workdir ].str_chdir
+str_chdir += 'vasp_sch/atom_11/'
 os.chdir( str_chdir )
 
 #list1d_angle = [00, 90]

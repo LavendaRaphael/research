@@ -175,87 +175,93 @@ def def_chgrdf(
     return array1d_r, array1d_rpd, array1d_rpi, array1d_rdf
 
 def def_tm_findmax( 
-        array2d_xdata, 
-        array2d_ydata, 
-        array2d_kb, 
+        array1d_xdata, 
+        array1d_ydata, 
+        array1d_kb, 
         float_onset, 
         str_abname, 
         int_ntm=1, 
         float_xwidth=0.5 ):
-    def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
+    def_startfunc( locals(), ['array1d_xdata', 'array1d_ydata','array1d_kb'] )
+
+    array1d_xdata = numpy.reshape( array1d_xdata, newshape=-1 )
+    array1d_ydata = numpy.reshape( array1d_ydata, newshape=-1 )
 
     str_jsonfile = 'xas_tm.'+str_abname+'.findtm.json'
     list1d_index_xwidth = []
-    for int_i in range( numpy.shape(array2d_xdata)[0] ):
-        float_x = array2d_xdata[ int_i ][0]
+    for int_i in range( numpy.shape(array1d_xdata)[0] ):
+        float_x = array1d_xdata[ int_i ]
         if ( float_x < float_onset-float_xwidth or float_x > float_onset+float_xwidth): continue
         list1d_index_xwidth.append( int_i )
-    list1d_index_xwidth_topn = numpy.argpartition( array2d_ydata[ list1d_index_xwidth ][:,0], -int_ntm )[-int_ntm:]
-    list1d_index_topn = [ list1d_index_xwidth[int_i] for int_i in list1d_index_xwidth_topn ]
+    array1d_index_xwidth_topn = numpy.argpartition( array1d_ydata[ list1d_index_xwidth ], -int_ntm )[-int_ntm:]
+    array1d_index_topn = [ list1d_index_xwidth[int_i] for int_i in array1d_index_xwidth_topn ]
 
-    array2d_xdata_topn = array2d_xdata[ list1d_index_topn ]
-    array2d_ydata_topn = array2d_ydata[ list1d_index_topn ]
-    array2d_kb_topn = array2d_kb[ list1d_index_topn ]
-    def_print_paras( locals(), ['array2d_xdata_topn', 'array2d_ydata_topn', 'array2d_kb_topn'] )
+    array1d_xdata_topn = array1d_xdata[ array1d_index_topn ]
+    array1d_ydata_topn = array1d_ydata[ array1d_index_topn ]
+    array1d_kb_topn = array1d_kb[ array1d_index_topn ]
 
     dict_jsonfile = {}
-    dict_jsonfile[ 'array2d_xdata_topn' ] = array2d_xdata_topn
-    dict_jsonfile[ 'array2d_ydata_topn' ] = array2d_ydata_topn
-    dict_jsonfile[ 'array2d_kb_topn' ] = array2d_kb_topn
+    dict_jsonfile[ 'array1d_index_topn' ] = array1d_index_topn
+    dict_jsonfile[ 'array1d_xdata_topn' ] = array1d_xdata_topn
+    dict_jsonfile[ 'array1d_ydata_topn' ] = array1d_ydata_topn
+    dict_jsonfile[ 'array1d_kb_topn' ] = array1d_kb_topn
     with open( str_jsonfile, 'w' ) as obj_jsonfile:
         json.dump( obj=dict_jsonfile, fp=obj_jsonfile, indent=4, cls=NumpyEncoder )
 
     def_endfunc()
-    return array2d_xdata_topn, array2d_ydata_topn, array2d_kb_topn
+    return array1d_index_topn
 
-def def_xas_atom_abworkflow(  str_jsonfile, list2d_angle, list2d_atom, float_tm_scaling=5.0):
+def def_xas_atom_abworkflow(  
+        str_jsonfile, 
+        list2d_angle, 
+        str_workdir, 
+        float_tm_scaling=5.0
+        ):
 #----------------------------------------------[]
 #----------------------------------------------[]
     def_startfunc( locals() )
 
+    dict_structures = local_module.def_dict_structures()
+
+    str_cwddir = os.getcwd()
+    os.chdir('..')
     dict_jsonfile={}
     with open(str_jsonfile) as obj_jsonfile:
         dict_jsonfile = json.load( fp=obj_jsonfile )
     float_align = dict_jsonfile['float_align']
     float_scaling = dict_jsonfile['float_scaling']
-
-    str_chdir=list2d_atom[0][0]
+    str_chdir = dict_structures[ str_workdir ].list2d_atom[0][0]
     os.chdir(str_chdir)
-    print(os.getcwd())
     float_finalenergy_1 = def_vasp_finalenergy()
-    os.chdir('..')
+    os.chdir( str_cwddir )
 
     int_l=str_jsonfile.find('.')
     int_r=str_jsonfile.rfind('.')
     str_abname=str_jsonfile[(int_l+1):int_r]
     def_print_paras( locals(), ['str_abname'] )
-    for list1d_atom in list2d_atom:
-        str_chdir = list1d_atom[0]
-        os.chdir(str_chdir)
-        print(os.getcwd())
-        #----------------------------------------------[alignscaling]
-        array2d_xdata_align, array2d_ydata_scaling, array2d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_xas_atom_alignscaling( 
-            float_align=float_align, 
-            float_scaling=float_scaling, 
-            float_finalenergy_1=float_finalenergy_1 
-            )
-        #----------------------------------------------[
-        array2d_ydata = array2d_ydata_scaling
-        list1d_yheader, array2d_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
 
-        list2d_header = [['E(eV)'], list1d_yheader]
-        list3d_data = [array2d_xdata_align, array2d_ydata_alphabeta]
-        str_outfile = 'xas.'+str_abname+'.csv'
-        def_xas_writedata( list2d_header=list2d_header, list3d_data=list3d_data, str_outfile=str_outfile)
-        #----------------------------------------------[
-        array2d_ydata = array2d_tm_ydata_scaling
-        _, array2d_tm_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    #----------------------------------------------[alignscaling]
+    array2d_xdata_align, array2d_ydata_scaling, array2d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_xas_atom_alignscaling( 
+        float_align=float_align, 
+        float_scaling=float_scaling, 
+        float_finalenergy_1=float_finalenergy_1 
+        )
+    #----------------------------------------------[
+    array2d_ydata = array2d_ydata_scaling
+    list1d_yheader, array2d_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
 
-        list2d_header = [ ['Kpoint', 'Band'] ] + list2d_header
-        list3d_data = [ array2d_tm_kb, array2d_tm_xdata_align, array2d_tm_ydata_alphabeta * float_tm_scaling]
-        str_outfile = 'xas_tm.'+str_abname+'.csv'
-        def_xas_writedata( list2d_header=list2d_header, list3d_data=list3d_data, str_outfile=str_outfile)
-        os.chdir('..')
+    list2d_header = [['E(eV)'], list1d_yheader]
+    list3d_data = [array2d_xdata_align, array2d_ydata_alphabeta]
+    str_outfile = 'xas.'+str_abname+'.csv'
+    def_xas_writedata( list2d_header=list2d_header, list3d_data=list3d_data, str_outfile=str_outfile)
+    #----------------------------------------------[
+    array2d_ydata = array2d_tm_ydata_scaling
+    _, array2d_tm_ydata_alphabeta = def_xas_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+
+    list2d_header = [ ['Kpoint', 'Band'] ] + list2d_header
+    list3d_data = [ array2d_tm_kb, array2d_tm_xdata_align, array2d_tm_ydata_alphabeta * float_tm_scaling]
+    str_outfile = 'xas_tm.'+str_abname+'.csv'
+    def_xas_writedata( list2d_header=list2d_header, list3d_data=list3d_data, str_outfile=str_outfile)
 
     def_endfunc()
 
@@ -492,20 +498,23 @@ def def_xas_alphabeta( list2d_angle, array2d_ydata ):
     array2d_ydata_alphabeta = numpy.empty( shape=(int_shape2dydata0, len(list2d_angle)) )
     list1d_yheader = []
     for int_i in range(len(list2d_angle)):
-        alpha, beta = list2d_angle[int_i]
-        str_yheader = 'a'+str(alpha)+'_b'+str(beta)
+        alpha, beta, str_symmetry = list2d_angle[int_i]
+        str_yheader = def_abname( alpha, beta )
         list1d_yheader.append( str_yheader )
     
-        array1d_weight = def_weight (alpha,beta)
+        array1d_weight = def_weight (alpha,beta,str_symmetry)
         array1d_ydata_dot = numpy.dot(array2d_ydata, array1d_weight)
 
         array2d_ydata_alphabeta[:,int_i] = array1d_ydata_dot
 
     return list1d_yheader, array2d_ydata_alphabeta
 
-def def_weight (alpha,beta):
+def def_weight (
+        alpha,
+        beta,
+        str_symmetry,
+        ):
 #----------------------------------------------[]
-# Suitable for Dichroism.
 #-------------------------[in]
 # alpha: float, degree angle
 # beta:  float, degree angle
@@ -517,9 +526,18 @@ def def_weight (alpha,beta):
     alpha = math.radians (alpha)
     beta = math.radians (beta)
     array1d_weight = numpy.empty( shape=(3) )
-    array1d_weight[0]= (0.5 * (math.cos(beta)**2 + math.sin(alpha)**2 * math.sin(beta)**2))
-    array1d_weight[1]= (array1d_weight[0])
-    array1d_weight[2]= (math.cos(alpha)**2 * math.sin(beta)**2)
+    array1d_weight[0]= math.cos(beta)**2
+    array1d_weight[1]= math.sin(alpha)**2 * math.sin(beta)**2
+    array1d_weight[2]= math.cos(alpha)**2 * math.sin(beta)**2
+
+    if (str_symmetry=='orthorhombic'):
+        pass
+    elif (str_symmetry=='trigonal'):
+        array1d_weight[0] = ( array1d_weight[0] + array1d_weight[1] ) / 2
+        array1d_weight[1] = array1d_weight[0]
+    else:
+        raise ValueError('str_symmetry')
+
     return array1d_weight
 
 def def_vasp_finalenergy():

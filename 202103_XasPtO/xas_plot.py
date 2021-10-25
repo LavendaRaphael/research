@@ -30,7 +30,7 @@ pic[4]=[
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
     'xas.exp_xy_z.pdf'
     ]
-    
+
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
@@ -174,8 +174,6 @@ if (pic[1][0]):
     str_workdir = pic[1][1]
     #---------------------------------------------[]
     plt.figure(1)
-    str_abname='a90_b45'
-    str_savefig = pic[1][2]+'.'+str_abname+'.pdf'
     os.chdir( str_workdir )
 
     str_datfile = str_exp+'20210924.Pt.110.a20.csv'
@@ -191,26 +189,41 @@ if (pic[1][0]):
     plt.plot( array2d_xdata, array2d_ydata, label=label )
 
     str_datfile = 'xas_tm.a20_b90.csv'
-    _, array2d_xdata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[2] )
-    _, array2d_ydata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[3] )
+    _, array2d_xdata_tm = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[2] )
+    list1d_header, array2d_ydata_tm = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[3] )
     label='TM O-11 X_Y'
-    plt.plot( array2d_xdata, array2d_ydata, 'o', label=label)
+    plt.plot( array2d_xdata_tm, array2d_ydata_tm, 'o', label=label)
+    str_savefig = pic[1][2]+'.'+list1d_header[0]+'.pdf'
 
-    _, array2d_kb = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
     float_onset = 531
-    array2d_xdata, array2d_ydata, _ = xas_module.def_tm_findmax( array2d_xdata=array2d_xdata, array2d_ydata=array2d_ydata, array2d_kb=array2d_kb, float_onset=float_onset, str_abname=str_abname)
-    plt.plot( array2d_xdata, array2d_ydata, 's', mfc='none')
+    _, array2d_kb = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
+    list1d_header, array2d_ydata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[5] )
+    array1d_index_topn = xas_module.def_tm_findmax(
+        array1d_xdata = array2d_xdata_tm, 
+        array1d_ydata = array2d_ydata, 
+        array1d_kb = array2d_kb, 
+        float_onset = float_onset, 
+        str_abname = list1d_header[0]
+        )
+    plt.plot( array2d_xdata_tm[ array1d_index_topn ], array2d_ydata_tm[ array1d_index_topn ], 's', mfc='none')
+    list1d_header, array2d_ydata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[6] )
+    array1d_index_topn = xas_module.def_tm_findmax(
+        array1d_xdata=array2d_xdata_tm, 
+        array1d_ydata=array2d_ydata, 
+        array1d_kb=array2d_kb, 
+        float_onset=float_onset, 
+        str_abname=list1d_header[0]
+        )
+    plt.plot( array2d_xdata_tm[ array1d_index_topn ], array2d_ydata_tm[ array1d_index_topn ], 's', mfc='none')
 
     plt.xlim( 527,540 )
     plt.ylim( 0,10 )
     plt.xlabel( 'Energy (eV)' )
     plt.ylabel( "Intensity (Arb. Units)" )
     plt.legend()
-    plt.savefig( str_savefig,bbox_inches='tight' )
+    plt.savefig( str_savefig, bbox_inches='tight' )
     #---------------------------------------------[]
     plt.figure(2)
-    str_abname='a0_b90'
-    str_savefig = pic[1][2]+'.'+str_abname+'.pdf'
 
     str_datfile = str_exp+'20210924.Pt.110.a20.csv'
     _, array2d_xdata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[0] )
@@ -226,14 +239,21 @@ if (pic[1][0]):
 
     str_datfile = 'xas_tm.a20_b90.csv'
     _, array2d_xdata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[2] )
-    _, array2d_ydata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[4] )
+    list1d_header, array2d_ydata = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[4] )
     label='TM O-11 Z'
     plt.plot( array2d_xdata, array2d_ydata, 'o', label=label)
+    str_savefig = pic[1][2]+'.'+list1d_header[0]+'.pdf'
 
     _, array2d_kb = xas_module.def_xas_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
     float_onset = 530
-    array2d_xdata, array2d_ydata, _ = xas_module.def_tm_findmax( array2d_xdata=array2d_xdata, array2d_ydata=array2d_ydata, array2d_kb=array2d_kb, float_onset=float_onset, str_abname=str_abname)
-    plt.plot( array2d_xdata, array2d_ydata, 's', mfc='none')
+    array1d_index_topn = xas_module.def_tm_findmax( 
+        array1d_xdata=array2d_xdata, 
+        array1d_ydata=array2d_ydata, 
+        array1d_kb=array2d_kb, 
+        float_onset=float_onset, 
+        str_abname=list1d_header[0]
+        )
+    plt.plot( array2d_xdata[ array1d_index_topn ], array2d_ydata[ array1d_index_topn ], 's', mfc='none')
 
     plt.xlim( 527,540 )
     plt.ylim( 0,10 )
