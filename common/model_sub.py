@@ -2,13 +2,17 @@
 import groupmodule
 
 str_jobname = 'test'
-int_ncore = 1
+dict_input = {} 
+dict_input[ 'int_ncore' ] = 1
+dict_input[ 'int_nodes' ] = 1
+dict_input[ 'str_jobqueue' ] = 'test'
 str_excute = 'mpirun ${software_bin}intelmpi_test.x'
 
+
 groupmodule.def_serversub(
-                str_jobname = str_jobname,
-                int_ncore = int_ncore,
-                str_excute = str_excute
-                )
+    str_jobname = str_jobname,
+    dict_input = dict_input,
+    str_excute = str_excute,
+    )
     
     

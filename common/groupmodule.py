@@ -5,25 +5,32 @@ import server
 
 def def_serversub( 
          str_jobname,
+         dict_input,
          str_excute,
-         int_ncore = None,
-         int_nodes = None,
-         str_jobqueue = None,
-         int_maxppn = None
+         #int_ncore = None,
+         #int_nodes = None,
+         #str_jobqueue = None,
+         #int_maxppn = None
          ):
 
     str_homedir = os.environ[ 'homedir' ]
     str_mycluster = os.environ[ 'mycluster' ]
 
-    if (str_jobqueue is None):
+    if ('str_jobqueue' in dict_input):
+        str_jobqueue = dict_input[ 'str_jobqueue' ]
+    else:
         str_jobqueue = server.str_jobqueue
-    if (int_maxppn is None):
+    if ('int_maxppn' in dict_input):
+        int_maxppn = dict_input[ 'int_maxppn' ]
+    else:
         int_maxppn = server.dict_maxppn[ str_jobqueue ]
-    if ( int_nodes is None ):
+    if ('int_nodes' in dict_input):
+        str_jobqueue = dict_input[ 'int_nodes' ]
+        int_ppn = int_maxppn 
+    if ('int_ncore' in dict_input):
+        int_ncore = dict_input[ 'int_ncore' ]
         int_nodes = math.ceil( int_ncore/int_maxppn )
         int_ppn = math.ceil( int_ncore/int_nodes )
-    if ( int_ncore is None ):
-        int_ppn = int_maxppn
 
     str_jobname = 'tff.'+str_jobname
     str_nodefile = str_jobname+'.nodelist'
