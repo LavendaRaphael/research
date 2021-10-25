@@ -1,8 +1,7 @@
 #!/bin/env python
-from from_xas_modules import *
+import xas_module
 import os
-sys.path.append(r'./')
-from from_dict_structures import dict_structures 
+import local_module
 
 list_workdirs=[]
 #----------------------------------[Pt.110]
@@ -24,6 +23,7 @@ list_workdirs.append('Pt.110.x12y2z4.5_O22_vac15/')
 #----------------------------------[Pt.111]
 
 #----------------------------------[loop]
+dict_structures = local_module.def_dict_structures()
 
 for str_workdir in list_workdirs:
     str_chdir = dict_structures[ str_workdir ].str_chdir
@@ -33,4 +33,4 @@ for str_workdir in list_workdirs:
     print(os.getcwd())
 
     list_atoms = dict_structures[ str_workdir ].list_atoms
-    def_xas_ave( list_atoms)
+    xas_module.def_xas_ave( list_atoms)

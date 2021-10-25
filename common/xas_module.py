@@ -180,7 +180,7 @@ def def_tm_findmax(
         array2d_kb, 
         float_onset, 
         str_abname, 
-        int_ntm=2, 
+        int_ntm=1, 
         float_xwidth=0.5 ):
     def_startfunc( locals(), ['array2d_xdata', 'array2d_ydata','array2d_kb'] )
 
