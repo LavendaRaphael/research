@@ -1,0 +1,145 @@
+%-------------------------------------------------------------------------------------[type]
+\documentclass[aspectratio=169]{beamer}
+\usepackage[T1]{fontenc}
+%-------------------------------------------------------------------------------------[移除导航]
+\setbeamertemplate{navigation symbols}{}
+%-------------------------------------------------------------------------------------[theme]
+\usetheme{Madrid}
+\usecolortheme{beaver}
+%-------------------------------------------------------------------------------------[date]
+\usepackage[USenglish,UKenglish,french,spanish,italian]{babel}
+\usepackage[useregional]{datetime2}
+%-------------------------------------------------------------------------------------[pic]
+\usepackage{graphicx}
+%-------------------------------------------------------------------------------------[#subfigure#]
+\usepackage{subcaption}
+\newcommand{\subfigwid}{0.24}
+%-------------------------------------------------------------------------------------[listings]
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\fontsize{9pt}{11pt}\selectfont,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+%-----------------------------------------------------------[multicol]
+\usepackage{multicol}
+%-------------------------------------------------------------------------------------[flowchart]
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\usepackage{varwidth}
+%-------------------------------------------------------------------------------------[comment]
+\usepackage{comment}
+%-------------------------------------------------------------------------------------[braket]
+\usepackage{braket}
+%-------------------------------------------------------------------------------------[#gif#]
+\usepackage{animate}
+%-------------------------------------------------------------------------------------[footfullcite]
+\usepackage[style=chem-acs,doi=false,url=false]{biblatex}
+%-----------------------------------------------------------------[多引用,]
+\usepackage{fnpct}
+\AdaptNote\footfullcite{oo+m}[footnote]{%
+\setfnpct{dont-mess-around}%
+\IfNoValueTF{#1}
+{#NOTE{#3}}
+{\IfNoValueTF{#2}{#NOTE[#1]{#3}}{#NOTE[#1][#2]{#3}}}%
+}
+%-----------------------------------------------------------------[字号]
+% 7pt 字号，9pt baselineskip
+\renewcommand{\footnotesize}{\fontsize{7pt}{9pt}\selectfont}
+%-----------------------------------------------------------------[footnotemark]
+% https://tex.stackexchange.com/questions/420162/footfullcite-not-showing-when-used-within-a-wrapfigure
+\DeclareCiteCommand{\footfullcitetext}[\mkbibfootnotetext]
+  {\usebibmacro{prenote}}
+  {\usedriver
+     {\DeclareNameAlias{sortname}{default}}
+     {\thefield{entrytype}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+\newcounter{colcites}
+%-------------------------------------------------------------------------------------[pvec]
+\newcommand{\pvec}[1]{\vec{#1}\mkern2mu\vphantom{#1}}
+
+\usepackage{multirow}
+%-------------------------------------------------------------------------------------[积分]
+\newcommand*{\diff}{\mathop{}\!\mathrm{d}}
+%-------------------------------------------------------------------------------------[#超链接#]
+% 放到 usepackage 最后
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=black,
+}
+\urlstyle{same}
+%-------------------------------------------------------------------------------------[atbeginsection]
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[
+        sectionstyle=show/shaded,
+        subsectionstyle=hide,
+        subsubsectionstyle=hide
+    ]
+  \end{frame}
+}
+\AtBeginSubsection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[
+        currentsubsection,
+        sectionstyle=show/hide,
+        subsectionstyle=show/shaded/hide,
+        subsubsectionstyle=hide
+    ]
+  \end{frame}
+}
+\AtBeginSubsubsection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[
+        currentsubsection,
+        sectionstyle=hide,
+        subsectionstyle=show/hide/hide,
+        subsubsectionstyle=show/shaded/hide/hide
+    ]
+  \end{frame}
+}
+%-------------------------------------------------------------------------------------[titleset]
+\institute[SHTU] % (optional)
+{
+  School of Physical Science and Technology\\
+  ShanghaiTech University
+}
+\date{\today}

@@ -19,6 +19,7 @@ export goto_pto_work_110=${homedir}group/202103_XasPtO/server/Pt.110_O_vac/
 export goto_pto_code=${homedir}codes/group/202103_XasPtO/
 export goto_pto_ms=${homedir}group/202103_XasPtO/structures/Untitled_Files/Documents/
 export goto_pto_comput_110=${homedir}comput/202103_XasPtO/server/Pt.110_O_vac/
+export goto_pto_work_111=${homedir}group/202103_XasPtO/server/Pt.111_O_vac/
 
 #---------------------------------------------[path]
 export PATH=${homedir}software/vtstscripts-967:$PATH
