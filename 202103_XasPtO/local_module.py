@@ -6,11 +6,15 @@ import json
 from ase.io import read,write
 
 def def_dict_structures():
-    str_exp=os.environ['goto_pto_exp']
-    str_110=os.environ['goto_pto_work_110']
+    goto_pto_exp=os.environ['goto_pto_exp']
+    goto_pto_work_110=os.environ['goto_pto_work_110']
+    goto_pto_work_111=os.environ['goto_pto_work_111']
+
+    float_onset_110 = 529.6
+    float_onset_111 = 530.1
 
     dict_structures = {}
-
+    #------------------------------------------
     str_workdir='Pt.110.x12y2z4.5_O22_vac15/'
     list2d_atom = []
     list2d_atom.append([ 1,2.0])
@@ -19,12 +23,18 @@ def def_dict_structures():
     list2d_atom.append([ 7,2.0])
     list2d_atom.append([ 9,2.0])
     list2d_atom.append([11,1.0])
-
-    str_chdir = str_110 + str_workdir
-
     dict_structures[ str_workdir ] = xas_module.class_structures()
     dict_structures[ str_workdir ].list2d_atom = list2d_atom
-    dict_structures[ str_workdir ].str_chdir = str_chdir
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_110 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_110
+    #------------------------------------------
+    str_workdir='Pt.111.x4y4z4_O4_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structures()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_111
 
     return dict_structures
 

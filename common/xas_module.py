@@ -391,6 +391,13 @@ def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 class class_structures(object):
 
     @property
+    def float_onset(self):
+        return self._float_onset
+    @float_onset.setter
+    def float_onset(self, float_temp):
+        self._float_onset = float_temp
+
+    @property
     def str_chdir(self):
         return self._str_chdir
     @str_chdir.setter
@@ -400,7 +407,6 @@ class class_structures(object):
     @property
     def list2d_atom(self):
         return self._list2d_atom
-
     @list2d_atom.setter
     def list2d_atom(self, list_temp):
         float_sum = 0
@@ -409,12 +415,13 @@ class class_structures(object):
         for list_i in list_temp: list_i[0] = 'atom_'+str(list_i[0])
         self._list2d_atom = list_temp
 
-def def_ave( list2d_atom, str_outfile = 'xas.ave.csv'):
-#----------------------------------------------[]
-# list2d_atom = []
-# list2d_atom.append([ 1,2.0])
-#----------------------------------------------[]
-    def_startfunc( locals() )
+def def_ave( 
+        class_structure, 
+        str_outfile = 'xas.ave.csv'
+        ):
+    def_startfunc( locals(), [ 'class_structure' ] )
+
+    list2d_atom = class_structure.list2d_atom
 
     str_chdir=list2d_atom[0][0]
     os.chdir(str_chdir)
@@ -430,48 +437,77 @@ def def_ave( list2d_atom, str_outfile = 'xas.ave.csv'):
         os.chdir(str_chdir)
         print(os.getcwd())
 
-        str_xheader, list1d_yheader, array1d_xdata, array2d_ydata = def_vasp_outcar2xas()
+        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_vasp_outcar2xas()
 
         float_finalenergy = def_vasp_finalenergy()
         float_sft = float_finalenergy-float_finalenergy_1 
-        array1d_xdata_sft = def_sft( array1d_xdata=array1d_xdata, float_sft=float_sft)
+        array2d_xdata_sft = array2d_xdata + float_sft
 
-        array1d_xdata = array1d_xdata_sft
         list_ycolums = list(range(len(array2d_ydata[0])))
-        list2d_data.append( [ array1d_xdata, array2d_ydata, list_ycolums, float_scaling ] )
+        list2d_data.append( [ array2d_xdata_sft, array2d_ydata, list_ycolums, float_scaling ] )
 
         os.chdir('..')
 
     array1d_xdata_mix, array2d_ydata_mix = def_mix(list2d_data=list2d_data)
-    def_writedata( array1d_xdata=array1d_xdata_mix, array2d_ydata=array2d_ydata_mix, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
+    def_writedata( 
+        list2d_header = [ list1d_xheader, list1d_yheader ],
+        list3d_data = [ array1d_xdata_mix, array2d_ydata_mix ],
+        str_outfile=str_outfile
+        )
 
-def def_abworkflow( list1d_alignangle, list1d_scalingangle, float_onset, list2d_angle, str_outfile, str_datfile='xas.ave.csv'):
+def def_abworkflow( 
+        list1d_alignangle, 
+        list1d_scalingangle, 
+        class_structure, 
+        list2d_angle, 
+        str_outfile, 
+        str_datfile='xas.ave.csv'):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
 # list_scalingangle = [ alpha1, beta1 ]
 # float_onset = 530.6
 #----------------------------------------------[]
-    def_startfunc( locals() )
+    def_startfunc( locals(), ['class_structure'] )
     
     #--------------------------------------------------[extract]
-    int_xcolumn = 0
-    list1d_ycolumn = [1,2,3]
-    str_xheader, _, array1d_xdata_origin, array2d_ydata_origin = def_extract( str_datfile=str_datfile, int_xcolumn=int_xcolumn, list1d_ycolumn=list1d_ycolumn )
+    list1d_column = [0]
+    list1d_xheader, array2d_xdata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
     
+    list1d_column = [1,2,3]
+    _, array2d_ydata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
+
     #--------------------------------------------------[alignscaling]
- 
+    float_onset = class_structure.float_onset
+
     str_abname = def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1])
     str_jsonfile = 'xas.'+str_abname+'.json'
-    array1d_xdata = array1d_xdata_origin
-    array2d_ydata = array2d_ydata_origin
-    array1d_xdata_align, array2d_ydata_scaling = def_alignscaling( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, list1d_alignangle=list1d_alignangle, list1d_scalingangle=list1d_scalingangle, float_onset=float_onset, str_jsonfile=str_jsonfile )
+    array1d_xdata_align, array2d_ydata_scaling = def_alignscaling( 
+        array1d_xdata = array2d_xdata_origin, 
+        array2d_ydata = array2d_ydata_origin, 
+        list1d_alignangle = list1d_alignangle, 
+        list1d_scalingangle = list1d_scalingangle, 
+        float_onset = float_onset, 
+        str_jsonfile = str_jsonfile 
+        )
     
-    array2d_ydata = array2d_ydata_scaling
-    list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( 
+        list2d_angle = list2d_angle, 
+        array2d_ydata = array2d_ydata_scaling 
+        )
 
     array1d_xdata = array1d_xdata_align
     array2d_ydata = array2d_ydata_alphabeta
-    def_writedata( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, str_xheader=str_xheader, list1d_yheader=list1d_yheader, str_outfile=str_outfile)
+    def_writedata( 
+        list2d_header = [ list1d_xheader, list1d_yheader ],
+        list3d_data = [ array1d_xdata_align, array2d_ydata_alphabeta ],
+        str_outfile=str_outfile
+        )
 
     def_endfunc() 
     return
@@ -495,27 +531,29 @@ def def_alignscaling(
     array1d_xdata_origin = array1d_xdata
     array2d_ydata_origin = array2d_ydata
     #--------------------------------------------------[align]
-    list2d_angle=[ list1d_alignangle ]
-    _, array2d_ydata_alphabeta = def_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    _, array2d_ydata_alphabeta = def_alphabeta( 
+        list2d_angle = [ list1d_alignangle ],
+        array2d_ydata = array2d_ydata_origin 
+        )
     
-    array1d_xdata = array1d_xdata_origin
-    array2d_ydata = array2d_ydata_alphabeta
-    list1d_peakx = def_findpeaks( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata)
-    
-    array1d_xdata = array1d_xdata_origin
-    float_align = float_onset - list1d_peakx[0]
-    array1d_xdata_align = array1d_xdata + float_align
+    dict_peaks = def_findpeaks( 
+        array1d_xdata = array1d_xdata_origin, 
+        array1d_ydata = array2d_ydata_alphabeta)
+    float_align = float_onset - dict_peaks[ 'E(eV)' ][0]
+    array1d_xdata_align = array1d_xdata_origin + float_align
     dict_jsonfile = {}
     dict_jsonfile[ 'float_align' ] = float_align
     #--------------------------------------------------[scaling]
-    list2d_angle = [ list1d_scalingangle ] 
-    array2d_ydata = array2d_ydata_origin
-    _, array2d_ydata_alphabeta = def_alphabeta(list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    _, array2d_ydata_alphabeta = def_alphabeta(
+        list2d_angle = [ list1d_scalingangle ], 
+        array2d_ydata = array2d_ydata_origin 
+        )
     
-    array1d_xdata = array1d_xdata_align
-    array2d_ydata = array2d_ydata_alphabeta
-    print( array2d_ydata )
-    float_area = def_findarea( array1d_xdata=array1d_xdata, array2d_ydata=array2d_ydata, tuple_xrange=tuple_xrange)
+    float_area = def_findarea( 
+        array1d_xdata = array1d_xdata_align, 
+        array1d_ydata = array2d_ydata_alphabeta, 
+        tuple_xrange = tuple_xrange
+        )
     float_scaling = float_scalingarea/float_area
     dict_jsonfile[ 'float_scaling' ] = float_scaling
 
@@ -712,12 +750,44 @@ def def_findpeaks(
     def_endfunc()
     return dict_peaks
 
+def def_mix(list2d_data):
+#------------------------------[]
+# list2d_data = []
+# list2d_data.append( [ array1d_xdata, array2d_ydata, [0,2], 0.7 ] )
+#------------------------------[]
+    dict_args = copy.deepcopy(locals()) 
+    for list_temp in dict_args['list2d_data']:
+        del list_temp[0:2]
+    def_startfunc( dict_args )
+
+    list2d_xydata = []
+    for list1d_data in list2d_data:
+        list2d_xydata.append( [ list1d_data[0], list1d_data[1] ] )
+    array1d_xdata_interp, list1d_ydata_interp = def_interp( list2d_xydata )
+
+    int_len1dxdata = len( array1d_xdata_interp )
+    int_lenycolumn = len( list2d_data[0][2] )
+    array2d_ydata_mix = numpy.zeros( shape=(int_len1dxdata, int_lenycolumn) )
+
+    int_len2ddata = len(list2d_data)
+    for int_i in range(int_len2ddata):
+        list1d_ycolumn = list2d_data[int_i][2]
+        array2d_ydata = list1d_ydata_interp[ int_i][:, list1d_ycolumn ]
+        float_scaling = list2d_data[int_i][3]
+        array2d_ydata_mix += array2d_ydata * float_scaling
+
+    def_endfunc()
+    return array1d_xdata_interp, array2d_ydata_mix
+
 def def_interp(list2d_data):
 #------------------------------[]
 # list2d_data = []
 # list_data.append( [ array1d_xdata, array2d_ydata ] )
 #------------------------------[]
     def_startfunc()
+
+    for list1d_data in list2d_data:
+        list1d_data[0] = list1d_data[0].reshape( -1 )
 
     float_xl = float('-inf')
     float_xr = float('+inf')
@@ -751,35 +821,6 @@ def def_interp(list2d_data):
 
     def_endfunc()
     return array1d_xdata_interp, list1d_ydata_interp
-
-def def_mix(list2d_data):
-#------------------------------[]
-# list2d_data = []
-# list2d_data.append( [ array1d_xdata, array2d_ydata, [0,2], 0.7 ] )
-#------------------------------[]
-    dict_args = copy.deepcopy(locals()) 
-    for list_temp in dict_args['list2d_data']:
-        del list_temp[0:2]
-    def_startfunc( dict_args )
-
-    list2d_xydata = []
-    for list1d_data in list2d_data:
-        list2d_xydata.append( [ list1d_data[0], list1d_data[1] ] )
-    array1d_xdata_interp, list1d_ydata_interp = def_interp( list2d_xydata )
-
-    int_len1dxdata = len( array1d_xdata_interp )
-    int_lenycolumn = len( list2d_data[0][2] )
-    array2d_ydata_mix = numpy.zeros( shape=(int_len1dxdata, int_lenycolumn) )
-
-    int_len2ddata = len(list2d_data)
-    for int_i in range(int_len2ddata):
-        list1d_ycolumn = list2d_data[int_i][2]
-        array2d_ydata = list1d_ydata_interp[ int_i][:, list1d_ycolumn ]
-        float_scaling = list2d_data[int_i][3]
-        array2d_ydata_mix += array2d_ydata * float_scaling
-
-    def_endfunc()
-    return array1d_xdata_interp, array2d_ydata_mix
 
 def def_extract( str_datfile, list1d_column, log_head=True, dtype=float ):
 #------------------------------[]

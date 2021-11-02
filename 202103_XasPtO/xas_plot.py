@@ -4,6 +4,7 @@ import xas_module
 import os
 import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.colors as mcolors
 
 str_exp=os.environ['goto_pto_exp']
 str_work_110=os.environ['goto_pto_work_110']
@@ -32,22 +33,116 @@ pic[4]=[
     'xas.exp_xy_z.pdf'
     ]
 pic[5]=[
-    True,
+    False,
     str_work_111+'Pt.111.x4y4z4_O4_vac15/feff/',
     'xas.real_imag_exp.pdf'
+    ]
+pic[6]=[
+    False,
+    str_work_111+'Pt.111.x4y4z4_O4_vac15/vasp_sch/',
+    'xas.exp_xy_z.pdf'
+    ]
+pic[7]=[
+    True,
+    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
+    'xas.alpha.pdf'
     ]
 
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
+list_colors = list(mcolors.TABLEAU_COLORS)
 
-int_num = 5
-if (pic[int_num][0]):
+list_pictemp = pic[7]
+if (list_pictemp[0]):
     #---------------------------------------------[]
-    plt.figure(int_num)
-    str_workdir = pic[int_num][1]
-    str_savefig = pic[int_num][2]
+    plt.figure(1)
+    str_workdir = list_pictemp[1]
+    str_savefig = list_pictemp[2]
+    os.chdir( str_workdir )
+    print(os.getcwd())
+
+    float_plus = 3
+
+    str_datfile = str_exp+'20210924.Pt.110.a20.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Exp. 20$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata+float_plus, 'o', mfc='none', label=label)
+
+    str_datfile = 'xas.a20_b90.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Theory 20$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata+float_plus, label=label, color=list_colors[0] )
+    
+    str_datfile = str_exp+'20210924.Pt.110.a41.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Exp. 41$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
+
+    str_datfile = 'xas.a41_b90.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Theory 41$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata, label=label, color=list_colors[1] )
+
+    plt.xlim( 527,540 )
+    #plt.ylim( 0,6 )
+    plt.xlabel( 'Energy (eV)' )
+    plt.ylabel( "Intensity (Arb. Units)" )
+    plt.legend()
+    plt.savefig( str_savefig,bbox_inches='tight' )
+    plt.show()
+
+list_pictemp = pic[6]
+if (list_pictemp[0]):
+    #---------------------------------------------[]
+    plt.figure(1)
+    str_workdir = list_pictemp[1]
+    str_savefig = list_pictemp[2]
+    os.chdir( str_workdir )
+    print(os.getcwd())
+
+    str_datfile = str_exp+'20210926.Pt.111.a20.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Exp. 20$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
+
+    str_datfile = 'xas.a20_b90.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Theory 20$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata, label=label )
+
+    str_datfile = 'xas.a20_b90.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
+    label='Theory X_Y'
+    plt.plot( array2d_xdata, array2d_ydata, label=label )
+
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[3] )
+    label='Theory Z'
+    plt.plot( array2d_xdata, array2d_ydata, label=label )
+
+    plt.xlim( 527,540 )
+    plt.ylim( 0,6 )
+    plt.xlabel( 'Energy (eV)' )
+    plt.ylabel( "Intensity (Arb. Units)" )
+    plt.legend()
+    plt.savefig( str_savefig,bbox_inches='tight' )
+    plt.show()
+
+list_pictemp = pic[5]
+if (list_pictemp[0]):
+    #---------------------------------------------[]
+    plt.figure(1)
+    str_workdir = list_pictemp[1]
+    str_savefig = list_pictemp[2]
     os.chdir( str_workdir )
     print(os.getcwd())
 
@@ -96,7 +191,6 @@ if (pic[4][0]):
     label='Theory O-11 X_Y'
     plt.plot( array2d_xdata, array2d_ydata, label=label )
 
-    str_datfile = 'xas.a20_b90.csv'
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
     _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
     label='Theory O-11 Z'
