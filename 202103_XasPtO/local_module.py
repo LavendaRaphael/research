@@ -23,7 +23,7 @@ def def_dict_structures():
     list2d_atom.append([ 7,2.0])
     list2d_atom.append([ 9,2.0])
     list2d_atom.append([11,1.0])
-    dict_structures[ str_workdir ] = xas_module.class_structures()
+    dict_structures[ str_workdir ] = xas_module.class_structure()
     dict_structures[ str_workdir ].list2d_atom = list2d_atom
     dict_structures[ str_workdir ].str_chdir = goto_pto_work_110 + str_workdir
     dict_structures[ str_workdir ].float_onset = float_onset_110
@@ -31,12 +31,55 @@ def def_dict_structures():
     str_workdir='Pt.111.x4y4z4_O4_vac15/'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
-    dict_structures[ str_workdir ] = xas_module.class_structures()
+    dict_structures[ str_workdir ] = xas_module.class_structure()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_111
+    #------------------------------------------
+    str_workdir='Pt.110.x2y3z4.5_O1_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structure()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_110 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_110
+    #------------------------------------------
+    str_workdir='Pt.110.x2y3z4.5_O2.12_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structure()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_111
+    #------------------------------------------
+    str_workdir='Pt.110.x2y3z4.5_O3.135_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structure()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_111
+    #------------------------------------------
+    str_workdir='Pt.110.x2y4z4.5_O4.1458_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structure()
+    dict_structures[ str_workdir ].list2d_atom = list2d_atom
+    dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
+    dict_structures[ str_workdir ].float_onset = float_onset_111
+    #------------------------------------------
+    str_workdir='Pt.110.x2y3z4.5_O6_vac15/'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    dict_structures[ str_workdir ] = xas_module.class_structure()
     dict_structures[ str_workdir ].list2d_atom = list2d_atom
     dict_structures[ str_workdir ].str_chdir = goto_pto_work_111 + str_workdir
     dict_structures[ str_workdir ].float_onset = float_onset_111
 
     return dict_structures
+
+def def_pto110_class(  ):
+    xas_module.class_structure()
 
 def def_render(tup_bbox, str_poscar):
     dict_args = locals()

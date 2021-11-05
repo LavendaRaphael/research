@@ -388,7 +388,7 @@ def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
     array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
     def_writedata( array1d_xdata=array1d_xdata_interp, array2d_ydata=array2d_ydata, str_xheader='E(eV)', list1d_yheader=['sigma_xyfit'], str_outfile=str_outfile)
 
-class class_structures(object):
+class class_structure(object):
 
     @property
     def float_onset(self):

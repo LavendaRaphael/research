@@ -28,8 +28,11 @@ pic[3]=[
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/wfn/',
     ]
 pic[4]=[
-    False,
-    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
+    True,
+    [
+        str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
+        str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
+    ],
     'xas.exp_xy_z.pdf'
     ]
 pic[5]=[
@@ -53,7 +56,7 @@ pic[8]=[
     'neighbor/xas.x_y.'
     ]
 pic[9]=[
-    True,
+    False,
     str_work_110,
     'neighbor/xas.xy.'
     ]
@@ -114,9 +117,9 @@ if (list_pictemp[0]):
     print(os.getcwd())
 
     list1d_datdir = []
-    list1d_datdir.append( 'Pt.110.x2y3z4.5_O1_vac15/' )
     list1d_datdir.append( 'Pt.110.x2y3z4.5_O2.12_vac15/' )
     list1d_datdir.append( 'Pt.110.x2y3z4.5_O3.135_vac15/' )
+    list1d_datdir.append( 'Pt.110.x2y4z4.5_O4.1458_vac15/' )
     list1d_abc = ['a','b','c','d','e']
     list1d_datangle = ['a0_b90', 'a90_b45']
     list1d_anglelabel = ['z','x_y']
@@ -270,7 +273,7 @@ if (list_pictemp[0]):
 if (pic[4][0]):
     #---------------------------------------------[]
     plt.figure(4)
-    str_workdir = pic[4][1]
+    str_workdir = pic[4][1][1]
     str_savefig = pic[4][2]
     os.chdir( str_workdir )
 
@@ -282,13 +285,13 @@ if (pic[4][0]):
 
     str_datfile = 'xas.a20_b90.csv'
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-    label='Theory O-11 X_Y'
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
+    label='Theory x_y'
     plt.plot( array2d_xdata, array2d_ydata, label=label )
 
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    label='Theory O-11 Z'
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[3] )
+    label='Theory z'
     plt.plot( array2d_xdata, array2d_ydata, label=label )
 
     plt.xlim( 527,540 )
@@ -515,6 +518,7 @@ if (pic[1][0]):
     plt.savefig( str_savefig,bbox_inches='tight' )
 
     plt.show()
+
 if (pic[0][0]):
     str_xheader, list_yheaders, array2d_xdata, array2d_ydata = xas_module.def_extract( str_datfile='20210924.Pt.110.a20.csv', list1d_column=[1] )
     plt.plot( array2d_xdata, array2d_ydata,label=r'Exp. 20$\degree$' )
