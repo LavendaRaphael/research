@@ -329,15 +329,12 @@ def def_tm_extract( str_datfile='MYCARXAS' ):
     def_startfunc( locals() )
     
     list1d_column = [0]
-    str_datfile = str_datfile
     _, array2d_tm_xdata = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False)
     
     list1d_column = [1,2,3]
-    str_datfile = str_datfile
     _, array2d_tm_ydata = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False)
 
     list1d_column = [7]
-    str_datfile = str_datfile
     _, array2d_tm_band = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False, dtype=int )
 
     int_lenline = numpy.shape( array2d_tm_band )[0]
@@ -387,6 +384,22 @@ def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
 
     array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
     def_writedata( array1d_xdata=array1d_xdata_interp, array2d_ydata=array2d_ydata, str_xheader='E(eV)', list1d_yheader=['sigma_xyfit'], str_outfile=str_outfile)
+
+class class_paras(object):
+
+    @property
+    def float_scalingarea(self):
+        return self._float_scalingarea
+    @float_scalingarea.setter
+    def float_scalingarea(self, float_temp):
+        self._float_scalingarea = float_temp
+
+    @property
+    def tuple_xrange(self):
+        return self._tuple_xrange
+    @tuple_xrange.setter
+    def tuple_xrange(self, tuple_temp):
+        self._tuple_xrange = tuple_temp
 
 class class_structure(object):
 
@@ -455,9 +468,8 @@ def def_ave(
         str_outfile=str_outfile
         )
 
-def def_abworkflow( 
+def def_alphabeta_workflow( 
         list1d_alignangle, 
-        list1d_scalingangle, 
         class_structure, 
         list2d_angle, 
         str_outfile, 
@@ -465,7 +477,6 @@ def def_abworkflow(
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
 # list_scalingangle = [ alpha1, beta1 ]
-# float_onset = 530.6
 #----------------------------------------------[]
     def_startfunc( locals(), ['class_structure'] )
     
@@ -483,17 +494,16 @@ def def_abworkflow(
         )
 
     #--------------------------------------------------[alignscaling]
-    float_onset = class_structure.float_onset
 
-    str_abname = def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1])
-    str_jsonfile = 'xas.'+str_abname+'.json'
-    array1d_xdata_align, array2d_ydata_scaling = def_alignscaling( 
+    array1d_xdata_align = def_align( 
         array1d_xdata = array2d_xdata_origin, 
         array2d_ydata = array2d_ydata_origin, 
         list1d_alignangle = list1d_alignangle, 
-        list1d_scalingangle = list1d_scalingangle, 
-        float_onset = float_onset, 
-        str_jsonfile = str_jsonfile 
+        float_onset = class_structure.float_onset, 
+        )
+
+    array2d_ydata_scaling = def_scaling(
+        array2d_ydata = array2d_ydata_origin
         )
     
     list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( 
@@ -501,8 +511,6 @@ def def_abworkflow(
         array2d_ydata = array2d_ydata_scaling 
         )
 
-    array1d_xdata = array1d_xdata_align
-    array2d_ydata = array2d_ydata_alphabeta
     def_writedata( 
         list2d_header = [ list1d_xheader, list1d_yheader ],
         list3d_data = [ array1d_xdata_align, array2d_ydata_alphabeta ],
@@ -512,19 +520,29 @@ def def_abworkflow(
     def_endfunc() 
     return
 
-def def_alignscaling( 
+def def_scaling( 
+        array2d_ydata, 
+        ):
+    
+    class_paras = local_module.def_class_paras()
+    str_jsonfile = class_paras.scaling_json
+    with open(str_jsonfile) as obj_jsonfile:
+        dict_jsonfile = json.load( fp=obj_jsonfile )
+    float_scaling = dict_jsonfile['float_scaling']
+
+    array2d_ydata_scaling = array2d_ydata * float_scaling
+
+    return array2d_ydata_scaling
+
+def def_align( 
         array1d_xdata, 
         array2d_ydata, 
         list1d_alignangle, 
-        list1d_scalingangle, 
         float_onset,
-        str_jsonfile, 
-        tuple_xrange = (527.0, 540.0), 
-        float_scalingarea = 20.0 ):
+        ):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
 # list_scalingangle = [ alpha1, beta1 ]
-# float_onset = 530.6
 #----------------------------------------------[]
     def_startfunc( locals(), ['array1d_xdata', 'array2d_ydata'] )
     
@@ -541,8 +559,50 @@ def def_alignscaling(
         array1d_ydata = array2d_ydata_alphabeta)
     float_align = float_onset - dict_peaks[ 'E(eV)' ][0]
     array1d_xdata_align = array1d_xdata_origin + float_align
-    dict_jsonfile = {}
-    dict_jsonfile[ 'float_align' ] = float_align
+
+    str_abname = def_abname( alpha=list1d_alignangle[0], beta=list1d_alignangle[1])
+    str_jsonfile = 'xas.'+str_abname+'.align.json'
+    with open( str_jsonfile, 'w' ) as obj_jsonfile:
+        json.dump( obj={'float_align': float_align}, fp=obj_jsonfile, indent=4 )
+
+    def_endfunc()
+    return array1d_xdata_align
+
+def def_scaling_json( 
+        list1d_alignangle, 
+        list1d_scalingangle, 
+        class_structure, 
+        str_datfile='xas.ave.csv'):
+#----------------------------------------------[]
+# list_alignangle = [ alpha0, beta0 ]
+# list_scalingangle = [ alpha1, beta1 ]
+#----------------------------------------------[]
+    def_startfunc( locals(), ['class_structure'] )
+    class_paras = local_module.def_class_paras()
+    #--------------------------------------------------[extract]
+    list1d_column = [0]
+    _, array2d_xdata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
+    
+    list1d_column = [1,2,3]
+    _, array2d_ydata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
+
+    #--------------------------------------------------[align]
+    _, array2d_ydata_alphabeta = def_alphabeta( 
+        list2d_angle = [ list1d_alignangle ],
+        array2d_ydata = array2d_ydata_origin 
+        )
+    
+    dict_peaks = def_findpeaks( 
+        array1d_xdata = array2d_xdata_origin, 
+        array1d_ydata = array2d_ydata_alphabeta)
+    float_align = class_structure.float_onset - dict_peaks[ 'E(eV)' ][0]
+    array1d_xdata_align = array2d_xdata_origin + float_align
     #--------------------------------------------------[scaling]
     _, array2d_ydata_alphabeta = def_alphabeta(
         list2d_angle = [ list1d_scalingangle ], 
@@ -552,18 +612,18 @@ def def_alignscaling(
     float_area = def_findarea( 
         array1d_xdata = array1d_xdata_align, 
         array1d_ydata = array2d_ydata_alphabeta, 
-        tuple_xrange = tuple_xrange
+        tuple_xrange = class_paras.tuple_xrange
         )
-    float_scaling = float_scalingarea/float_area
-    dict_jsonfile[ 'float_scaling' ] = float_scaling
+    float_scaling = class_paras.float_scalingarea/float_area
 
-    array2d_ydata_scaling=array2d_ydata_origin*float_scaling
     #--------------------------------------------------[output]
+    str_abname = def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1])
+    str_jsonfile = 'xas.'+str_abname+'.scaling.json'
     with open( str_jsonfile, 'w' ) as obj_jsonfile:
-        json.dump( obj=dict_jsonfile, fp=obj_jsonfile, indent=4 )
+        json.dump( obj={ 'float_scaling' : float_scaling }, fp=obj_jsonfile, indent=4 )
 
     def_endfunc()
-    return array1d_xdata_align, array2d_ydata_scaling
+    return
 
 def def_alphabeta( list2d_angle, array2d_ydata ):
 #----------------------------------------------[]
@@ -623,15 +683,6 @@ def def_weight (
 
     return array1d_weight
 
-def def_vasp_finalenergy():
-    def_startfunc( locals() )
-
-    float_finalenergy = ase.io.read( filename='OUTCAR' ).get_total_energy()
-    print( json.dumps({'float_finalenergy': float_finalenergy}, indent=4))
-
-    def_endfunc()
-    return float_finalenergy
-
 def def_vasp_outcar2xas():
     def_startfunc( locals() )
 
@@ -660,10 +711,30 @@ def def_vasp_outcar2xas():
     for int_i in range(int_shapexdata):
         array2d_ydata[int_i,:] *= array2d_xdata[int_i][0]
 
+    array2d_ydata *= def_vasp_volume()
+
     os.remove( str_tempfile )
 
     def_endfunc()
     return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata
+
+def def_vasp_volume():
+    def_startfunc( locals() )
+
+    float_volume = ase.io.read( filename='OUTCAR' ).get_volume()
+    def_print_paras( locals(), ['float_volume'] )
+
+    def_endfunc()
+    return float_volume
+
+def def_vasp_finalenergy():
+    def_startfunc( locals() )
+
+    float_finalenergy = ase.io.read( filename='OUTCAR' ).get_total_energy()
+    def_print_paras( locals(), ['float_finalenergy'] )
+
+    def_endfunc()
+    return float_finalenergy
 
 def def_sft( array1d_xdata, float_sft):
     def_startfunc( locals(), ['array1d_xdata'] )

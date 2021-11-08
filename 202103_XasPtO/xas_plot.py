@@ -15,51 +15,99 @@ pic=[]
 for int_i in range(100):
     pic.append([False])
 pic[1]=[
-    False,
+    '',
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/', 
     'xas_tm'
-    ]
+]
 pic[2]=[
-    False,
+    '',
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
-    ]
+]
 pic[3]=[
-    False,
+    '',
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/wfn/',
-    ]
+]
 pic[4]=[
-    True,
+    '',
     [
         str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
         str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
     ],
     'xas.exp_xy_z.pdf'
-    ]
+]
 pic[5]=[
-    False,
+    '',
     str_work_111+'Pt.111.x4y4z4_O4_vac15/feff/',
     'xas.real_imag_exp.pdf'
-    ]
+]
 pic[6]=[
-    False,
+    '',
     str_work_111+'Pt.111.x4y4z4_O4_vac15/vasp_sch/',
     'xas.exp_xy_z.pdf'
-    ]
+]
 pic[7]=[
-    False,
+    '',
     str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
     'xas.alpha.pdf'
-    ]
+]
 pic[8]=[
-    False,
-    str_work_110,
-    'neighbor/xas.x_y.'
+    't',
+    str_work_110+'neighbor/',
+    [
+        [
+            'xas.neighbor_x.',
+            [
+                'Pt.110.x2y3z4.5_O1_vac15/',
+                'Pt.110.x2y3z4.5_O2.12_vac15/'
+            ]
+        ],
+        [
+            'xas.neighbor_y.',
+            [
+                'Pt.110.x2y3z4.5_O1_vac15/' ,
+                'Pt.110.x2y3z4.5_O2.13_vac15/' ,
+                'Pt.110.x2y4z4.5_O3.137_vac15/',
+                'Pt.110.x2y3z4.5_O3.135_vac15/',
+            ],
+        ],
+        [
+            'xas.neighbor_xy.',
+            [
+                'Pt.110.x2y3z4.5_O1_vac15/',
+                'Pt.110.x2y3z4.5_O2.14_vac15/',
+                'Pt.110.x2y4z4.5_O3.148_vac15/',
+                'Pt.110.x2y4z4.5_O4.1458_vac15/',
+            ],
+        ],
+        [
+            'xas.neighbor_mix.',
+            [
+                'Pt.110.x2y3z4.5_O1_vac15/',
+                'Pt.110.x2y3z4.5_O3.123_vac15/',
+                'Pt.110.x2y4z4.5_O4.1237_vac15/',
+                'Pt.110.x2y3z4.5_O4.v56_vac15/',
+                'Pt.110.x2y4z4.5_O6.v56_vac15/',
+                'Pt.110.x2y3z4.5_O6_vac15/',
+            ],
+        ],
+        [
+            'xas.coverage.',
+            [
+                'Pt.110.x2y3z4.5_O2.12_vac15/',
+                'Pt.110.x2y3z4.5_O3.135_vac15/',
+                'Pt.110.x2y4z4.5_O4.1458_vac15/'
+            ]
+        ],
+        [
+            'xas.distribution.',
+            [
+                'Pt.110.x2y3z4.5_O1_vac15/',
+                'Pt.110.x2y4z4.5_O4.1458_vac15/',
+                'Pt.110.x2y3z4.5_O6_vac15/'
+            ]
+        ]
     ]
-pic[9]=[
-    False,
-    str_work_110,
-    'neighbor/xas.xy.'
-    ]
+]
 
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
@@ -67,89 +115,41 @@ matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
 list_colors = list(mcolors.TABLEAU_COLORS)
 
-list_pictemp = pic[9]
-if (list_pictemp[0]):
-    #---------------------------------------------[]
-    str_workdir = list_pictemp[1]
-    os.chdir( str_workdir )
-    print(os.getcwd())
-
-    list1d_datdir = []
-    list1d_datdir.append( 'Pt.110.x2y3z4.5_O1_vac15/' )
-    list1d_datdir.append( 'Pt.110.x2y4z4.5_O4.1458_vac15/' )
-    list1d_datdir.append( 'Pt.110.x2y3z4.5_O6_vac15/' )
-    list1d_abc = ['a','b','c','d','e']
-    list1d_datangle = ['a0_b90', 'a90_b45']
-    list1d_anglelabel = ['z','x_y']
-
-    for int_i in range(len(list1d_datangle)):
-        str_datanlge = list1d_datangle[int_i]
-        plt.figure( int_i )
-        str_savefig = list_pictemp[2]+str_datanlge+'.pdf'
-
-        str_datfile = str_exp+'20210924.Pt.110.a20.csv'
-        _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-        _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-        label=r'Exp. 20$\degree$'
-        plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
-        
-        for int_j in range(len(list1d_datdir)):
-            str_datdir = list1d_datdir[ int_j ]
-            str_datfile = str_datdir+'vasp_sch/xas_'+str_datanlge+'.csv'
-            _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-            _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-            label=r'Theory '+list1d_anglelabel[int_i]+' '+list1d_abc[int_j]
-            plt.plot( array2d_xdata, array2d_ydata, label=label )
-
-            plt.xlim( 527,540 )
-            plt.ylim( 0,6 )
-            plt.xlabel( 'Energy (eV)' )
-            plt.ylabel( "Intensity (Arb. Units)" )
-            plt.legend()
-            plt.savefig( str_savefig,bbox_inches='tight' )
-    plt.show()
-
 list_pictemp = pic[8]
 if (list_pictemp[0]):
     #---------------------------------------------[]
     str_workdir = list_pictemp[1]
+    list1d_out = list_pictemp[2][0]
+
     os.chdir( str_workdir )
     print(os.getcwd())
 
-    list1d_datdir = []
-    list1d_datdir.append( 'Pt.110.x2y3z4.5_O2.12_vac15/' )
-    list1d_datdir.append( 'Pt.110.x2y3z4.5_O3.135_vac15/' )
-    list1d_datdir.append( 'Pt.110.x2y4z4.5_O4.1458_vac15/' )
+    str_outfile = list1d_out[0]
+    list1d_datdir = list1d_out[1]
+
     list1d_abc = ['a','b','c','d','e']
-    list1d_datangle = ['a0_b90', 'a90_b45']
-    list1d_anglelabel = ['z','x_y']
 
-
-    for int_i in range(len(list1d_datangle)):
-        str_datanlge = list1d_datangle[int_i]
-        plt.figure( int_i )
-        str_savefig = list_pictemp[2]+str_datanlge+'.pdf'
-
-        str_datfile = str_exp+'20210924.Pt.110.a20.csv'
+    plt.figure( int_i )
+    str_savefig = str_outfile+'a20_b90.pdf'
+    str_datfile = str_exp+'20210924.Pt.110.a20.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    label=r'Exp. 20$\degree$'
+    plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
+    
+    for int_j in range(len(list1d_datdir)):
+        str_datdir = list1d_datdir[ int_j ]
+        str_datfile = '../'+str_datdir+'vasp_sch/xas.a20_b90.csv'
         _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
         _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-        label=r'Exp. 20$\degree$'
-        plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
-        
-        for int_j in range(len(list1d_datdir)):
-            str_datdir = list1d_datdir[ int_j ]
-            str_datfile = str_datdir+'vasp_sch/xas_'+str_datanlge+'.csv'
-            _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-            _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-            label=r'Theory '+list1d_anglelabel[int_i]+' '+list1d_abc[int_j]
-            plt.plot( array2d_xdata, array2d_ydata, label=label )
-
-            plt.xlim( 527,540 )
-            plt.ylim( 0,6 )
-            plt.xlabel( 'Energy (eV)' )
-            plt.ylabel( "Intensity (Arb. Units)" )
-            plt.legend()
-            plt.savefig( str_savefig,bbox_inches='tight' )
+        label=r'Theory 20$\degree$ '+list1d_abc[int_j]
+        plt.plot( array2d_xdata, array2d_ydata, label=label )
+    plt.xlim( 527,540 )
+    plt.ylim( 0,6 )
+    plt.xlabel( 'Energy (eV)' )
+    plt.ylabel( "Intensity (Arb. Units)" )
+    plt.legend()
+    plt.savefig( str_savefig,bbox_inches='tight' )
     plt.show()
 
 list_pictemp = pic[7]
