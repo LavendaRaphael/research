@@ -25,7 +25,7 @@ def def_serversub(
     else:
         int_maxppn = server.dict_maxppn[ str_jobqueue ]
     if ('int_nodes' in dict_input):
-        str_jobqueue = dict_input[ 'int_nodes' ]
+        int_nodes = dict_input[ 'int_nodes' ]
         int_ppn = int_maxppn 
     if ('int_ncore' in dict_input):
         int_ncore = dict_input[ 'int_ncore' ]
