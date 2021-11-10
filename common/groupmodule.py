@@ -2,6 +2,123 @@ import os
 import math
 import subprocess
 import server
+import shutil
+
+def def_vasp_potgen():
+    str_poscar = 'POSCAR'
+    with open( str_poscar, 'r' ) as obj_poscar:
+        for i in range(5):
+            next(obj_poscar)
+        list1d_atomsymbol = obj_poscar.readline().split()
+    print(list1d_atomsymbol)
+
+    dict_pot = {}
+    dict_pot['H' ]='H'
+    dict_pot['Li']='Li_sv'
+    dict_pot['B' ]='B'
+    dict_pot['C' ]='C'
+    dict_pot['N' ]='N'
+    dict_pot['O' ]='O'
+    dict_pot['F' ]='F'
+    dict_pot['Ne']='Ne'
+    dict_pot['Na']='Na_pv'
+    dict_pot['Mg']='Mg'
+    dict_pot['Al']='Al'
+    dict_pot['Si']='Si'
+    dict_pot['P' ]='P '
+    dict_pot['S' ]='S'
+    dict_pot['Cl']='Cl'
+    dict_pot['Ar']='Ar'
+    dict_pot['K' ]='K_sv'
+    dict_pot['Ca']='Ca_sv'
+    dict_pot['Sc']='Sc_sv'
+    dict_pot['Ti']='Ti_sv'
+    dict_pot['V' ]='V_sv'
+    dict_pot['Cr']='Cr_pv'
+    dict_pot['Mn']='Mn_pv'
+    dict_pot['Fe']='Fe'
+    dict_pot['Co']='Co'
+    dict_pot['Ni']='Ni'
+    dict_pot['Cu']='Cu'
+    dict_pot['Zn']='Zn'
+    dict_pot['Ga']='Ga_d'
+    dict_pot['Ge']='Ge_d'
+    dict_pot['As']='As'
+    dict_pot['Se']='Se'
+    dict_pot['Br']='Br'
+    dict_pot['Kr']='Kr'
+    dict_pot['Rb']='Rb_sv'
+    dict_pot['Sr']='Sr_sv'
+    dict_pot['Y' ]='Y_sv'
+    dict_pot['Zr']='Zr_sv'
+    dict_pot['Nb']='Nb_sv'
+    dict_pot['Mo']='Mo_sv'
+    dict_pot['Tc']='Tc_pv'
+    dict_pot['Ru']='Ru_pv'
+    dict_pot['Rh']='Rh_pv'
+    dict_pot['Pd']='Pd'
+    dict_pot['Ag']='Ag'
+    dict_pot['Cd']='Cd'
+    dict_pot['In']='In_d'
+    dict_pot['Sn']='Sn_d'
+    dict_pot['Sb']='Sb'
+    dict_pot['Te']='Te'
+    dict_pot['I' ]='I'
+    dict_pot['Xe']='Xe'
+    dict_pot['Cs']='Cs_sv'
+    dict_pot['Ba']='Ba_sv'
+    dict_pot['La']='La'
+    dict_pot['Ce']='Ce'
+    dict_pot['Pr']='Pr_3'
+    dict_pot['Nd']='Nd_3'
+    dict_pot['Pm']='Pm_3'
+    dict_pot['Sm']='Sm_3'
+    dict_pot['Eu']='Eu_2'
+    dict_pot['Gd']='Gd_3'
+    dict_pot['Tb']='Tb_3'
+    dict_pot['Dy']='Dy_3'
+    dict_pot['Ho']='Ho_3'
+    dict_pot['Er']='Er_3'
+    dict_pot['Tm']='Tm_3'
+    dict_pot['Yb']='Yb_2'
+    dict_pot['Lu']='Lu_3'
+    dict_pot['Hf']='Hf_pv'
+    dict_pot['Ta']='Ta_pv'
+    dict_pot['W' ]='W_sv'
+    dict_pot['Re']='Re'
+    dict_pot['Os']='Os'
+    dict_pot['Ir']='Ir'
+    dict_pot['Pt']='Pt'
+    dict_pot['Au']='Au'
+    dict_pot['Hg']='Hg'
+    dict_pot['Tl']='Tl_d'
+    dict_pot['Pb']='Pb_d'
+    dict_pot['Bi']='Bi_d'
+    dict_pot['Po']='Po_d'
+    dict_pot['At']='At'
+    dict_pot['Rn']='Rn'
+    dict_pot['Fr']='Fr_sv'
+    dict_pot['Ra']='Ra_sv'
+    dict_pot['Ac']='Ac'
+    dict_pot['Th']='Th'
+    dict_pot['Pa']='Pa'
+    dict_pot['U' ]='U'
+    dict_pot['Np']='Np'
+    dict_pot['Pu']='Pu'
+    dict_pot['Am']='Am'
+    dict_pot['Cm']='Cm'
+
+    list1d_pot = [ dict_pot[i] for i in list1d_atomsymbol ]
+    print(list1d_pot)
+
+    dir_vasppot = os.environ('vasp_pot')
+
+    with open('POTCAR','wb') as obj_potcar:
+        for str_pottype in list1d_pot:
+            file_inpot = dir_vasppot + str_pottype +'/POTCAR'
+            with open(file_inpot,'rb') as obj_inpot:
+                shutil.copyfileobj(obj_inpot, obj_potcar)
+                obj_potcar.write(b'\n')
 
 def def_serversub( 
          str_jobname,
