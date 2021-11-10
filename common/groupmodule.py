@@ -5,6 +5,10 @@ import server
 import shutil
 
 def def_vasp_potgen():
+    if os.path.isfile('POTCAR'):
+        print('POTCAR has exist.')
+        return 
+
     str_poscar = 'POSCAR'
     with open( str_poscar, 'r' ) as obj_poscar:
         for i in range(5):
@@ -186,6 +190,7 @@ def def_serversub(
         obj_subfile.write( str_subhead )
         if (('vasp' in str_excute) and (( '_std' in str_excute ) or ('_gam' in str_excute))) :
             obj_subfile.write( str_subvasp)
+            def_vasp_potgen()
         obj_subfile.write( str_excute )
         obj_subfile.write( '\n' )
         obj_subfile.write( str_timecount )
