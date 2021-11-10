@@ -111,14 +111,13 @@ def def_vasp_potgen():
     list1d_pot = [ dict_pot[i] for i in list1d_atomsymbol ]
     print(list1d_pot)
 
-    dir_vasppot = os.environ('vasp_pot')
+    dir_vasppot = os.environ['vasp_pot']
 
     with open('POTCAR','wb') as obj_potcar:
         for str_pottype in list1d_pot:
             file_inpot = dir_vasppot + str_pottype +'/POTCAR'
             with open(file_inpot,'rb') as obj_inpot:
                 shutil.copyfileobj(obj_inpot, obj_potcar)
-                obj_potcar.write(b'\n')
 
 def def_serversub( 
          str_jobname,
