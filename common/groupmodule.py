@@ -61,13 +61,14 @@ def def_serversub(
     str_subvasp = (
         'if [ -f "INCAR" ]; then\n'+
         '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_maxppn/2)) +'" INCAR\n'+
+        '   '+
         'fi\n'
         )
 
     with open( str_subfile, 'w' ) as obj_subfile:
         obj_subfile.write( dict_subconfig[ str_mycluster ] ) 
         obj_subfile.write( str_subhead )
-        if ('vasp' in str_excute):
+        if (('vasp' in str_excute) and (( '_std' in str_excute ) or ('_gam' in str_excute))) :
             obj_subfile.write( str_subvasp)
         obj_subfile.write( str_excute )
         obj_subfile.write( '\n' )
