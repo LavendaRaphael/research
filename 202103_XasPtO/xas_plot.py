@@ -51,7 +51,7 @@ pic[7]=[
     'xas.alpha.pdf'
 ]
 pic[8]=[
-    't',
+    '',
     str_work_110+'neighbor/',
     [
         [
@@ -113,12 +113,79 @@ pic[8]=[
         ]
     ]
 ]
+pic[9]=[
+    't',
+    [
+        str_work_111+'Pt.111.a2b2c4_O1_vac15/feff/atom_1/polarization_z/',
+        str_work_111+'Pt.111.a2b2c8_O1_vac15/atom_1/polarization_z/',
+    ],
+    [
+        [
+            'test_scf',
+            [
+                'scf_7/',
+                'scf_8/',
+            ],
+            [
+                'SCF 7.0',
+                'SCF 8.0',
+            ],
+        ],
+        [
+            'test_fms',
+            [
+                'scf_7/',
+                'fms_10/',
+                'fms_11/',
+                #'fms_12/',
+                #'fms_13/',
+            ],
+            [
+                'FMS 9.0',
+                'FMS 10.0',
+                'FMS 11.0',
+                #'FMS 12.0',
+                #'FMS 13.0',
+            ],
+        ],
+    ]
+]
 
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
-list_colors = list(mcolors.TABLEAU_COLORS)
+list1d_colors = list(mcolors.TABLEAU_COLORS)
+
+list_pictemp = pic[9]
+if (list_pictemp[0]):
+    str_workdir = list_pictemp[1][1]
+    list1d_out = list_pictemp[2][1]
+
+    str_savefig = list1d_out[0] +'.pdf'
+    list1d_datdir = list1d_out[1]
+    list1d_title = list1d_out[2]
+
+    os.chdir( str_workdir )
+    print(os.getcwd())
+
+    for int_j in range(len(list1d_datdir)):
+        str_datfile = list1d_datdir[ int_j ]+'xmu.dat'
+        _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+        _, array2d_ydata = xas_module.def_extract(
+            str_datfile=str_datfile,
+            list1d_column=[ 3 ]
+        )
+        plt.plot( 
+            array2d_xdata, array2d_ydata, 
+            label = list1d_title[ int_j ]
+        )
+    plt.xlim( 527,540 )
+    plt.xlabel( 'Energy (eV)' )
+    plt.ylabel( "Intensity (Arb. Units)" )
+    plt.legend()
+    plt.savefig( str_savefig, bbox_inches='tight' )
+    plt.show()
 
 list_pictemp = pic[8]
 if (list_pictemp[0]):
