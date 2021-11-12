@@ -160,7 +160,7 @@ def def_serversub(
     dict_jobsub = {}
     dict_subconfig[ 'qsub' ] = (
         '#PBS -l nodes='+str(int_nodes)+':ppn='+str(int_ppn)+'\n'+
-        '#PBS -l walltime=240:00:00\n'+
+        #'#PBS -l walltime=240:00:00\n'+
         '#PBS -N '+str_jobname+'\n'+
         '#PBS -q '+str_jobqueue+'\n'+
         '#PBS -j oe\n'+
