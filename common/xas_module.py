@@ -383,7 +383,7 @@ def def_exp_xyfit( list2d_alpha, str_outfile ):
         array1d_ydata_fit[ int_i ] = numpy.sum( polyfit.convert().coef )
 
     def_writedata(
-        list2d_header = [ 'E(eV)', 'sigma_xyfit' ],
+        list2d_header = [ ['E(eV)', 'sigma_xyfit'] ],
         list3d_data = [ array1d_xdata_interp, array1d_ydata_fit ],
         str_outfile=str_outfile
         )
