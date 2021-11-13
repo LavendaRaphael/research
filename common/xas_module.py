@@ -349,11 +349,9 @@ def def_tm_extract( str_datfile='MYCARXAS' ):
     def_endfunc()
     return array2d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
 
-def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
+def def_exp_xyfit( list2d_alpha, str_outfile ):
 #----------------------------------------------[]
 # list2d_alpha = []
-# list2d_alpha.append( [20, '20210924.Pt.110.a20.csv'] )
-# list2d_alpha.append( [41, '20210924.Pt.110.a41.csv'] )
 #----------------------------------------------[]
     def_startfunc( locals() )
 
@@ -363,8 +361,10 @@ def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
     for int_i in range(int_lenalpha):
         array1d_alpha[int_i] = list2d_alpha[ int_i ][ 0 ]
         str_datfile = list2d_alpha[ int_i ][ 1 ]
-        str_xheader, list1d_yheader, array1d_xdata, array2d_ydata = def_extract( str_datfile=str_datfile, int_xcolumn=0, list1d_ycolumn=[1] )
-        list2d_data.append( [ array1d_xdata, array2d_ydata] )
+        list1d_xycolumn = list2d_alpha[ int_i ][ 2 ]
+        list1d_xheader, array2d_xdata = def_extract( str_datfile=str_datfile, list1d_column=[ list1d_xycolumn[0] ] )
+        list1d_yheader, array2d_ydata = def_extract( str_datfile=str_datfile, list1d_column=[ list1d_xycolumn[1] ] )
+        list2d_data.append( [ array2d_xdata, array2d_ydata] )
 
     array1d_sinalpha2 = numpy.sin( numpy.radians( array1d_alpha ) ) **2
     def_print_paras( locals(), ['array1d_sinalpha2'] )
@@ -382,8 +382,11 @@ def def_exp_xyfit( list2d_alpha, str_outfile='xas_exp.xyfit.csv' ):
         polyfit = numpy.polynomial.Polynomial.fit( array1d_sinalpha2, array1d_temp, 1 )
         array1d_ydata_fit[ int_i ] = numpy.sum( polyfit.convert().coef )
 
-    array2d_ydata = numpy.reshape( array1d_ydata_fit, newshape=( int_len1dxdata,1 ) )
-    def_writedata( array1d_xdata=array1d_xdata_interp, array2d_ydata=array2d_ydata, str_xheader='E(eV)', list1d_yheader=['sigma_xyfit'], str_outfile=str_outfile)
+    def_writedata(
+        list2d_header = [ 'E(eV)', 'sigma_xyfit' ],
+        list3d_data = [ array1d_xdata_interp, array1d_ydata_fit ],
+        str_outfile=str_outfile
+        )
 
 class class_paras(object):
 
