@@ -5,33 +5,57 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.colors as mcolors
+import local_module
 
 str_exp=os.environ['goto_pto_exp']
 str_work_110=os.environ['goto_pto_work_110']
 str_work_111=os.environ['goto_pto_work_111']
-str_comput_110=os.environ['goto_pto_comput_110']
+
+dict_structure = local_module.def_dict_structure()
 
 pic=[]
 for int_i in range(100):
     pic.append([False])
+pic[0]=[
+    't',
+    str_exp,
+    [
+        [
+            '20211113.xyzfit',
+            '20211113.xyzfit.csv',
+            ['25', '50']
+        ],
+        [
+            '20211113.xyzfit_m5',
+            '20211113.xyzfit_m5.csv',
+            ['20', '45']
+        ],
+        [
+            '20211113.xyzfit_p5',
+            '20211113.xyzfit_p5.csv',
+            ['30', '55']
+        ],
+    ]
+]
 pic[1]=[
     '',
-    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/', 
+    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/', 
     'xas_tm'
 ]
 pic[2]=[
     '',
-    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
+    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/',
 ]
 pic[3]=[
     '',
-    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/wfn/',
+    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/wfn/',
 ]
 pic[4]=[
     '',
     [
-        str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/atom_11/',
-        str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
+        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/',
+        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir,
+        dict_structure[ '110.x12y2z4.5_O22_aimd' ].str_chdir,
     ],
     'xas.exp_xy_z.pdf'
 ]
@@ -42,80 +66,83 @@ pic[5]=[
 ]
 pic[6]=[
     '',
-    str_work_111+'Pt.111.x4y4z4_O4_vac15/vasp_sch/',
+    dict_structure['111.x4y4z4_O4'].str_chdir,
     'xas.exp_xy_z.pdf'
 ]
 pic[7]=[
     '',
-    str_work_110+'Pt.110.x12y2z4.5_O22_vac15/vasp_sch/',
+    [
+        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir,
+        dict_structure[ '110.x12y2z4.5_O22_aimd' ].str_chdir,
+    ],
     'xas.alpha.pdf'
 ]
 pic[8]=[
-    't',
+    '',
     str_work_110+'neighbor/',
     [
         [
             'xas.neighbor_x.',
             [
-                'Pt.110.x2y3z4.5_O1_vac15/',
-                'Pt.110.x2y3z4.5_O2.12_vac15/'
+                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O2.12' ].str_chdir
             ]
         ],
         [
             'xas.neighbor_y.',
             [
-                'Pt.110.x2y3z4.5_O1_vac15/' ,
-                'Pt.110.x2y3z4.5_O2.13_vac15/' ,
-                'Pt.110.x2y4z4.5_O3.137_vac15/',
-                'Pt.110.x2y3z4.5_O3.135_vac15/',
+                dict_structure[ '110.x2y3z4.5_O1'].str_chdir ,
+                dict_structure[ '110.x2y3z4.5_O2.13'].str_chdir ,
+                dict_structure[ '110.x2y4z4.5_O3.137'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O3.135'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_xy.',
             [
-                'Pt.110.x2y3z4.5_O1_vac15/',
-                'Pt.110.x2y3z4.5_O2.14_vac15/',
-                'Pt.110.x2y4z4.5_O3.148_vac15/',
-                'Pt.110.x2y4z4.5_O4.1458_vac15/',
+                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O2.14'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O3.148'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_mix.',
             [
-                'Pt.110.x2y3z4.5_O1_vac15/',
-                'Pt.110.x2y3z4.5_O3.123_vac15/',
-                'Pt.110.x2y4z4.5_O4.1237_vac15/',
+                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O3.123'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O4.1237'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_double.',
             [
-                'Pt.110.x2y3z4.5_O4.v56_vac15/',
-                'Pt.110.x2y4z4.5_O6.v56_vac15/',
-                'Pt.110.x2y3z4.5_O6_vac15/',
+                dict_structure[ '110.x2y3z4.5_O4.v56'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O6.v56'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
             ],
         ],
         [
             'xas.coverage.',
             [
-                'Pt.110.x2y3z4.5_O1_vac15/',
-                'Pt.110.x2y4z4.5_O4.1458_vac15/',
-                'Pt.110.x2y3z4.5_O6_vac15/'
+                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O6'].str_chdir
             ]
         ],
         [
             'xas.distribution.',
             [
-                'Pt.110.x2y3z4.5_O2.12_vac15/',
-                'Pt.110.x2y3z4.5_O3.135_vac15/',
-                'Pt.110.x2y4z4.5_O4.1458_vac15/'
+                dict_structure[ '110.x2y3z4.5_O2.12'].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O3.135'].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir
             ]
         ],
         [
             'xas.density.',
             [
-                'Pt.110.x2y3z4.5_O6_vac15/',
-                'Pt.110.x4y3z4.5_O6_vac15/'
+                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
+                dict_structure[ '110.x4y3z4.5_O6'].str_chdir
             ],
         ]
     ]
@@ -124,7 +151,7 @@ pic[9]=[
     '',
     [
         str_work_111+'Pt.111.a2b2c4_O1_vac15/feff/atom_1/polarization_z/',
-        str_work_111+'Pt.111.a2b2c8_O1_vac15/atom_1/polarization_z/',
+        str_work_111+'Pt.111.a2b2c8_O1_vac15/feff/atom_1/polarization_z/',
     ],
     [
         [
@@ -162,7 +189,7 @@ matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
-list1d_colors = list(mcolors.TABLEAU_COLORS)
+list1d_color = list(mcolors.TABLEAU_COLORS)
 
 list_pictemp = pic[9]
 if (list_pictemp[0]):
@@ -244,7 +271,7 @@ list_pictemp = pic[7]
 if (list_pictemp[0]):
     #---------------------------------------------[]
     plt.figure(1)
-    str_workdir = list_pictemp[1]
+    str_workdir = list_pictemp[1][1]
     str_savefig = list_pictemp[2]
     os.chdir( str_workdir )
     print(os.getcwd())
@@ -261,7 +288,7 @@ if (list_pictemp[0]):
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
     _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
     label=r'Theory 20$\degree$'
-    plt.plot( array2d_xdata, array2d_ydata+float_plus, label=label, color=list_colors[0] )
+    plt.plot( array2d_xdata, array2d_ydata+float_plus, label=label, color=list1d_color[0] )
     
     str_datfile = str_exp+'20210924.Pt.110.a41.csv'
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
@@ -269,11 +296,11 @@ if (list_pictemp[0]):
     label=r'Exp. 41$\degree$'
     plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
 
-    str_datfile = 'xas.a41_b90.csv'
+    str_datfile = 'xas.a20_b90.csv'
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[4] )
     label=r'Theory 41$\degree$'
-    plt.plot( array2d_xdata, array2d_ydata, label=label, color=list_colors[1] )
+    plt.plot( array2d_xdata, array2d_ydata, label=label, color=list1d_color[1] )
 
     plt.xlim( 527,540 )
     #plt.ylim( 0,6 )
@@ -358,11 +385,12 @@ if (list_pictemp[0]):
     plt.savefig( str_savefig,bbox_inches='tight' )
     plt.show()
 
-if (pic[4][0]):
+list_pictemp = pic[4]
+if (list_pictemp[0]):
     #---------------------------------------------[]
-    plt.figure(4)
-    str_workdir = pic[4][1][1]
-    str_savefig = pic[4][2]
+    plt.figure(1)
+    str_workdir = list_pictemp[1][2]
+    str_savefig = list_pictemp[2]
     os.chdir( str_workdir )
 
     str_datfile = str_exp+'20210924.Pt.110.a20.csv'
@@ -607,20 +635,37 @@ if (pic[1][0]):
 
     plt.show()
 
-if (pic[0][0]):
-    str_xheader, list_yheaders, array2d_xdata, array2d_ydata = xas_module.def_extract( str_datfile='20210924.Pt.110.a20.csv', list1d_column=[1] )
-    plt.plot( array2d_xdata, array2d_ydata,label=r'Exp. 20$\degree$' )
+list_pictemp = pic[0]
+if (list_pictemp[0]):
+    str_chdir = list_pictemp[1]
+    list1d_para  = list_pictemp[2][1]
 
-    str_xheader, list_yheaders, array2d_xdata, array2d_ydata = xas_module.def_extract( str_datfile='20210924.Pt.110.a41.csv', list1d_column=[1] )
-    plt.plot( array2d_xdata, array2d_ydata,label=r'Exp. 41$\degree$' )
+    str_savefig = list1d_para[0]
+    os.chdir(str_chdir)
 
-    str_xheader, list_yheaders, array2d_xdata, array2d_ydata = xas_module.def_extract( str_datfile='xas_exp.xyfit.csv', list1d_column=[1] )
-    plt.plot( array2d_xdata, array2d_ydata,label=r'Exp. 90$\degree$ fit' )
+    list1d_degree = list1d_para[2]
+    str_datfile = '20211113.Angel-Pt110-OXAS.csv'
+    _, array2d_xdata = xas_module.def_extract( str_datfile, [0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile, [1] )
+    plt.plot( array2d_xdata, array2d_ydata, label=r'Exp. '+list1d_degree[0]+'$\degree$' )
+
+    _, array2d_xdata = xas_module.def_extract( str_datfile, [0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile, [6] )
+    plt.plot( array2d_xdata, array2d_ydata, label=r'Exp. '+list1d_degree[1]+'$\degree$' )
+
+    str_datfile = list1d_para[1]
+    _, array2d_xdata = xas_module.def_extract( str_datfile, [0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile, [1] )
+    plt.plot( array2d_xdata, array2d_ydata, label=r'Exp. 90$\degree$ fit' )
+
+    _, array2d_xdata = xas_module.def_extract( str_datfile, [0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile, [2] )
+    plt.plot( array2d_xdata, array2d_ydata, label=r'Exp. 0$\degree$ fit' )
 
     plt.xlim( 527,540 )
-    plt.ylim( bottom=0 )
+    #plt.ylim( bottom=0 )
     plt.xlabel( 'Energy (eV)' )
     plt.ylabel( "Intensity (Arb. Units)" )
     plt.legend()
-    plt.savefig( 'xas_exp.xyfit.pdf',bbox_inches='tight' )
+    plt.savefig( str_savefig+'.pdf',bbox_inches='tight' )
     plt.show()

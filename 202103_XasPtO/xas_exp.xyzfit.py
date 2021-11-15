@@ -16,7 +16,7 @@ list2d_alpha.append( [ 45, '20211113.Angel-Pt110-OXAS.csv', [0,5] ])
 list2d_alpha.append( [ 50, '20211113.Angel-Pt110-OXAS.csv', [0,6] ])
 
 
-xas_module.def_exp_xyfit( 
+xas_module.def_exp_xyzfit( 
     list2d_alpha = list2d_alpha,
-    str_outfile = 'test.csv'
+    str_outfile = 'xyzfit.csv'
 )

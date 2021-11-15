@@ -2,30 +2,31 @@ import xas_module
 import os
 import local_module
 
-list1d_workdir=[]
+list1d_key=[]
 #----------------------------------
-#list1d_workdir.append('Pt.110.x12y2z4.5_O22_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O1_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O2.12_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O2.13_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O2.14_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O3.123_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O3.135_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O3.136_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O4.v56_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O5_vac15/')
-#list1d_workdir.append('Pt.110.x2y3z4.5_O6_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O2.15_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O2.16_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O3.137_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O3.148_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O4.1237_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O4.1458_vac15/')
-#list1d_workdir.append('Pt.110.x2y4z4.5_O6.v56_vac15/')
-#list1d_workdir.append('Pt.110.x4y3z4.5_O2.12_vac15/')
-list1d_workdir.append('Pt.110.x4y3z4.5_O6_vac15/')
+#list1d_key.append('110.x12y2z4.5_O22')
+list1d_key.append('110.x12y2z4.5_O22_aimd')
+#list1d_key.append('110.x2y3z4.5_O1')
+#list1d_key.append('110.x2y3z4.5_O2.12')
+#list1d_key.append('110.x2y3z4.5_O2.13')
+#list1d_key.append('110.x2y3z4.5_O2.14')
+#list1d_key.append('110.x2y3z4.5_O3.123')
+#list1d_key.append('110.x2y3z4.5_O3.135')
+#list1d_key.append('110.x2y3z4.5_O3.136')
+#list1d_key.append('110.x2y3z4.5_O4.v56')
+#list1d_key.append('110.x2y3z4.5_O5')
+#list1d_key.append('110.x2y3z4.5_O6')
+#list1d_key.append('110.x2y4z4.5_O2.15')
+#list1d_key.append('110.x2y4z4.5_O2.16')
+#list1d_key.append('110.x2y4z4.5_O3.137')
+#list1d_key.append('110.x2y4z4.5_O3.148')
+#list1d_key.append('110.x2y4z4.5_O4.1237')
+#list1d_key.append('110.x2y4z4.5_O4.1458')
+#list1d_key.append('110.x2y4z4.5_O6.v56')
+#list1d_key.append('110.x4y3z4.5_O2.12')
+#list1d_key.append('110.x4y3z4.5_O6')
 
-#list1d_workdir.append('Pt.111.x4y4z4_O4_vac15/')
+#list1d_key.append('111.x4y4z4_O4')
 
 #----------------------------------
 list2d_angle = []
@@ -43,10 +44,10 @@ str_abname = xas_module.def_abname( alpha=list1d_alignangle[0], beta=list1d_alig
 str_outfile = 'xas.'+str_abname+'.csv'
 #str_outfile = 'test.csv'
 
-for str_workdir in list1d_workdir:
-    class_structure = dict_structure[ str_workdir ]
+for str_key in list1d_key:
+    class_structure = dict_structure[ str_key ]
     str_chdir = class_structure.str_chdir
-    str_chdir = str_chdir+'vasp_sch/'
+    str_chdir = str_chdir
     os.chdir(str_chdir)
     print(os.getcwd())
 

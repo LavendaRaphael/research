@@ -349,7 +349,7 @@ def def_tm_extract( str_datfile='MYCARXAS' ):
     def_endfunc()
     return array2d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
 
-def def_exp_xyfit( list2d_alpha, str_outfile ):
+def def_exp_xyzfit( list2d_alpha, str_outfile ):
 #----------------------------------------------[]
 # list2d_alpha = []
 #----------------------------------------------[]
@@ -366,25 +366,27 @@ def def_exp_xyfit( list2d_alpha, str_outfile ):
         list1d_yheader, array2d_ydata = def_extract( str_datfile=str_datfile, list1d_column=[ list1d_xycolumn[1] ] )
         list2d_data.append( [ array2d_xdata, array2d_ydata] )
 
-    array1d_sinalpha2 = numpy.sin( numpy.radians( array1d_alpha ) ) **2
-    def_print_paras( locals(), ['array1d_sinalpha2'] )
+    array1d_cosalpha2 = numpy.cos( numpy.radians( array1d_alpha ) ) **2
+    def_print_paras( locals(), ['array1d_cosalpha2'] )
 
     array1d_xdata_interp, list1d_ydata_interp = def_interp( list2d_data )
 
     int_len1dxdata = len( array1d_xdata_interp )
     def_print_paras( locals(), ['int_len1dxdata'] )
 
-    array1d_ydata_fit = numpy.empty( shape=(int_len1dxdata) )    
+    array2d_ydata_fit = numpy.empty( shape=(int_len1dxdata,2) )
     array1d_temp = numpy.empty( shape=(int_lenalpha) )
     for int_i in range( int_len1dxdata ):
         for int_j in range( int_lenalpha ):
             array1d_temp[int_j] = list1d_ydata_interp[int_j][int_i]
-        polyfit = numpy.polynomial.Polynomial.fit( array1d_sinalpha2, array1d_temp, 1 )
-        array1d_ydata_fit[ int_i ] = numpy.sum( polyfit.convert().coef )
+        polyfit = numpy.polynomial.Polynomial.fit( array1d_cosalpha2, array1d_temp, 1 )
+        b,k = polyfit.convert().coef
+        array2d_ydata_fit[ int_i ][0] = b
+        array2d_ydata_fit[ int_i ][1] = k+b
 
     def_writedata(
-        list2d_header = [ ['E(eV)', 'sigma_xyfit'] ],
-        list3d_data = [ array1d_xdata_interp, array1d_ydata_fit ],
+        list2d_header = [ ['E(eV)', 'fit_xy','fit_z'] ],
+        list3d_data = [ array1d_xdata_interp, array2d_ydata_fit ],
         str_outfile=str_outfile
         )
 
