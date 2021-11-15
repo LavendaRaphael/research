@@ -112,15 +112,11 @@ pic[8]=[
             ]
         ],
         [
-            'xas.x4y3.',
+            'xas.density.',
             [
                 'Pt.110.x2y3z4.5_O6_vac15/',
                 'Pt.110.x4y3z4.5_O6_vac15/'
             ],
-            [
-                'x2y3',
-                'x4y3',
-            ]
         ]
     ]
 ]
@@ -209,7 +205,6 @@ if (list_pictemp[0]):
 
     str_outfile = list1d_out[0]
     list1d_datdir = list1d_out[1]
-    list1d_title = list1d_out[2]
 
     list1d_abc = ['a','b','c','d','e','f']
 
@@ -234,7 +229,7 @@ if (list_pictemp[0]):
                 list1d_column=[ list1d_column[int_i] ] 
             )
             #label=r'Theory '+ list1d_label[int_i] +' '+list1d_abc[int_j]
-            label=r'Theory '+ list1d_label[int_i] +' '+ list1d_title[int_j]
+            label=r'Theory '+ list1d_label[int_i] +' '+ list1d_abc[int_j]
             plt.plot( array2d_xdata, array2d_ydata, label=label )
         str_savefig = str_outfile + list1d_yheader[0] +'.pdf'
         plt.xlim( 527,540 )

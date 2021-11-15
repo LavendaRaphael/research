@@ -432,11 +432,11 @@ class class_structure(object):
         self._list2d_atom = list_temp
 
     @property
-    def tup_bbox(self):
-        return self._tup_bbox
-    @tup_bbox.setter
-    def tup_bbox(self, tup_temp):
-        self._tup_bbox = tup_temp
+    def list1d_bbox(self):
+        return self._list1d_bbox
+    @list1d_bbox.setter
+    def list1d_bbox(self, list1d_temp):
+        self._list1d_bbox = list1d_temp
 
 def def_ave( 
         class_structure, 
