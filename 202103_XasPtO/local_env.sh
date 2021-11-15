@@ -41,7 +41,8 @@ echo "#=========================================================================
 #   work_dir=${work_dir}'vasp_sch.zm/'
 #   work_dir=${work_dir}'vasp_sch.zp/'
 # work_dir='Pt.110.x4y3z4.5_O2.12_vac15/'
-# work_dir=${goto_pto_work_110}${work_dir}
+ work_dir='Pt.110.x4y3z4.5_O6_vac15/'
+ work_dir=${goto_pto_work_110}${work_dir}
  work_dir=${work_dir}'vasp_sch/'
 echo "work_dir=$work_dir"
 
@@ -52,10 +53,10 @@ echo "work_dir=$work_dir"
 # loopfile=`seq 1 $O_num`
 # loopfile=(1 1 3 3 5 5 7 7 9 9 11)
 # loopfile=$(seq 1 22)
-  loopfile=(1 2)
+  loopfile=(1)
  echo "loopfile=$loopfile"
 
-  subfile=vasp_sub.sh
+  subfile=vasp_sub.py
 # subfile=xspectra_sub.sh
 # subfile=scf_sub.sh
 echo "subfile=$subfile"
