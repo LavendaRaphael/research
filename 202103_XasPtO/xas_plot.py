@@ -51,7 +51,7 @@ pic[7]=[
     'xas.alpha.pdf'
 ]
 pic[8]=[
-    '',
+    't',
     str_work_110+'neighbor/',
     [
         [
@@ -110,11 +110,22 @@ pic[8]=[
                 'Pt.110.x2y3z4.5_O3.135_vac15/',
                 'Pt.110.x2y4z4.5_O4.1458_vac15/'
             ]
+        ],
+        [
+            'xas.x4y3.',
+            [
+                'Pt.110.x2y3z4.5_O6_vac15/',
+                'Pt.110.x4y3z4.5_O6_vac15/'
+            ],
+            [
+                'x2y3',
+                'x4y3',
+            ]
         ]
     ]
 ]
 pic[9]=[
-    't',
+    '',
     [
         str_work_111+'Pt.111.a2b2c4_O1_vac15/feff/atom_1/polarization_z/',
         str_work_111+'Pt.111.a2b2c8_O1_vac15/atom_1/polarization_z/',
@@ -191,13 +202,14 @@ list_pictemp = pic[8]
 if (list_pictemp[0]):
     #---------------------------------------------[]
     str_workdir = list_pictemp[1]
-    list1d_out = list_pictemp[2][6]
+    list1d_out = list_pictemp[2][7]
 
     os.chdir( str_workdir )
     print(os.getcwd())
 
     str_outfile = list1d_out[0]
     list1d_datdir = list1d_out[1]
+    list1d_title = list1d_out[2]
 
     list1d_abc = ['a','b','c','d','e','f']
 
@@ -221,7 +233,8 @@ if (list_pictemp[0]):
                 str_datfile=str_datfile, 
                 list1d_column=[ list1d_column[int_i] ] 
             )
-            label=r'Theory '+ list1d_label[int_i] +' '+list1d_abc[int_j]
+            #label=r'Theory '+ list1d_label[int_i] +' '+list1d_abc[int_j]
+            label=r'Theory '+ list1d_label[int_i] +' '+ list1d_title[int_j]
             plt.plot( array2d_xdata, array2d_ydata, label=label )
         str_savefig = str_outfile + list1d_yheader[0] +'.pdf'
         plt.xlim( 527,540 )

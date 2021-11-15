@@ -78,8 +78,8 @@ def def_atom_findpeak(
     os.chdir('..')
     with open(str_jsonfile) as obj_jsonfile:
         float_align = json.load( fp=obj_jsonfile )['float_align']
-    dict_structures = local_module.def_dict_structures()
-    str_chdir = dict_structures[ str_workdir ].list2d_atom[0][0]
+    dict_structure = local_module.def_dict_structure()
+    str_chdir = dict_structure[ str_workdir ].list2d_atom[0][0]
     os.chdir(str_chdir)
     float_finalenergy_1 = def_vasp_finalenergy()
     os.chdir( str_cwddir )
@@ -258,7 +258,7 @@ def def_atom_abworkflow(
 #----------------------------------------------[]
     def_startfunc( locals() )
 
-    dict_structures = local_module.def_dict_structures()
+    dict_structure = local_module.def_dict_structure()
 
     str_cwddir = os.getcwd()
     os.chdir('..')
@@ -267,7 +267,7 @@ def def_atom_abworkflow(
         dict_jsonfile = json.load( fp=obj_jsonfile )
     float_align = dict_jsonfile['float_align']
     float_scaling = dict_jsonfile['float_scaling']
-    str_chdir = dict_structures[ str_workdir ].list2d_atom[0][0]
+    str_chdir = dict_structure[ str_workdir ].list2d_atom[0][0]
     os.chdir(str_chdir)
     float_finalenergy_1 = def_vasp_finalenergy()
     os.chdir( str_cwddir )
@@ -430,6 +430,13 @@ class class_structure(object):
         for list_i in list_temp: list_i[1] /= float_sum
         for list_i in list_temp: list_i[0] = 'atom_'+str(list_i[0])
         self._list2d_atom = list_temp
+
+    @property
+    def tup_bbox(self):
+        return self._tup_bbox
+    @tup_bbox.setter
+    def tup_bbox(self, tup_temp):
+        self._tup_bbox = tup_temp
 
 def def_ave( 
         class_structure, 
