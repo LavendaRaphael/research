@@ -5,8 +5,8 @@ import local_module
 
 list1d_key=[]
 #----------------------------------
-#list1d_key.append('110.x12y2z4.5_O22')
-list1d_key.append('110.x12y2z4.5_O22_aimd')
+#list1d_key.append('110.x2y12z4.5_O22')
+list1d_key.append('110.x2y12z4.5_O22_aimd')
 #list1d_key.append('110.x2y3z4.5_O1')
 #list1d_key.append('110.x2y3z4.5_O2.12')
 #list1d_key.append('110.x2y3z4.5_O2.13')

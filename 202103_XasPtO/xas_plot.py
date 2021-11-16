@@ -17,7 +17,7 @@ pic=[]
 for int_i in range(100):
     pic.append([False])
 pic[0]=[
-    't',
+    '',
     str_exp,
     [
         [
@@ -39,23 +39,23 @@ pic[0]=[
 ]
 pic[1]=[
     '',
-    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/', 
+    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/', 
     'xas_tm'
 ]
 pic[2]=[
     '',
-    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/',
+    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/',
 ]
 pic[3]=[
     '',
-    dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/wfn/',
+    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/wfn/',
 ]
 pic[4]=[
     '',
     [
-        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir+'atom_11/',
-        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir,
-        dict_structure[ '110.x12y2z4.5_O22_aimd' ].str_chdir,
+        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/',
+        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir,
+        dict_structure[ '110.x2y12z4.5_O22_aimd' ].str_chdir,
     ],
     'xas.exp_xy_z.pdf'
 ]
@@ -72,15 +72,45 @@ pic[6]=[
 pic[7]=[
     '',
     [
-        dict_structure[ '110.x12y2z4.5_O22' ].str_chdir,
-        dict_structure[ '110.x12y2z4.5_O22_aimd' ].str_chdir,
+        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir,
+        dict_structure[ '110.x2y12z4.5_O22_aimd' ].str_chdir,
     ],
     'xas.alpha.pdf'
 ]
 pic[8]=[
-    '',
+    't',
     str_work_110+'neighbor/',
     [
+        [   
+            'xas.correlation_2column.',
+            [   
+                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
+                dict_structure[ '110.x4y3z4.5_O2.12' ].str_chdir,
+            ]
+        ],
+        [   
+            'xas.correlation_2column_1.',
+            [   
+                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
+                dict_structure[ '110.x4y3z4.5_O6'].str_chdir
+            ],
+        ],
+        [   
+            'xas.correlation_y.',
+            [   
+                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O2.13' ].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O2.15' ].str_chdir,
+            ]
+        ],
+        [
+            'xas.correlation_xy.',
+            [
+                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
+                dict_structure[ '110.x2y3z4.5_O2.14' ].str_chdir,
+                dict_structure[ '110.x2y4z4.5_O2.16' ].str_chdir,
+            ]
+        ],
         [
             'xas.neighbor_x.',
             [
@@ -115,7 +145,7 @@ pic[8]=[
             ],
         ],
         [
-            'xas.neighbor_double.',
+            'xas.neighbor_mix_1.',
             [
                 dict_structure[ '110.x2y3z4.5_O4.v56'].str_chdir,
                 dict_structure[ '110.x2y4z4.5_O6.v56'].str_chdir,
@@ -138,13 +168,6 @@ pic[8]=[
                 dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir
             ]
         ],
-        [
-            'xas.density.',
-            [
-                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
-                dict_structure[ '110.x4y3z4.5_O6'].str_chdir
-            ],
-        ]
     ]
 ]
 pic[9]=[
@@ -225,7 +248,7 @@ list_pictemp = pic[8]
 if (list_pictemp[0]):
     #---------------------------------------------[]
     str_workdir = list_pictemp[1]
-    list1d_out = list_pictemp[2][7]
+    list1d_out = list_pictemp[2][2]
 
     os.chdir( str_workdir )
     print(os.getcwd())
@@ -249,7 +272,7 @@ if (list_pictemp[0]):
 
         for int_j in range(len(list1d_datdir)):
             str_datdir = list1d_datdir[ int_j ]
-            str_datfile = '../'+str_datdir+'vasp_sch/xas.a20_b90.csv'
+            str_datfile = str_datdir+'xas.a20_b90.csv'
             _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
             list1d_yheader, array2d_ydata = xas_module.def_extract( 
                 str_datfile=str_datfile, 

@@ -4,7 +4,7 @@ import local_module
 
 list1d_workdir=[]
 #----------------------------------
-list1d_workdir.append('Pt.110.x12y2z4.5_O22_vac15/')
+list1d_workdir.append('Pt.110.x2y12z4.5_O22_vac15/')
 
 #----------------------------------[loop]
 dict_structure = local_module.def_dict_structure()
