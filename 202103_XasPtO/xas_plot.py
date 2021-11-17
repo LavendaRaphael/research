@@ -13,9 +13,96 @@ str_work_111=os.environ['goto_pto_work_111']
 
 dict_structure = local_module.def_dict_structure()
 
+matplotlib.rcParams['font.size']=25
+matplotlib.rcParams['font.family']='sans-serif'
+matplotlib.rcParams['font.sans-serif']=["Arial"]
+matplotlib.rcParams["figure.figsize"] = (10,8)
+list1d_color = list(mcolors.TABLEAU_COLORS)
+
+def def_pic_0(
+        str_workdir,
+        str_savefig,
+        list2d_data,
+        ):
+
+    os.chdir( str_workdir )
+    print(os.getcwd())
+
+    list1d_column=[1,2,3]
+    list1d_label=[ '20$\degree$', 'x_y', 'z' ]
+
+    for int_i in range(len(list1d_column)):
+        fig, obj_ax = plt.subplots()
+
+        def_plt_exp(
+            obj_ax = obj_ax,
+            str_datfile = str_exp+'20210926.Pt.111.a20.csv',
+            str_label=r'Exp. 20$\degree$'
+        )
+
+        for int_j in range(len(list2d_data)):
+            list1d_data = list2d_data[ int_j ]
+            def_plt_theory(
+                obj_ax = obj_ax,
+                str_datfile = list1d_data[0]+'xas.a20_b90.csv',
+                list1d_column = [ 0, list1d_column[int_i] ],
+                str_label = r'Theory '+list1d_label[int_i]+' '+ list1d_data[1]
+            )
+        def_plt_save(
+            fig,
+            obj_ax,
+            str_savefig +'_'+ str(list1d_column[int_i])+'.pdf'
+        )
+    plt.show()
+
+def def_plt_exp(
+        obj_ax,
+        str_datfile,
+        str_label,
+        ):
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
+    return obj_ax
+
+def def_plt_theory(
+        obj_ax,
+        str_datfile,
+        str_label,
+        list1d_column,
+        ):
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
+    return obj_ax
+
+def def_plt_save(
+        fig,
+        obj_ax,
+        str_savefig
+        ):
+    obj_ax.set_xlim( left=527, right=540 )
+    obj_ax.set_ylim( bottom=0, top=9 )
+    obj_ax.set_xlabel( 'Energy (eV)' )
+    obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
+    obj_ax.legend()
+    fig.savefig( str_savefig, bbox_inches='tight' )
+
+if ('t'):
+    str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/'
+    str_savefig = 'vasp_sch.corehole'
+    list2d_data = [
+        ['vasp_sch/', 'FCH'],
+        ['vasp_sch.hch/', 'HCH'],
+    ]
+    def_pic_0( str_workdir, str_savefig, list2d_data, )
+
+
+'''
 pic=[]
 for int_i in range(100):
     pic.append([False])
+
 pic[0]=[
     '',
     str_exp,
@@ -78,7 +165,7 @@ pic[7]=[
     'xas.alpha.pdf'
 ]
 pic[8]=[
-    't',
+    '',
     str_work_110+'neighbor/',
     [
         [   
@@ -207,12 +294,6 @@ pic[9]=[
         ],
     ]
 ]
-
-matplotlib.rcParams['font.size']=25
-matplotlib.rcParams['font.family']='sans-serif'
-matplotlib.rcParams['font.sans-serif']=["Arial"]
-matplotlib.rcParams["figure.figsize"] = (10,8)
-list1d_color = list(mcolors.TABLEAU_COLORS)
 
 list_pictemp = pic[9]
 if (list_pictemp[0]):
@@ -692,3 +773,4 @@ if (list_pictemp[0]):
     plt.legend()
     plt.savefig( str_savefig+'.pdf',bbox_inches='tight' )
     plt.show()
+'''
