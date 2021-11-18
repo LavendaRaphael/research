@@ -23,6 +23,7 @@ def def_pic_0(
         str_workdir,
         str_savefig,
         list2d_data,
+        str_expfile,
         ):
 
     os.chdir( str_workdir )
@@ -36,7 +37,7 @@ def def_pic_0(
 
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+'20210926.Pt.111.a20.csv',
+            str_datfile = str_exp+str_expfile,
             str_label=r'Exp. 20$\degree$'
         )
 
@@ -82,20 +83,32 @@ def def_plt_save(
         str_savefig
         ):
     obj_ax.set_xlim( left=527, right=540 )
-    obj_ax.set_ylim( bottom=0, top=9 )
+    obj_ax.set_ylim( bottom=0, top=6 )
     obj_ax.set_xlabel( 'Energy (eV)' )
     obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
     obj_ax.legend()
     fig.savefig( str_savefig, bbox_inches='tight' )
 
+if (''):
+    def_pic_0( 
+        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/', 
+        str_savefig = 'vasp_sch.corehole', 
+        list2d_data = [
+            ['vasp_sch/', 'FCH'],
+            ['vasp_sch.hch/', 'HCH'],
+        ],
+        str_expfile = '20210926.Pt.111.a20.csv',
+    )
 if ('t'):
-    str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/'
-    str_savefig = 'vasp_sch.corehole'
-    list2d_data = [
-        ['vasp_sch/', 'FCH'],
-        ['vasp_sch.hch/', 'HCH'],
-    ]
-    def_pic_0( str_workdir, str_savefig, list2d_data, )
+    def_pic_0( 
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.useless',
+        list2d_data = [
+            ['Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/', 'a'],
+            ['Pt.110.x2y3z4.5_O5_vac15/vasp_sch/', 'b'],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
 
 
 '''
