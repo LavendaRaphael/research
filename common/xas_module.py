@@ -727,6 +727,12 @@ def def_vasp_outcar2xas():
 
     os.remove( str_tempfile )
 
+    def_writedata(
+        list2d_header = [ list1d_xheader, list1d_yheader ],
+        list3d_data = [ array2d_xdata, array2d_ydata ],
+        str_outfile = 'xas.csv'
+    )
+
     def_endfunc()
     return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata
 

@@ -19,12 +19,51 @@ matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
 list1d_color = list(mcolors.TABLEAU_COLORS)
 
-def def_pic_0(
+def def_plt_exp(
+        obj_ax,
+        str_datfile,
+        str_label,
+        ):
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
+    obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
+    return obj_ax
+
+def def_plt_theory(
+        obj_ax,
+        str_datfile,
+        str_label,
+        list1d_column,
+        ):
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
+    return obj_ax
+
+def def_plt_save(
+        fig,
+        obj_ax,
+        str_savefig,
+        tuple_xlim = (None, None),
+        tuple_ylim = (None, None),
+        ):
+    obj_ax.set_xlim( tuple_xlim )
+    obj_ax.set_ylim( tuple_ylim )
+    obj_ax.set_xlabel( 'Energy (eV)' )
+    obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
+    obj_ax.legend()
+    fig.savefig( str_savefig, bbox_inches='tight' )
+
+def def_pic_20degree(
         str_workdir,
         str_savefig,
-        list2d_data,
-        str_expfile,
-        ):
+        list2d_data, #[
+        #    [ str_datfile, str_label ],
+        #]
+        str_expfile,    
+    ):
+# exp, theory0, theory1
+# 20, x_y, z
 
     os.chdir( str_workdir )
     print(os.getcwd())
@@ -56,41 +95,48 @@ def def_pic_0(
         )
     plt.show()
 
-def def_plt_exp(
-        obj_ax,
-        str_datfile,
-        str_label,
-        ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-    obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
-    return obj_ax
+def def_pic_converge(
+        str_workdir,
+        str_savefig,
+        list2d_data, #[
+        #    [ str_datfile, str_label, int_column ],
+        #]
+        tuple_xlim,
+    ):
 
-def def_plt_theory(
-        obj_ax,
-        str_datfile,
-        str_label,
-        list1d_column,
-        ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
-    obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
-    return obj_ax
+    os.chdir( str_workdir )
+    print(os.getcwd())
 
-def def_plt_save(
+    fig, obj_ax = plt.subplots()
+    for int_i in range( len( list2d_data ) ):
+        list1d_data = list2d_data[ int_i ]
+        def_plt_theory(
+                obj_ax = obj_ax,
+                str_datfile = list1d_data[0],
+                list1d_column = [ 0, list1d_data[2] ],
+                str_label = list1d_data[1]
+            )
+    def_plt_save(
         fig,
         obj_ax,
-        str_savefig
-        ):
-    obj_ax.set_xlim( left=527, right=540 )
-    obj_ax.set_ylim( bottom=0, top=6 )
-    obj_ax.set_xlabel( 'Energy (eV)' )
-    obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
-    obj_ax.legend()
-    fig.savefig( str_savefig, bbox_inches='tight' )
+        str_savefig + '.pdf',
+        tuple_xlim,
+    )
+    plt.show()
+
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.x4y4z4_O4' ].str_chdir + 'atom_1/',
+        str_savefig = 'converge_kspace',
+        list2d_data = [
+            [ 'xas.csv',           'kspace 0.25', 3 ],
+            [ 'kspace0.2/xas.csv', 'kspace 0.20', 3 ],
+        ],
+        tuple_xlim = ( 512,525 )
+    )
 
 if (''):
-    def_pic_0( 
+    def_pic_20degree( 
         str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/', 
         str_savefig = 'vasp_sch.corehole', 
         list2d_data = [
@@ -99,8 +145,8 @@ if (''):
         ],
         str_expfile = '20210926.Pt.111.a20.csv',
     )
-if ('t'):
-    def_pic_0( 
+if (''):
+    def_pic_20degree( 
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.useless',
         list2d_data = [
