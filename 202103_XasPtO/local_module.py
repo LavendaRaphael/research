@@ -193,44 +193,53 @@ def def_dict_structure():
     str_workdir = 'Pt.'+str_key+'_vac15/vasp_sch/'
     dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
     #------------------------------------------
+    str_key='110.x2y6z4.5_O2.17'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    list1d_bbox = [ 1/2,2/6,1,1 ]
+    str_workdir = 'Pt.'+ str_key +'_vac15/vasp_sch/'
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+    #------------------------------------------
     str_key='110.x2y6z4.5_O2.17_ym'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
     list2d_atom.append([ 1,1.0])
-    list1d_bbox = [ 1/2,2/6,1,1 ]
     str_workdir = 'Pt.110.x2y6z4.5_O2.17_vac15/vasp_sch.ym/'
-    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir )
     #------------------------------------------
     str_key='110.x2y6z4.5_O2.17_xm'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
     list2d_atom.append([ 1,1.0])
-    list1d_bbox = [ 1/2,2/6,1,1 ]
     str_workdir = 'Pt.110.x2y6z4.5_O2.17_vac15/vasp_sch.xm/'
-    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir )
     #------------------------------------------
     str_key='110.x2y6z4.5_O2.17_xp'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
     list2d_atom.append([ 1,1.0])
-    list1d_bbox = [ 1/2,2/6,1,1 ]
     str_workdir = 'Pt.110.x2y6z4.5_O2.17_vac15/vasp_sch.xp/'
-    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir )
     #------------------------------------------
     str_key='110.x2y6z4.5_O2.17_zm'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
     list2d_atom.append([ 1,1.0])
-    list1d_bbox = [ 1/2,2/6,1,1 ]
     str_workdir = 'Pt.110.x2y6z4.5_O2.17_vac15/vasp_sch.zm/'
-    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir )
     #------------------------------------------
     str_key='110.x2y6z4.5_O2.17_zp'
     list2d_atom = []
     list2d_atom.append([ 1,1.0])
     list2d_atom.append([ 1,1.0])
-    list1d_bbox = [ 1/2,2/6,1,1 ]
     str_workdir = 'Pt.110.x2y6z4.5_O2.17_vac15/vasp_sch.zp/'
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir )
+    #------------------------------------------
+    str_key='110.x2y6z4.5_O2.18'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    list1d_bbox = [ 1/2,5/6,1,1 ]
+    str_workdir = 'Pt.'+ str_key +'_vac15/vasp_sch/'
     dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
     #------------------------------------------
     str_key='110.x4y3z4.5_O2.12'
@@ -281,7 +290,7 @@ def def_pto111_class( list2d_atom, str_workdir,
     return class_structure
 
 def def_render(
-        list1d_bbox, 
+        list1d_bbox = [0,0,1,1], 
         str_poscar = 'POSCAR',
         str_savefig = 'render'
         ):

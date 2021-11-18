@@ -62,8 +62,8 @@ def def_pic_20degree(
         #]
         str_expfile,    
     ):
-# exp, theory0, theory1
-# 20, x_y, z
+    # exp, theory0, theory1
+    # 20, x_y, z
 
     os.chdir( str_workdir )
     print(os.getcwd())
@@ -91,9 +91,57 @@ def def_pic_20degree(
         def_plt_save(
             fig,
             obj_ax,
-            str_savefig +'_'+ str(list1d_column[int_i])+'.pdf'
+            str_savefig +'.'+ str(list1d_column[int_i])+'.pdf',
+            tuple_xlim = (527,540),
         )
     plt.show()
+
+if ('t'):
+    def_pic_20degree(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.correlation_xy',
+        list2d_data = [
+            [ dict_structure['110.x2y3z4.5_O1'].str_chdir,    'a'],
+            [ dict_structure['110.x2y3z4.5_O2.14'].str_chdir, 'b'],
+            [ dict_structure['110.x2y4z4.5_O2.16'].str_chdir, 'c'],
+            [ dict_structure['110.x2y6z4.5_O2.18'].str_chdir, 'd'],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
+
+if ('t'):
+    def_pic_20degree(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.correlation_y',
+        list2d_data = [
+            [ dict_structure['110.x2y3z4.5_O1'].str_chdir,    'a'],
+            [ dict_structure['110.x2y3z4.5_O2.13'].str_chdir, 'b'],
+            [ dict_structure['110.x2y4z4.5_O2.15'].str_chdir, 'c'],
+            [ dict_structure['110.x2y6z4.5_O2.17'].str_chdir, 'd'],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
+
+if (''):
+    def_pic_20degree( 
+        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/', 
+        str_savefig = 'vasp_sch.corehole', 
+        list2d_data = [
+            ['vasp_sch/', 'FCH'],
+            ['vasp_sch.hch/', 'HCH'],
+        ],
+        str_expfile = '20210926.Pt.111.a20.csv',
+    )
+if (''):
+    def_pic_20degree( 
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.useless',
+        list2d_data = [
+            ['Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/', 'a'],
+            ['Pt.110.x2y3z4.5_O5_vac15/vasp_sch/', 'b'],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
 
 def def_pic_converge(
         str_workdir,
@@ -124,7 +172,7 @@ def def_pic_converge(
     )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.x4y4z4_O4' ].str_chdir + 'atom_1/',
         str_savefig = 'converge_kspace',
@@ -134,28 +182,6 @@ if ('t'):
         ],
         tuple_xlim = ( 512,525 )
     )
-
-if (''):
-    def_pic_20degree( 
-        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/', 
-        str_savefig = 'vasp_sch.corehole', 
-        list2d_data = [
-            ['vasp_sch/', 'FCH'],
-            ['vasp_sch.hch/', 'HCH'],
-        ],
-        str_expfile = '20210926.Pt.111.a20.csv',
-    )
-if (''):
-    def_pic_20degree( 
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.useless',
-        list2d_data = [
-            ['Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/', 'a'],
-            ['Pt.110.x2y3z4.5_O5_vac15/vasp_sch/', 'b'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
-
 
 '''
 pic=[]
