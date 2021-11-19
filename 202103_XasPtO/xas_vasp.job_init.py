@@ -2,6 +2,7 @@ import local_module
 import os
 from distutils.dir_util import copy_tree
 import re
+import groupmodule
 
 list1d_workdir=[]
 #----------------------------------
@@ -46,11 +47,12 @@ for str_workdir in list1d_workdir:
         int_nelect += int_val * int_atomnum
     with open('INCAR','r+') as file_incar:
         list1d_incar = file_incar.readlines()
-        for str_line in list1d_incar:
-            if (str_line.strip()[0:6] == 'NBANDS'):
-                str_line = 'NBANDS = '+str(int_nelect)
+        for int_i in range(len(list1d_incar)):
+            if (list1d_incar[ int_i ].strip()[0:6] == 'NBANDS'):
+                list1d_incar[ int_i ] = 'NBANDS = '+str(int_nelect)
+                break
         file_incar.seek(0)
-        file_incar.trunk()
+        file_incar.truncate()
         file_incar.writelines( list1d_incar )
 
     with open( 'vasp_sub.py','r' ) as file_sub:
