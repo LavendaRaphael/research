@@ -16,13 +16,26 @@ def def_vasp_potgen():
         list1d_atomsymbol = obj_poscar.readline().split()
     print(list1d_atomsymbol)
 
+    dict_pot = def_dict_pot()
+    list1d_pot = [ dict_pot[i][0] for i in list1d_atomsymbol ]
+    print(list1d_pot)
+
+    dir_vasppot = os.environ['vasp_pot']
+
+    with open('POTCAR','wb') as obj_potcar:
+        for str_pottype in list1d_pot:
+            file_inpot = dir_vasppot + str_pottype +'/POTCAR'
+            with open(file_inpot,'rb') as obj_inpot:
+                shutil.copyfileobj(obj_inpot, obj_potcar)
+    
+def def_dict_pot():
     dict_pot = {}
     dict_pot['H' ]='H'
     dict_pot['Li']='Li_sv'
     dict_pot['B' ]='B'
     dict_pot['C' ]='C'
     dict_pot['N' ]='N'
-    dict_pot['O' ]='O'
+    dict_pot['O' ]=['O',6]
     dict_pot['F' ]='F'
     dict_pot['Ne']='Ne'
     dict_pot['Na']='Na_pv'
@@ -92,7 +105,7 @@ def def_vasp_potgen():
     dict_pot['Re']='Re'
     dict_pot['Os']='Os'
     dict_pot['Ir']='Ir'
-    dict_pot['Pt']='Pt'
+    dict_pot['Pt']=['Pt',10]
     dict_pot['Au']='Au'
     dict_pot['Hg']='Hg'
     dict_pot['Tl']='Tl_d'
@@ -111,17 +124,7 @@ def def_vasp_potgen():
     dict_pot['Pu']='Pu'
     dict_pot['Am']='Am'
     dict_pot['Cm']='Cm'
-
-    list1d_pot = [ dict_pot[i] for i in list1d_atomsymbol ]
-    print(list1d_pot)
-
-    dir_vasppot = os.environ['vasp_pot']
-
-    with open('POTCAR','wb') as obj_potcar:
-        for str_pottype in list1d_pot:
-            file_inpot = dir_vasppot + str_pottype +'/POTCAR'
-            with open(file_inpot,'rb') as obj_inpot:
-                shutil.copyfileobj(obj_inpot, obj_potcar)
+    return dict_pot
 
 def def_serversub( 
          str_jobname,

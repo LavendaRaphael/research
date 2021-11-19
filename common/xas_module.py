@@ -430,7 +430,7 @@ class class_structure(object):
         float_sum = 0
         for list_i in list_temp: float_sum += list_i[1]
         for list_i in list_temp: list_i[1] /= float_sum
-        for list_i in list_temp: list_i[0] = 'atom_'+str(list_i[0])
+        for list_i in list_temp: list_i.append( 'atom_'+str(list_i[0]) )
         self._list2d_atom = list_temp
 
     @property
