@@ -37,7 +37,7 @@ def def_dict_structure():
     str_key='110.x1y1z4.5.a2b4_O4'
     list2d_atom = []
     list2d_atom.append([ 1,4.0])
-    list1d_bbox = [ 1/2,2/3,1,1 ]
+    list1d_bbox = [ 0.5/2,0.5/4,1,1 ]
     str_workdir = 'Pt.'+str_key+'_vac15/vasp_sch/'
     dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
     #------------------------------------------

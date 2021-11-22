@@ -98,6 +98,16 @@ def def_pic_20degree(
 
 if ('t'):
     def_pic_20degree(
+        str_workdir = dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir,
+        str_savefig = 'xas',
+        list2d_data = [
+            [ dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir, ''],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
+
+if (''):
+    def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.correlation_xy',
         list2d_data = [
@@ -109,7 +119,7 @@ if ('t'):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.correlation_y',
