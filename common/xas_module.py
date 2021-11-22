@@ -18,8 +18,26 @@ import pandas
 from distutils.dir_util import copy_tree
 import re
 import group_module
+import subprocess
 
-def def_sch_jobinit( class_structure ):
+def def_vasp_sub( class_structure ):
+    os.chdir('template/')
+    with open( 'vasp_sub.py','r' ) as file_sub:
+        str_subfile = file_sub.read()
+    os.chdir('..')
+
+    for list1d_atomi in class_structure.list2d_atom:
+        str_atomdir = list1d_atomi[2]
+        os.chdir(str_atomdir)
+
+        with open( 'vasp_sub.py','w' ) as file_sub:
+            str_subfile_new = re.sub( 'xNUMx',str(int_atomi),str_subfile )
+            file_sub.write( str_subfile_new )
+
+        subprocess.run( ['python','vasp_sub.py'] )
+        os.chdir('..')
+
+def def_vasp_jobinit( class_structure ):
     os.chdir('template/')
 
     with open('POSCAR', 'r') as file_poscar:
@@ -58,9 +76,6 @@ def def_sch_jobinit( class_structure ):
         file_incar.truncate()
         file_incar.writelines( list1d_incar )
 
-    with open( 'vasp_sub.py','r' ) as file_sub:
-        str_subfile = file_sub.read()
-
     os.chdir('..')
 
     for list1d_atomi in class_structure.list2d_atom:
@@ -73,10 +88,6 @@ def def_sch_jobinit( class_structure ):
         list1d_poscar_atomi[ int_directline +int_atomi ] = list1d_poscar[ int_directline +1 ]
         with open('POSCAR', 'w') as file_poscar:
             file_poscar.writelines( list1d_poscar_atomi )
-
-        with open( 'vasp_sub.py','w' ) as file_sub:
-            str_subfile_new = re.sub( 'xNUMx',str(int_atomi),str_subfile )
-            file_sub.write( str_subfile_new )
 
         os.chdir('..')
 

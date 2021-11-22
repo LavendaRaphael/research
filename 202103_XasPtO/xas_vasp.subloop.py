@@ -15,4 +15,4 @@ for str_workdir in list1d_workdir:
     os.chdir(str_chdir)
     print(os.getcwd())
 
-    xas_module.def_vasp_jobinit( class_structure )
+    xas_module.def_vasp_sub( class_structure )
