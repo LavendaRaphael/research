@@ -1,5 +1,5 @@
 #/bin/env python
-import groupmodule
+import group_module
 
 str_jobname = 'test'
 dict_input = {} 
@@ -9,7 +9,7 @@ dict_input[ 'str_jobqueue' ] = 'test'
 str_excute = 'mpirun ${software_bin}intelmpi_test.x'
 
 
-groupmodule.def_serversub(
+group_module.def_serversub(
     str_jobname = str_jobname,
     dict_input = dict_input,
     str_excute = str_excute,
