@@ -23,10 +23,12 @@ import subprocess
 def def_code2xas(
         str_code = 'vasp',
         ):
-    if ( str_code = 'vasp' ):
+    if ( str_code == 'vasp' ):
         return def_vasp_outcar2xas()
-    else if ( str_code = 'feff' ):
+    elif ( str_code == 'feff' ):
         return def_feff2xas()
+    else:
+        raise
 
 def def_feff2xas( 
         str_outfile = 'xas.csv'
@@ -66,8 +68,8 @@ def def_feff2xas(
     df_xas.to_csv( str_outfile )
 
     list_xheader = [str_xheader]
-    array2d_xdata = df_xmu[str_xheader].to_numpy()
-    array2d_ydata = df_xmu[list1d_yheader].to_numpy()
+    array2d_xdata = df_xas[str_xheader].to_numpy()
+    array2d_ydata = df_xas[list1d_yheader].to_numpy()
 
     return list_xheader, list1d_yheader, array2d_xdata, array2d_ydata
 
@@ -533,6 +535,27 @@ class class_structure(object):
     def list1d_bbox(self, list1d_temp):
         self._list1d_bbox = list1d_temp
 
+    @property
+    def str_cif(self):
+        return self._str_cif
+    @str_cif.setter
+    def str_cif(self, str_temp):
+        self._str_cif = str_temp
+
+    @property
+    def str_code(self):
+        return self._str_code
+    @str_code.setter
+    def str_code(self, str_temp):
+        self._str_code = str_temp
+
+    @property
+    def float_scaling(self):
+        return self._float_scaling
+    @float_scaling.setter
+    def float_scaling(self, float_temp):
+        self._float_scaling = float_temp
+
 def def_ave( 
         class_structure, 
         str_outfile = 'xas.ave.csv'
@@ -601,7 +624,8 @@ def def_alphabeta_workflow(
         )
 
     array2d_ydata_scaling = def_scaling(
-        array2d_ydata = array2d_ydata_origin
+        array2d_ydata = array2d_ydata_origin,
+        class_structure = class_structure,
         )
     
     list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( 
@@ -619,14 +643,11 @@ def def_alphabeta_workflow(
     return
 
 def def_scaling( 
-        array2d_ydata, 
+        array2d_ydata,
+        class_structure,
         ):
     
-    class_paras = local_module.def_class_paras()
-    str_jsonfile = class_paras.scaling_json
-    with open(str_jsonfile) as obj_jsonfile:
-        dict_jsonfile = json.load( fp=obj_jsonfile )
-    float_scaling = dict_jsonfile['float_scaling']
+    float_scaling = class_structure.float_scaling
 
     array2d_ydata_scaling = array2d_ydata * float_scaling
 
@@ -842,9 +863,9 @@ def def_vasp_finalenergy():
 
 def def_sft( array1d_xdata, str_code='vasp' ):
 
-    if ( str_code = 'vasp' ):
+    if ( str_code == 'vasp' ):
         float_sft = def_sft_vasp()
-    else if ( str_code = 'feff' ):
+    elif ( str_code == 'feff' ):
         float_sft = 0
     else:
         raise
@@ -852,7 +873,7 @@ def def_sft( array1d_xdata, str_code='vasp' ):
     array1d_xdata_sft = array1d_xdata + float_sft
     return array1d_xdata_sft
 
-def def_sft_vasp( )
+def def_sft_vasp( ):
     
     str_chdir=list2d_atom[0][2]
     os.chdir(str_chdir)
