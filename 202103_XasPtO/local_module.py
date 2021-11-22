@@ -20,6 +20,13 @@ def def_class_paras():
 def def_dict_structure():
     
     dict_structure = {}
+    #===================================================================================
+    str_key='111.a2b2c4_O1_feff_kspace'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    str_workdir = 'Pt.111.a2b2c4_O1_vac15/feff_kspace/'
+    list1d_bbox = [ 'template/polarization_z/feff.cif',-0.25,-0.5,1.5,2 ]
+    dict_structure[ str_key ] = def_pto111_class( list2d_atom, str_workdir, list1d_bbox )
     #------------------------------------------
     str_key='111.x4y4z4_O4'
     list2d_atom = []
@@ -33,7 +40,7 @@ def def_dict_structure():
     list2d_atom.append([ 1,4.0])
     str_workdir = 'Pt.111.x4y4z4_O4_vac15/vasp_sch.hch/'
     dict_structure[ str_key ] = def_pto111_class( list2d_atom, str_workdir )
-    #------------------------------------------
+    #===================================================================================
     str_key='110.x1y1z4.5.a2b4_O4'
     list2d_atom = []
     list2d_atom.append([ 1,4.0])
@@ -306,22 +313,24 @@ def def_pto111_class( list2d_atom, str_workdir,
     return class_structure
 
 def def_render(
-        list1d_bbox = [0,0,1,1], 
-        str_poscar = 'POSCAR',
+        list1d_bbox = ['POSCAR',0,0,1,1], 
         str_savefig = 'render'
         ):
 
-    atom_poscar = read(str_poscar)
+    atom_poscar = read( list1d_bbox[0] )
     atom_cell = atom_poscar.cell
-    atom_poscar = atom_poscar*(3,3,1)
+    array2d_cell = atom_cell[:]
+
+    atom_poscar = atom_poscar*(4,4,1)
+    atom_poscar.translate( - array2d_cell[0] )
+    atom_poscar.translate( - array2d_cell[1] )
+
     atom_poscar.cell = atom_cell
 
-    array1d_cellpara = atom_cell.lengths()
-    x1 = list1d_bbox[0] * array1d_cellpara[0]
-    y1 = list1d_bbox[1] * array1d_cellpara[1]
-    x2 = list1d_bbox[2] * array1d_cellpara[0] + x1
-    y2 = list1d_bbox[3] * array1d_cellpara[1] + y1
-    tup_bbox = ( x1,y1,x2,y2 )
+    array1d_bbox_1 = list1d_bbox[1] * array2d_cell[0] + list1d_bbox[2] * array2d_cell[1]
+    array1d_bbox_2 = list1d_bbox[3] * array2d_cell[0] + list1d_bbox[4] * array2d_cell[1] + array1d_bbox_1
+
+    tup_bbox = ( array1d_bbox_1[0], array1d_bbox_1[1], array1d_bbox_2[0], array1d_bbox_2[1] )
 
     #r = [{'O': 0.74, 'Pt': 1.39}[at.symbol] for at in atom_poscar]
     
@@ -330,7 +339,7 @@ def def_render(
         #'rotation': '90y',
         #'radii': .85,  # float, or a list with one float per atom
         'colors': None,  # List: one (r, g, b) tuple per atom
-        'show_unit_cell': 0,   # 0, 1, or 2 to not show, show, and show all of cell
+        'show_unit_cell': 1,   # 0, 1, or 2 to not show, show, and show all of cell
     }
     
     povray_settings={

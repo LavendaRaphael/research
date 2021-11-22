@@ -3,9 +3,10 @@ import local_module
 
 list1d_key=[]
 
+list1d_key.append('111.a2b2c4_O1_feff_kspace')
 #list1d_key.append('111.x4y4z4_O4')
 
-list1d_key.append('110.x1y1z4.5.a2b4_O4')
+#list1d_key.append('110.x1y1z4.5.a2b4_O4')
 #list1d_key.append('110.x2y12z4.5_O22')
 #list1d_key.append('110.x2y12z4.5_O22_aimd')
 #list1d_key.append('110.x2y3z4.5_O1')
@@ -30,7 +31,7 @@ dict_structure = local_module.def_dict_structure()
 
 for str_key in list1d_key:
     class_structure = dict_structure[ str_key ]
-    str_chdir = class_structure.str_chdir + 'template/'
+    str_chdir = class_structure.str_chdir
     os.chdir( str_chdir )
     print( os.getcwd() )
 

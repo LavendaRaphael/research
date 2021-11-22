@@ -96,12 +96,13 @@ def def_pic_20degree(
         )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_20degree(
-        str_workdir = dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir,
-        str_savefig = 'xas',
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
         list2d_data = [
-            [ dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir, ''],
+            [ dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir, 'a'],
+            [ dict_structure['110.x2y3z4.5_O6'].str_chdir, 'b'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -181,6 +182,18 @@ def def_pic_converge(
         tuple_xlim,
     )
     plt.show()
+
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2c4_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'converge_kspace',
+        list2d_data = [
+            [ 'kmesh10/xmu.dat',    'KMESH 10 10 1', 3 ],
+            [ 'xmu.dat',            'KMESH 15 15 1', 3 ],
+            [ 'kmesh20/xmu.dat',    'KMESH 20 20 1', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
 
 if (''):
     def_pic_converge(

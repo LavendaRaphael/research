@@ -91,18 +91,17 @@ def def_vasp_jobinit( class_structure ):
 
         os.chdir('..')
 
-def def_corvus( 
-        str_datfile = 'Corvus.xanes.out',
+def def_feff( 
         tuple_xrange = (527.0, 540.0), 
         float_scalingarea = 20.0,
         str_outfile = 'xas.scaling.csv'
         ):
 
     list1d_column = [0]
-    _, array2d_xdata = def_extract( 
-        str_datfile=str_datfile,
+    _, array2d_xdata = def_extract(
+        str_datfile = 'atom_1/polarization_z/',
         list1d_column = list1d_column,
-        log_head=False
+        log_head = False
         )
     
     list1d_column = [1]
