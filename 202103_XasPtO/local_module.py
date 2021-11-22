@@ -40,6 +40,15 @@ def def_dict_structure():
     list1d_bbox = [ 0.5/2,0.5/4,1,1 ]
     str_workdir = 'Pt.'+str_key+'_vac15/vasp_sch/'
     dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
+     #------------------------------------------
+    str_key='110.x2y1z4.5.a1b2_O3_a1b2'
+    list2d_atom = []
+    list2d_atom.append([ 1,1.0])
+    list2d_atom.append([ 2,1.0])
+    list2d_atom.append([ 3,1.0])
+    list1d_bbox = [ 1/2,2/3,1,1 ]
+    str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/'
+    dict_structure[ str_key ] = def_pto110_class( list2d_atom, str_workdir, list1d_bbox )
     #------------------------------------------
     str_key='110.x2y12z4.5_O22'
     list2d_atom = []
