@@ -20,6 +20,57 @@ import re
 import group_module
 import subprocess
 
+def def_code2xas(
+        str_code = 'vasp',
+        ):
+    if ( str_code = 'vasp' ):
+        return def_vasp_outcar2xas()
+    else if ( str_code = 'feff' ):
+        return def_feff2xas()
+
+def def_feff2xas( 
+        str_outfile = 'xas.csv'
+        ):
+
+    str_xheader = 'E(eV)'
+    list1d_yheader = [ 'x','y','z' ]
+
+    df_xas_x = pandas.read_csv( 
+        'ellipticity_z/xmu.dat', 
+        sep=' ', 
+        skipinitialspace=True, 
+        header=None, 
+        names= [str_xheader, list1d_yheader[0]] ,
+        usecols=[0,3],
+        comment='#',
+        )
+    print(df_xas_x)
+
+    df_xas_y = df_xas_x.rename( columns={ list1d_yheader[0]: list1d_yheader[1] } )
+
+    df_xas_z = pandas.read_csv(       
+        'polarization_z/xmu.dat',
+        sep=' ',
+        skipinitialspace=True,
+        header=None,
+        names=[str_xheader, list1d_yheader[2]],
+        usecols=[0,3],
+        comment='#',
+        )
+    print(df_xas_z)
+
+    df_xas = pandas.merge( df_xas_x, df_xas_y, on=str_xheader )
+    df_xas = pandas.merge( df_xas, df_xas_z, on=str_xheader )
+    print(df_xas)
+    
+    df_xas.to_csv( str_outfile )
+
+    list_xheader = [str_xheader]
+    array2d_xdata = df_xmu[str_xheader].to_numpy()
+    array2d_ydata = df_xmu[list1d_yheader].to_numpy()
+
+    return list_xheader, list1d_yheader, array2d_xdata, array2d_ydata
+
 def def_vasp_sub( class_structure ):
     os.chdir('template/')
     with open( 'vasp_sub.py','r' ) as file_sub:
@@ -90,41 +141,6 @@ def def_vasp_jobinit( class_structure ):
             file_poscar.writelines( list1d_poscar_atomi )
 
         os.chdir('..')
-
-def def_feff( 
-        tuple_xrange = (527.0, 540.0), 
-        float_scalingarea = 20.0,
-        str_outfile = 'xas.scaling.csv'
-        ):
-
-    list1d_column = [0]
-    _, array2d_xdata = def_extract(
-        str_datfile = 'atom_1/polarization_z/',
-        list1d_column = list1d_column,
-        log_head = False
-        )
-    
-    list1d_column = [1]
-    _, array2d_ydata = def_extract( 
-        str_datfile=str_datfile,
-        list1d_column = list1d_column,
-        log_head=False
-        )
-    
-    float_area = def_findarea( 
-        array1d_xdata=array2d_xdata, 
-        array1d_ydata=array2d_ydata, 
-        tuple_xrange=tuple_xrange
-        )
-    float_scaling = float_scalingarea/float_area
-
-    array2d_ydata_scaling=array2d_ydata*float_scaling
-
-    def_writedata( 
-            list2d_header = [ ['E(eV)'], ['Intensity'] ],
-            list3d_data = [ array2d_xdata, array2d_ydata_scaling ],
-            str_outfile = str_outfile
-            )
 
 def def_atom_findpeak( 
         list1d_angle,
@@ -524,12 +540,7 @@ def def_ave(
     def_startfunc( locals(), [ 'class_structure' ] )
 
     list2d_atom = class_structure.list2d_atom
-
-    str_chdir=list2d_atom[0][2]
-    os.chdir(str_chdir)
-    print(os.getcwd())
-    float_finalenergy_1 = def_vasp_finalenergy()
-    os.chdir('..')
+    str_code = class_structure.str_code
 
     list2d_data = []
     for list1d_atom in list2d_atom:
@@ -539,11 +550,9 @@ def def_ave(
         os.chdir(str_chdir)
         print(os.getcwd())
 
-        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_vasp_outcar2xas()
-
-        float_finalenergy = def_vasp_finalenergy()
-        float_sft = float_finalenergy-float_finalenergy_1 
-        array2d_xdata_sft = array2d_xdata + float_sft
+        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_code2xas( str_code )
+    
+        array2d_xdata_sft = def_sft( array2d_xdata, str_code )
 
         list_ycolums = list(range(len(array2d_ydata[0])))
         list2d_data.append( [ array2d_xdata_sft, array2d_ydata, list_ycolums, float_scaling ] )
@@ -831,13 +840,30 @@ def def_vasp_finalenergy():
     def_endfunc()
     return float_finalenergy
 
-def def_sft( array1d_xdata, float_sft):
-    def_startfunc( locals(), ['array1d_xdata'] )
+def def_sft( array1d_xdata, str_code='vasp' ):
+
+    if ( str_code = 'vasp' ):
+        float_sft = def_sft_vasp()
+    else if ( str_code = 'feff' ):
+        float_sft = 0
+    else:
+        raise
 
     array1d_xdata_sft = array1d_xdata + float_sft
-
-    def_endfunc()
     return array1d_xdata_sft
+
+def def_sft_vasp( )
+    
+    str_chdir=list2d_atom[0][2]
+    os.chdir(str_chdir)
+    print(os.getcwd())
+    float_finalenergy_1 = def_vasp_finalenergy()
+    os.chdir('..')
+
+    float_finalenergy = def_vasp_finalenergy()
+    float_sft = float_finalenergy-float_finalenergy_1
+
+    return float_sft
 
 def def_writedata( list2d_header, list3d_data, str_outfile):
     def_startfunc( locals(), ['list3d_data'] )
