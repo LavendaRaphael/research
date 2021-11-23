@@ -97,7 +97,7 @@ def def_pic_20degree(
         )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2',
@@ -110,7 +110,7 @@ if ('t'):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
@@ -121,7 +121,7 @@ if ('t'):
         str_expfile = '20210926.Pt.111.a20.csv',
     )
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
@@ -160,7 +160,7 @@ if (''):
 
 if (''):
     def_pic_20degree( 
-        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac15/', 
+        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac/', 
         str_savefig = 'vasp_sch.corehole', 
         list2d_data = [
             ['vasp_sch/', 'FCH'],
@@ -173,8 +173,8 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.useless',
         list2d_data = [
-            ['Pt.110.x2y3z4.5_O3.136_vac15/vasp_sch/', 'a'],
-            ['Pt.110.x2y3z4.5_O5_vac15/vasp_sch/', 'b'],
+            ['Pt.110.x2y3z4.5_O3.136_vac/vasp_sch/', 'a'],
+            ['Pt.110.x2y3z4.5_O5_vac/vasp_sch/', 'b'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -207,6 +207,18 @@ def def_pic_converge(
         tuple_xlim,
     )
     plt.show()
+
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2c8_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'converge_fms_fix',
+        list2d_data = [
+            [ 'fix.scf_7/xmu.dat',    'rfms 9', 3 ],
+            [ 'fix.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'fix.fms_11/xmu.dat',   'rfms 11', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
 
 if (''):
     def_pic_converge(
@@ -281,7 +293,7 @@ pic[4]=[
 ]
 pic[5]=[
     '',
-    str_work_111+'Pt.111.x4y4z4_O4_vac15/feff/',
+    str_work_111+'Pt.111.x4y4z4_O4_vac/feff/',
     'xas.real_imag_exp.pdf'
 ]
 pic[6]=[
@@ -393,8 +405,8 @@ pic[8]=[
 pic[9]=[
     '',
     [
-        str_work_111+'Pt.111.a2b2c4_O1_vac15/feff/atom_1/polarization_z/',
-        str_work_111+'Pt.111.a2b2c8_O1_vac15/feff/atom_1/polarization_z/',
+        str_work_111+'Pt.111.a2b2c4_O1_vac/feff/atom_1/polarization_z/',
+        str_work_111+'Pt.111.a2b2c8_O1_vac/feff/atom_1/polarization_z/',
     ],
     [
         [
@@ -608,7 +620,7 @@ if (list_pictemp[0]):
     label='FEFF realspace'
     plt.plot( array2d_xdata, array2d_ydata, label=label )
 
-    str_datfile = str_work_111+'Pt.111.a2b2c4_O1_vac15/feff_kspace/xas.scaling.csv'
+    str_datfile = str_work_111+'Pt.111.a2b2c4_O1_vac/feff_kspace/xas.scaling.csv'
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
     _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
     label='FEFF kspace'

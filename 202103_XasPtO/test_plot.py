@@ -45,7 +45,7 @@ def def_test(
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'/group/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2c4_O1_vac15/feff_kspace/')
+os.chdir(str_homedir+'/group/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2c4_O1_vac/feff_kspace/')
 
 def_test(
     list2d_data = [
