@@ -873,16 +873,9 @@ def def_sft( array1d_xdata, str_code='vasp' ):
     array1d_xdata_sft = array1d_xdata + float_sft
     return array1d_xdata_sft
 
-def def_sft_vasp( ):
-    
-    str_chdir=list2d_atom[0][2]
-    os.chdir(str_chdir)
-    print(os.getcwd())
-    float_finalenergy_1 = def_vasp_finalenergy()
-    os.chdir('..')
-
+def def_sft_vasp( ): 
     float_finalenergy = def_vasp_finalenergy()
-    float_sft = float_finalenergy-float_finalenergy_1
+    float_sft = float_finalenergy
 
     return float_sft
 

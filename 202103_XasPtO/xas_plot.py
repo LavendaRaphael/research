@@ -99,6 +99,30 @@ def def_pic_20degree(
 if (''):
     def_pic_20degree(
         str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2',
+        list2d_data = [
+            [ dict_structure['110.x2y4z4.5_O2.15'].str_chdir, 'a'],
+            [ dict_structure['110.x2y4z4.5_O4.1458'].str_chdir, 'b'],
+            [ dict_structure['110.x2y1z4.5.a1b2_O3_a1b2'].str_chdir, 'c'],
+            [ dict_structure['110.x2y3z4.5_O6'].str_chdir, 'd'],
+        ],
+        str_expfile = '20210924.Pt.110.a20.csv',
+    )
+
+if (''):
+    def_pic_20degree(
+        str_workdir = str_work_111,
+        str_savefig = 'picture/xas.vasp_feff',
+        list2d_data = [
+            [ dict_structure['111.x4y4z4_O4'].str_chdir, 'vasp'],
+            [ dict_structure['111.a2b2c4_O1_feff_kspace'].str_chdir, 'feff kspace'],
+        ],
+        str_expfile = '20210926.Pt.111.a20.csv',
+    )
+
+if (''):
+    def_pic_20degree(
+        str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
         list2d_data = [
             [ dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir, 'a'],
@@ -183,7 +207,7 @@ def def_pic_converge(
     )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2c4_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'converge_kspace',
