@@ -93,10 +93,11 @@ def def_pic_20degree(
             obj_ax,
             str_savefig +'.'+ str(list1d_column[int_i])+'.pdf',
             tuple_xlim = (527,540),
+            tuple_ylim = (None,6)
         )
     plt.show()
 
-if (''):
+if ('t'):
     def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2',
@@ -109,18 +110,18 @@ if (''):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if (''):
+if ('t'):
     def_pic_20degree(
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
         list2d_data = [
-            [ dict_structure['111.x4y4z4_O4'].str_chdir, 'vasp'],
-            [ dict_structure['111.a2b2c4_O1_feff_kspace'].str_chdir, 'feff kspace'],
+            [ dict_structure['111.x4y4z4_O4'].str_chdir, 'VASP'],
+            [ dict_structure['111.a2b2c4_O1_feff_kspace'].str_chdir, 'FEFF kspace'],
         ],
         str_expfile = '20210926.Pt.111.a20.csv',
     )
 
-if (''):
+if ('t'):
     def_pic_20degree(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',

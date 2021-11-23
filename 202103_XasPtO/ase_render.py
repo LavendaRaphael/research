@@ -3,12 +3,13 @@ import local_module
 
 list1d_key=[]
 
-list1d_key.append('111.a2b2c4_O1_feff_kspace')
+#list1d_key.append('111.a2b2c4_O1_feff_kspace')
 #list1d_key.append('111.x4y4z4_O4')
 
 #list1d_key.append('110.x1y1z4.5.a2b4_O4')
 #list1d_key.append('110.x2y12z4.5_O22')
 #list1d_key.append('110.x2y12z4.5_O22_aimd')
+list1d_key.append('110.x2y1z4.5.a1b2_O3_a1b2')
 #list1d_key.append('110.x2y3z4.5_O1')
 #list1d_key.append('110.x2y3z4.5_O2.12')
 #list1d_key.append('110.x2y3z4.5_O2.13')
@@ -36,6 +37,6 @@ for str_key in list1d_key:
     print( os.getcwd() )
 
     local_module.def_render(
-        list1d_bbox = class_structure.list1d_bbox,
+        class_structure=class_structure
     )
 
