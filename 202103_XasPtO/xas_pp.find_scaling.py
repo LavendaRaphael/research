@@ -7,7 +7,7 @@ list1d_key=[]
 #----------------------------------
 #list1d_key.append('111.a2b2c4_O1_feff_kspace')
 
-list1d_key.append('110.x2y12z4.5_O22')
+list1d_key.append('110.x2y12_O22')
 
 #----------------------------------[loop]
 dict_structure = local_module.def_dict_structure()

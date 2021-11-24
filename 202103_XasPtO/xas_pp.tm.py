@@ -4,7 +4,7 @@ import os
 import local_module
 
 dict_structure = local_module.def_dict_structure()
-str_workdir='Pt.110.x2y12z4.5_O22_vac/'
+str_workdir='Pt.110.x2y12_O22_vac/'
 
 #----------------------------------[loop]
 str_jsonfile='xas.a20_b90.json'

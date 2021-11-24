@@ -4,7 +4,7 @@ import xas_module
 
 list1d_workdir=[]
 #----------------------------------
-list1d_workdir.append('110.x2y1z4.5.a1b2_O3_a1b2')
+list1d_workdir.append('110.x2y1.a1b2_O3_a1b2')
 
 #----------------------------------[loop]
 dict_structure = local_module.def_dict_structure()

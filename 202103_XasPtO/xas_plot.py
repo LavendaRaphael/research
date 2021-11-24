@@ -102,10 +102,10 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2',
         list2d_data = [
-            [ dict_structure['110.x2y4z4.5_O2.15'].str_chdir, 'a'],
-            [ dict_structure['110.x2y4z4.5_O4.1458'].str_chdir, 'b'],
-            [ dict_structure['110.x2y1z4.5.a1b2_O3_a1b2'].str_chdir, 'c'],
-            [ dict_structure['110.x2y3z4.5_O6'].str_chdir, 'd'],
+            [ dict_structure['110.x2y4_O2.15'].str_chdir, 'a'],
+            [ dict_structure['110.x2y4_O4.1458'].str_chdir, 'b'],
+            [ dict_structure['110.x2y1.a1b2_O3_a1b2'].str_chdir, 'c'],
+            [ dict_structure['110.x2y3_O6'].str_chdir, 'd'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -115,7 +115,7 @@ if (''):
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
         list2d_data = [
-            [ dict_structure['111.x4y4z4_O4'].str_chdir, 'VASP'],
+            [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP'],
             [ dict_structure['111.a2b2c4_O1_feff_kspace'].str_chdir, 'FEFF kspace'],
         ],
         str_expfile = '20210926.Pt.111.a20.csv',
@@ -126,8 +126,8 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
         list2d_data = [
-            [ dict_structure['110.x1y1z4.5.a2b4_O4'].str_chdir, 'a'],
-            [ dict_structure['110.x2y3z4.5_O6'].str_chdir, 'b'],
+            [ dict_structure['110.x1y1.a2b4_O4'].str_chdir, 'a'],
+            [ dict_structure['110.x2y3_O6'].str_chdir, 'b'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -137,10 +137,10 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.correlation_xy',
         list2d_data = [
-            [ dict_structure['110.x2y3z4.5_O1'].str_chdir,    'a'],
-            [ dict_structure['110.x2y3z4.5_O2.14'].str_chdir, 'b'],
-            [ dict_structure['110.x2y4z4.5_O2.16'].str_chdir, 'c'],
-            [ dict_structure['110.x2y6z4.5_O2.18'].str_chdir, 'd'],
+            [ dict_structure['110.x2y3_O1'].str_chdir,    'a'],
+            [ dict_structure['110.x2y3_O2.14'].str_chdir, 'b'],
+            [ dict_structure['110.x2y4_O2.16'].str_chdir, 'c'],
+            [ dict_structure['110.x2y6_O2.18'].str_chdir, 'd'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -150,17 +150,17 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.correlation_y',
         list2d_data = [
-            [ dict_structure['110.x2y3z4.5_O1'].str_chdir,    'a'],
-            [ dict_structure['110.x2y3z4.5_O2.13'].str_chdir, 'b'],
-            [ dict_structure['110.x2y4z4.5_O2.15'].str_chdir, 'c'],
-            [ dict_structure['110.x2y6z4.5_O2.17'].str_chdir, 'd'],
+            [ dict_structure['110.x2y3_O1'].str_chdir,    'a'],
+            [ dict_structure['110.x2y3_O2.13'].str_chdir, 'b'],
+            [ dict_structure['110.x2y4_O2.15'].str_chdir, 'c'],
+            [ dict_structure['110.x2y6_O2.17'].str_chdir, 'd'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
 if (''):
     def_pic_20degree( 
-        str_workdir = str_work_111+'Pt.111.x4y4z4_O4_vac/', 
+        str_workdir = str_work_111+'Pt.111.x4y4_O4_vac/', 
         str_savefig = 'vasp_sch.corehole', 
         list2d_data = [
             ['vasp_sch/', 'FCH'],
@@ -173,8 +173,8 @@ if (''):
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.useless',
         list2d_data = [
-            ['Pt.110.x2y3z4.5_O3.136_vac/vasp_sch/', 'a'],
-            ['Pt.110.x2y3z4.5_O5_vac/vasp_sch/', 'b'],
+            ['Pt.110.x2y3_O3.136_vac/vasp_sch/', 'a'],
+            ['Pt.110.x2y3_O5_vac/vasp_sch/', 'b'],
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
@@ -210,7 +210,19 @@ def def_pic_converge(
 
 if ('t'):
     def_pic_converge(
-        str_workdir = dict_structure[ '111.a2b2c8_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'r20.converge_fms',
+        list2d_data = [
+            [ 'r20.scf_7/xmu.dat',    'rfms 9', 3 ],
+            [ 'r20.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r20.fms_11/xmu.dat',   'rfms 11', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
+
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'converge_fms_fix',
         list2d_data = [
             [ 'fix.scf_7/xmu.dat',    'rfms 9', 3 ],
@@ -234,7 +246,7 @@ if (''):
 
 if (''):
     def_pic_converge(
-        str_workdir = dict_structure[ '111.x4y4z4_O4' ].str_chdir + 'atom_1/',
+        str_workdir = dict_structure[ '111.x4y4_O4' ].str_chdir + 'atom_1/',
         str_savefig = 'converge_kspace',
         list2d_data = [
             [ 'xas.csv',           'kspace 0.25', 3 ],
@@ -271,41 +283,41 @@ pic[0]=[
 ]
 pic[1]=[
     '',
-    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/', 
+    dict_structure[ '110.x2y12_O22' ].str_chdir+'atom_11/', 
     'xas_tm'
 ]
 pic[2]=[
     '',
-    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/',
+    dict_structure[ '110.x2y12_O22' ].str_chdir+'atom_11/',
 ]
 pic[3]=[
     '',
-    dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/wfn/',
+    dict_structure[ '110.x2y12_O22' ].str_chdir+'atom_11/wfn/',
 ]
 pic[4]=[
     '',
     [
-        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir+'atom_11/',
-        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir,
-        dict_structure[ '110.x2y12z4.5_O22_aimd' ].str_chdir,
+        dict_structure[ '110.x2y12_O22' ].str_chdir+'atom_11/',
+        dict_structure[ '110.x2y12_O22' ].str_chdir,
+        dict_structure[ '110.x2y12_O22_aimd' ].str_chdir,
     ],
     'xas.exp_xy_z.pdf'
 ]
 pic[5]=[
     '',
-    str_work_111+'Pt.111.x4y4z4_O4_vac/feff/',
+    str_work_111+'Pt.111.x4y4_O4_vac/feff/',
     'xas.real_imag_exp.pdf'
 ]
 pic[6]=[
     '',
-    dict_structure['111.x4y4z4_O4'].str_chdir,
+    dict_structure['111.x4y4_O4'].str_chdir,
     'xas.exp_xy_z.pdf'
 ]
 pic[7]=[
     '',
     [
-        dict_structure[ '110.x2y12z4.5_O22' ].str_chdir,
-        dict_structure[ '110.x2y12z4.5_O22_aimd' ].str_chdir,
+        dict_structure[ '110.x2y12_O22' ].str_chdir,
+        dict_structure[ '110.x2y12_O22_aimd' ].str_chdir,
     ],
     'xas.alpha.pdf'
 ]
@@ -316,88 +328,88 @@ pic[8]=[
         [   
             'xas.correlation_2column.',
             [   
-                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
-                dict_structure[ '110.x4y3z4.5_O2.12' ].str_chdir,
+                dict_structure[ '110.x2y3_O1' ].str_chdir,
+                dict_structure[ '110.x4y3_O2.12' ].str_chdir,
             ]
         ],
         [   
             'xas.correlation_2column_1.',
             [   
-                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
-                dict_structure[ '110.x4y3z4.5_O6'].str_chdir
+                dict_structure[ '110.x2y3_O6'].str_chdir,
+                dict_structure[ '110.x4y3_O6'].str_chdir
             ],
         ],
         [   
             'xas.correlation_y.',
             [   
-                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O2.13' ].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O2.15' ].str_chdir,
+                dict_structure[ '110.x2y3_O1' ].str_chdir,
+                dict_structure[ '110.x2y3_O2.13' ].str_chdir,
+                dict_structure[ '110.x2y4_O2.15' ].str_chdir,
             ]
         ],
         [
             'xas.correlation_xy.',
             [
-                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O2.14' ].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O2.16' ].str_chdir,
+                dict_structure[ '110.x2y3_O1' ].str_chdir,
+                dict_structure[ '110.x2y3_O2.14' ].str_chdir,
+                dict_structure[ '110.x2y4_O2.16' ].str_chdir,
             ]
         ],
         [
             'xas.neighbor_x.',
             [
-                dict_structure[ '110.x2y3z4.5_O1' ].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O2.12' ].str_chdir
+                dict_structure[ '110.x2y3_O1' ].str_chdir,
+                dict_structure[ '110.x2y3_O2.12' ].str_chdir
             ]
         ],
         [
             'xas.neighbor_y.',
             [
-                dict_structure[ '110.x2y3z4.5_O1'].str_chdir ,
-                dict_structure[ '110.x2y3z4.5_O2.13'].str_chdir ,
-                dict_structure[ '110.x2y4z4.5_O3.137'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O3.135'].str_chdir,
+                dict_structure[ '110.x2y3_O1'].str_chdir ,
+                dict_structure[ '110.x2y3_O2.13'].str_chdir ,
+                dict_structure[ '110.x2y4_O3.137'].str_chdir,
+                dict_structure[ '110.x2y3_O3.135'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_xy.',
             [
-                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O2.14'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O3.148'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir,
+                dict_structure[ '110.x2y3_O1'].str_chdir,
+                dict_structure[ '110.x2y3_O2.14'].str_chdir,
+                dict_structure[ '110.x2y4_O3.148'].str_chdir,
+                dict_structure[ '110.x2y4_O4.1458'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_mix.',
             [
-                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O3.123'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O4.1237'].str_chdir,
+                dict_structure[ '110.x2y3_O1'].str_chdir,
+                dict_structure[ '110.x2y3_O3.123'].str_chdir,
+                dict_structure[ '110.x2y4_O4.1237'].str_chdir,
             ],
         ],
         [
             'xas.neighbor_mix_1.',
             [
-                dict_structure[ '110.x2y3z4.5_O4.v56'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O6.v56'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O6'].str_chdir,
+                dict_structure[ '110.x2y3_O4.v56'].str_chdir,
+                dict_structure[ '110.x2y4_O6.v56'].str_chdir,
+                dict_structure[ '110.x2y3_O6'].str_chdir,
             ],
         ],
         [
             'xas.coverage.',
             [
-                dict_structure[ '110.x2y3z4.5_O1'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O6'].str_chdir
+                dict_structure[ '110.x2y3_O1'].str_chdir,
+                dict_structure[ '110.x2y4_O4.1458'].str_chdir,
+                dict_structure[ '110.x2y3_O6'].str_chdir
             ]
         ],
         [
             'xas.distribution.',
             [
-                dict_structure[ '110.x2y3z4.5_O2.12'].str_chdir,
-                dict_structure[ '110.x2y3z4.5_O3.135'].str_chdir,
-                dict_structure[ '110.x2y4z4.5_O4.1458'].str_chdir
+                dict_structure[ '110.x2y3_O2.12'].str_chdir,
+                dict_structure[ '110.x2y3_O3.135'].str_chdir,
+                dict_structure[ '110.x2y4_O4.1458'].str_chdir
             ]
         ],
     ]
