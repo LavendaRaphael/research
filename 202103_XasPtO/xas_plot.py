@@ -208,7 +208,33 @@ def def_pic_converge(
     )
     plt.show()
 
-if ('t'):
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'r27.converge_fms.0',
+        list2d_data = [
+            [ 'r27.scf_7/xmu.dat',    'rfms 9', 3 ],
+            [ 'r27.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r27.fms_11/xmu.dat',   'rfms 11', 3 ],
+            [ 'r27.fms_12/xmu.dat',   'rfms 12', 3 ],
+            [ 'r27.fms_13/xmu.dat',   'rfms 13', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'r27.converge_fms.1',
+        list2d_data = [
+            [ 'r27.fms_14/xmu.dat',   'rfms 14', 3 ],
+            [ 'r27.fms_15/xmu.dat',   'rfms 15', 3 ],
+            [ 'r27.fms_16/xmu.dat',   'rfms 16', 3 ],
+            [ 'r27.fms_17/xmu.dat',   'rfms 17', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
+
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'r20.converge_fms',
@@ -220,21 +246,33 @@ if ('t'):
         tuple_xlim = ( 527,540 )
     )
 
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test',
+        list2d_data = [
+            [ 'r16.9_fix.scf_7/xmu.dat',    'rfms 9', 3 ],
+            [ 'r16.9_fix.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r16.9_fix.fms_11/xmu.dat',   'rfms 11', 3 ],
+            [ 'r27.fms_17/xmu.dat',   'rfms 17', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
-        str_savefig = 'converge_fms_fix',
+        str_savefig = 'r16.9_fix.converge_fms',
         list2d_data = [
-            [ 'fix.scf_7/xmu.dat',    'rfms 9', 3 ],
-            [ 'fix.fms_10/xmu.dat',   'rfms 10', 3 ],
-            [ 'fix.fms_11/xmu.dat',   'rfms 11', 3 ],
+            [ 'r16.9_fix.scf_7/xmu.dat',    'rfms 9', 3 ],
+            [ 'r16.9_fix.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r16.9_fix.fms_11/xmu.dat',   'rfms 11', 3 ],
         ],
         tuple_xlim = ( 527,540 )
     )
 
 if (''):
     def_pic_converge(
-        str_workdir = dict_structure[ '111.a2b2c4_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'converge_kspace',
         list2d_data = [
             [ 'kmesh10/xmu.dat',    'KMESH 10 10 1', 3 ],
