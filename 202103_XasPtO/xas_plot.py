@@ -208,6 +208,19 @@ def def_pic_converge(
     )
     plt.show()
 
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test_broaden',
+        list2d_data = [
+            [ 'xmu.dat',    'default chwidth 0.156', 3  ],
+            [ 'all0/xmu.dat',   'chwidth 0', 3 ],
+            [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
+            [ 'exchange0.45/xmu.dat', 'exchange 0.45',3 ],
+            [ 'correction0.45/xmu.dat', 'correction 0.45',3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
@@ -219,7 +232,7 @@ if (''):
         ],
         tuple_xlim = ( 527,540 )
     )
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'r20_xanes.converge_fms',

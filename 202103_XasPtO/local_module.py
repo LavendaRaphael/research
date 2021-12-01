@@ -60,6 +60,12 @@ def def_dict_structure():
         list1d_bbox = [ 0.5/4,1.5/4,1,1 ]
         )
     #------------------------------------------
+    str_key='111.a2b2_O1_feff_kspace'
+    dict_structure[ str_key ] = def_pto_class( 
+        str_workdir = 'Pt.111.a2b2_O1_vac/feff_kspace/',
+        list1d_bbox = [ 0.5/4,1.5/4,1,1 ]
+        )
+    #------------------------------------------
     str_key='111.x4y4_O4'
     dict_structure[ str_key ] = def_pto_class( 
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
