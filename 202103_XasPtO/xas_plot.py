@@ -211,6 +211,28 @@ def def_pic_converge(
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'r20_fms.converge_fms',
+        list2d_data = [
+            [ 'r20_fms.scf_7/xmu.dat',    'rfms 9', 3  ],
+            [ 'r20_fms.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r20_fms.fms_11/xmu.dat',   'rfms 11', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'r20_xanes.converge_fms',
+        list2d_data = [
+            [ 'r20_xanes.scf_7/xmu.dat',    'rfms 9', 3  ],
+            [ 'r20_xanes.fms_10/xmu.dat',   'rfms 10', 3 ],
+            [ 'r20_xanes.fms_11/xmu.dat',   'rfms 11', 3 ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'r27.converge_fms.0',
         list2d_data = [
             [ 'r27.scf_7/xmu.dat',    'rfms 9', 3 ],
@@ -246,7 +268,7 @@ if (''):
         tuple_xlim = ( 527,540 )
     )
 
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'test',
