@@ -97,6 +97,16 @@ def def_pic_20degree(
         )
     plt.show()
 
+if ('t'):
+    def_pic_20degree(
+        str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
+        str_savefig = 'xas.exp_theory',
+        list2d_data = [
+            [ '', ''],
+        ],
+        str_expfile = '20210926.Pt.111.a20.csv',
+    )
+
 if (''):
     def_pic_20degree(
         str_workdir = str_work_110,
@@ -186,6 +196,7 @@ def def_pic_converge(
         #    [ str_datfile, str_label, int_column ],
         #]
         tuple_xlim,
+        tuple_ylim=(None,None)
     ):
 
     os.chdir( str_workdir )
@@ -205,21 +216,34 @@ def def_pic_converge(
         obj_ax,
         str_savefig + '.pdf',
         tuple_xlim,
+        tuple_ylim
     )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'test_broaden',
         list2d_data = [
-            [ 'xmu.dat',    'default chwidth 0.156', 3  ],
-            [ 'all0/xmu.dat',   'chwidth 0', 3 ],
             [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
+            [ 'chbroad/xmu.dat',  'chbroadening 1', 3 ],
             [ 'exchange0.45/xmu.dat', 'exchange 0.45',3 ],
             [ 'correction0.45/xmu.dat', 'correction 0.45',3 ],
         ],
-        tuple_xlim = ( 527,540 )
+        tuple_xlim = ( 527,540 ),
+        tuple_ylim = (0,0.02)
+    )
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test_chwidth',
+        list2d_data = [
+            [ 'all0/xmu.dat',   'chwidth 0.0', 3 ],
+            [ 'xmu.dat',    'chwidth 0.156 (default)', 3  ],
+            [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
+        ],
+        tuple_xlim = ( 527,540 ),
+        tuple_ylim = (0,0.02)
     )
 if (''):
     def_pic_converge(
