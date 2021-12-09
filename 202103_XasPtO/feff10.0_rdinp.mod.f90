@@ -1881,7 +1881,7 @@ if ((ispace .eq. 0) .or. (cifread .and. ispace .eq. 1)) then
         endif
     end do
     mindist = min(dsqrt(a1(1)**2 + a1(2)**2 + a1(3)**2)*(i1+0.5), dsqrt(a2(1)**2 + a2(2)**2 + a2(3)**2)*(i2+0.5), dsqrt(a3(1)**2 + a3(2)**2 + a3(3)**2)*(i3+0.5))
-    mindist = max( mindist, tff_real_tmp )
+    mindist = max( mindist, tff_mindist )
     !<
     !@end
 
