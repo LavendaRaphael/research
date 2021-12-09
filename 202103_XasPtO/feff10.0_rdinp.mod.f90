@@ -1885,7 +1885,6 @@ if ((ispace .eq. 0) .or. (cifread .and. ispace .eq. 1)) then
     !<
     !@end
 
-    write (*, *) 'mindist', mindist
     do i = 1, natt
         if (distance(i) .gt. mindist) then
             j = i
