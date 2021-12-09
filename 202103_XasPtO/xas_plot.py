@@ -97,7 +97,7 @@ def def_pic_20degree(
         )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
         str_savefig = 'xas.exp_theory',
@@ -223,12 +223,10 @@ def def_pic_converge(
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
-        str_savefig = 'test_broaden',
+        str_savefig = 'test_chbroading',
         list2d_data = [
-            [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
-            [ 'chbroad/xmu.dat',  'chbroadening 1', 3 ],
-            [ 'exchange0.45/xmu.dat', 'exchange 0.45',3 ],
-            [ 'correction0.45/xmu.dat', 'correction 0.45',3 ],
+            [ 'correction0.225/xmu.dat', 'correction 0.225',3 ],
+            [ 'chbroading1/xmu.dat', 'chwidth 0.45 + chbroading 1',3 ],
         ],
         tuple_xlim = ( 527,540 ),
         tuple_ylim = (0,0.02)
@@ -236,11 +234,32 @@ if (''):
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test_correction',
+        list2d_data = [
+            [ 'correction0.225/xmu.dat', 'correction 0.225',3 ],
+            [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
+        ],
+        tuple_xlim = ( 527,540 ),
+        tuple_ylim = (0,0.02)
+    )
+if (''):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test_exchange',
+        list2d_data = [
+            [ 'chwidth0.45/xmu.dat',   'chwidth 0.45', 3 ],
+            [ 'exchange0.225/xmu.dat',  'exchange 0.225', 3  ],
+        ],
+        tuple_xlim = ( 527,540 ),
+        tuple_ylim = (0,0.02)
+    )
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'test_chwidth',
         list2d_data = [
-            [ 'all0/xmu.dat',   'chwidth 0.0', 3 ],
-            [ 'xmu.dat',    'chwidth 0.156 (default)', 3  ],
-            [ 'chwidth0.45/xmu.dat',  'chwidth 0.45', 3 ],
+            [ 'chwidth0.0/xmu.dat',   'chwidth 0.0', 3 ],
+            [ 'chwidth0.04/xmu.dat',  'chwidth 0.04', 3  ],
         ],
         tuple_xlim = ( 527,540 ),
         tuple_ylim = (0,0.02)

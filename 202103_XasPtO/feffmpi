@@ -8,6 +8,7 @@ else
     MPICOMMAND="mpirun -np $1 "
 fi
 $MPICOMMAND $FeffPath/rdinp
+exit
 $MPICOMMAND $FeffPath/atomic
 $MPICOMMAND $FeffPath/dmdw
 $MPICOMMAND $FeffPath/opconsat
