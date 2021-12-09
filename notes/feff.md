@@ -61,6 +61,9 @@ SCF 7.0
 * EXCHANGE 0 0 0.0 (default)
 
 * p82
+* UNFREEZEF
+
+* p82
 * CHBROADENING igammach
 * CHBROADENING 0 (default)
 

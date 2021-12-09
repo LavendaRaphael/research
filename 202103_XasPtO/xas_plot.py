@@ -119,7 +119,7 @@ if (''):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if ('t'):
+if (''):
     def_pic_20degree(
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
@@ -219,6 +219,17 @@ def def_pic_converge(
     )
     plt.show()
 
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.a2b2_O1_feffk' ].str_chdir + 'atom_1/polarization_z/',
+        str_savefig = 'test_unfreezef',
+        list2d_data = [
+            [ 'chwidth0.45/xmu.dat', 'default',3 ],
+            [ 'unfreezef/xmu.dat', 'unfreezef',3 ],
+        ],
+        tuple_xlim = ( 527,540 ),
+        tuple_ylim = (0,0.02)
+    )
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
