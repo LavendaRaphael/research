@@ -45,11 +45,11 @@ def def_test(
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'/group/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2c4_O1_vac/feff_kspace/')
+os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2_O1_vac/feff_kspace/')
 
 def_test(
     list2d_data = [
-        ['xas.ave.csv', [0,2] ],
-        ['atom_1/ellipticity_z/xmu.dat', [0,3] ],
+        ['xas.ave.csv', [0,3] ],
+        ['atom_1/polarization_z/xmu.dat', [0,3] ],
     ]
     )

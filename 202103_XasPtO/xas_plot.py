@@ -53,7 +53,7 @@ def def_plt_save(
     obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
     obj_ax.legend()
     fig.savefig( str_savefig, bbox_inches='tight' )
-
+#------------------------------------------------------------
 def def_pic_20degree(
         str_workdir,
         str_savefig,
@@ -96,7 +96,6 @@ def def_pic_20degree(
             tuple_ylim = (None,6)
         )
     plt.show()
-
 if (''):
     def_pic_20degree(
         str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
@@ -120,13 +119,13 @@ if (''):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if (''):
+if ('t'):
     def_pic_20degree(
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
         list2d_data = [
             [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP'],
-            [ dict_structure['111.a2b2c4_O1_feff_kspace'].str_chdir, 'FEFF kspace'],
+            [ dict_structure['111.a2b2_O1_feffk'].str_chdir, 'FEFF kspace'],
         ],
         str_expfile = '20210926.Pt.111.a20.csv',
     )
@@ -188,7 +187,7 @@ if (''):
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
-
+#---------------------------------------------------------------
 def def_pic_converge(
         str_workdir,
         str_savefig,
@@ -253,7 +252,7 @@ if (''):
         tuple_xlim = ( 527,540 ),
         tuple_ylim = (0,0.02)
     )
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
         str_savefig = 'test_chwidth',

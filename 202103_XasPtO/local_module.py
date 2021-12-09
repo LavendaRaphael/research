@@ -9,6 +9,7 @@ def def_list1d_key():
     list1d_key=[]
     
     #----------------------------------
+    list1d_key.append('111.a2b2_O1_feffk')
     #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
@@ -17,7 +18,7 @@ def def_list1d_key():
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
-    list1d_key.append('110.x2y1_O2_a1b3')
+    #list1d_key.append('110.x2y1_O2_a1b3')
     #list1d_key.append('110.x2y2_O1_a1b2')
     #list1d_key.append('110.x2y2_O2.14_a1b2')
     #list1d_key.append('110.x2y2_O3_a1b2')
@@ -57,13 +58,14 @@ def def_dict_structure():
     str_key='111.a2b2_O1_feff'
     dict_structure[ str_key ] = def_pto_class( 
         str_workdir = 'Pt.111.a2b2_O1_vac/feff/',
-        list1d_bbox = [ 0.5/4,1.5/4,1,1 ]
+        list1d_bbox = [ 0.5/4,1.5/4,1,1 ],
         )
     #------------------------------------------
-    str_key='111.a2b2_O1_feff_kspace'
+    str_key='111.a2b2_O1_feffk'
     dict_structure[ str_key ] = def_pto_class( 
         str_workdir = 'Pt.111.a2b2_O1_vac/feff_kspace/',
-        list1d_bbox = [ 0.5/4,1.5/4,1,1 ]
+        list1d_bbox = [ 0.5/4,1.5/4,1,1 ],
+        float_onset_sft = 0.3
         )
     #------------------------------------------
     str_key='111.x4y4_O4'
@@ -278,7 +280,8 @@ def def_pto_class(
         str_workdir,
         list2d_atom = [[1,1.0]],
         list1d_bbox = [0,0,1,1],
-        str_cif = 'template/POSCAR'
+        str_cif = 'template/POSCAR',
+        float_onset_sft = 0.0
     ):
  
     goto_pto_work_110=os.environ['goto_pto_work_110']
@@ -299,14 +302,15 @@ def def_pto_class(
         float_scaling = 0.15830009697342037
     elif ('feff' in str_workdir):
         str_code = 'feff'
-        float_scaling = 228.0845335107418
+        # from file `Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json`
+        float_scaling = 227.64789130499736
     else:
         raise 
 
     class_structure = xas_module.class_structure()
     class_structure.list2d_atom = list2d_atom
     class_structure.str_chdir = goto_pto_work + str_workdir
-    class_structure.float_onset = float_onset
+    class_structure.float_onset = float_onset + float_onset_sft
     class_structure.list1d_bbox = list1d_bbox
     class_structure.str_cif = str_cif
     class_structure.str_code = str_code
