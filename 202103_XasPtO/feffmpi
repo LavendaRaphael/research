@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
+homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
 
-FeffPath=/home/faye/software/feff10/bin/MPI
+FeffPath=${homedir}software/feff10/bin/MPI
 if [ $# = 0 ]; then
     MPICOMMAND="mpirun "
 else
