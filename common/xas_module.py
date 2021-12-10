@@ -687,6 +687,49 @@ def def_align(
     def_endfunc()
     return array1d_xdata_align
 
+def def_peak_area_json( 
+        str_datfile, 
+        int_xcolumn,
+        int_ycolumn,
+        str_jsonfile):
+#----------------------------------------------[]
+    class_paras = local_module.def_class_paras()
+    list1d_column = [int_xcolumn]
+    _, array2d_xdata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
+    
+    list1d_column = [int_ycolumn]
+    _, array2d_ydata_origin = def_extract( 
+        str_datfile=str_datfile,
+        list1d_column = list1d_column,
+        )
+
+    float_area = def_findarea( 
+        array1d_xdata = array2d_xdata_origin, 
+        array1d_ydata = array2d_ydata_origin, 
+        tuple_xrange = class_paras.tuple_xrange
+        )
+    
+    dict_peaks = def_findpeaks( 
+        array1d_xdata = array2d_xdata_origin, 
+        array1d_ydata = array2d_ydata_origin
+        )
+
+    #--------------------------------------------------[output]
+    with open( str_jsonfile, 'w' ) as obj_jsonfile:
+        json.dump( 
+            obj={ 
+                    'float_area' : float_area,
+                    'float_onset': dict_peaks[ 'E(eV)' ][0]
+                },
+            fp=obj_jsonfile, 
+            indent=4 )
+
+    def_endfunc()
+    return
+
 def def_scaling_json( 
         list1d_alignangle, 
         list1d_scalingangle, 

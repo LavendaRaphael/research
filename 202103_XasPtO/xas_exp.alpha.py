@@ -1,5 +1,5 @@
 #!/bin/env python
-from from_xas_modules import *
+import xas_module
 import os
 
 str_exp=os.environ['goto_pto_exp']
