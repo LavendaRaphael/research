@@ -122,6 +122,13 @@ call chopen(ios, 'log.dat', 'feff')
 tmpstr = vfeff
 call triml(tmpstr)
 call wlog('Launching FEFF version '//tmpstr)
+
+!@tff
+!<add
+call wlog('20211209@FeifeiTian')
+!>
+!@end
+
  ! Josh adding revision number to feff output.
  !call wlog(' ' // revision)
 
