@@ -687,7 +687,7 @@ def def_align(
     def_endfunc()
     return array1d_xdata_align
 
-def def_peak_area_json( 
+def def_exp_info_json( 
         str_datfile, 
         int_xcolumn,
         int_ycolumn,
