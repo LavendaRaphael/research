@@ -5,14 +5,12 @@ import os
 import json
 from ase.io import read,write
 
-str_exp=os.environ['goto_pto_exp']
-
 def def_list1d_key():
     list1d_key=[]
     
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
-    #list1d_key.append('111.x4y4_O4')
+    list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
@@ -20,7 +18,7 @@ def def_list1d_key():
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
-    list1d_key.append('110.x2y1_O2_feffk')
+    #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
     #list1d_key.append('110.x2y2_O1_a1b2')
     #list1d_key.append('110.x2y2_O2.14_a1b2')
@@ -51,7 +49,7 @@ def def_class_paras():
 
     class_paras.tuple_xrange = (527.0, 540.0)
 
-    class_paras.float_scalingarea = 20.792019499999988
+    class_paras.float_scalingarea = 20
 
     return class_paras
 
@@ -300,27 +298,35 @@ def def_pto_class(
         float_onset_sft = 0.0
     ):
  
+    str_exp=os.environ['goto_pto_exp']
     goto_pto_work_110=os.environ['goto_pto_work_110']
     goto_pto_work_111=os.environ['goto_pto_work_111']
 
     str_surface = str_workdir[0:6] 
     if (str_surface == 'Pt.110'):
-        float_onset = 529.7
+        with open( str_exp+'20211113.pto110_a25_info.json','r' ) as open_json:
+            dict_json = json.load( open_json )
+            float_onset = dict_json[ 'float_onset' ]
         goto_pto_work=goto_pto_work_110
     elif ( str_surface == 'Pt.111'):
-        float_onset = 530.1
+        with open( str_exp+'20210926.pto111_a20_info.json','r' ) as open_json:
+            dict_json = json.load( open_json )
+            float_onset = dict_json[ 'float_onset' ]
         goto_pto_work=goto_pto_work_111
     else:
         raise
 
     if ('vasp' in str_workdir):
         str_code = 'vasp'
-        float_scaling = 0.16467196647660517
+        with open( goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json', 'r') as open_json:
+            dict_json = json.load( open_json )
+            float_scaling = dict_json[ 'float_scaling' ]
         str_cif = 'template/POSCAR'
     elif ('feff' in str_workdir):
         str_code = 'feff'
-        # from file `Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json`
-        float_scaling = 227.64789130499736
+        with open( goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json', 'r') as open_json:
+            dict_json = json.load( open_json )
+            float_scaling = dict_json[ 'float_scaling' ]
         str_cif = 'feff.cif'
     else:
         raise 

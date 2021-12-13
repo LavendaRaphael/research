@@ -12,8 +12,8 @@ for str_key in list1d_key:
     print(os.getcwd())
 
     xas_module.def_scaling_json(
-        list1d_alignangle = [25, 90, 'trigonal'],
-        list1d_scalingangle = [25, 90, 'trigonal'],
+        list1d_alignangle = [20, 90, 'trigonal'],
+        list1d_scalingangle = [20, 90, 'trigonal'],
         class_structure = class_structure,
         )
 
