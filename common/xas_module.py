@@ -492,11 +492,25 @@ class class_paras(object):
         self._float_scalingarea = float_temp
 
     @property
-    def tuple_xrange(self):
-        return self._tuple_xrange
-    @tuple_xrange.setter
-    def tuple_xrange(self, tuple_temp):
-        self._tuple_xrange = tuple_temp
+    def tuple_mainxrange(self):
+        return self._tuple_mainxrange
+    @tuple_mainxrange.setter
+    def tuple_mainxrange(self, tuple_temp):
+        self._tuple_mainxrange = tuple_temp
+
+    @property
+    def tuple_postxrange(self):
+        return self._tuple_postxrange
+    @tuple_postxrange.setter
+    def tuple_postxrange(self, tuple_temp):
+        self._tuple_postxrange = tuple_temp
+    
+    @property
+    def str_scalingmethod(self):
+        return self._str_scalingmethod
+    @str_scalingmethod.setter
+    def str_scalingmethod(self, str_temp):
+        self._str_scalingmethod = str_temp
 
 class class_structure(object):
 
@@ -639,8 +653,46 @@ def def_alphabeta_workflow(
         str_outfile=str_outfile
         )
 
-    def_endfunc() 
+    def_endfunc()
     return
+
+def def_findscaling_dict(
+        array1d_xdata,
+        array1d_ydata
+        ): 
+    class_paras = local_module.def_class_paras()
+    float_mainscaling = def_findscaling(
+        array1d_xdata = array1d_xdata_align, 
+        array1d_ydata = array2d_ydata_alphabeta, 
+        tuple_xrange = class_paras.tuple_mainxrange
+        )
+
+    float_postscaling = def_postscaling(
+        array1d_xdata = array1d_xdata_align,
+        array1d_ydata = array2d_ydata_alphabeta,
+        tuple_xrange = class_paras.tuple_postxrange
+        )
+    dict_scaling = {
+        'float_mainscaling' : float_mainscaling,
+        'float_postscaling': def_postscaling
+        }
+ 
+    return dict_scaling
+
+def def_findscaling(
+        array1d_xdata,
+        array1d_ydata,
+        tuple_xrange
+        ):
+
+    float_area = def_findarea(
+        array1d_xdata = array1d_xdata,
+        array1d_ydata = array1d_ydata,
+        tuple_xrange = tuple_xrange
+        )
+    float_scaling = ( tuple_xrange[1] - tuple_xrange[0] ) / float_area
+
+    return float_scaling
 
 def def_scaling( 
         array2d_ydata,
@@ -706,12 +758,10 @@ def def_exp_info_json(
         list1d_column = list1d_column,
         )
 
-    float_area = def_findarea( 
-        array1d_xdata = array2d_xdata_origin, 
-        array1d_ydata = array2d_ydata_origin, 
-        tuple_xrange = class_paras.tuple_xrange
+    dict_scaling = def_findscaling_dict(
+        array1d_xdata = array1d_xdata_align, 
+        array1d_ydata = array2d_ydata_alphabeta, 
         )
-    
     dict_peaks = def_findpeaks( 
         array1d_xdata = array2d_xdata_origin, 
         array1d_ydata = array2d_ydata_origin
@@ -720,10 +770,9 @@ def def_exp_info_json(
     #--------------------------------------------------[output]
     with open( str_jsonfile, 'w' ) as obj_jsonfile:
         json.dump( 
-            obj={ 
-                    'float_area' : float_area,
+            obj= dict_scaling.update({ 
                     'float_onset': dict_peaks[ 'E(eV)' ][0]
-                },
+                }),
             fp=obj_jsonfile, 
             indent=4 )
 
@@ -740,7 +789,6 @@ def def_scaling_json(
 # list_scalingangle = [ alpha1, beta1 ]
 #----------------------------------------------[]
     def_startfunc( locals(), ['class_structure'] )
-    class_paras = local_module.def_class_paras()
     #--------------------------------------------------[extract]
     list1d_column = [0]
     _, array2d_xdata_origin = def_extract( 
@@ -771,18 +819,19 @@ def def_scaling_json(
         array2d_ydata = array2d_ydata_origin 
         )
     
-    float_area = def_findarea( 
+    dict_scaling = def_findscaling_dict(
         array1d_xdata = array1d_xdata_align, 
         array1d_ydata = array2d_ydata_alphabeta, 
-        tuple_xrange = class_paras.tuple_xrange
         )
-    float_scaling = class_paras.float_scalingarea/float_area
 
     #--------------------------------------------------[output]
     str_abname = def_abname( alpha=list1d_scalingangle[0], beta=list1d_scalingangle[1])
     str_jsonfile = 'xas.'+str_abname+'.scaling.json'
     with open( str_jsonfile, 'w' ) as obj_jsonfile:
-        json.dump( obj={ 'float_scaling' : float_scaling }, fp=obj_jsonfile, indent=4 )
+        json.dump( 
+            obj=dict_scaling, 
+            fp=obj_jsonfile, 
+            indent=4 )
 
     def_endfunc()
     return

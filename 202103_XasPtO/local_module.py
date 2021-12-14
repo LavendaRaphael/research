@@ -48,8 +48,9 @@ def def_class_paras():
     class_paras = xas_module.class_paras()
 
     class_paras.tuple_xrange = (527.0, 540.0)
+    class_paras.tuple_postxrange = (540.0, 548.0)
 
-    class_paras.float_scalingarea = 20
+    class_paras.str_scalingmethod = 'float_mainscaling'
 
     return class_paras
 
@@ -320,16 +321,16 @@ def def_pto_class(
         str_code = 'vasp'
         with open( goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json', 'r') as open_json:
             dict_json = json.load( open_json )
-            float_scaling = dict_json[ 'float_scaling' ]
         str_cif = 'template/POSCAR'
     elif ('feff' in str_workdir):
         str_code = 'feff'
         with open( goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json', 'r') as open_json:
             dict_json = json.load( open_json )
-            float_scaling = dict_json[ 'float_scaling' ]
         str_cif = 'feff.cif'
     else:
         raise 
+
+    class_paras = def_class_paras()
 
     class_structure = xas_module.class_structure()
     class_structure.list2d_atom = list2d_atom
@@ -338,7 +339,7 @@ def def_pto_class(
     class_structure.list1d_bbox = list1d_bbox
     class_structure.str_cif = str_cif
     class_structure.str_code = str_code
-    class_structure.float_scaling = float_scaling
+    class_structure.float_scaling = dict_json[ class_paras.str_scalingmethod ]
 
     return class_structure
 

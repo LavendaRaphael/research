@@ -77,6 +77,11 @@ SCF 7.0
 * FMS None 0 0 0.001 0.001 (default)
 FMS 9.0 0 2
 
+* p92
+* STRFAC eta gmax rmax
+* For negative electronic configuration
+* STRFAC 1.0 0.0 0.0
+
 *--------------------------------------[iff2x: ff2x, sfconv, eels]
 
 * p98

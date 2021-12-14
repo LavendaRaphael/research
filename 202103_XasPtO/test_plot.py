@@ -50,6 +50,5 @@ os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2_O1
 def_test(
     list2d_data = [
         ['xas.ave.csv', [0,3] ],
-        ['atom_1/polarization_z/xmu.dat', [0,3] ],
     ]
     )
