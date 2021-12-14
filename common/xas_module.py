@@ -20,6 +20,26 @@ import re
 import group_module
 import subprocess
 
+def def_exp_scaling( str_datfile, int_xcolumn, int_ycolumn, str_outfile ):
+    df_xas = pandas.read_csv(
+        str_datfile,
+        header = 0,
+        names= ['E(eV)', 'Intensity'],
+        usecols = [int_xcolumn,int_ycolumn],
+        comment='#',
+        )
+    df_xas = df_xas.dropna()
+    print(df_xas)
+    dict_scaling = def_findscaling_dict(
+        array1d_xdata = df_xas['E(eV)'].to_numpy(),
+        array1d_ydata = df_xas['Intensity'].to_numpy()
+        )
+    class_paras = local_module.def_class_paras()
+    float_scaling = dict_scaling[ class_paras.str_scalingmethod ]
+    df_xas['Intensity'] *= float_scaling
+    
+    df_xas.to_csv( str_outfile )
+
 def def_code2xas(
         str_code = 'vasp',
         ):
@@ -67,11 +87,11 @@ def def_feff2xas(
     
     df_xas.to_csv( str_outfile )
 
-    list_xheader = [str_xheader]
-    array2d_xdata = df_xas[str_xheader].to_numpy()
+    list1d_xheader = [str_xheader]
+    array2d_xdata = df_xas[list1d_xheader].to_numpy()
     array2d_ydata = df_xas[list1d_yheader].to_numpy()
 
-    return list_xheader, list1d_yheader, array2d_xdata, array2d_ydata
+    return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata
 
 def def_vasp_sub( class_structure ):
     os.chdir('template/')
@@ -662,21 +682,22 @@ def def_findscaling_dict(
         ): 
     class_paras = local_module.def_class_paras()
     float_mainscaling = def_findscaling(
-        array1d_xdata = array1d_xdata_align, 
-        array1d_ydata = array2d_ydata_alphabeta, 
+        array1d_xdata = array1d_xdata, 
+        array1d_ydata = array1d_ydata, 
         tuple_xrange = class_paras.tuple_mainxrange
         )
 
-    float_postscaling = def_postscaling(
-        array1d_xdata = array1d_xdata_align,
-        array1d_ydata = array2d_ydata_alphabeta,
+    float_postscaling = def_findscaling(
+        array1d_xdata = array1d_xdata,
+        array1d_ydata = array1d_ydata,
         tuple_xrange = class_paras.tuple_postxrange
         )
     dict_scaling = {
         'float_mainscaling' : float_mainscaling,
-        'float_postscaling': def_postscaling
+        'float_postscaling': float_postscaling
         }
- 
+
+    def_print_paras( locals(),['dict_scaling'] ) 
     return dict_scaling
 
 def def_findscaling(
@@ -685,6 +706,8 @@ def def_findscaling(
         tuple_xrange
         ):
 
+    if ( numpy.amax( array1d_xdata ) < tuple_xrange[1] ):
+        raise ValueError('tuple_xrange is too large!')
     float_area = def_findarea(
         array1d_xdata = array1d_xdata,
         array1d_ydata = array1d_ydata,

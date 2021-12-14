@@ -9,8 +9,8 @@ def def_list1d_key():
     list1d_key=[]
     
     #----------------------------------
-    #list1d_key.append('111.a2b2_O1_feffk')
-    list1d_key.append('111.x4y4_O4')
+    list1d_key.append('111.a2b2_O1_feffk')
+    #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
@@ -47,10 +47,11 @@ def def_class_paras():
 
     class_paras = xas_module.class_paras()
 
-    class_paras.tuple_xrange = (527.0, 540.0)
-    class_paras.tuple_postxrange = (540.0, 548.0)
+    class_paras.tuple_mainxrange = (527.0, 540.0)
+    class_paras.tuple_postxrange = (540.0, 545.9)
 
-    class_paras.str_scalingmethod = 'float_mainscaling'
+    #class_paras.str_scalingmethod = 'float_mainscaling'
+    class_paras.str_scalingmethod = 'float_postscaling'
 
     return class_paras
 
@@ -305,31 +306,29 @@ def def_pto_class(
 
     str_surface = str_workdir[0:6] 
     if (str_surface == 'Pt.110'):
-        with open( str_exp+'20211113.pto110_a25_info.json','r' ) as open_json:
-            dict_json = json.load( open_json )
-            float_onset = dict_json[ 'float_onset' ]
+        str_onsetfile = str_exp+'20211113.pto110_a25_info.json'
         goto_pto_work=goto_pto_work_110
     elif ( str_surface == 'Pt.111'):
-        with open( str_exp+'20210926.pto111_a20_info.json','r' ) as open_json:
-            dict_json = json.load( open_json )
-            float_onset = dict_json[ 'float_onset' ]
+        str_onsetfile = str_exp+'20210926.pto111_a20_info.json'
         goto_pto_work=goto_pto_work_111
     else:
         raise
+    with open( str_onsetfile, 'r' ) as open_json:
+        dict_json = json.load( open_json )
+        float_onset = dict_json[ 'float_onset' ]
 
     if ('vasp' in str_workdir):
         str_code = 'vasp'
-        with open( goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json', 'r') as open_json:
-            dict_json = json.load( open_json )
+        str_scalingfile = goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json'
         str_cif = 'template/POSCAR'
     elif ('feff' in str_workdir):
         str_code = 'feff'
-        with open( goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json', 'r') as open_json:
-            dict_json = json.load( open_json )
+        str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
         str_cif = 'feff.cif'
     else:
         raise 
-
+    with open( str_scalingfile, 'r') as open_json:
+        dict_json = json.load( open_json )
     class_paras = def_class_paras()
 
     class_structure = xas_module.class_structure()

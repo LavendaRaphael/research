@@ -45,10 +45,10 @@ def def_test(
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.a2b2_O1_vac/feff_kspace/')
+os.chdir(str_homedir+'')
 
 def_test(
     list2d_data = [
-        ['xas.ave.csv', [0,3] ],
+        ['research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.csv', [0,1] ],
     ]
     )
