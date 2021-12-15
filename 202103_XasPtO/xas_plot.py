@@ -66,6 +66,28 @@ def def_pic_pto110(
     os.chdir( str_workdir )
     print(os.getcwd())
 
+    fig, obj_ax = plt.subplots()
+    def_plt_exp(
+        obj_ax = obj_ax,
+        str_datfile = str_exp+'20210924.pto110_a20_postscaling.csv',
+        str_label=r'Exp. 20$\degree$',
+        list1d_column = [ 1, 2]
+    )
+    for list1d_data in list2d_data:
+        def_plt_theory(
+            obj_ax = obj_ax,
+            str_datfile = list1d_data[0]+'xas.a20_b90.csv',
+            list1d_column = [ 0, 1 ],
+            str_label = r'Theory 20$\degree$ '+ list1d_data[1]
+        )
+    def_plt_save(
+        fig,
+        obj_ax,
+        str_savefig +'.a20.pdf',
+        tuple_xlim = (527,540),
+        tuple_ylim = (None,5)
+    )
+
     list2d_loop = [
         [ 'z',2,3 ],
         [ 'x_y',1,2]
@@ -73,14 +95,12 @@ def def_pic_pto110(
 
     for list1d_loop in list2d_loop:
         fig, obj_ax = plt.subplots()
-
         def_plt_exp(
             obj_ax = obj_ax,
             str_datfile = str_exp+'20210924.pto110_xyzfit.csv',
-            str_label=r'Exp. fit z',
+            str_label=r'Exp. fit '+list1d_loop[0],
             list1d_column = [ 0, list1d_loop[1]]
         )
-
         for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
@@ -93,11 +113,21 @@ def def_pic_pto110(
             obj_ax,
             str_savefig +'.'+list1d_loop[0]+'.pdf',
             tuple_xlim = (527,540),
-            tuple_ylim = (None,6)
+            tuple_ylim = (None,5)
         )
 
     plt.show()
 
+if ('t'):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.neighbor_mix_1',
+        list2d_data = [
+            [ dict_structure['110.x2y3_O4.v56'].str_chdir, 'a'],
+            [ dict_structure['110.x2y4_O6.v56'].str_chdir, 'b'],
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir,'c'],
+        ],
+    )
 if ('t'):
     def_pic_pto110(
         str_workdir = str_work_110,
@@ -106,6 +136,15 @@ if ('t'):
             [ dict_structure['110.x2y1_O1_a1b3'].str_chdir, 'a'],
             [ dict_structure['110.x2y2_O2.14_a1b2'].str_chdir, 'b'],
             [ dict_structure['110.x2y1_O2_a1b3'].str_chdir,'c'],
+        ],
+    )
+if (''):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
+        list2d_data = [
+            [ dict_structure['110.x1y1.a2b2_O2_a1b2'].str_chdir, 'a'],
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir, 'b'],
         ],
     )
 #------------------------------------------------------------
@@ -167,8 +206,8 @@ if (''):
         str_workdir = str_work_111,
         str_savefig = 'picture/xas.vasp_feff',
         list2d_data = [
-            [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP'],
-            [ dict_structure['111.a2b2_O1_feffk'].str_chdir, 'FEFF kspace'],
+            [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP SCH'],
+            [ dict_structure['111.a2b2_O1_feffk'].str_chdir, 'FEFF K-Space'],
         ],
     )
 #------------------------------------------------------------
@@ -194,7 +233,6 @@ if (''):
         ],
         str_expfile = '20210924.Pt.110.a20.csv',
     )
-
 
 if (''):
     def_pic_20degree(

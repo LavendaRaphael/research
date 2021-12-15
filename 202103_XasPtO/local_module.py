@@ -10,7 +10,7 @@ def def_list1d_key():
    
     #---------------------------------- 
     #list1d_key.append('exp.20210926.pto111')
-    #list1d_key.append('exp.20210924.pto110_a20')
+    list1d_key.append('exp.20210924.pto110_a20')
     #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
@@ -18,7 +18,7 @@ def def_list1d_key():
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
-    #list1d_key.append('110.x1y1.a2a2_O2_a1b2')
+    #list1d_key.append('110.x1y1.a2b2_O2_a1b2')
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
@@ -34,13 +34,13 @@ def def_list1d_key():
     #list1d_key.append('110.x2y3_O2.14')
     #list1d_key.append('110.x2y3_O3.123')
     #list1d_key.append('110.x2y3_O3.136')
-    list1d_key.append('110.x2y3_O4.v56')
+    #list1d_key.append('110.x2y3_O4.v56')
     #list1d_key.append('110.x2y3_O5')
     #list1d_key.append('110.x2y4_O2.16')
     #list1d_key.append('110.x2y4_O3.137')
     #list1d_key.append('110.x2y4_O3.148')
     #list1d_key.append('110.x2y4_O4.1237')
-    list1d_key.append('110.x2y4_O6.v56')
+    #list1d_key.append('110.x2y4_O6.v56')
     #list1d_key.append('110.x2y6_O2.18')
     #list1d_key.append('110.x4y3_O2.12')
     #list1d_key.append('110.x4y3_O6')
@@ -103,6 +103,12 @@ def def_dict_structure():
         str_workdir = 'Pt.111.x4y4_O4_vac/vasp_sch.hch/'
         )
     #===================================================================================
+    str_key='110.x1y1.a2b2_O2_a1b2'
+    dict_structure[ str_key ] = def_pto_class(
+        str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
+        list1d_bbox = [ -0.5,-0.25,2,1.5 ]
+        )
+    #------------------------------------------
     str_key='110.x2y12_O22'
     list2d_atom = []
     list2d_atom.append([ 1,4.0])
@@ -236,7 +242,7 @@ def def_dict_structure():
     str_key='110.x2y3_O4.v56'
     dict_structure[ str_key ] = def_pto_class(
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
-        list1d_bbox = [ 1/2,2.5/3,1,1 ]
+        list1d_bbox = [ -0.5,-0.5,2,2 ]
         )
     #------------------------------------------
     str_key='110.x2y3_O5'
@@ -289,7 +295,7 @@ def def_dict_structure():
     list2d_atom.append([ 3,4.0])
     dict_structure[ str_key ] = def_pto_class(
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
-        list1d_bbox = [ 1,2.5,2,4 ]
+        list1d_bbox = [ -0.5,-0.25,2,1.5 ]
         )
     #------------------------------------------
     str_key='110.x2y6_O2.18'
@@ -329,61 +335,64 @@ def def_pto_class(
     class_structure = xas_module.class_structure()
     
     if ( marker == None ):
+        marker = []
         str_surface = str_workdir[0:6] 
         if (str_surface == 'Pt.110'):
-            str_onsetfile = str_exp+'20211113.pto110_a25_info.json'
-            goto_pto_work=goto_pto_work_110
-            tuple_mainxrange = (527.0, 540.0)
-            tuple_postxrange = (539, 544)
+            marker.append( '110' )
         elif ( str_surface == 'Pt.111'):
-            str_onsetfile = str_exp+'20210926.pto111_a20_info.json'
-            goto_pto_work=goto_pto_work_111
-            tuple_mainxrange = (527.0, 540.0)
-            tuple_postxrange = (534, 544)
+            marker.append( '111' )
         else:
             raise
-        with open( str_onsetfile, 'r' ) as open_json:
-            dict_json = json.load( open_json )
-            float_onset = dict_json[ 'float_onset' ]
-
         if ('vasp' in str_workdir):
+            marker.append( 'vasp','theory' )
+        elif ('feff' in str_workdir):
+            marker.append( 'feff','theory' )
+        else:
+            raise 
+    if ('110' in marker):
+        str_onsetfile = str_exp+'20210924.pto110_a20_info.json'
+        goto_pto_work=goto_pto_work_110
+        tuple_mainxrange = (527.0, 540.0)
+        tuple_postxrange = (539, 544)
+    elif ( '111' in marker):
+        str_onsetfile = str_exp+'20210926.pto111_a20_info.json'
+        goto_pto_work=goto_pto_work_111
+        tuple_mainxrange = (527.0, 540.0)
+        tuple_postxrange = (534, 544)
+    else:
+        raise
+
+    class_paras = def_class_paras()
+
+    if ('theory' in marker):
+        if ('vasp' in marker):
             str_code = 'vasp'
-            if (str_surface == 'Pt.111'):
+            marker.append( 'vasp','theory' )
+            if ( '111' in marker):
                 str_scalingfile = goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json'
-            elif ( str_surface == 'Pt.110'):
+            elif ( '110' in marker):
                 str_scalingfile = goto_pto_work_110+'Pt.110.x2y12_O22_vac/vasp_sch/xas.a20_b90.scaling.json'
             str_cif = 'template/POSCAR'
-        elif ('feff' in str_workdir):
+        elif ('feff' in marker):
+            marker.append( 'feff','theory' )
             str_code = 'feff'
             str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
             str_cif = 'feff.cif'
-        else:
-            raise 
+        with open( str_onsetfile, 'r' ) as open_json:
+            dict_onset = json.load( open_json )
         with open( str_scalingfile, 'r') as open_json:
-            dict_json = json.load( open_json )
-        class_paras = def_class_paras()
-
+            dict_scaling = json.load( open_json )
         class_structure.list2d_atom = list2d_atom
-        class_structure.float_onset = float_onset + float_onset_sft
+        class_structure.float_onset = dict_onset[ 'float_onset' ] + float_onset_sft
         class_structure.list1d_bbox = list1d_bbox
         class_structure.str_cif = str_cif
         class_structure.str_code = str_code
-        class_structure.float_scaling = dict_json[ class_paras.str_scalingmethod ]
+        class_structure.float_scaling = dict_scaling[ class_paras.str_scalingmethod ]
+    elif ( 'exp' in marker ):
+        goto_pto_work = str_exp
+        class_structure.list1d_column = list1d_column
     else:
-        if ( '111' in marker ):
-            tuple_mainxrange = (527.0, 540.0)
-            tuple_postxrange = (534, 544)
-        elif ( '110' in marker ):
-            tuple_mainxrange = (527.0, 540.0)
-            tuple_postxrange = (539, 544)
-        else:
-            raise
-        if ( 'exp' in marker ):
-            goto_pto_work = str_exp
-            class_structure.list1d_column = list1d_column
-        else:
-            raise
-
+        raise
     class_structure.str_chdir = goto_pto_work + str_workdir
     class_structure.tuple_mainxrange = tuple_mainxrange
     class_structure.tuple_postxrange = tuple_postxrange

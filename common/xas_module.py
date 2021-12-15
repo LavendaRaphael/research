@@ -784,21 +784,19 @@ def def_exp_info_json(
     str_datfile = class_structure.str_datfile 
     int_xcolumn = class_structure.list1d_column[0]
     int_ycolumn = class_structure.list1d_column[1]
-    list1d_column = [int_xcolumn]
     _, array2d_xdata_origin = def_extract( 
-        str_datfile=str_datfile,
-        list1d_column = list1d_column,
+        str_datfile = str_datfile,
+        list1d_column = [int_xcolumn],
         )
     
-    list1d_column = [int_ycolumn]
     _, array2d_ydata_origin = def_extract( 
         str_datfile=str_datfile,
-        list1d_column = list1d_column,
+        list1d_column = [int_ycolumn],
         )
 
     dict_scaling = def_findscaling_dict(
-        array1d_xdata = array1d_xdata_align, 
-        array1d_ydata = array2d_ydata_alphabeta,
+        array1d_xdata = array2d_xdata_origin, 
+        array1d_ydata = array2d_ydata_origin,
         class_structure = class_structure,
         )
     dict_peaks = def_findpeaks( 
