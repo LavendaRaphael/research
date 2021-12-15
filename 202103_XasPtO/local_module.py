@@ -10,7 +10,7 @@ def def_list1d_key():
    
     #---------------------------------- 
     #list1d_key.append('exp.20210926.pto111')
-    list1d_key.append('exp.20210924.pto110_a20')
+    #list1d_key.append('exp.20210924.pto110_a20')
     #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
@@ -344,9 +344,9 @@ def def_pto_class(
         else:
             raise
         if ('vasp' in str_workdir):
-            marker.append( 'vasp','theory' )
+            marker.extend( ['vasp','theory'] )
         elif ('feff' in str_workdir):
-            marker.append( 'feff','theory' )
+            marker.extend( ['feff','theory'] )
         else:
             raise 
     if ('110' in marker):
@@ -364,17 +364,16 @@ def def_pto_class(
 
     class_paras = def_class_paras()
 
+    print(marker)
     if ('theory' in marker):
         if ('vasp' in marker):
             str_code = 'vasp'
-            marker.append( 'vasp','theory' )
             if ( '111' in marker):
                 str_scalingfile = goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json'
             elif ( '110' in marker):
                 str_scalingfile = goto_pto_work_110+'Pt.110.x2y12_O22_vac/vasp_sch/xas.a20_b90.scaling.json'
             str_cif = 'template/POSCAR'
         elif ('feff' in marker):
-            marker.append( 'feff','theory' )
             str_code = 'feff'
             str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
             str_cif = 'feff.cif'

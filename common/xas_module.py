@@ -803,13 +803,13 @@ def def_exp_info_json(
         array1d_xdata = array2d_xdata_origin, 
         array1d_ydata = array2d_ydata_origin
         )
-
+    dict_scaling.update({
+        'float_onset': dict_peaks[ 'E(eV)' ][0]
+         })
     #--------------------------------------------------[output]
     with open( str_jsonfile, 'w' ) as obj_jsonfile:
         json.dump( 
-            obj= dict_scaling.update({ 
-                    'float_onset': dict_peaks[ 'E(eV)' ][0]
-                }),
+            obj= dict_scaling, 
             fp=obj_jsonfile, 
             indent=4 )
 

@@ -118,7 +118,7 @@ def def_pic_pto110(
 
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_pto110(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.neighbor_mix_1',
@@ -128,7 +128,7 @@ if ('t'):
             [ dict_structure['110.x2y1_O2_a1b3'].str_chdir,'c'],
         ],
     )
-if ('t'):
+if (''):
     def_pic_pto110(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.mixture',
@@ -286,9 +286,9 @@ def def_pic_converge(
         str_workdir,
         str_savefig,
         list2d_data, #[
-        #    [ str_datfile, str_label, int_column ],
+        #    [ str_datfile, str_label, list2d_column ],
         #]
-        tuple_xlim,
+        tuple_xlim=(None,None),
         tuple_ylim=(None,None)
     ):
 
@@ -463,7 +463,17 @@ if (''):
         ],
         tuple_xlim = ( 527,540 )
     )
-
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '110.x2y1_O2_feffk' ].str_chdir + 'atom_1/',
+        str_savefig = 'converge_kspace',
+        list2d_data = [
+            [ 'kmesh225/xmu.dat',    'KMESH 225', [0,3] ],
+            [ 'kmesh400/xmu.dat',    'KMESH 400', [0,3] ],
+            [ 'kmesh625/xmu.dat',    'KMESH 625', [0,3] ],
+        ],
+        tuple_xlim = ( 527,540 )
+    )
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.a2b2_O1_feff_kspace' ].str_chdir + 'atom_1/polarization_z/',
