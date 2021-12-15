@@ -7,9 +7,13 @@ from ase.io import read,write
 
 def def_list1d_key():
     list1d_key=[]
-    
+   
+    #---------------------------------- 
+    #list1d_key.append('exp.20210926.pto111')
+    #list1d_key.append('exp.20210924.pto110_a20')
+    #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
-    list1d_key.append('111.a2b2_O1_feffk')
+    #list1d_key.append('111.a2b2_O1_feffk')
     #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
@@ -30,13 +34,13 @@ def def_list1d_key():
     #list1d_key.append('110.x2y3_O2.14')
     #list1d_key.append('110.x2y3_O3.123')
     #list1d_key.append('110.x2y3_O3.136')
-    #list1d_key.append('110.x2y3_O4.v56')
+    list1d_key.append('110.x2y3_O4.v56')
     #list1d_key.append('110.x2y3_O5')
     #list1d_key.append('110.x2y4_O2.16')
     #list1d_key.append('110.x2y4_O3.137')
     #list1d_key.append('110.x2y4_O3.148')
     #list1d_key.append('110.x2y4_O4.1237')
-    #list1d_key.append('110.x2y4_O6.v56')
+    list1d_key.append('110.x2y4_O6.v56')
     #list1d_key.append('110.x2y6_O2.18')
     #list1d_key.append('110.x4y3_O2.12')
     #list1d_key.append('110.x4y3_O6')
@@ -47,9 +51,6 @@ def def_class_paras():
 
     class_paras = xas_module.class_paras()
 
-    class_paras.tuple_mainxrange = (527.0, 540.0)
-    class_paras.tuple_postxrange = (540.0, 545.9)
-
     #class_paras.str_scalingmethod = 'float_mainscaling'
     class_paras.str_scalingmethod = 'float_postscaling'
 
@@ -58,6 +59,25 @@ def def_class_paras():
 def def_dict_structure():
     
     dict_structure = {}
+    #===================================================================================
+    str_key='exp.20210926.pto111'
+    dict_structure[ str_key ] = def_pto_class(
+        marker = ['exp','111'],
+        str_datfile = '20210926.Pt111-XAS.CSV',
+        list1d_column = [0,2]
+        )
+    str_key='exp.20210924.pto110_a20'
+    dict_structure[ str_key ] = def_pto_class(
+        marker = ['exp','110'],
+        str_datfile = '20210924.Pt110-XAS.CSV',
+        list1d_column = [6,8]
+        )
+    str_key='exp.20210924.pto110_a41'
+    dict_structure[ str_key ] = def_pto_class(
+        marker = ['exp','110'],
+        str_datfile = '20210924.Pt110-XAS.CSV',
+        list1d_column = [10,12]
+        )
     #===================================================================================
     str_key='111.a2b2_O1_feff'
     dict_structure[ str_key ] = def_pto_class( 
@@ -293,52 +313,81 @@ def def_dict_structure():
     return dict_structure
 
 def def_pto_class( 
-        str_workdir,
+        marker = None,
+        str_workdir='',
         list2d_atom = [[1,1.0]],
         list1d_bbox = [0,0,1,1],
         str_cif = 'template/POSCAR',
-        float_onset_sft = 0.0
+        str_datfile = 'xas.ave.csv',
+        float_onset_sft = 0.0,
+        list1d_column = None
     ):
  
     str_exp=os.environ['goto_pto_exp']
     goto_pto_work_110=os.environ['goto_pto_work_110']
     goto_pto_work_111=os.environ['goto_pto_work_111']
-
-    str_surface = str_workdir[0:6] 
-    if (str_surface == 'Pt.110'):
-        str_onsetfile = str_exp+'20211113.pto110_a25_info.json'
-        goto_pto_work=goto_pto_work_110
-    elif ( str_surface == 'Pt.111'):
-        str_onsetfile = str_exp+'20210926.pto111_a20_info.json'
-        goto_pto_work=goto_pto_work_111
-    else:
-        raise
-    with open( str_onsetfile, 'r' ) as open_json:
-        dict_json = json.load( open_json )
-        float_onset = dict_json[ 'float_onset' ]
-
-    if ('vasp' in str_workdir):
-        str_code = 'vasp'
-        str_scalingfile = goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json'
-        str_cif = 'template/POSCAR'
-    elif ('feff' in str_workdir):
-        str_code = 'feff'
-        str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
-        str_cif = 'feff.cif'
-    else:
-        raise 
-    with open( str_scalingfile, 'r') as open_json:
-        dict_json = json.load( open_json )
-    class_paras = def_class_paras()
-
     class_structure = xas_module.class_structure()
-    class_structure.list2d_atom = list2d_atom
+    
+    if ( marker == None ):
+        str_surface = str_workdir[0:6] 
+        if (str_surface == 'Pt.110'):
+            str_onsetfile = str_exp+'20211113.pto110_a25_info.json'
+            goto_pto_work=goto_pto_work_110
+            tuple_mainxrange = (527.0, 540.0)
+            tuple_postxrange = (539, 544)
+        elif ( str_surface == 'Pt.111'):
+            str_onsetfile = str_exp+'20210926.pto111_a20_info.json'
+            goto_pto_work=goto_pto_work_111
+            tuple_mainxrange = (527.0, 540.0)
+            tuple_postxrange = (534, 544)
+        else:
+            raise
+        with open( str_onsetfile, 'r' ) as open_json:
+            dict_json = json.load( open_json )
+            float_onset = dict_json[ 'float_onset' ]
+
+        if ('vasp' in str_workdir):
+            str_code = 'vasp'
+            if (str_surface == 'Pt.111'):
+                str_scalingfile = goto_pto_work_111+'Pt.111.x4y4_O4_vac/vasp_sch/xas.a20_b90.scaling.json'
+            elif ( str_surface == 'Pt.110'):
+                str_scalingfile = goto_pto_work_110+'Pt.110.x2y12_O22_vac/vasp_sch/xas.a20_b90.scaling.json'
+            str_cif = 'template/POSCAR'
+        elif ('feff' in str_workdir):
+            str_code = 'feff'
+            str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
+            str_cif = 'feff.cif'
+        else:
+            raise 
+        with open( str_scalingfile, 'r') as open_json:
+            dict_json = json.load( open_json )
+        class_paras = def_class_paras()
+
+        class_structure.list2d_atom = list2d_atom
+        class_structure.float_onset = float_onset + float_onset_sft
+        class_structure.list1d_bbox = list1d_bbox
+        class_structure.str_cif = str_cif
+        class_structure.str_code = str_code
+        class_structure.float_scaling = dict_json[ class_paras.str_scalingmethod ]
+    else:
+        if ( '111' in marker ):
+            tuple_mainxrange = (527.0, 540.0)
+            tuple_postxrange = (534, 544)
+        elif ( '110' in marker ):
+            tuple_mainxrange = (527.0, 540.0)
+            tuple_postxrange = (539, 544)
+        else:
+            raise
+        if ( 'exp' in marker ):
+            goto_pto_work = str_exp
+            class_structure.list1d_column = list1d_column
+        else:
+            raise
+
     class_structure.str_chdir = goto_pto_work + str_workdir
-    class_structure.float_onset = float_onset + float_onset_sft
-    class_structure.list1d_bbox = list1d_bbox
-    class_structure.str_cif = str_cif
-    class_structure.str_code = str_code
-    class_structure.float_scaling = dict_json[ class_paras.str_scalingmethod ]
+    class_structure.tuple_mainxrange = tuple_mainxrange
+    class_structure.tuple_postxrange = tuple_postxrange
+    class_structure.str_datfile = str_datfile
 
     return class_structure
 

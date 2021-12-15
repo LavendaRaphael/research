@@ -23,10 +23,10 @@ def def_plt_exp(
         obj_ax,
         str_datfile,
         str_label,
-        int_column = 1
+        list1d_column = [0,1]
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ int_column ] )
+    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
     return obj_ax
 
@@ -62,8 +62,6 @@ def def_pic_pto110(
         #    [ str_datfile, str_label ],
         #]
     ):
-    # exp, theory0, theory1
-    # 20, x_y, z
 
     os.chdir( str_workdir )
     print(os.getcwd())
@@ -78,16 +76,15 @@ def def_pic_pto110(
 
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+'20211113.xyzfit.csv',
+            str_datfile = str_exp+'20210924.pto110_xyzfit.csv',
             str_label=r'Exp. fit z',
-            int_column = list1d_loop[1]
+            list1d_column = [ 0, list1d_loop[1]]
         )
 
-        for int_j in range(len(list2d_data)):
-            list1d_data = list2d_data[ int_j ]
+        for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
-                str_datfile = list1d_data[0]+'xas.a25_b90.csv',
+                str_datfile = list1d_data[0]+'xas.a20_b90.csv',
                 list1d_column = [ 0, list1d_loop[2] ],
                 str_label = r'Theory '+list1d_loop[0]+' '+ list1d_data[1]
             )
@@ -112,48 +109,69 @@ if ('t'):
         ],
     )
 #------------------------------------------------------------
-def def_pic_20degree(
+def def_pic_pto111(
         str_workdir,
         str_savefig,
         list2d_data, #[
         #    [ str_datfile, str_label ],
         #]
-        str_expfile,    
     ):
-    # exp, theory0, theory1
-    # 20, x_y, z
 
     os.chdir( str_workdir )
     print(os.getcwd())
 
-    list1d_column=[1,2,3]
-    list1d_label=[ '20$\degree$', 'x_y', 'z' ]
+    list2d_loop = [
+        [ '20$\degree$',1 ],
+        [ 'z',3 ],
+        [ 'x_y',2]
+        ]
 
-    for int_i in range(len(list1d_column)):
+    for list1d_loop in list2d_loop:
         fig, obj_ax = plt.subplots()
 
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+str_expfile,
-            str_label=r'Exp. 20$\degree$'
-        )
+            str_datfile = str_exp+'20210926.pto111_a20_postscaling.csv',
+            str_label=r'Exp. 20$\degree$',
+            list1d_column = [1,2]
+            )
 
-        for int_j in range(len(list2d_data)):
-            list1d_data = list2d_data[ int_j ]
+        for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
                 str_datfile = list1d_data[0]+'xas.a20_b90.csv',
-                list1d_column = [ 0, list1d_column[int_i] ],
-                str_label = r'Theory '+list1d_label[int_i]+' '+ list1d_data[1]
+                list1d_column = [ 0, list1d_loop[1] ],
+                str_label = r'Theory '+list1d_loop[0]+' '+ list1d_data[1]
             )
         def_plt_save(
             fig,
             obj_ax,
-            str_savefig +'.'+ str(list1d_column[int_i])+'.pdf',
+            str_savefig +'.'+ str(list1d_loop[1])+'.pdf',
             tuple_xlim = (527,540),
             tuple_ylim = (None,6)
         )
     plt.show()
+
+if (''):
+    def_pic_pto111( 
+        str_workdir = str_work_111+'Pt.111.x4y4_O4_vac/',
+        str_savefig = 'vasp_sch.corehole', 
+        list2d_data = [
+            ['vasp_sch/', '1.0 corehole'],
+            ['vasp_sch.hch/', '0.5 corehole'],
+        ],
+    )
+
+if (''):
+    def_pic_pto111(
+        str_workdir = str_work_111,
+        str_savefig = 'picture/xas.vasp_feff',
+        list2d_data = [
+            [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP'],
+            [ dict_structure['111.a2b2_O1_feffk'].str_chdir, 'FEFF kspace'],
+        ],
+    )
+#------------------------------------------------------------
 if (''):
     def_pic_20degree(
         str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
@@ -177,16 +195,6 @@ if (''):
         str_expfile = '20210924.Pt.110.a20.csv',
     )
 
-if (''):
-    def_pic_20degree(
-        str_workdir = str_work_111,
-        str_savefig = 'picture/xas.vasp_feff',
-        list2d_data = [
-            [ dict_structure['111.x4y4_O4'].str_chdir, 'VASP'],
-            [ dict_structure['111.a2b2_O1_feffk'].str_chdir, 'FEFF kspace'],
-        ],
-        str_expfile = '20210926.Pt.111.a20.csv',
-    )
 
 if (''):
     def_pic_20degree(
@@ -227,16 +235,6 @@ if (''):
 
 if (''):
     def_pic_20degree( 
-        str_workdir = str_work_111+'Pt.111.x4y4_O4_vac/', 
-        str_savefig = 'vasp_sch.corehole', 
-        list2d_data = [
-            ['vasp_sch/', 'FCH'],
-            ['vasp_sch.hch/', 'HCH'],
-        ],
-        str_expfile = '20210926.Pt.111.a20.csv',
-    )
-if (''):
-    def_pic_20degree( 
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.useless',
         list2d_data = [
@@ -265,7 +263,7 @@ def def_pic_converge(
         def_plt_theory(
                 obj_ax = obj_ax,
                 str_datfile = list1d_data[0],
-                list1d_column = [ 0, list1d_data[2] ],
+                list1d_column = list1d_data[2],
                 str_label = list1d_data[1]
             )
     def_plt_save(
@@ -280,12 +278,12 @@ def def_pic_converge(
 if (''):
     def_pic_converge(
         str_workdir = str_exp,
-        str_savefig = '20211113.fit.xy_z',
+        str_savefig = '20210924.pto110_xyzfit',
         list2d_data = [
-            [ '20211113.xyzfit.csv', r'Fit. 0$\degree$',2 ],
-            [ '20211113.Angel-Pt110-OXAS.csv',r'Exp. 25$\degree$',1 ],
-            [ '20211113.Angel-Pt110-OXAS.csv',r'Exp. 50$\degree$',6 ],
-            [ '20211113.xyzfit.csv', r'Fit. 90$\degree$',1 ],
+            [ '20210924.pto110_xyzfit.csv', r'Fit. 0$\degree$', [0,2] ],
+            [ '20210924.pto110_a20_postscaling.csv',r'Exp. 20$\degree$',[1,2] ],
+            [ '20210924.pto110_a41_postscaling.csv',r'Exp. 41$\degree$',[1,2] ],
+            [ '20210924.pto110_xyzfit.csv', r'Fit. 90$\degree$',[0,1] ],
         ],
         tuple_xlim = ( 527,540 ),
     )

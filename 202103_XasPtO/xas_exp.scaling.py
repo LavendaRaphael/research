@@ -2,18 +2,20 @@
 import xas_module
 import os
 import local_module
-import pandas
 
-str_exp=os.environ['goto_pto_exp']
-os.chdir(str_exp)
+list1d_key = local_module.def_list1d_key()
+dict_structure = local_module.def_dict_structure()
 
-#--------------------------------------------------[Pt.111]
-xas_module.def_exp_scaling( 
-    str_datfile = '20210926.Pt111-XAS.CSV',
-    int_xcolumn = 0,
-    int_ycolumn = 2,
-    str_outfile = '20210926.pto111_a20_postscaling.csv'
-    )
+for str_key in list1d_key:
+    class_structure = dict_structure[ str_key ]
+    str_chdir = class_structure.str_chdir
+    os.chdir(str_chdir)
+    print(os.getcwd())
+
+    xas_module.def_exp_scaling( 
+        class_structure = class_structure,
+        str_outfile = 'xas.exp_scaling.csv'
+        )
 '''
 #--------------------------------------------------[Pt.110]
 xas_module.def_exp_scaling( 

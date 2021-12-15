@@ -20,7 +20,13 @@ import re
 import group_module
 import subprocess
 
-def def_exp_scaling( str_datfile, int_xcolumn, int_ycolumn, str_outfile ):
+def def_exp_scaling( 
+        class_structure,
+        str_outfile 
+        ):
+    str_datfile = class_structure.str_datfile 
+    int_xcolumn = class_structure.list1d_column[0]
+    int_ycolumn = class_structure.list1d_column[1]
     df_xas = pandas.read_csv(
         str_datfile,
         header = 0,
@@ -32,7 +38,8 @@ def def_exp_scaling( str_datfile, int_xcolumn, int_ycolumn, str_outfile ):
     print(df_xas)
     dict_scaling = def_findscaling_dict(
         array1d_xdata = df_xas['E(eV)'].to_numpy(),
-        array1d_ydata = df_xas['Intensity'].to_numpy()
+        array1d_ydata = df_xas['Intensity'].to_numpy(),
+        class_structure = class_structure
         )
     class_paras = local_module.def_class_paras()
     float_scaling = dict_scaling[ class_paras.str_scalingmethod ]
@@ -505,11 +512,27 @@ def def_exp_xyzfit( list2d_alpha, str_outfile ):
 class class_paras(object):
 
     @property
-    def float_scalingarea(self):
-        return self._float_scalingarea
-    @float_scalingarea.setter
-    def float_scalingarea(self, float_temp):
-        self._float_scalingarea = float_temp
+    def str_scalingmethod(self):
+        return self._str_scalingmethod
+    @str_scalingmethod.setter
+    def str_scalingmethod(self, str_temp):
+        self._str_scalingmethod = str_temp
+
+class class_structure(object):
+
+    @property
+    def list1d_column(self):
+        return self._list1d_column
+    @list1d_column.setter
+    def list1d_column(self, list1d_temp):
+        self._list1d_column = list1d_temp
+
+    @property
+    def str_datfile(self):
+        return self._str_datfile
+    @str_datfile.setter
+    def str_datfile(self, str_temp):
+        self._str_datfile = str_temp
 
     @property
     def tuple_mainxrange(self):
@@ -524,16 +547,7 @@ class class_paras(object):
     @tuple_postxrange.setter
     def tuple_postxrange(self, tuple_temp):
         self._tuple_postxrange = tuple_temp
-    
-    @property
-    def str_scalingmethod(self):
-        return self._str_scalingmethod
-    @str_scalingmethod.setter
-    def str_scalingmethod(self, str_temp):
-        self._str_scalingmethod = str_temp
-
-class class_structure(object):
-
+ 
     @property
     def float_onset(self):
         return self._float_onset
@@ -678,19 +692,19 @@ def def_alphabeta_workflow(
 
 def def_findscaling_dict(
         array1d_xdata,
-        array1d_ydata
+        array1d_ydata,
+        class_structure
         ): 
-    class_paras = local_module.def_class_paras()
     float_mainscaling = def_findscaling(
         array1d_xdata = array1d_xdata, 
         array1d_ydata = array1d_ydata, 
-        tuple_xrange = class_paras.tuple_mainxrange
+        tuple_xrange = class_structure.tuple_mainxrange
         )
 
     float_postscaling = def_findscaling(
         array1d_xdata = array1d_xdata,
         array1d_ydata = array1d_ydata,
-        tuple_xrange = class_paras.tuple_postxrange
+        tuple_xrange = class_structure.tuple_postxrange
         )
     dict_scaling = {
         'float_mainscaling' : float_mainscaling,
@@ -763,12 +777,13 @@ def def_align(
     return array1d_xdata_align
 
 def def_exp_info_json( 
-        str_datfile, 
-        int_xcolumn,
-        int_ycolumn,
-        str_jsonfile):
+        class_structure,
+        str_jsonfile,
+        ):
 #----------------------------------------------[]
-    class_paras = local_module.def_class_paras()
+    str_datfile = class_structure.str_datfile 
+    int_xcolumn = class_structure.list1d_column[0]
+    int_ycolumn = class_structure.list1d_column[1]
     list1d_column = [int_xcolumn]
     _, array2d_xdata_origin = def_extract( 
         str_datfile=str_datfile,
@@ -783,7 +798,8 @@ def def_exp_info_json(
 
     dict_scaling = def_findscaling_dict(
         array1d_xdata = array1d_xdata_align, 
-        array1d_ydata = array2d_ydata_alphabeta, 
+        array1d_ydata = array2d_ydata_alphabeta,
+        class_structure = class_structure,
         )
     dict_peaks = def_findpeaks( 
         array1d_xdata = array2d_xdata_origin, 
@@ -844,7 +860,8 @@ def def_scaling_json(
     
     dict_scaling = def_findscaling_dict(
         array1d_xdata = array1d_xdata_align, 
-        array1d_ydata = array2d_ydata_alphabeta, 
+        array1d_ydata = array2d_ydata_alphabeta,
+        class_structure = class_structure,
         )
 
     #--------------------------------------------------[output]
