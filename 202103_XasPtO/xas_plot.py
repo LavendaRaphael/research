@@ -118,6 +118,15 @@ def def_pic_pto110(
 
     plt.show()
 
+if ('t'):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.vasp_feff',
+        list2d_data = [
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir, 'VASP SCH'],
+            [ dict_structure['110.x2y1_O2_feffk'].str_chdir,'FEFF Kspace'],
+        ],
+    )
 if (''):
     def_pic_pto110(
         str_workdir = str_work_110,
@@ -463,7 +472,7 @@ if (''):
         ],
         tuple_xlim = ( 527,540 )
     )
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '110.x2y1_O2_feffk' ].str_chdir + 'atom_1/',
         str_savefig = 'converge_kspace',

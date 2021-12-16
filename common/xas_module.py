@@ -65,7 +65,7 @@ def def_feff2xas(
     list1d_yheader = [ 'x','y','z' ]
 
     df_xas_x = pandas.read_csv( 
-        'ellipticity_z/xmu.dat', 
+        'ellip_z/xmu.dat', 
         sep=' ', 
         skipinitialspace=True, 
         header=None, 
@@ -78,7 +78,7 @@ def def_feff2xas(
     df_xas_y = df_xas_x.rename( columns={ list1d_yheader[0]: list1d_yheader[1] } )
 
     df_xas_z = pandas.read_csv(       
-        'polarization_z/xmu.dat',
+        'polar_z/xmu.dat',
         sep=' ',
         skipinitialspace=True,
         header=None,

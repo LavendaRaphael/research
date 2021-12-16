@@ -22,7 +22,7 @@ def def_list1d_key():
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
-    #list1d_key.append('110.x2y1_O2_feffk')
+    list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
     #list1d_key.append('110.x2y2_O1_a1b2')
     #list1d_key.append('110.x2y2_O2.14_a1b2')
@@ -349,6 +349,7 @@ def def_pto_class(
             marker.extend( ['feff','theory'] )
         else:
             raise 
+
     if ('110' in marker):
         str_onsetfile = str_exp+'20210924.pto110_a20_info.json'
         goto_pto_work=goto_pto_work_110
@@ -362,10 +363,8 @@ def def_pto_class(
     else:
         raise
 
-    class_paras = def_class_paras()
-
-    print(marker)
     if ('theory' in marker):
+        class_paras = def_class_paras()
         if ('vasp' in marker):
             str_code = 'vasp'
             if ( '111' in marker):
@@ -375,7 +374,10 @@ def def_pto_class(
             str_cif = 'template/POSCAR'
         elif ('feff' in marker):
             str_code = 'feff'
-            str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
+            if ( '111' in marker):
+                str_scalingfile = goto_pto_work_111+'Pt.111.a2b2_O1_vac/feff_kspace/xas.a20_b90.scaling.json'
+            elif ( '110' in marker):
+                str_scalingfile = goto_pto_work_110+'Pt.110.x2y1_O2_vac/feff_k/xas.a20_b90.scaling.json'
             str_cif = 'feff.cif'
         with open( str_onsetfile, 'r' ) as open_json:
             dict_onset = json.load( open_json )

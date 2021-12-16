@@ -101,7 +101,7 @@ integer, external :: itoken, istrln
 real*8, external :: dist, getspin
 integer iTmp
 
-!@tff
+!@FeifeiTian
 !<add
 real(8)          :: tff_mindist, tff_real_tmp
 !>
@@ -121,11 +121,13 @@ call chopen(ios, 'log.dat', 'feff')
 
 tmpstr = vfeff
 call triml(tmpstr)
-call wlog('Launching FEFF version '//tmpstr)
 
-!@tff
+!@FeifeiTian
+!<comment
+!call wlog('Launching FEFF version '//tmpstr)
+!>
 !<add
-call wlog('20211209@FeifeiTian')
+call wlog('Launching FEFF version '//tmpstr//' 20211209@FeifeiTian')
 !>
 !@end
 
@@ -1874,8 +1876,8 @@ if ((ispace .eq. 0) .or. (cifread .and. ispace .eq. 1)) then
     ! but it confuses users to give incomplete shells at large distance.
     ! The radius of that sphere is the minimum of the 3 supercell lattice parameters
 
-    !@tff
-    !>comment
+    !@FeifeiTian
+    !<comment
     !mindist = min(dsqrt(a1(1)**2 + a1(2)**2 + a1(3)**2)*i1, dsqrt(a2(1)**2 + a2(2)**2 + a2(3)**2)*i1, dsqrt(a3(1)**2 + a3(2)**2 + a3(3)**2)*i1)
     !>
     !<add

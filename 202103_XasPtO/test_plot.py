@@ -47,12 +47,13 @@ def def_test(
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'')
+os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.110_O_vac/Pt.110.x2y1_O2_vac/feff_k')
 
 def_test(
     list2d_data = [
-        ['research/202103_XasPtO/exp/20210924.pto110_a20_postscaling.csv', [1,2] ],
-        ['research/202103_XasPtO/exp/20211113.Angel-Pt110-OXAS.csv',[0,1]]
+        ['xas.ave.csv', [0,3] ],
+        [ 'atom_1/polar_z/xmu.dat',[0,3] ],
+        [ 'atom_1/ellip_z/xmu.dat',[0,3] ],
     ],
     tuple_xlim = (527,545)
     )
