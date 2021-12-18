@@ -199,3 +199,10 @@ def def_serversub(
         obj_subfile.write( str_timecount )
     subprocess.run( dict_jobsub[ str_mycluster ].split()  )
 
+class class_cluster(object):
+    @property
+    def str_scalingmethod(self):
+        return self._str_scalingmethod
+    @str_scalingmethod.setter
+    def str_scalingmethod(self, str_temp):
+        self._str_scalingmethod = str_temp
