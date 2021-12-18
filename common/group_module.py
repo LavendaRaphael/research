@@ -1,7 +1,6 @@
 import os
 import math
 import subprocess
-import server
 import shutil
 
 def def_vasp_potgen():
@@ -127,14 +126,11 @@ def def_dict_pot():
     return dict_pot
 
 def def_serversub( 
-         str_jobname,
-         dict_input,
-         str_excute,
-         #int_ncore = None,
-         #int_nodes = None,
-         #str_jobqueue = None,
-         #int_maxppn = None
-         ):
+        str_jobname,
+        dict_input,
+        str_excute,
+        class_cluster,
+        ):
 
     str_homedir = os.environ[ 'homedir' ]
     str_mycluster = os.environ[ 'mycluster' ]
@@ -142,11 +138,11 @@ def def_serversub(
     if ('str_jobqueue' in dict_input):
         str_jobqueue = dict_input[ 'str_jobqueue' ]
     else:
-        str_jobqueue = server.str_jobqueue
+        str_jobqueue = class_cluster.str_jobqueue
     if ('int_maxppn' in dict_input):
         int_maxppn = dict_input[ 'int_maxppn' ]
     else:
-        int_maxppn = server.dict_maxppn[ str_jobqueue ]
+        int_maxppn = class_cluster.dict_maxppn[ str_jobqueue ]
     if ('int_nodes' in dict_input):
         int_nodes = dict_input[ 'int_nodes' ]
         int_ppn = int_maxppn 
@@ -201,8 +197,15 @@ def def_serversub(
 
 class class_cluster(object):
     @property
-    def str_scalingmethod(self):
-        return self._str_scalingmethod
-    @str_scalingmethod.setter
-    def str_scalingmethod(self, str_temp):
-        self._str_scalingmethod = str_temp
+    def str_jobqueue(self):
+        return self._str_jobqueue
+    @str_jobqueue.setter
+    def str_jobqueue(self, str_temp):
+        self._str_jobqueue = str_temp
+
+    @property
+    def dict_maxppn(self):
+        return self._dict_maxppn
+    @dict_maxppn.setter
+    def dict_maxppn(self, dict_temp):
+        self._dict_maxppn = dict_temp  
