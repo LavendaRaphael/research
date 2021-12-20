@@ -20,6 +20,89 @@ import re
 import group_module
 import subprocess
 
+def def_vasp_tm2xas(
+        str_broadmethod,
+        float_hwhm,
+        int_broadnbin
+        ):
+    array1d_tm_xdata, array2d_tm_ydata, _ = def_tm_extract()
+    array1d_xdata_new, array2d_ydata_new =  def_broad( 
+        array1d_xdata = array1d_tm_xdata, 
+        array2d_ydata = array2d_tm_ydata, 
+        float_hwhm = float_hwhm,
+        str_method = str_broadmethod,
+        int_nbin = int_broadnbin
+        )
+    list1d_xheader = ['E(eV)'],
+    list1d_yheader = ['x','y','z']
+
+    return list1d_xheader, list1d_yheader, array1d_xdata_new, array2d_ydata_new
+def def_broad(
+        array1d_xdata,
+        array2d_ydata,
+        float_hwhm,
+        str_method,
+        int_nbin = 3000
+        ):
+    float_xl = numpy.amin( array1d_xdata )
+    float_xr = numpy.amax( array1d_xdata )
+    array1d_xdata_new = numpy.linspace( 
+        start = float_xl, 
+        stop = float_xr, 
+        num = int_nbin
+        )
+    int_xdata_new_shape = array1d_xdata_new.shape[0]
+    int_xdata_shape = array1d_xdata.shape[0]
+    array2d_delta = numpy.empty( shape=(int_xdata_new_shape, int_xdata_shape) )
+    for int_i in range( int_xdata_new_shape ):
+        for int_j in range( int_xdata_shape ):
+            float_delta = array1d_xdata_new[ int_i ] - array1d_xdata[ int_j ]
+            array2d_delta[ int_i, int_j ] = def_lineshape(
+                str_method = str_method,
+                float_x = float_delta,
+                float_hwhm = float_hwhm,
+                )
+    int_ydata_shape1 = array2d_ydata.shape[1]
+    array2d_ydata_new = numpy.zeros( shape=( int_xdata_new_shape, int_ydata_shape1 ) )
+    for int_i in range( int_xdata_new_shape ):
+        for int_j in range( int_xdata_shape ):
+            for int_z in range( int_ydata_shape1 ):
+                array2d_ydata_new[ int_i, int_z ] += array2d_delta[ int_i,int_j ] * array2d_ydata[ int_j,int_z ]
+
+    return array1d_xdata_new, array2d_ydata_new
+
+def def_lineshape(
+        str_method,
+        float_x,
+        float_hwhm,
+        ):
+    if ( str_method == 'gaussian' ):
+        float_y = def_gaussian(
+            float_x = float_x,
+            float_hwhm = float_hwhm,
+            )
+    elif ( str_method == 'lorentzian' ):
+        float_y = def_gaussian(
+            float_x = float_x,
+            float_hwhm = float_hwhm,
+            )
+    else:
+        raise ValueError()
+
+    return float_y
+
+def def_gaussian(
+        float_x,
+        float_hwhm,
+        ):
+    return numpy.sqrt(numpy.log(2) / numpy.pi) / float_hwhm\
+                             * numpy.exp(-(float_x / float_hwhm)**2 * numpy.log(2))
+def def_lorentzian(
+        float_x,
+        float_hwhm,
+        ):
+    return float_hwhm / numpy.pi / (float_x**2 + float_hwhm**2)
+
 def def_exp_scaling( 
         class_structure,
         str_outfile 
@@ -49,17 +132,47 @@ def def_exp_scaling(
 
 def def_code2xas(
         str_code = 'vasp',
+        str_outfile = 'xas.csv',
+        log_tm2xas = False,
+        str_broadmethod = None,
+        float_hwhm = None,
+        int_broadnbin = None,
         ):
     if ( str_code == 'vasp' ):
-        return def_vasp_outcar2xas()
+        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_vasp2xas(
+            log_tm2xas = log_tm2xas,
+            str_broadmethod = str_broadmethod,
+            float_hwhm = float_hwhm,
+            int_broadnbin = int_broadnbin,
+            )
     elif ( str_code == 'feff' ):
-        return def_feff2xas()
+        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_feff2xas()
     else:
         raise
 
-def def_feff2xas( 
-        str_outfile = 'xas.csv'
+    print(list1d_xheader,list1d_yheader)
+    def_writedata(
+        list2d_header = [list1d_xheader, list1d_yheader],
+        list3d_data = [array2d_xdata, array2d_ydata], 
+        str_outfile = str_outfile)
+
+    return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata
+
+def def_vasp2xas(
+        log_tm2xas = False,
+        str_broadmethod = None,
+        float_hwhm = None,
+        int_broadnbin = None,
         ):
+    if ( not log_tm2xas ):
+        return def_vasp_outcar2xas()
+    return def_vasp_tm2xas( 
+        str_broadmethod = str_broadmethod,
+        float_hwhm = float_hwhm,
+        int_broadnbin = int_broadnbin
+        )
+
+def def_feff2xas():
 
     str_xheader = 'E(eV)'
     list1d_yheader = [ 'x','y','z' ]
@@ -92,7 +205,7 @@ def def_feff2xas(
     df_xas = pandas.merge( df_xas, df_xas_z, on=str_xheader )
     print(df_xas)
     
-    df_xas.to_csv( str_outfile )
+    # df_xas.to_csv( str_outfile )
 
     list1d_xheader = [str_xheader]
     array2d_xdata = df_xas[list1d_xheader].to_numpy()
@@ -522,6 +635,48 @@ class class_paras(object):
     def str_scalingmethod(self, str_temp):
         self._str_scalingmethod = str_temp
 
+    @property
+    def log_tm2xas(self):
+        return self._log_tm2xas
+    @log_tm2xas.setter
+    def log_tm2xas(self, obj_temp):
+        self._log_tm2xas = obj_temp
+
+    @property
+    def str_broadmethod(self):
+        return self._str_broadmethod
+    @str_broadmethod.setter
+    def str_broadmethod(self, obj_temp):
+        self._str_broadmethod = obj_temp
+
+    @property
+    def float_hwhm(self):
+        return self._float_hwhm
+    @float_hwhm.setter
+    def float_hwhm(self, obj_temp):
+        self._float_hwhm = obj_temp
+
+    @property
+    def str_xasfile(self):
+        return self._str_xasfile
+    @str_xasfile.setter
+    def str_xasfile(self, obj_temp):
+        self._str_xasfile = obj_temp
+
+    @property
+    def str_avefile(self):
+        return self._str_avefile
+    @str_avefile.setter
+    def str_avefile(self, obj_temp):
+        self._str_avefile = obj_temp
+
+    @property
+    def int_broadnbin(self):
+        return self._int_broadnbin
+    @int_broadnbin.setter
+    def int_broadnbin(self, obj_temp):
+        self._int_broadnbin = obj_temp
+
 class class_structure(object):
 
     @property
@@ -610,12 +765,12 @@ class class_structure(object):
 
 def def_ave( 
         class_structure, 
-        str_outfile = 'xas.ave.csv'
         ):
     def_startfunc( locals(), [ 'class_structure' ] )
 
     list2d_atom = class_structure.list2d_atom
     str_code = class_structure.str_code
+    class_paras = local_module.def_class_paras()
 
     list2d_data = []
     for list1d_atom in list2d_atom:
@@ -625,7 +780,14 @@ def def_ave(
         os.chdir(str_chdir)
         print(os.getcwd())
 
-        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_code2xas( str_code )
+        list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata = def_code2xas( 
+            str_code = str_code,
+            str_outfile = class_paras.str_xasfile,
+            log_tm2xas = class_paras.log_tm2xas,
+            str_broadmethod = class_paras.str_broadmethod,
+            float_hwhm = class_paras.float_hwhm,
+            int_broadnbin = class_paras.int_broadnbin,
+            )
     
         array2d_xdata_sft = def_sft( array2d_xdata, str_code )
 
@@ -638,7 +800,7 @@ def def_ave(
     def_writedata( 
         list2d_header = [ list1d_xheader, list1d_yheader ],
         list3d_data = [ array1d_xdata_mix, array2d_ydata_mix ],
-        str_outfile=str_outfile
+        str_outfile = class_paras.str_avefile
         )
 
 def def_alphabeta_workflow( 
@@ -646,13 +808,14 @@ def def_alphabeta_workflow(
         class_structure, 
         list2d_angle, 
         str_outfile, 
-        str_datfile='xas.ave.csv'):
+        ):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
 # list_scalingangle = [ alpha1, beta1 ]
 #----------------------------------------------[]
     def_startfunc( locals(), ['class_structure'] )
-    
+    class_paras = local_module.def_class_paras()
+    str_datfile = class_paras.str_avefile
     #--------------------------------------------------[extract]
     list1d_column = [0]
     list1d_xheader, array2d_xdata_origin = def_extract( 
@@ -968,11 +1131,11 @@ def def_vasp_outcar2xas():
 
     os.remove( str_tempfile )
 
-    def_writedata(
-        list2d_header = [ list1d_xheader, list1d_yheader ],
-        list3d_data = [ array2d_xdata, array2d_ydata ],
-        str_outfile = 'xas.csv'
-    )
+    #def_writedata(
+    #    list2d_header = [ list1d_xheader, list1d_yheader ],
+    #    list3d_data = [ array2d_xdata, array2d_ydata ],
+    #    str_outfile = 'xas.csv'
+    #)
 
     def_endfunc()
     return list1d_xheader, list1d_yheader, array2d_xdata, array2d_ydata

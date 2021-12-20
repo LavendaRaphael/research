@@ -14,7 +14,7 @@ def def_list1d_key():
     #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
-    #list1d_key.append('111.x4y4_O4')
+    list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
@@ -22,7 +22,7 @@ def def_list1d_key():
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
-    list1d_key.append('110.x2y1_O2_feffk')
+    #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
     #list1d_key.append('110.x2y2_O1_a1b2')
     #list1d_key.append('110.x2y2_O2.14_a1b2')
@@ -53,6 +53,14 @@ def def_class_paras():
 
     #class_paras.str_scalingmethod = 'float_mainscaling'
     class_paras.str_scalingmethod = 'float_postscaling'
+    
+    class_paras.log_tm2xas = True
+    class_paras.str_broadmethod = 'gaussian'
+    class_paras.float_hwhm = 0.5
+    class_paras.int_broadnbin = 10
+ 
+    class_paras.str_xasfile = 'xas_tm.csv'
+    class_paras.str_avefile = 'xas_tm.ave.csv'
 
     return class_paras
 
