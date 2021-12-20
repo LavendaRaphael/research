@@ -446,27 +446,31 @@ def def_tm_extract( str_datfile='MYCARXAS' ):
 #------------------------------[]
 #------------------------------[]
     def_startfunc( locals() )
-    
-    list1d_column = [0]
-    _, array2d_tm_xdata = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False)
-    
-    list1d_column = [1,2,3]
-    _, array2d_tm_ydata = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False)
 
-    list1d_column = [7]
-    _, array2d_tm_band = def_extract( str_datfile=str_datfile, list1d_column=list1d_column, log_head=False, dtype=int )
+    df_tm = pandas.read_csv( 
+        str_datfile, 
+        sep=' ', 
+        skipinitialspace=True, 
+        names= ['E(eV)','x','y','z','band'],
+        usecols=[0,1,2,3,7],
+        comment='#',
+        )
+    array1d_tm_xdata = df_tm['E(eV)'].to_numpy()
+    array2d_tm_ydata = df_tm[['x','y','z']].to_numpy()
+    array1d_tm_band = df_tm['band'].to_numpy()
 
-    int_lenline = numpy.shape( array2d_tm_band )[0]
-    int_nb = numpy.amax( array2d_tm_band )
+    int_lenline = numpy.shape( array1d_tm_band )[0]
+    int_nb = numpy.amax( array1d_tm_band )
     int_nk = int_lenline//int_nb
     def_print_paras( locals(), ['int_lenline','int_nb','int_nk'] )
-    array2d_tm_kb = numpy.empty( shape=(int_lenline, 2), dtype= int )
-    array2d_tm_kb[:,1:2] = array2d_tm_band
+    array1d_tm_kpoint = numpy.empty( shape=(int_lenline), dtype= int )
     for int_k in range(int_nk):
-        array2d_tm_kb[ int_nb*int_k:int_nb*(int_k+1) ,0].fill( int_k+1 )
+        array1d_tm_kpoint[ int_nb*int_k:int_nb*(int_k+1) ].fill( int_k+1 )
+    df_tm['kpoint'] = array1d_tm_kpoint
 
+    array2d_tm_kb = df_tm[['kpoint','band']].to_numpy()
     def_endfunc()
-    return array2d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
+    return array1d_tm_xdata, array2d_tm_ydata, array2d_tm_kb
 
 def def_exp_xyzfit( list2d_alpha, str_outfile ):
 #----------------------------------------------[]
