@@ -55,6 +55,7 @@ def def_class_paras():
     #class_paras.str_scalingmethod = 'float_mainscaling'
     class_paras.str_scalingmethod = 'float_postscaling'
     
+    #class_paras.log_tm2xas = False
     class_paras.log_tm2xas = True
     class_paras.str_broadmethod = 'gaussian'
     class_paras.float_hwhm = 0.45*math.sqrt( math.log(2) )
