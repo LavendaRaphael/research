@@ -26,23 +26,31 @@ def def_vasp_tm2xas(
         int_broadnbin
         ):
     array1d_tm_xdata, array2d_tm_ydata, _ = def_tm_extract()
-    array1d_xdata_new, array2d_ydata_new =  def_broad( 
+
+    array2d_tm_ydata *= array1d_tm_xdata[ :,None ]
+
+    array1d_xdata, array2d_ydata =  def_broad( 
         array1d_xdata = array1d_tm_xdata, 
         array2d_ydata = array2d_tm_ydata, 
         float_hwhm = float_hwhm,
         str_method = str_broadmethod,
         int_nbin = int_broadnbin
         )
-    list1d_xheader = ['E(eV)'],
+
+    array2d_ydata /= array1d_xdata[:,None]
+
+    array2d_ydata *= def_vasp_volume()
+
+    list1d_xheader = ['E(eV)']
     list1d_yheader = ['x','y','z']
 
-    return list1d_xheader, list1d_yheader, array1d_xdata_new, array2d_ydata_new
+    return list1d_xheader, list1d_yheader, array1d_xdata, array2d_ydata
 def def_broad(
         array1d_xdata,
         array2d_ydata,
         float_hwhm,
         str_method,
-        int_nbin = 3000
+        int_nbin,
         ):
     float_xl = numpy.amin( array1d_xdata )
     float_xr = numpy.amax( array1d_xdata )
@@ -51,23 +59,20 @@ def def_broad(
         stop = float_xr, 
         num = int_nbin
         )
+
+    array2d_delta =  array1d_xdata_new[:,None] - array1d_xdata[None,:]
+    array2d_delta = def_lineshape(
+        str_method = str_method,
+        float_x = array2d_delta,
+        float_hwhm = float_hwhm,
+        )
+
     int_xdata_new_shape = array1d_xdata_new.shape[0]
-    int_xdata_shape = array1d_xdata.shape[0]
-    array2d_delta = numpy.empty( shape=(int_xdata_new_shape, int_xdata_shape) )
-    for int_i in range( int_xdata_new_shape ):
-        for int_j in range( int_xdata_shape ):
-            float_delta = array1d_xdata_new[ int_i ] - array1d_xdata[ int_j ]
-            array2d_delta[ int_i, int_j ] = def_lineshape(
-                str_method = str_method,
-                float_x = float_delta,
-                float_hwhm = float_hwhm,
-                )
     int_ydata_shape1 = array2d_ydata.shape[1]
-    array2d_ydata_new = numpy.zeros( shape=( int_xdata_new_shape, int_ydata_shape1 ) )
-    for int_i in range( int_xdata_new_shape ):
-        for int_j in range( int_xdata_shape ):
-            for int_z in range( int_ydata_shape1 ):
-                array2d_ydata_new[ int_i, int_z ] += array2d_delta[ int_i,int_j ] * array2d_ydata[ int_j,int_z ]
+    array2d_ydata_new = numpy.empty( shape=( int_xdata_new_shape, int_ydata_shape1 ) )
+    for int_z in range( int_ydata_shape1 ):
+        array1d_temp = array2d_delta * array2d_ydata[ :,int_z ][None,]
+        array2d_ydata_new[ :,int_z ] = numpy.sum( array1d_temp, axis=1 )
 
     return array1d_xdata_new, array2d_ydata_new
 
@@ -150,7 +155,6 @@ def def_code2xas(
     else:
         raise
 
-    print(list1d_xheader,list1d_yheader)
     def_writedata(
         list2d_header = [list1d_xheader, list1d_yheader],
         list3d_data = [array2d_xdata, array2d_ydata], 

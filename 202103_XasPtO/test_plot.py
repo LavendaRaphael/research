@@ -20,11 +20,10 @@ def def_plt(
         str_datfile,
         list1d_column,
         str_label,
-        str_marker,
         ):
     _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[list1d_column[0]] )
     _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[list1d_column[1]] )
-    obj_ax.plot( array2d_xdata, array2d_ydata, marker=str_marker, mfc='none', label=str_label )
+    obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
     obj_ax.legend()
     return obj_ax
 
@@ -41,19 +40,17 @@ def def_test(
             str_datfile = list1d_data[0],
             list1d_column = list1d_data[1],
             str_label = list1d_data[0],
-            str_marker = list1d_marker[int_j]
             )
     obj_ax.set_xlim( tuple_xlim )
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.110_O_vac/Pt.110.x2y1_O2_vac/feff_k')
+os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.x4y4_O4_vac/vasp_sch/atom_1')
 
 def_test(
     list2d_data = [
-        ['xas.ave.csv', [0,3] ],
-        [ 'atom_1/polar_z/xmu.dat',[0,3] ],
-        [ 'atom_1/ellip_z/xmu.dat',[0,3] ],
+        [ 'xas.csv', [0,3] ],
+        [ 'xas_tm.csv',[0,3] ],
     ],
-    tuple_xlim = (527,545)
+    #tuple_xlim = (527,545)
     )
