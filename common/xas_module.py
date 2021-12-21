@@ -87,7 +87,7 @@ def def_lineshape(
             float_hwhm = float_hwhm,
             )
     elif ( str_method == 'lorentzian' ):
-        float_y = def_gaussian(
+        float_y = def_lorentzian(
             float_x = float_x,
             float_hwhm = float_hwhm,
             )
@@ -675,6 +675,13 @@ class class_paras(object):
         self._str_avefile = obj_temp
 
     @property
+    def str_alphafile(self):
+        return self._str_alphafile
+    @str_alphafile.setter
+    def str_alphafile(self, obj_temp):
+        self._str_alphafile = obj_temp
+
+    @property
     def int_broadnbin(self):
         return self._int_broadnbin
     @int_broadnbin.setter
@@ -811,7 +818,6 @@ def def_alphabeta_workflow(
         list1d_alignangle, 
         class_structure, 
         list2d_angle, 
-        str_outfile, 
         ):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
@@ -820,6 +826,7 @@ def def_alphabeta_workflow(
     def_startfunc( locals(), ['class_structure'] )
     class_paras = local_module.def_class_paras()
     str_datfile = class_paras.str_avefile
+    str_outfile = class_paras.str_alphafile
     #--------------------------------------------------[extract]
     list1d_column = [0]
     list1d_xheader, array2d_xdata_origin = def_extract( 

@@ -50,7 +50,8 @@ os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.x4y4_O4
 def_test(
     list2d_data = [
         [ 'xas.csv', [0,3] ],
-        [ 'xas_tm.csv',[0,3] ],
+        [ 'xas.hwhm0.225.csv',[0,3] ],
+        [ 'xas.lorentzian_hwhm0.225.csv',[0,3] ],
     ],
     #tuple_xlim = (527,545)
     )
