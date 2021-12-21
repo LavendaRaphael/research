@@ -118,7 +118,7 @@ def def_pic_pto110(
 
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_pto110(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.vasp_feff',
@@ -163,6 +163,7 @@ def def_pic_pto111(
         list2d_data, #[
         #    [ str_datfile, str_label ],
         #]
+        tuple_ylim = (None,6)
     ):
 
     os.chdir( str_workdir )
@@ -187,7 +188,7 @@ def def_pic_pto111(
         for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
-                str_datfile = list1d_data[0]+'xas.a20_b90.csv',
+                str_datfile = list1d_data[0],
                 list1d_column = [ 0, list1d_loop[1] ],
                 str_label = r'Theory '+list1d_loop[0]+' '+ list1d_data[1]
             )
@@ -196,10 +197,31 @@ def def_pic_pto111(
             obj_ax,
             str_savefig +'.'+ str(list1d_loop[1])+'.pdf',
             tuple_xlim = (527,540),
-            tuple_ylim = (None,6)
+            tuple_ylim = tuple_ylim
         )
     plt.show()
 
+if ('t'):
+    def_pic_pto111(
+        str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
+        str_savefig = 'xas.boradening_1',
+        list2d_data = [
+            [ 'xas.alpha.csv', 'CH_SIGMA 0.45'],
+            [ 'xas.gaussian_sigma0.4.alpha.csv', 'Gaussian Sigma 0.4'],
+        ],
+        tuple_ylim = (0, 7)
+    )
+if (''):
+    def_pic_pto111(
+        str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
+        str_savefig = 'xas.boradening',
+        list2d_data = [
+            [ 'xas.alpha.csv', 'CH_SIGMA 0.45'],
+            [ 'xas.gaussian_hwhm0.225.alpha.csv', 'Gaussian FWHM 0.45'],
+            [ 'xas.lorentzian_hwhm0.225.alpha.csv', 'Lorentzian FWHM 0.45'],
+        ],
+        tuple_ylim = (0, 7)
+    )
 if (''):
     def_pic_pto111( 
         str_workdir = str_work_111+'Pt.111.x4y4_O4_vac/',

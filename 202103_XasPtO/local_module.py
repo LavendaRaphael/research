@@ -60,13 +60,14 @@ def def_class_paras():
     class_paras.str_broadmethod = 'gaussian'
     #class_paras.str_broadmethod = 'lorentzian'
     #class_paras.float_hwhm = 0.45*math.sqrt( math.log(2) )
-    class_paras.float_hwhm = 0.225
+    #class_paras.float_hwhm = 0.225
+    class_paras.float_hwhm = 0.4*math.sqrt( 2*math.log(2) )
     class_paras.int_broadnbin = 3000
  
-    str_temp = 'gaussian_hwhm0.225'
-    class_paras.str_xasfile = 'xas.'+str_temp+'.csv'
-    class_paras.str_avefile = 'xas.'+str_temp+'.ave.csv'
-    class_paras.str_alphafile = 'xas.'+str_temp+'.alpha.csv'
+    str_temp = '.gaussian_sigma0.4'
+    class_paras.str_xasfile = 'xas'+str_temp+'.csv'
+    class_paras.str_avefile = 'xas'+str_temp+'.ave.csv'
+    class_paras.str_alphafile = 'xas'+str_temp+'.alpha.csv'
 
     return class_paras
 
