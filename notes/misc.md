@@ -1,22 +1,24 @@
+# MISC
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [KIM](#kim)
-- [PLUMED2](#plumed2)
-- [LAMMPS](#lammps)
-- [materials studio](#materials-studio)
-  - [旋转分子](#旋转分子)
-  - [内存占用高](#内存占用高)
-  - [经验教程](#经验教程)
-  - [图像重影问题](#图像重影问题)
-  - [下载安装破解](#下载安装破解)
-- [cluster](#cluster)
-  - [bug](#bug)
-    - [error](#error)
-    - [solution](#solution)
-- [VESTA](#vesta)
+- [MISC](#misc)
+  - [KIM](#kim)
+  - [PLUMED2](#plumed2)
+  - [LAMMPS](#lammps)
+  - [materials studio](#materials-studio)
+    - [旋转分子](#旋转分子)
+    - [内存占用高](#内存占用高)
+    - [经验教程](#经验教程)
+    - [图像重影问题](#图像重影问题)
+    - [下载安装破解](#下载安装破解)
+  - [cluster](#cluster)
+    - [bug](#bug)
+      - [error](#error)
+      - [solution](#solution)
+  - [VESTA](#vesta)
 
 <!-- /code_chunk_output -->
 
@@ -44,12 +46,13 @@ git clone -b v2.7 https://github.com/plumed/plumed2.git plumed2.7
 ```
 
 ```sh
-./configure CC=icx FC=ifx CXX=icpx --prefix=$software
-make
+./configure CC=icx FC=ifx CXX=mpiicpc --prefix=$software
+make -j 4
 make install
 ```
 
 if not `make install`
+
 ```sh
 source sourceme.sh
 ```
@@ -67,7 +70,18 @@ cmake ../cmake           # configuration reading CMake scripts from ../cmake
 cmake --build .          # compilation (or type "make")
 ```
 
+GSL
+
+```sh
+sudo apt install libgsl-dev
+```
+
+```sh
+module add mathlib/gsl/intel
+```
+
 Building
+
 ```sh
 # Building with GNU Compilers:
 cmake ../cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_Fortran_COMPILER=gfortran
@@ -77,8 +91,8 @@ cmake ../cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_
 cmake ../cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_COMPILER=ifx
 ```
 
-```
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D PKG_KIM=yes ../cmake
+```sh
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes ../cmake
 ```
 
 ## materials studio
