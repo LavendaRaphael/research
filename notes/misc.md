@@ -3,6 +3,8 @@
 
 <!-- code_chunk_output -->
 
+- [KIM](#kim)
+- [PLUMED2](#plumed2)
 - [LAMMPS](#lammps)
 - [materials studio](#materials-studio)
   - [旋转分子](#旋转分子)
@@ -17,6 +19,40 @@
 - [VESTA](#vesta)
 
 <!-- /code_chunk_output -->
+
+## KIM
+
+<https://openkim.org/doc/usage/obtaining-models/>
+
+```sh
+git clone https://github.com/openkim/kim-api.git
+cd kim-api
+mkdir build
+cd build
+CC=icx CXX=icpx FC=ifx cmake .. -DCMAKE_INSTALL_PREFIX="$software" -DCMAKE_BUILD_TYPE=Release
+make
+```
+
+```sh
+source $software/bin/kim-api-activate
+```
+
+## PLUMED2
+
+```sh
+git clone -b v2.7 https://github.com/plumed/plumed2.git plumed2.7
+```
+
+```sh
+./configure CC=icx FC=ifx CXX=icpx --prefix=$software
+make
+make install
+```
+
+if not `make install`
+```sh
+source sourceme.sh
+```
 
 ## LAMMPS
 
@@ -42,7 +78,7 @@ cmake ../cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_
 ```
 
 ```
-cmake -C ../cmake/presets/oneapi.cmake
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D PKG_KIM=yes ../cmake
 ```
 
 ## materials studio
