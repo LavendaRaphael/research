@@ -33,6 +33,7 @@ mkdir build
 cd build
 CC=icx CXX=icpx FC=ifx cmake .. -DCMAKE_INSTALL_PREFIX="$software" -DCMAKE_BUILD_TYPE=Release
 make
+make install
 ```
 
 ```sh
@@ -40,6 +41,8 @@ source $software/bin/kim-api-activate
 ```
 
 ## PLUMED2
+
+<https://github.com/CSIprinceton/CSI-hacks-and-tricks/tree/master/Compilation/Plumed>
 
 ```sh
 git clone -b v2.7 https://github.com/plumed/plumed2.git plumed2.7
@@ -51,11 +54,16 @@ make -j 4
 make install
 ```
 
+```sh
+export PKG_CONFIG_PATH="${software}/lib/pkgconfig:$PKG_CONFIG_PATH"
+```
+
 if not `make install`
 
 ```sh
 source sourceme.sh
 ```
+
 
 ## LAMMPS
 
@@ -92,7 +100,7 @@ cmake ../cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_
 ```
 
 ```sh
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes ../cmake
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes -D BUILD_MPI=yes ../cmake
 ```
 
 ## materials studio
