@@ -100,7 +100,7 @@ cmake ../cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_
 ```
 
 ```sh
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes -D BUILD_MPI=yes ../cmake
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=mpiicpc -DCMAKE_Fortran_COMPILER=ifx -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes -D BUILD_MPI=yes ../cmake
 ```
 
 ## materials studio

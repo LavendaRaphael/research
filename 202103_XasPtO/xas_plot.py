@@ -201,7 +201,7 @@ def def_pic_pto111(
         )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_pto111(
         str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
         str_savefig = 'xas.boradening_1',
@@ -344,6 +344,15 @@ def def_pic_converge(
     )
     plt.show()
 
+if ('t'):
+    def_pic_converge(
+        str_workdir = str_exp,
+        str_savefig = '20211113_20210924.pto110_a20',
+        list2d_data = [
+            [ '20210924.pto110_a20_postscaling.csv', r'Exp.0924 20$\degree$', [1,2] ],
+            [ '20211113.Angel-Pt110-OXAS.csv', r'Exp.1113 25$\degree$',[0,1] ],
+        ],
+    )
 if (''):
     def_pic_converge(
         str_workdir = str_exp,
