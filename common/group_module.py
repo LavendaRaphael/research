@@ -171,7 +171,7 @@ def def_serversub(
     str_timecount='echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s."'
 
     str_subhead = (
-        'source '+str_homedir+'codes/common/environment.sh\n'+
+        'source '+str_homedir+'codes/common/set_env.sh\n'+
         'set -euo pipefail\n'+
         'SECONDS=0\n'+
         'sort -u '+str_nodefile+' > '+str_nodefile+'.tmp && mv '+str_nodefile+'.tmp '+str_nodefile+'\n'
@@ -180,7 +180,6 @@ def def_serversub(
     str_subvasp = (
         'if [ -f "INCAR" ]; then\n'+
         '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_maxppn/2)) +'" INCAR\n'+
-        '   '+
         'fi\n'
         )
 
