@@ -223,8 +223,8 @@ def def_vasp_sub( class_structure ):
         str_subfile = file_sub.read()
     os.chdir('..')
 
-    for list1d_atomi in class_structure.list2d_atom:
-        str_atomdir = list1d_atomi[2]
+    for list1d_atomi in class_structure.dict_atom.values():
+        str_atomdir = list1d_atomi[1]
         os.chdir(str_atomdir)
 
         with open( 'vasp_sub.py','w' ) as file_sub:
@@ -275,9 +275,8 @@ def def_vasp_jobinit( class_structure ):
 
     os.chdir('..')
 
-    for list1d_atomi in class_structure.list2d_atom:
-        str_atomdir = list1d_atomi[2]
-        int_atomi = list1d_atomi[0]
+    for int_atomi, list1d_atomi in class_structure.dict_atom.items():
+        str_atomdir = list1d_atomi[1]
         copy_tree( 'template/', str_atomdir )
         os.chdir(str_atomdir)
         list1d_poscar_atomi = list( list1d_poscar)
@@ -315,7 +314,7 @@ def def_atom_findpeak(
     with open(str_jsonfile) as obj_jsonfile:
         float_align = json.load( fp=obj_jsonfile )['float_align']
     dict_structure = local_module.def_dict_structure()
-    str_chdir = dict_structure[ str_workdir ].list2d_atom[0][2]
+    str_chdir = dict_structure[ str_workdir ].dict_atom[1][1]
     os.chdir(str_chdir)
     float_finalenergy_1 = def_vasp_finalenergy()
     os.chdir( str_cwddir )
@@ -485,51 +484,46 @@ def def_tm_findmax(
     return array1d_index_topn
 
 def def_atom_abworkflow(  
-        str_jsonfile, 
-        list2d_angle, 
-        str_workdir, 
-        float_tm_scaling=5.0
+        class_structure,
         ):
-#----------------------------------------------[]
-#----------------------------------------------[]
-    def_startfunc( locals() )
 
-    dict_structure = local_module.def_dict_structure()
+    class_paras = local_module.def_class_paras()
 
-    str_cwddir = os.getcwd()
-    os.chdir('..')
-    dict_jsonfile={}
-    with open(str_jsonfile) as obj_jsonfile:
-        dict_jsonfile = json.load( fp=obj_jsonfile )
-    float_align = dict_jsonfile['float_align']
-    float_scaling = dict_jsonfile['float_scaling']
-    str_chdir = dict_structure[ str_workdir ].list2d_atom[0][2]
-    os.chdir(str_chdir)
-    float_finalenergy_1 = def_vasp_finalenergy()
-    os.chdir( str_cwddir )
+    dict_atom = class_structure.dict_atom
 
-    int_l=str_jsonfile.find('.')
-    int_r=str_jsonfile.rfind('.')
-    str_abname=str_jsonfile[(int_l+1):int_r]
+    list2d_angle = class_paras.list2d_angle
+    float_tm_scaling = class_paras.float_tm_scaling
+
+    str_alignfile = class_paras.str_alignfile
+    with open(class_paras.str_alignfile) as obj_jsonfile:
+        float_align = json.load( fp=obj_jsonfile )['float_align']
+
+    str_chdir = dict_atom[ class_paras.int_atomkey ][1]
+    os.chdir( str_chdir )
+
+    int_l=str_alignfile.find('.')
+    int_r=str_alignfile.rfind('.')
+    str_abname = str_alignfile[(int_l+1):int_r]
     def_print_paras( locals(), ['str_abname'] )
 
     #----------------------------------------------[alignscaling]
     array2d_xdata_align, array2d_ydata_scaling, array2d_tm_xdata_align, array2d_tm_ydata_scaling, array2d_tm_kb = def_atom_alignscaling( 
         float_align=float_align, 
-        float_scaling=float_scaling, 
-        float_finalenergy_1=float_finalenergy_1 
+        float_scaling= class_structure.float_scaling, 
         )
     #----------------------------------------------[
-    array2d_ydata = array2d_ydata_scaling
-    list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    list1d_yheader, array2d_ydata_alphabeta = def_alphabeta( 
+        list2d_angle = list2d_angle, 
+        array2d_ydata = array2d_ydata_scaling )
 
     list2d_header = [['E(eV)'], list1d_yheader]
     list3d_data = [array2d_xdata_align, array2d_ydata_alphabeta]
     str_outfile = 'xas.'+str_abname+'.csv'
     def_writedata( list2d_header=list2d_header, list3d_data=list3d_data, str_outfile=str_outfile)
     #----------------------------------------------[
-    array2d_ydata = array2d_tm_ydata_scaling
-    _, array2d_tm_ydata_alphabeta = def_alphabeta( list2d_angle=list2d_angle, array2d_ydata=array2d_ydata )
+    _, array2d_tm_ydata_alphabeta = def_alphabeta( 
+        list2d_angle=list2d_angle, 
+        array2d_ydata=array2d_tm_ydata_scaling )
 
     list2d_header = [ ['Kpoint', 'Band'] ] + list2d_header
     list3d_data = [ array2d_tm_kb, array2d_tm_xdata_align, array2d_tm_ydata_alphabeta * float_tm_scaling]
@@ -538,17 +532,21 @@ def def_atom_abworkflow(
 
     def_endfunc()
 
-def def_atom_alignscaling(float_align, float_scaling, float_finalenergy_1):
-#----------------------------------------------[]
-#----------------------------------------------[]
+def def_atom_alignscaling(float_align, float_scaling):
     def_startfunc( locals() )
 
+    class_paras = local_module.def_class_paras()
     #----------------------------------------------[extract]
-    _, _, array2d_xdata, array2d_ydata = def_vasp_outcar2xas()
+    _, array2d_xdata = def_extract(
+        str_datfile = class_paras.str_xasfile,
+        list1d_column = [0]
+        ) 
+    _, array2d_ydata = def_extract(
+        str_datfile = class_paras.str_xasfile,
+        list1d_column = [1,2,3]
+        )
     #----------------------------------------------[alignscaling]
-    float_finalenergy = def_vasp_finalenergy()
-    float_sft = float_finalenergy-float_finalenergy_1
-    float_sft += float_align
+    float_sft = float_align + def_vasp_finalenergy()
     array2d_xdata_align = array2d_xdata + float_sft
     array2d_ydata_scaling = array2d_ydata * float_scaling
     #----------------------------------------------[tm]
@@ -633,6 +631,27 @@ def def_exp_xyzfit( list2d_alpha, str_outfile ):
 class class_paras(object):
 
     @property
+    def float_tm_scaling(self):
+        return self._float_tm_scaling
+    @float_tm_scaling.setter
+    def float_tm_scaling(self, obj_temp):
+        self._float_tm_scaling = obj_temp
+
+    @property
+    def str_alignfile(self):
+        return self._str_alignfile
+    @str_alignfile.setter
+    def str_alignfile(self, obj_temp):
+        self._str_alignfile = obj_temp
+
+    @property
+    def int_atomkey(self):
+        return self._int_atomkey
+    @int_atomkey.setter
+    def int_atomkey(self, obj_temp):
+        self._int_atomkey = obj_temp
+
+    @property
     def str_scalingmethod(self):
         return self._str_scalingmethod
     @str_scalingmethod.setter
@@ -688,6 +707,20 @@ class class_paras(object):
     def int_broadnbin(self, obj_temp):
         self._int_broadnbin = obj_temp
 
+    @property
+    def list2d_anlge(self):
+        return self._list2d_anlge
+    @list2d_anlge.setter
+    def list2d_anlge(self, obj_temp):
+        self._list2d_anlge = obj_temp
+
+    @property
+    def list1d_alignangle(self):
+        return self._list1d_alignangle
+    @list1d_alignangle.setter
+    def list1d_alignangle(self, obj_temp):
+        self._list1d_alignangle = obj_temp
+
 class class_structure(object):
 
     @property
@@ -733,18 +766,18 @@ class class_structure(object):
         self._str_chdir = str_temp
   
     @property
-    # list2d_atom = [
-    #   [ 1, 1.0, 'atom_1' ]
-    # ]
-    def list2d_atom(self):
-        return self._list2d_atom
-    @list2d_atom.setter
-    def list2d_atom(self, list_temp):
+    # dict_atom[1] = [
+    #   [ 1.0, 'atom_1' ]
+    #   ]
+    def dict_atom(self):
+        return self._dict_atom
+    @dict_atom.setter
+    def dict_atom(self, dict_temp):
         float_sum = 0
-        for list_i in list_temp: float_sum += list_i[1]
-        for list_i in list_temp: list_i[1] /= float_sum
-        for list_i in list_temp: list_i.append( 'atom_'+str(list_i[0]) )
-        self._list2d_atom = list_temp
+        for list_i in dict_temp.values(): float_sum += list_i[0]
+        for list_i in dict_temp.values(): list_i[0] /= float_sum
+        for int_i in dict_temp: dict_temp[ int_i ].append( 'atom_'+str(int_i) )
+        self._dict_atom = dict_temp
 
     @property
     def list1d_bbox(self):
@@ -779,15 +812,15 @@ def def_ave(
         ):
     def_startfunc( locals(), [ 'class_structure' ] )
 
-    list2d_atom = class_structure.list2d_atom
+    dict_atom = class_structure.dict_atom
     str_code = class_structure.str_code
     class_paras = local_module.def_class_paras()
 
     list2d_data = []
-    for list1d_atom in list2d_atom:
+    for list1d_atom in dict_atom.values():
 
-        str_chdir = list1d_atom[2]
-        float_scaling = list1d_atom[1]
+        str_chdir = list1d_atom[1]
+        float_scaling = list1d_atom[0]
         os.chdir(str_chdir)
         print(os.getcwd())
 

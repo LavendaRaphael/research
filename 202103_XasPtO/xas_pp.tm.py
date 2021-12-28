@@ -3,24 +3,15 @@ import xas_module
 import os
 import local_module
 
+list1d_key = local_module.def_list1d_key()
 dict_structure = local_module.def_dict_structure()
-str_workdir='Pt.110.x2y12_O22_vac/'
 
-#----------------------------------[loop]
-str_jsonfile='xas.a20_b90.json'
-list2d_angle = []
-list2d_angle.append( [ 90, 45, 'trigonal' ] )
-list2d_angle.append( [  0, 90, 'trigonal' ] )
-list2d_angle.append( [ 90,  0, 'orthorhombic' ] )
-list2d_angle.append( [ 90, 90, 'orthorhombic' ] )
+for str_key in list1d_key:
+    class_structure = dict_structure[ str_key ]
+    str_chdir = class_structure.str_chdir
+    os.chdir(str_chdir)
+    print(os.getcwd())
 
-str_chdir = dict_structure[ str_workdir ].str_chdir
-str_chdir = str_chdir+'vasp_sch/atom_11/'
-os.chdir(str_chdir)
-print(os.getcwd())
-
-xas_module.def_xas_atom_abworkflow(
-    str_jsonfile=str_jsonfile, 
-    list2d_angle=list2d_angle, 
-    str_workdir=str_workdir
-    )
+    xas_module.def_atom_abworkflow(
+        class_structure = class_structure
+        )
