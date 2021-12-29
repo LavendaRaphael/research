@@ -20,128 +20,6 @@ matplotlib.rcParams["figure.figsize"] = (10,8)
 list1d_color = list(mcolors.TABLEAU_COLORS)
 
 if (''):
-    
-    class_structure = dict_structure[ '110.x2y12_O22' ]
-    #---------------------------------------------[]
-    fig,ax = plt.subplots()
-    os.chdir( class_structure.chdir )
-    os.chdir( class_structure.dict_atom[11][1] )
-    float_makersize=12
-    float_linewidth=2
-    str_expfile = '20210924.pto110_a20_postscaling.csv'
-    str_alignfile = 'xas.a20_b90.align.csv'
-    str_tmalginfile = 'xas_tm.a20_b90.align.csv'
-
-    str_datfile = str_exp+str_expfile
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    label=r'Exp. 20$\degree$'
-    plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
-
-    str_datfile = 'xas.a20_b90.align.csv'
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    label='Theory O-11 X_Y'
-    plt.plot( array2d_xdata, array2d_ydata, label=label )
-
-    str_datfile = 'xas_tm.a20_b90.align.csv'
-    _, array2d_xdata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    list1d_header, array2d_ydata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[4] )
-    label='TM O-11 X_Y'
-    plt.plot( array2d_xdata_tm, array2d_ydata_tm, 'o', label=label)
-    str_savefig = 'xas_tm.'+list1d_header[0]+'.pdf'
-
-    float_onset = 531
-    _, array2d_kb = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
-    list1d_header, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[7] )
-    array1d_index_topn = xas_module.def_tm_findmax(
-        array1d_xdata = array2d_xdata_tm, 
-        array1d_ydata = array2d_ydata, 
-        array1d_kb = array2d_kb, 
-        float_onset = float_onset, 
-        str_abname = list1d_header[0]
-        )
-    plt.plot( 
-        array2d_xdata_tm[ array1d_index_topn ], 
-        array2d_ydata_tm[ array1d_index_topn ], 
-        's', 
-        markersize=float_makersize, 
-        markeredgewidth =float_linewidth,
-        mfc='none')
-    list1d_header, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[8] )
-    array1d_index_topn = xas_module.def_tm_findmax(
-        array1d_xdata=array2d_xdata_tm, 
-        array1d_ydata=array2d_ydata, 
-        array1d_kb=array2d_kb, 
-        float_onset=float_onset, 
-        str_abname=list1d_header[0]
-        )
-    plt.plot( 
-        array2d_xdata_tm[ array1d_index_topn ], 
-        array2d_ydata_tm[ array1d_index_topn ], 
-        's', 
-        markersize=float_makersize,
-        markeredgewidth =float_linewidth,
-        mfc='none'
-        )
-
-    plt.xlim( 527,540 )
-    plt.ylim( 0,10 )
-    plt.xlabel( 'Energy (eV)' )
-    plt.ylabel( "Intensity (Arb. Units)" )
-    plt.legend()
-    plt.savefig( str_savefig, bbox_inches='tight' )
-    #---------------------------------------------[]
-    plt.figure(2)
-
-    str_datfile = str_exp+'20210924.pto110_a20_postscaling.csv'
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[1] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    label=r'Exp. 20$\degree$'
-    plt.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=label)
-
-    str_datfile = 'xas.a20_b90.align.csv'
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[3] )
-    label='Theory O-11 Z'
-    plt.plot( array2d_xdata, array2d_ydata, label=label )
-
-    str_datfile = 'xas_tm.a20_b90.align.csv'
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[2] )
-    list1d_header, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[5] )
-    label='TM O-11 Z'
-    plt.plot( array2d_xdata, array2d_ydata, 'o', label=label)
-    str_savefig = pic[1][2]+'.'+list1d_header[0]+'.pdf'
-
-    _, array2d_kb = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
-    float_onset = 530
-    array1d_index_topn = xas_module.def_tm_findmax( 
-        array1d_xdata=array2d_xdata, 
-        array1d_ydata=array2d_ydata, 
-        array1d_kb=array2d_kb, 
-        float_onset=float_onset, 
-        str_abname=list1d_header[0]
-        )
-    plt.plot( 
-        array2d_xdata[ array1d_index_topn ], 
-        array2d_ydata[ array1d_index_topn ], 
-        's', 
-        markersize=float_makersize,
-        markeredgewidth =float_linewidth,
-        mfc='none'
-        )
-
-    plt.xlim( 527,540 )
-    plt.ylim( 0,10 )
-    plt.xlabel( 'Energy (eV)' )
-    plt.ylabel( "Intensity (Arb. Units)" )
-    plt.legend()
-    plt.savefig( str_savefig,bbox_inches='tight' )
-
-    plt.show()
-
-
-if (''):
     fig, ax = plt.subplots()
     str_workdir = dict_structure[ '110.x2y12_O22' ].str_chdir
     str_savefig = 'xas.alpha.pdf'
@@ -235,6 +113,128 @@ def def_plt_save(
     obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
     obj_ax.legend()
     fig.savefig( str_savefig, bbox_inches='tight' )
+#--------------------------------------------------------------------------------------------------------
+def def_pic_tm(
+        ax,
+        str_datfile,
+        list1d_column,
+        str_label,
+        ):
+    
+    _, array2d_xdata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    ax.plot( array2d_xdata_tm, array2d_ydata_tm, 'o', label=str_label)
+
+    return ax, array2d_xdata_tm, array2d_ydata_tm
+def def_pic_tm_select(
+        ax,
+        str_datfile,
+        list1d_column,
+        float_onset,
+        ):
+    _, array2d_xdata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata_tm = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_kb = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[0,1], dtype=int)
+    list1d_header, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[2] ] )
+    array1d_index_topn = xas_module.def_tm_findmax(
+        array1d_xdata = array2d_xdata_tm, 
+        array1d_ydata = array2d_ydata, 
+        array1d_kb = array2d_kb, 
+        float_onset = float_onset, 
+        str_abname = list1d_header[0]
+        )
+    ax.plot(
+        array2d_xdata_tm[ array1d_index_topn ], 
+        array2d_ydata_tm[ array1d_index_topn ], 
+        's',
+        markersize=12, 
+        markeredgewidth =2,
+        mfc='none',
+        )
+ 
+if ('t'):
+    
+    class_structure = dict_structure[ '110.x2y12_O22' ]
+    os.chdir( class_structure.str_chdir )
+    os.chdir( class_structure.dict_atom[11][1] )
+    str_expfile = '20210924.pto110_a20_postscaling.csv'
+    str_alignfile = 'xas.a20_b90.align.csv'
+    str_tmalginfile = 'xas_tm.a20_b90.align.csv'
+
+    fig,ax = plt.subplots()
+    def_plt_exp(
+        ax,
+        str_datfile = str_exp + str_expfile,
+        str_label = r'Exp. 20$\degree$',
+        list1d_column = [1,2]
+        )
+    def_plt_theory(
+        ax,
+        str_datfile = str_alignfile,
+        str_label = 'Theory O-11 X_Y',
+        list1d_column = [0,2],
+        )
+    def_pic_tm(
+        ax,
+        str_datfile = str_tmalginfile,
+        list1d_column = [2,4],
+        str_label = 'TM O-11 X_Y',
+        )
+    def_pic_tm_select(
+        ax,
+        str_datfile = str_tmalginfile,
+        list1d_column = [2,4,7],
+        float_onset = 531,
+        )
+    def_pic_tm_select(
+        ax,
+        str_datfile = str_tmalginfile,
+        list1d_column = [2,4,8],
+        float_onset = 531,
+        )
+    def_plt_save(
+        fig,
+        ax,
+        str_savefig = 'xas_tm.xy.pdf',
+        tuple_xlim = (527, 540),
+        tuple_ylim = (0, 6.2),
+        )
+    #---------------------------------------------[]
+    fig,ax = plt.subplots()
+    def_plt_exp(
+        ax,
+        str_datfile = str_exp + str_expfile,
+        str_label = r'Exp. 20$\degree$',
+        list1d_column = [1,2]
+        )
+    def_plt_theory(
+        ax,
+        str_datfile = str_alignfile,
+        str_label = 'Theory O-11 Z',
+        list1d_column = [0,3],
+        )
+    def_pic_tm(
+        ax,
+        str_datfile = str_tmalginfile,
+        list1d_column = [2,5],
+        str_label = 'TM O-11 Z',
+        )
+    def_pic_tm_select(
+        ax,
+        str_datfile = str_tmalginfile,
+        list1d_column = [2,5,5],
+        float_onset = 530,
+        )
+    def_plt_save(
+        fig,
+        ax,
+        str_savefig = 'xas_tm.z.pdf',
+        tuple_xlim = (527, 540),
+        tuple_ylim = (0, 6.2),
+        )
+
+    plt.show()
+
 #----------------------------------------------------------------------------------
 def def_pic_exp_theory(
         str_workdir,
@@ -269,7 +269,7 @@ def def_pic_exp_theory(
         )
     plt.show()
 
-if ('t'):
+if (''):
     def_pic_exp_theory(
         str_workdir = dict_structure[ '110.x2y12_O22' ].str_chdir,
         str_savefig = 'xas.exp_xy_z',

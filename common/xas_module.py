@@ -39,8 +39,6 @@ def def_vasp_tm2xas(
 
     array2d_ydata /= array1d_xdata[:,None]
 
-    array2d_ydata *= def_vasp_volume()
-
     list1d_xheader = ['E(eV)']
     list1d_yheader = ['x','y','z']
 
@@ -572,6 +570,7 @@ def def_tm_extract( str_datfile='MYCARXAS' ):
         )
     array1d_tm_xdata = df_tm['E(eV)'].to_numpy()
     array2d_tm_ydata = df_tm[['x','y','z']].to_numpy()
+    array2d_tm_ydata *= def_vasp_volume()
     array1d_tm_band = df_tm['band'].to_numpy()
 
     int_lenline = numpy.shape( array1d_tm_band )[0]
