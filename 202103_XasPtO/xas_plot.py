@@ -113,6 +113,7 @@ def def_plt_save(
     obj_ax.set_ylabel( 'Intensity (Arb. Units)' )
     obj_ax.legend()
     fig.savefig( str_savefig, bbox_inches='tight' )
+
 #--------------------------------------------------------------------------------------------------------
 def def_pic_tm(
         ax,
@@ -152,7 +153,7 @@ def def_pic_tm_select(
         mfc='none',
         )
  
-if ('t'):
+if (''):
     
     class_structure = dict_structure[ '110.x2y12_O22' ]
     os.chdir( class_structure.str_chdir )
@@ -314,23 +315,23 @@ def def_pic_pto110(
     )
 
     list2d_loop = [
-        [ 'Z',[1,2],3 ],
-        [ 'X_Y',[1,2],2]
+        [ 'z',[0,2],[0,3] ],
+        [ 'x_y',[0,1],[0,2]]
         ]
 
     for list1d_loop in list2d_loop:
         fig, obj_ax = plt.subplots()
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+'20210924.pto110_a20_postscaling.csv',
+            str_datfile = str_exp+'20210924.pto110_xyzfit.csv',
             str_label=r'Exp. fit '+list1d_loop[0],
             list1d_column = list1d_loop[1]
         )
         for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
-                str_datfile = list1d_data[0]+'xas.ave.csv',
-                list1d_column = [ 0, list1d_loop[2] ],
+                str_datfile = list1d_data[0]+'xas.alpha.csv',
+                list1d_column = list1d_loop[2],
                 str_label = r'Theory '+list1d_loop[0]+' '+ list1d_data[1]
             )
         def_plt_save(
@@ -343,6 +344,45 @@ def def_pic_pto110(
 
     plt.show()
 
+if (''):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.neighbor_mix_1',
+        list2d_data = [
+            [ dict_structure['110.x2y3_O4.v56'].str_chdir,'a'],
+            [ dict_structure['110.x2y4_O6.v56'].str_chdir,'b'],
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir, 'c'],
+        ],
+    )
+if (''):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.neighbor_xy',
+        list2d_data = [
+            [ dict_structure['110.x2y3_O2.14'].str_chdir, 'a'],
+            [ dict_structure['110.x2y4_O3.148'].str_chdir,'b'],
+            [ dict_structure['110.x2y2_O2.14_a1b2'].str_chdir,'c'],
+        ],
+    )
+if (''):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.neighbor_y',
+        list2d_data = [
+            [ dict_structure['110.x2y3_O2.13'].str_chdir, 'a'],
+            [ dict_structure['110.x2y4_O3.137'].str_chdir,'b'],
+            [ dict_structure['110.x2y1_O1_a1b3'].str_chdir,'c'],
+        ],
+    )
+if (''):
+    def_pic_pto110(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.neighbor_x',
+        list2d_data = [
+            [ dict_structure['110.x2y3_O1'].str_chdir, 'a'],
+            [ dict_structure['110.x2y3_O2.12'].str_chdir,'b'],
+        ],
+    )
 if (''):
     def_pic_pto110(
         str_workdir = str_work_110,
@@ -370,15 +410,6 @@ if (''):
             [ dict_structure['110.x2y1_O1_a1b3'].str_chdir, 'a'],
             [ dict_structure['110.x2y2_O2.14_a1b2'].str_chdir, 'b'],
             [ dict_structure['110.x2y1_O2_a1b3'].str_chdir,'c'],
-        ],
-    )
-if (''):
-    def_pic_pto110(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
-        list2d_data = [
-            [ dict_structure['110.x1y1.a2b2_O2_a1b2'].str_chdir, 'a'],
-            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir, 'b'],
         ],
     )
 #------------------------------------------------------------
@@ -452,9 +483,10 @@ if (''):
         str_workdir = str_work_111+'Pt.111.x4y4_O4_vac/',
         str_savefig = 'vasp_sch.corehole', 
         list2d_data = [
-            ['vasp_sch/', '1.0 corehole'],
-            ['vasp_sch.hch/', '0.5 corehole'],
+            ['vasp_sch/xas.alpha.csv', '1.0 corehole'],
+            ['vasp_sch.hch/xas.alpha.csv', '0.5 corehole'],
         ],
+        tuple_ylim = (None, 6)
     )
 
 if (''):
@@ -475,67 +507,6 @@ if (''):
         ],
     )
 
-#------------------------------------------------------------
-if (''):
-    def_pic_20degree(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2',
-        list2d_data = [
-            [ dict_structure['110.x2y4_O2.15'].str_chdir, 'a'],
-            [ dict_structure['110.x2y4_O4.1458'].str_chdir, 'b'],
-            [ dict_structure['110.x2y1.a1b2_O3_a1b2'].str_chdir, 'c'],
-            [ dict_structure['110.x2y3_O6'].str_chdir, 'd'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
-
-if (''):
-    def_pic_20degree(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5',
-        list2d_data = [
-            [ dict_structure['110.x1y1.a2b4_O4'].str_chdir, 'a'],
-            [ dict_structure['110.x2y3_O6'].str_chdir, 'b'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
-
-if (''):
-    def_pic_20degree(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.correlation_xy',
-        list2d_data = [
-            [ dict_structure['110.x2y3_O1'].str_chdir,    'a'],
-            [ dict_structure['110.x2y3_O2.14'].str_chdir, 'b'],
-            [ dict_structure['110.x2y4_O2.16'].str_chdir, 'c'],
-            [ dict_structure['110.x2y6_O2.18'].str_chdir, 'd'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
-
-if (''):
-    def_pic_20degree(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.correlation_y',
-        list2d_data = [
-            [ dict_structure['110.x2y3_O1'].str_chdir,    'a'],
-            [ dict_structure['110.x2y3_O2.13'].str_chdir, 'b'],
-            [ dict_structure['110.x2y4_O2.15'].str_chdir, 'c'],
-            [ dict_structure['110.x2y6_O2.17'].str_chdir, 'd'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
-
-if (''):
-    def_pic_20degree( 
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.useless',
-        list2d_data = [
-            ['Pt.110.x2y3_O3.136_vac/vasp_sch/', 'a'],
-            ['Pt.110.x2y3_O5_vac/vasp_sch/', 'b'],
-        ],
-        str_expfile = '20210924.Pt.110.a20.csv',
-    )
 #---------------------------------------------------------------
 def def_pic_converge(
         str_workdir,
@@ -568,6 +539,30 @@ def def_pic_converge(
     )
     plt.show()
 
+if (''):
+    def_pic_converge(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f2.a20',
+        list2d_data = [
+            [ dict_structure['110.x2y2_O1_a1b2'].str_chdir+'xas.alpha.csv', 'Theory 0.25 ML',[0,1]],
+            [ dict_structure['110.x2y2_O2.14_a1b2'].str_chdir+'xas.alpha.csv', 'Theory 0.5 ML',[0,1]],
+            [ dict_structure['110.x2y2_O3_a1b2'].str_chdir+'xas.alpha.csv', 'Theory 0.75 ML',[0,1]],
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir+'xas.alpha.csv', 'Theory 1.0 ML',[0,1]],
+        ],
+        tuple_xlim=(527, 540),
+        tuple_ylim=(None, 4)
+    )
+if (''):
+    def_pic_converge(
+        str_workdir = str_work_110,
+        str_savefig = 'neighbor/xas.2013_jpcc_zhutianwei.f5.a20',
+        list2d_data = [
+            [ dict_structure['110.x1y1.a2b2_O2_a1b2'].str_chdir+'xas.alpha.csv', 'Theory 0.5 ML',[0,1]],
+            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir+'xas.alpha.csv', 'Theory 1.0 ML',[0,1]],
+        ],
+        tuple_xlim=(527, 540),
+        tuple_ylim=(None, 4)
+    )
 if (''):
     def_pic_converge(
         str_workdir = str_exp,
@@ -753,10 +748,20 @@ if (''):
 if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.x4y4_O4' ].str_chdir + 'atom_1/',
+        str_savefig = 'converge_nbands',
+        list2d_data = [
+            [ 'xas.csv',           'NBANDS 664', [0,1] ],
+            [ 'nbands1000/xas.csv', 'NBANDS 1000', [0,1] ],
+        ],
+        tuple_xlim = ( 512,525 )
+    )
+if ('t'):
+    def_pic_converge(
+        str_workdir = dict_structure[ '111.x4y4_O4' ].str_chdir + 'atom_1/',
         str_savefig = 'converge_kspace',
         list2d_data = [
-            [ 'xas.csv',           'kspace 0.25', 3 ],
-            [ 'kspace0.2/xas.csv', 'kspace 0.20', 3 ],
+            [ 'xas.csv',           'KSPACING 0.25', [0,1] ],
+            [ 'kspace0.2/xas.csv', 'KSPACING 0.20', [0,1] ],
         ],
         tuple_xlim = ( 512,525 )
     )
@@ -851,31 +856,6 @@ pic[8]=[
                 dict_structure[ '110.x2y3_O2.14' ].str_chdir,
                 dict_structure[ '110.x2y4_O2.16' ].str_chdir,
             ]
-        ],
-        [
-            'xas.neighbor_x.',
-            [
-                dict_structure[ '110.x2y3_O1' ].str_chdir,
-                dict_structure[ '110.x2y3_O2.12' ].str_chdir
-            ]
-        ],
-        [
-            'xas.neighbor_y.',
-            [
-                dict_structure[ '110.x2y3_O1'].str_chdir ,
-                dict_structure[ '110.x2y3_O2.13'].str_chdir ,
-                dict_structure[ '110.x2y4_O3.137'].str_chdir,
-                dict_structure[ '110.x2y3_O3.135'].str_chdir,
-            ],
-        ],
-        [
-            'xas.neighbor_xy.',
-            [
-                dict_structure[ '110.x2y3_O1'].str_chdir,
-                dict_structure[ '110.x2y3_O2.14'].str_chdir,
-                dict_structure[ '110.x2y4_O3.148'].str_chdir,
-                dict_structure[ '110.x2y4_O4.1458'].str_chdir,
-            ],
         ],
         [
             'xas.neighbor_mix.',

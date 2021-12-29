@@ -45,13 +45,12 @@ def def_test(
     plt.show()
 
 str_homedir = os.environ['HOME']
-os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.111_O_vac/Pt.111.x4y4_O4_vac/vasp_sch/atom_1')
+os.chdir(str_homedir+'/research/202103_XasPtO/server/Pt.110_O_vac/Pt.110.x2y12_O22_vac/vasp_sch/')
 
 def_test(
     list2d_data = [
-        [ 'xas.csv', [0,3] ],
-        [ 'xas.hwhm0.225.csv',[0,3] ],
-        [ 'xas.lorentzian_hwhm0.225.csv',[0,3] ],
+        [ 'xas.alpha.csv', [0,3] ],
+        [ 'xas.a20_b90.csv',[0,3] ],
     ],
-    #tuple_xlim = (527,545)
+    tuple_xlim = (527,540)
     )

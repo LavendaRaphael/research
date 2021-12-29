@@ -847,18 +847,19 @@ def def_ave(
         )
 
 def def_alphabeta_workflow( 
-        list1d_alignangle, 
-        class_structure, 
-        list2d_angle, 
+        class_structure,
         ):
 #----------------------------------------------[]
 # list_alignangle = [ alpha0, beta0 ]
 # list_scalingangle = [ alpha1, beta1 ]
 #----------------------------------------------[]
     def_startfunc( locals(), ['class_structure'] )
+
     class_paras = local_module.def_class_paras()
     str_datfile = class_paras.str_avefile
     str_outfile = class_paras.str_alphafile
+    list1d_alignangle = class_paras.list1d_alignangle
+    list2d_angle = class_paras.list2d_angle
     #--------------------------------------------------[extract]
     list1d_column = [0]
     list1d_xheader, array2d_xdata_origin = def_extract( 

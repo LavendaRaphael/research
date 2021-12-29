@@ -14,8 +14,6 @@ for str_key in list1d_key:
     print(os.getcwd())
 
     xas_module.def_alphabeta_workflow( 
-        list1d_alignangle = list1d_alignangle, 
-        list2d_angle = list2d_angle, 
         class_structure = class_structure, 
         ) 
     
