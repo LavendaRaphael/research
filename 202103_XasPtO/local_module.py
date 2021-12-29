@@ -25,9 +25,9 @@ def def_list1d_key():
     #list1d_key.append('110.x2y1_O1_a1b3')
     #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
-    list1d_key.append('110.x2y2_O1_a1b2')
+    #list1d_key.append('110.x2y2_O1_a1b2')
     #list1d_key.append('110.x2y2_O2.14_a1b2')
-    list1d_key.append('110.x2y2_O3_a1b2')
+    #list1d_key.append('110.x2y2_O3_a1b2')
     #list1d_key.append('110.x2y3_O1')
     #list1d_key.append('110.x2y3_O1_a1b2')
     #list1d_key.append('110.x2y3_O2.12')
@@ -128,7 +128,8 @@ def def_dict_structure():
     str_key='111.x4y4_O4'
     dict_structure[ str_key ] = def_pto_class(
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
-        list1d_bbox = [ -0.25,-0.25,1.5,1.5 ]
+        list1d_bbox = [ -0.25,-0.25,1.5,1.5 ],
+        log_test = True,
         )
     #------------------------------------------
     str_key='111.x4y4_O4_hch'
@@ -351,9 +352,12 @@ def def_dict_structure():
         )
     #------------------------------------------
     str_key='110.x4y3_O6'
+    dict_atom = {}
+    dict_atom[1] = [2.0]
     dict_structure[ str_key ] = def_pto_class(
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
-        list1d_bbox = [ 1/4,0.5/3,1,1 ]
+        list1d_bbox = [ 1/4,0.5/3,1,1 ],
+        dict_atom = dict_atom,
         )
     #------------------------------------------
     return dict_structure
@@ -361,14 +365,19 @@ def def_dict_structure():
 def def_pto_class( 
         marker = None,
         str_workdir='',
-        dict_atom = {1:[1.0]},
-        list1d_bbox = [0,0,1,1],
+        dict_atom = None,
+        list1d_bbox = None,
         str_cif = 'template/POSCAR',
-        str_datfile = 'xas.ave.csv',
+        str_datfile = None,
         float_onset_sft = 0.0,
-        list1d_column = None
+        list1d_column = None,
+        log_test = False,
     ):
- 
+    if (dict_atom is None):
+         dict_atom = {1:[1.0]}
+    if list1d_bbox is None:
+         list1d_bbox = [0,0,1,1]
+    print('test_1',dict_atom) 
     str_exp=os.environ['goto_pto_exp']
     goto_pto_work_110=os.environ['goto_pto_work_110']
     goto_pto_work_111=os.environ['goto_pto_work_111']
