@@ -315,8 +315,8 @@ def def_pic_pto110(
     )
 
     list2d_loop = [
-        [ 'z',[0,2],[0,3] ],
-        [ 'x_y',[0,1],[0,2]]
+        [ 'z',[0,2],[0,3] ,'out-of-plane'],
+        [ 'x_y',[0,1],[0,2], 'in-plane']
         ]
 
     for list1d_loop in list2d_loop:
@@ -324,7 +324,7 @@ def def_pic_pto110(
         def_plt_exp(
             obj_ax = obj_ax,
             str_datfile = str_exp+'20210924.pto110_xyzfit.csv',
-            str_label=r'Exp. fit '+list1d_loop[0],
+            str_label=r'Exp. fit '+list1d_loop[3],
             list1d_column = list1d_loop[1]
         )
         for list1d_data in list2d_data:
@@ -332,7 +332,7 @@ def def_pic_pto110(
                 obj_ax = obj_ax,
                 str_datfile = list1d_data[0]+'xas.alpha.csv',
                 list1d_column = list1d_loop[2],
-                str_label = r'Theory '+list1d_loop[0]+' '+ list1d_data[1]
+                str_label = r'Theory '+list1d_loop[3]+' '+ list1d_data[1]
             )
         def_plt_save(
             fig,
@@ -392,17 +392,7 @@ if (''):
             [ dict_structure['110.x2y1_O2_feffk'].str_chdir,'FEFF Kspace'],
         ],
     )
-if (''):
-    def_pic_pto110(
-        str_workdir = str_work_110,
-        str_savefig = 'neighbor/xas.neighbor_mix_1',
-        list2d_data = [
-            [ dict_structure['110.x2y3_O4.v56'].str_chdir, 'a'],
-            [ dict_structure['110.x2y4_O6.v56'].str_chdir, 'b'],
-            [ dict_structure['110.x2y1_O2_a1b3'].str_chdir,'c'],
-        ],
-    )
-if (''):
+if ('t'):
     def_pic_pto110(
         str_workdir = str_work_110,
         str_savefig = 'neighbor/xas.mixture',
@@ -755,7 +745,7 @@ if (''):
         ],
         tuple_xlim = ( 512,525 )
     )
-if ('t'):
+if (''):
     def_pic_converge(
         str_workdir = dict_structure[ '111.x4y4_O4' ].str_chdir + 'atom_1/',
         str_savefig = 'converge_kspace',
