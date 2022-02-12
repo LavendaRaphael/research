@@ -11,7 +11,7 @@ export homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirna
 echo "#=========================================================================[groupenv.sh]"
 
 #---------------------------------------------[dir]
-export vasp_pot=${homedir}software/potpaw_PBE.54/
+export vasp_pot=${software}src/potpaw_PBE.54/
 
 #---------------------------------------------[path]
 export PATH=${homedir}software/vtstscripts-967:$PATH
