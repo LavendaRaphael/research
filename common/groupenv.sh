@@ -10,17 +10,16 @@ export homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirna
 
 echo "#=========================================================================[groupenv.sh]"
 
-#---------------------------------------------[dir]
+#---------------------------------------------[export]
 export vasp_pot=${software}src/potpaw_PBE.54/
 
-#---------------------------------------------[path]
-export PATH=${homedir}software/vtstscripts-967:$PATH
+#export PATH=${homedir}software/vtstscripts-967:$PATH
 
-source $software/bin/kim-api-activate
+#source $software/bin/kim-api-activate
 
-export PLUMED_KERNEL="${software}/lib/libplumedKernel.so"
-export PLUMED_VIMPATH="${software}/src/plumed2.7/vim"
-export PYTHONPATH="${software}/lib/plumed/python:$PYTHONPATH"
+#export PLUMED_KERNEL="${software}/lib/libplumedKernel.so"
+#export PLUMED_VIMPATH="${software}/src/plumed2.7/vim"
+#export PYTHONPATH="${software}/lib/plumed/python:$PYTHONPATH"
 
 #---------------------------------------------[jobsub]
 if [ "$mycluster" = "qsub" ]; then
