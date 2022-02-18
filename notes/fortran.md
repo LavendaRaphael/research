@@ -1,23 +1,65 @@
-!=========================================================================================[杂项]
-!------------------------------[数组内循环]
+# Fortran
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Fortran](#fortran)
+  - [杂项](#杂项)
+    - [数组内循环](#数组内循环)
+    - [数组查找](#数组查找)
+    - [点积](#点积)
+    - [整行读取](#整行读取)
+    - [I/O](#io)
+    - [bug](#bug)
+  - [读取行参数个数](#读取行参数个数)
+  - [读取文件行数](#读取文件行数)
+  - [mpi](#mpi)
+  - [模板](#模板)
+  - [SUBROUTINE](#subroutine)
+
+<!-- /code_chunk_output -->
+
+## 杂项
+
+### 数组内循环
+
+```fortran
 (/(i,i=1,2)/)
-!------------------------------[数组查找]
+```
+
+### 数组查找
+
+```fortran
 findloc (ARRAY, VALUE, DIM )
-!------------------------------[点积]
+```
+
+### 点积
+
+```fortran
 dot_product (a,b)
-!------------------------------[整行读取]
+```
+
+### 整行读取
+
+```fortran
 read(datafile_unit, '(a)') temp_char0
 temp_char0 = adjustl(temp_char0)
-!------------------------------[I/O]
-!	*infile中的string最好加引号，以免被“/”隔断
-!	datafile       '../water.pos'
-!------------------------------[bug]
-!	*服务器本身的module很有问题，建议用source
-!	*莫名奇妙的bug一般都是编译器的问题
-!	*ifort test.f90 -o test.x #编译
+```
 
+### I/O
 
-!=================================================================================[读取行参数个数]
+*infile中的string最好加引号，以免被“/”隔断  
+`datafile       '../water.pos'`
+
+### bug
+
+- 服务器本身的module很有问题，建议用source
+- 莫名奇妙的bug一般都是编译器的问题
+
+## 读取行参数个数
+
+```fotran
 subroutine sub_splitline(line, n)
     implicit none
     integer, parameter                  :: q = 8
@@ -35,8 +77,12 @@ subroutine sub_splitline(line, n)
     enddo
     n=n-1
 
-end subroutine sub_splitline    
-!================================================================================[读取文件行数]
+end subroutine sub_splitline
+```
+
+## 读取文件行数
+
+```fortran
 subroutine sub_nlines(file_unit,nlines)
     implicit none
     integer, parameter                  :: q = 8
@@ -58,31 +104,57 @@ subroutine sub_nlines(file_unit,nlines)
     rewind(file_unit)
     
 end subroutine sub_nlines
-!==========================================================================================[mpi]
+```
+
+## mpi
+
+```fortan
 use mpi
-!---------------------------------------------------------------[MPI变量]
+```
+
+ MPI变量
+
+```fortran
 character (len=100)                 :: outfile_rank !各进程的输出文件
 integer                             :: ntasks, rank, ierr, stat (MPI_STATUS_SIZE)
-!---------------------------------------------------------------[MPI初始化]
+```
+
+MPI初始化
+
+```fortran
 call MPI_INIT (ierr)
 call MPI_COMM_SIZE (MPI_COMM_WORLD, ntasks, ierr)
 call MPI_COMM_RANK (MPI_COMM_WORLD, rank, ierr)
-!---------------------------------------------------------------[进程0记录日志]
+```
+
+进程0记录日志
+
+```fortran
 if (rank==0) then
     open (errfile_unit, file=errfile, status='replace')
     call system_clock (clock_start)
-
 endif
-!---------------------------------------------------------------[由进程0分发获取到的参数信息]    
+```
+
+由进程0分发获取到的参数信息
+
+```fortran
 call MPI_BCAST (X, 100, MPI_CHARACTER, 0, MPI_COMM_WORLD, ierr)
 call MPI_BCAST (X, 1, MPI_REAL8, 0, MPI_COMM_WORLD, ierr)
 call MPI_SEND (X, 100, MPI_CHARACTER, 0, 1, MPI_COMM_WORLD, ierr)
 call MPI_RECV (X, 100, MPI_CHARACTER, i, 1, MPI_COMM_WORLD, stat, ierr)
-!------------------------------[根据 snap 序号分发计算任务]
+```
+
+根据 snap 序号分发计算任务
+
+```fortran
 if (mod (snap_onset, ntasks) /= rank) then
-    
 endif
-!------------------------------[合并各进程产生的outfile]
+```
+
+合并各进程产生的outfile
+
+```fortran
 call MPI_SEND (outfile_rank, 100, MPI_CHARACTER, 0, 1, MPI_COMM_WORLD, ierr)
 if (rank==0) then
     open (outfile_unit, file = outfile, status = 'replace')
@@ -98,7 +170,11 @@ if (rank==0) then
         close(outfile_unit, status='delete')
     enddo
 endif
-!------------------------------[重命名log文件，添加时间]
+```
+
+重命名log文件，添加时间
+
+```fortan
 if (rank==0) then
     call system_clock (clock_end, clock_rate)
     write (errfile_unit, ' (A25, F)') 'Elapsed time (s)', (clock_end-clock_start)/real(clock_rate)
@@ -106,27 +182,31 @@ if (rank==0) then
     call rename(errfile, logfile)
 endif
 call mpi_finalize (ierr)
-!==========================================================================================[README]
-!---------------------------------------------------------------[VERSION]
+```
+
+## 模板
+
+```fortran
+!------------[VERSION]
 !2020.12.21
 !@tianff
-!---------------------------------------------------------------[NOTES]
-!---------------------------------------------------------------[Compile]
+!------------[NOTES]
+!------------[Compile]
 !mpiifort *.f90 -o *.x
-!---------------------------------------------------------------[INFILE]
+!------------[INFILE]
 !datafile 'datafile'
 !atom_type
 !    O   32
 !    H   64
 !end atom_type
-!---------------------------------------------------------------[USE]
+!------------[USE]
 !mpirun ./*.x *.in
-!---------------------------------------------------------------[DATAFILE]
-!---------------------------------------------------------------[OUTFILE]
+!------------[DATAFILE]
+!------------[OUTFILE]
 ![my.err]
 !*.log
 !*.out
-!==========================================================================================[main]
+!------------[main]
 program main
 implicit none
 !----------------------------------------------------------------[CommonVariable]
@@ -139,10 +219,10 @@ character (len=500)                 :: temp_char0, temp_char (10), leng=" (65 ('
 integer, parameter                  :: errfile_unit=11, infile_unit=12, datafile_unit=13, outfile_unit=14
 character (len=500), allocatable    :: input_list(:)
 character (len=500), parameter      :: prefix = "prefix"
-!---------------------------------------------------------------[InputVariable]
+### InputVariable]
 character (len=500),parameter       :: 
 real(q), parameter                  ::
-!---------------------------------------------------------------[InternalVariable] 
+### InternalVariable] 
 integer, parameter                  ::
 integer (q)                         :: 
 integer (q), allocatable            ::
@@ -150,7 +230,7 @@ character (len=500)                 ::
 character (len=500), allocatable    ::
 real (q), allocatable               :: 
 real (q)                            ::
-!---------------------------------------------------------------[文件名生成]
+!------------[文件名生成]
 write (temp_char0, '(I25)') rank
 outfile_rank = trim(prefix)//trim(adjustl(temp_char0))//outfile
 outfile = trim(prefix)//outfile
@@ -158,7 +238,7 @@ logfile = trim(prefix)//logfile
 
 open (errfile_unit, file=errfile, status='replace')
 call system_clock (clock_start)
-!---------------------------------------------------------------[READ INFILE]
+!------------[READ INFILE]
 call get_command_argument(1,infile)
 write (errfile_unit, leng//"'[READ INFILE]: "//trim(infile)//"')")
 open(infile_unit, file = infile, status = 'old')
@@ -207,27 +287,32 @@ endselect
 rewind (infile_unit)
 enddo
 close (infile_unit)
-!---------------------------------------------------------------[READ DATAFILE]
-!---------------------------------------------------------------[COMPUTE]
+!------------[READ DATAFILE]
+!------------[COMPUTE]
 write (errfile_unit, leng//"'[COMPUTE]')")
-!---------------------------------------------------------------[OUTPUT]
+!------------[OUTPUT]
 write (errfile_unit, leng//"'[OUTPUT]: "//trim(outfile)//"')")
 open (outfile_unit, file = outfile, status = 'replace')
-!---------------------------------------------------------------[FINALIZE]
+!------------[FINALIZE]
 deallocate()
 call system_clock (clock_end, clock_rate)
 write (errfile_unit, ' (A25, F)') 'Elapsed time (s)', (clock_end-clock_start)/real(clock_rate)
 close(errfile_unit)
 call rename(errfile, logfile)
 end program main
-!==========================================================================================[SUBROUTINE]
-!===============================================================[]
+```
+
+## SUBROUTINE
+
+```fortran
 function func_()
 implicit none
 integer, parameter                  :: q = 8
 
 end function func_
-!===============================================================[]
+```
+
+```fortran
 subroutine sub_()
 implicit none
 integer, parameter                  :: q = 8
@@ -239,3 +324,4 @@ character(*), intent(in)            ::
 real(q), intent(out)                :: 
 
 end subroutine sub_
+```
