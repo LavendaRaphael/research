@@ -15,7 +15,7 @@ def def_list1d_key():
     #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
-    #list1d_key.append('111.x4y4_O4')
+    list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
@@ -84,7 +84,7 @@ def def_class_paras():
     str_abname = xas_module.def_abname( alpha=list1d_alignangle[0], beta=list1d_alignangle[1])
     class_paras.str_alignfile = 'xas.'+str_abname+'.align.json'
 
-    class_paras.int_atomkey = 11
+    class_paras.int_atomkey = 1
     class_paras.float_tm_scaling = 5.0
 
     return class_paras
@@ -127,9 +127,9 @@ def def_dict_structure():
     #------------------------------------------
     str_key='111.x4y4_O4'
     dict_structure[ str_key ] = def_pto_class(
+        marker = ['theory','vasp','111'],
         str_workdir = 'Pt.'+str_key+'_vac/vasp_sch/',
         list1d_bbox = [ -0.25,-0.25,1.5,1.5 ],
-        log_test = True,
         )
     #------------------------------------------
     str_key='111.x4y4_O4_hch'
@@ -377,7 +377,6 @@ def def_pto_class(
          dict_atom = {1:[1.0]}
     if list1d_bbox is None:
          list1d_bbox = [0,0,1,1]
-    print('test_1',dict_atom) 
     str_exp=os.environ['goto_pto_exp']
     goto_pto_work_110=os.environ['goto_pto_work_110']
     goto_pto_work_111=os.environ['goto_pto_work_111']
