@@ -15,12 +15,12 @@ def def_list1d_key():
     #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
-    list1d_key.append('111.x4y4_O4')
+    #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
     
     #----------------------------------
     #list1d_key.append('110.x1y1.a2b2_O2_a1b2')
-    #list1d_key.append('110.x2y12_O22')
+    list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
     #list1d_key.append('110.x2y1_O1_a1b3')
     #list1d_key.append('110.x2y1_O2_feffk')
@@ -84,7 +84,7 @@ def def_class_paras():
     str_abname = xas_module.def_abname( alpha=list1d_alignangle[0], beta=list1d_alignangle[1])
     class_paras.str_alignfile = 'xas.'+str_abname+'.align.json'
 
-    class_paras.int_atomkey = 1
+    class_paras.int_atomkey = 11
     class_paras.float_tm_scaling = 5.0
 
     return class_paras
