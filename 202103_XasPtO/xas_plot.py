@@ -233,8 +233,20 @@ if (''):
             [[2,5,5], 530.5, 1.0,1],
             ],
         list1d_save = ['xas_tm.z.pdf', (527, 540), (0, 4)],
-    ) 
+    )
+ 
 if ('t'):
+    def_pic_tm_flow(
+        list1d_workdir = ['110.x2y12_O22', 11],
+        list1d_exp = ['20210924.pto110_a20_postscaling.csv', [1,2]],
+        list1d_theory = ['xas.a20_b90.align.csv', [0,2], 'Theory O-11 X_Y'],
+        list1d_tm = ['xas_tm.a20_b90.align.csv', [2,4], 'TM O-11 X_Y'],
+        list2d_tm_select = [
+            [[2,4,4], 531.5, 1.0, 5],
+            ],
+        list1d_save = ['test_tm.xy.pdf', (527, 540), (0, 6.2)],
+    )
+if (''):
     def_pic_tm_flow(
         list1d_workdir = ['110.x2y12_O22', 11],
         list1d_exp = ['20210924.pto110_a20_postscaling.csv', [1,2]],
@@ -253,10 +265,10 @@ if (''):
         list1d_theory = ['xas.a20_b90.align.csv', [0,3], 'Theory O-11 Z'],
         list1d_tm = ['xas_tm.a20_b90.align.csv', [2,5], 'TM O-11 Z'],
         list2d_tm_select = [
-            [[2,5,5], 530.5, 0.5,1],
+            [[2,5,5], 529.5, 1.0, 1],
             ],
         list1d_save = ['xas_tm.z.pdf', (527, 540), (0, 6.2)],
-    ) 
+    )
 if (''):
     def_pic_tm_flow(
         list1d_workdir = ['110.x2y12_O22', 11],
