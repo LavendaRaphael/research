@@ -2,6 +2,7 @@ import os
 import math
 import subprocess
 import shutil
+import server
 
 def def_vasp_potgen():
     if os.path.isfile('POTCAR'):
@@ -127,36 +128,23 @@ def def_dict_pot():
 
 def def_serversub( 
         str_jobname,
-        dict_input,
         str_excute,
-        class_cluster,
+        Instance_mpi,
         ):
 
     str_homedir = os.environ[ 'homedir' ]
     str_mycluster = os.environ[ 'mycluster' ]
 
-    if ('str_jobqueue' in dict_input):
-        str_jobqueue = dict_input[ 'str_jobqueue' ]
-    else:
-        str_jobqueue = class_cluster.str_jobqueue
-    if ('int_maxppn' in dict_input):
-        int_maxppn = dict_input[ 'int_maxppn' ]
-    else:
-        int_maxppn = class_cluster.dict_maxppn[ str_jobqueue ]
-    if ('int_nodes' in dict_input):
-        int_nodes = dict_input[ 'int_nodes' ]
-        int_ppn = int_maxppn 
-    if ('int_ncore' in dict_input):
-        int_ncore = dict_input[ 'int_ncore' ]
-        int_nodes = math.ceil( int_ncore/int_maxppn )
-        int_ppn = math.ceil( int_ncore/int_nodes )
+    str_jobqueue = Instance_mpi.str_jobqueue
+    int_nodes = Instance_mpi.int_nodes
+    int_ppn = Instance_mpi.int_ppn
 
     str_jobname = 'tff.'+str_jobname
     str_nodefile = str_jobname+'.nodelist'
     str_subfile = str_jobname + '.sh'
 
+    #-----------------------------[cluster]
     dict_subconfig = {}
-    dict_jobsub = {}
     dict_subconfig[ 'qsub' ] = (
         '#PBS -l nodes='+str(int_nodes)+':ppn='+str(int_ppn)+'\n'+
         #'#PBS -l walltime=240:00:00\n'+
@@ -166,23 +154,27 @@ def def_serversub(
         'cd $PBS_O_WORKDIR\n'+
         'cat $PBS_NODEFILE > '+str_nodefile+'\n'
         )
+    dict_jobsub = {}
     dict_jobsub[ 'qsub' ] = 'qsub '+str_subfile
 
-    str_timecount='echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s."'
 
+    #-----------------------------[headend]
     str_subhead = (
         'source '+str_homedir+'codes/common/set_env.sh\n'+
         'set -euo pipefail\n'+
         'SECONDS=0\n'+
         'sort -u '+str_nodefile+' > '+str_nodefile+'.tmp && mv '+str_nodefile+'.tmp '+str_nodefile+'\n'
         )
+    str_timecount='echo "TotalTime $((${SECONDS} / 60)) m $((${SECONDS} % 60)) s."'
 
+    #-----------------------------[program]
     str_subvasp = (
         'if [ -f "INCAR" ]; then\n'+
-        '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_maxppn/2)) +'" INCAR\n'+
+        '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_ppn/2)) +'" INCAR\n'+
         'fi\n'
         )
 
+    #-----------------------------[]
     with open( str_subfile, 'w' ) as obj_subfile:
         obj_subfile.write( dict_subconfig[ str_mycluster ] ) 
         obj_subfile.write( str_subhead )
@@ -192,19 +184,77 @@ def def_serversub(
         obj_subfile.write( str_excute )
         obj_subfile.write( '\n' )
         obj_subfile.write( str_timecount )
+ 
     subprocess.run( dict_jobsub[ str_mycluster ].split()  )
 
-class class_cluster(object):
+class Class_mpi():
+    
+    def __init__(self):
+        _class_cluster = server.class_cluster()
+        self._str_jobqueue = _class_cluster.str_jobqueue
+        self._dict_maxppn = _class_cluster.dict_maxppn
+
+        self._int_maxppn = self._dict_maxppn[ self._str_jobqueue ]
+        self._int_nodes = 1
+        self._int_ppn = self._int_maxppn
+    
+        self._int_mpippn = 4
+        self._int_ompthread = math.ceil(self._int_ppn / self._int_mpippn)
+        self._int_np = self._int_mpippn * self._int_nodes
+
     @property
     def str_jobqueue(self):
         return self._str_jobqueue
     @str_jobqueue.setter
-    def str_jobqueue(self, str_temp):
-        self._str_jobqueue = str_temp
+    def str_jobqueue(self, _temp):
+        self._str_jobqueue = _temp
+        self._int_maxppn = self._dict_maxppn[ self._str_jobqueue ]
+        self._int_ppn = self._int_maxppn
+        self._int_ompthread = math.ceil(self._int_ppn / self._int_mpippn)
 
     @property
-    def dict_maxppn(self):
-        return self._dict_maxppn
-    @dict_maxppn.setter
-    def dict_maxppn(self, dict_temp):
-        self._dict_maxppn = dict_temp  
+    def int_maxppn(self):
+        return int_maxppn
+    @int_maxppn.setter
+    def int_maxppn(self, _temp):
+        self._int_maxppn = _temp
+
+    @property
+    def int_nodes(self):
+        return self._int_nodes
+    @int_nodes.setter
+    def int_nodes(self, _temp):
+        self._int_nodes = _temp
+        self._int_np = self._int_mpippn * self._int_nodes
+
+    #@property
+    #def int_ncore(self):
+    #    return self._int_ncore
+    #@int_ncore.setter
+    #def int_ncore(self, _temp):
+    #    self._int_ncore = _temp
+    #    self._int_nodes = math.ceil( _temp/self._int_maxppn )
+    #    self._int_ppn = math.ceil( _temp/self._int_nodes )
+
+    @property
+    def int_ppn(self):
+        return self._int_ppn
+    @int_ppn.setter
+    def int_ppn(self, _temp):
+        self._int_ppn = _temp
+
+    @property
+    def int_mpippn(self):
+        return self._int_mpippn
+
+    @property
+    def int_ompthread(self):
+        return self._int_ompthread
+
+    @property
+    def int_np(self):
+        return self._int_np
+
+    @property
+    def str_mpiomp(self):
+        return 'mpirun -np '+ str(self._int_np) +' -ppn '+str(self._int_mpippn)+' -genv OMP_NUM_THREADS='+str(self._int_ompthread)+' -genv OMP_STACKSIZE=512m '
