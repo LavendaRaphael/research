@@ -105,7 +105,7 @@ def def_dict_pot():
     dict_pot['Re']='Re'
     dict_pot['Os']='Os'
     dict_pot['Ir']='Ir'
-    dict_pot['Pt']=['Pt',10]
+    dict_pot['Pt']=['Pt',18]
     dict_pot['Au']='Au'
     dict_pot['Hg']='Hg'
     dict_pot['Tl']='Tl_d'

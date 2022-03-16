@@ -20,8 +20,9 @@ def def_list1d_key():
     
     #----------------------------------
     #list1d_key.append('110.x1y1.a2b2_O2_a1b2')
-    list1d_key.append('110.x2y12_O22')
+    #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
+    list1d_key.append('110.x2y12_O22_gw')
     #list1d_key.append('110.x2y1_O1_a1b3')
     #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
@@ -175,6 +176,21 @@ def def_dict_structure():
         str_workdir = 'Pt.110.x2y12_O22_vac/vasp_sch.aimd2_932/', 
         list1d_bbox = [ 0.5, 0.5/12, 1, 1 ],
         dict_atom = dict_atom
+        )
+    #------------------------------------------
+    str_key='110.x2y12_O22_gw'
+    dict_atom = {}
+    dict_atom[1] = [4.0]
+    dict_atom[3] = [4.0]
+    dict_atom[5] = [4.0]
+    dict_atom[7] = [4.0]
+    dict_atom[9] = [4.0]
+    dict_atom[11] = [2.0]
+    dict_structure[ str_key ] = def_pto_class( 
+        marker = ['theory','vasp','110'],
+        str_workdir = 'Pt.110.x2y12_O22_vac/vasp_sch_new.gw/',
+        dict_atom = dict_atom,
+        list1d_bbox = [ -0.5,-0.5/12,2,13/12 ],
         )
     #------------------------------------------
     str_key='110.x2y1_O1_a1b3'
@@ -371,6 +387,7 @@ def def_pto_class(
         str_datfile = None,
         float_onset_sft = 0.0,
         list1d_column = None,
+        log_pp = False,
         log_test = False,
     ):
     if (dict_atom is None):
@@ -427,16 +444,17 @@ def def_pto_class(
             elif ( '110' in marker):
                 str_scalingfile = goto_pto_work_110+'Pt.110.x2y1_O2_vac/feff_k/xas.a20_b90.scaling.json'
             str_cif = 'feff.cif'
-        with open( str_onsetfile, 'r' ) as open_json:
-            dict_onset = json.load( open_json )
-        with open( str_scalingfile, 'r') as open_json:
-            dict_scaling = json.load( open_json )
+        if (log_pp):
+            with open( str_onsetfile, 'r' ) as open_json:
+                dict_onset = json.load( open_json )
+                class_structure.float_onset = dict_onset[ 'float_onset' ] + float_onset_sft
+            with open( str_scalingfile, 'r') as open_json:
+                dict_scaling = json.load( open_json )
+                class_structure.float_scaling = dict_scaling[ class_paras.str_scalingmethod ]
         class_structure.dict_atom = dict_atom
-        class_structure.float_onset = dict_onset[ 'float_onset' ] + float_onset_sft
         class_structure.list1d_bbox = list1d_bbox
         class_structure.str_cif = str_cif
         class_structure.str_code = str_code
-        class_structure.float_scaling = dict_scaling[ class_paras.str_scalingmethod ]
     elif ( 'exp' in marker ):
         goto_pto_work = str_exp
         class_structure.list1d_column = list1d_column
