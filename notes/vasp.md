@@ -148,16 +148,16 @@
 
 ## ka
 
-- ka ~ 30 Å, for d band metals
-- ka ~ 25 Å, for simple metals
-- ka ~ 20 Å, for semiconductors
-- ka ~ 15 Å, for insulators
+- k*a ~ 30 Å, for d band metals
+- k*a ~ 25 Å, for simple metals
+- k*a ~ 20 Å, for semiconductors
+- k*a ~ 15 Å, for insulators
 
 <https://www.bigbrosci.com/2017/12/10/ex18/>
 
 <https://wiki.fysik.dtu.dk/gpaw/exercises/surface/surface.html>
 
-## 2pi*ksapce
+## KSPACING/(2$\pi$)
 
 - Low: 0.06~0.04;
 - Medium: 0.04~0.03;
@@ -165,11 +165,19 @@
 
 <https://vaspkit.com/tutorials.html#generate-kpoints>
 
-## ksapce
+## KSPACING
 
 ```vasp
-KSPACING=0.25
+KSPACING=0.25 # ang^-1
 ```
+
+```math
+KSPACING = \frac{2\pi}{ak}
+```
+
+- KSPACING = 0.25
+- KSPACING/(2$\pi$) $\approx$ 0.04
+- k\*a = 2$\pi$/KSPACING = 25.1327412287
 
 <https://www.vasp.at/wiki/index.php/KSPACING>
 
