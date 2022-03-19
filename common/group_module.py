@@ -214,7 +214,7 @@ class Class_mpi():
 
     @property
     def int_maxppn(self):
-        return int_maxppn
+        return self._int_maxppn
     @int_maxppn.setter
     def int_maxppn(self, _temp):
         self._int_maxppn = _temp
