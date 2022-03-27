@@ -1,4 +1,23 @@
-#--------------------------------------------------------------------------[xspectra]
+# QuantumEspresso
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [QuantumEspresso](#quantumespresso)
+  - [xspectra](#xspectra)
+  - [evc.dat](#evcdat)
+  - [新版本编译-cmake](#新版本编译-cmake)
+  - [新版本编译-make](#新版本编译-make)
+  - [老版本编译](#老版本编译)
+  - [libxc](#libxc)
+  - [收敛问题](#收敛问题)
+
+<!-- /code_chunk_output -->
+
+## xspectra
+
+```in
 &input_xspectra
     calculation='xanes_dipole'
     edge='K'
@@ -28,15 +47,26 @@
     cut_desmooth=0.1,
 /
 3 3 1 0 0 0
+```
 
-#--------------------------------------------------------------------------[evc.dat]
-# 6.2 不支持 evc.dat, 变为 wfc*.dat
-# 6.0 支持 evc.dat
-# https://lists.quantum-espresso.org/pipermail/users/2019-June/042996.html
+## evc.dat
+6.2 不支持 evc.dat, 变为 wfc*.dat  
+6.0 支持 evc.dat  
+<https://lists.quantum-espresso.org/pipermail/users/2019-June/042996.html>
 
+## 新版本编译-cmake
 
-#--------------------------------------------------------------------------[新版本编译]
+ref: lammps compile method
 
+```sh
+mkdir build; cd build
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_COMPILER=ifx ..
+make
+```
+
+## 新版本编译-make
+
+```sh
 make clean
 make veryclean
 
@@ -48,9 +78,11 @@ export F90=ifort
 ./configure
 
 make all
+```
 
-#--------------------------------------------------------------------------[老版本编译]
+## 老版本编译
 
+```sh
 # if [ ! -f "make.sys" ]; then
 #  ./configure
 # fi
@@ -79,13 +111,16 @@ FFT_LIBS="$FFT_LIB_PATH/libfftw3.a"
 make cp
 make pw
 make links
+```
 
-# http://blog.sciencenet.cn/blog-2909108-1152511.html
-# https://blog.csdn.net/odin_linux/article/details/81130075
-# http://bbs.keinsci.com/thread-1324-1-1.html
-# http://muchong.com/html/201409/7951501.html
+<http://blog.sciencenet.cn/blog-2909108-1152511.html>  
+<https://blog.csdn.net/odin_linux/article/details/81130075>  
+<http://bbs.keinsci.com/thread-1324-1-1.html>  
+<http://muchong.com/html/201409/7951501.html>
 
-#--------------------------------------------------------------------------[libxc]
+## libxc
+
+```sh
 export CC=icc
 export F77=ifort
 export MPIF90=mpiifort
@@ -111,7 +146,11 @@ vim make.sys
 #<<
 
 make pw
-#--------------------------------------------------------------------------[收敛问题]
+```
+
+## 收敛问题
+
+```in
 &system
     nbnd=415
     occupations='smearing'
@@ -120,6 +159,7 @@ make pw
 &electrons
     mixing_mode='local-TF'  # surface
 /
+```
 
-# https://suncat.stanford.edu/wiki/convergence-tips
-# https://www.quantum-espresso.org/Doc/pw_user_guide/node21.html
+<https://suncat.stanford.edu/wiki/convergence-tips>
+<https://www.quantum-espresso.org/Doc/pw_user_guide/node21.html>

@@ -64,7 +64,6 @@ if not `make install`
 source sourceme.sh
 ```
 
-
 ## LAMMPS
 
 ```sh
