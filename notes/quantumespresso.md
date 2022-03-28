@@ -5,6 +5,7 @@
 <!-- code_chunk_output -->
 
 - [QuantumEspresso](#quantumespresso)
+  - [pw.in](#pwin)
   - [xspectra](#xspectra)
   - [evc.dat](#evcdat)
   - [新版本编译-cmake](#新版本编译-cmake)
@@ -14,6 +15,46 @@
   - [收敛问题](#收敛问题)
 
 <!-- /code_chunk_output -->
+
+## pw.in
+
+```in
+&CONTROL
+    ! calculation Default: 'scf'
+    ! tstress  Default:  .false.
+    tstress = .true.   ! calcute stress
+    ! tprnfor  Default:  .false.
+    tprnfor = .true.   ! calcute force
+    ! pseudo_dir  Default:  value of the $ESPRESSO_PSEUDO environment variable if set; '$HOME/espresso/pseudo/' otherwise
+    ! outdir  Default:  value of the ESPRESSO_TMPDIR environment variable if set; current directory ('./') otherwise
+    ! disk_io  Default is 'low' for the scf case, 'medium' otherwise.
+    disk_io = 'none'
+/
+&SYSTEM
+    input_dft = 'scan'
+    ecutwfc = 150
+    ! nosym  Default:  .FALSE.
+    nosym = .TRUE.
+    ntyp  = 2
+    nat   = 192
+    ibrav = 0
+/
+&ELECTRONS
+    ! conv_thr Default: 1.D-6
+    ! electron_maxstep Default: 100
+    electron_maxstep = 500
+/
+ 
+ATOMIC_SPECIES 
+  O  15.9994  O_HSCV_PBE-1.0.UPF 
+  H  2.01588  H_HSCV_PBE-1.0.UPF 
+
+K_POINTS gamma
+
+CELL_PARAMETERS angstrom
+
+ATOMIC_POSITIONS angstrom
+```
 
 ## xspectra
 
@@ -157,7 +198,7 @@ make pw
     degauss=0.003
 /
 &electrons
-    mixing_mode='local-TF'  # surface
+    mixing_mode='local-TF'  ! surface
 /
 ```
 
