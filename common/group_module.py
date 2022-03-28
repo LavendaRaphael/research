@@ -4,6 +4,50 @@ import subprocess
 import shutil
 import server
 
+class class_subparas():
+    def __init__(self):
+        self._str_dirformat = 'sub_%05d'
+
+    @property
+    def str_workdir(self):
+        return self._str_workdir
+    @str_workdir.setter
+    def str_workdir(self, value):
+        self._str_workdir = value
+
+    @property
+    def str_dirformat(self):
+        return self._str_dirformat
+    @str_dirformat.setter
+    def str_dirformat(self, value):
+        self._str_dirformat = value
+
+    @property
+    def array_id(self):
+        return self._array_id
+    @array_id.setter
+    def array_id(self, value):
+        self._array_id = value
+
+    def def_id2dir( self, value ):
+        return (self._str_dirformat % value)
+
+def def_subloop( class_subparas ):
+    with open( 'sub.py','r' ) as file_sub:
+        str_subfile = file_sub.read()
+    os.chdir( class_subparas.str_workdir )
+
+    for int_id in class_subparas.array_id:
+        print(int_id)
+        os.chdir( class_subparas.def_id2dir(int_id) )
+
+        with open( 'sub.py','w' ) as file_sub:
+            str_subfile_new = re.sub( 'xNUMx', str(int_id), str_subfile )
+            file_sub.write( str_subfile_new )
+
+        subprocess.run( ['python','sub.py'] )
+        os.chdir('..')
+
 def def_vasp_potgen():
     if os.path.isfile('POTCAR'):
         print('POTCAR has exist.')
