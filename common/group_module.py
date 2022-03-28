@@ -214,7 +214,7 @@ def def_serversub(
     #-----------------------------[program]
     str_subvasp = (
         'if [ -f "INCAR" ]; then\n'+
-        '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_ppn/2)) +'" INCAR\n'+
+        '   sed -i "/NCORE/c\  NCORE = '+ str(int(int_ppn)) +'" INCAR\n'+
         'fi\n'
         )
 
@@ -301,4 +301,4 @@ class Class_mpi():
 
     @property
     def str_mpiomp(self):
-        return 'mpirun -np '+ str(self._int_np) +' -ppn '+str(self._int_mpippn)+' -genv OMP_NUM_THREADS='+str(self._int_ompthread)+' -genv OMP_STACKSIZE=512m '
+        return 'mpirun -ppn '+str(self._int_mpippn)+' -genv OMP_NUM_THREADS='+str(self._int_ompthread)+' -genv OMP_STACKSIZE=512m -hostfile $PBS_NODEFILE '
