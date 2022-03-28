@@ -3,6 +3,7 @@ import math
 import subprocess
 import shutil
 import server
+import re
 
 class class_subparas():
     def __init__(self):
