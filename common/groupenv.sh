@@ -6,7 +6,7 @@ if [ "$groupenv" == 'pass' ] ;then
 fi
 fi
 
-export homedir=`find ~ -maxdepth 3 -name "server.me.sh" -print -quit|xargs dirname`/
+source $HOME/.config/.tianff
 
 echo "#=========================================================================[groupenv.sh]"
 

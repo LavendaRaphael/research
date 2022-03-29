@@ -36,6 +36,8 @@ class class_subparas():
 def def_subloop( class_subparas ):
     with open( 'sub.py','r' ) as file_sub:
         str_subfile = file_sub.read()
+
+    str_cwd = os.getcwd()
     os.chdir( class_subparas.str_workdir )
 
     for int_id in class_subparas.array_id:
@@ -48,6 +50,8 @@ def def_subloop( class_subparas ):
 
         subprocess.run( ['python','sub.py'] )
         os.chdir('..')
+    
+    os.chdir( str_cwd )
 
 def def_vasp_potgen():
     if os.path.isfile('POTCAR'):
