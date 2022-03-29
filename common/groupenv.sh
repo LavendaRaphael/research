@@ -13,6 +13,7 @@ echo "#=========================================================================
 #---------------------------------------------[export]
 export vasp_pot=${software}src/potpaw_PBE.54/
 export ESPRESSO_PSEUDO=${software}src/qe_pseudo/
+
 #export PATH=${homedir}software/vtstscripts-967:$PATH
 
 #source $software/bin/kim-api-activate
