@@ -12,6 +12,8 @@
   - [新版本编译-make](#新版本编译-make)
   - [老版本编译](#老版本编译)
   - [libxc](#libxc)
+    - [cmake](#cmake)
+    - [make](#make)
   - [收敛问题](#收敛问题)
 
 <!-- /code_chunk_output -->
@@ -91,6 +93,7 @@ ATOMIC_POSITIONS angstrom
 ```
 
 ## evc.dat
+
 6.2 不支持 evc.dat, 变为 wfc*.dat  
 6.0 支持 evc.dat  
 <https://lists.quantum-espresso.org/pipermail/users/2019-June/042996.html>
@@ -161,6 +164,24 @@ make links
 
 ## libxc
 
+### cmake
+
+```sh
+#---------------------------------------------libxc
+
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/public/spst/home/tianff/tianff/software/ -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx
+cd build && make
+make test
+make install
+
+#----------------------------------------------qe
+
+```
+
+### make
+
+<https://www.quantum-espresso.org/Doc/user_guide/node13.html>
+
 ```sh
 export CC=icc
 export F77=ifort
@@ -169,9 +190,7 @@ export F90=ifort
 export FC=ifort
 #---------------------------------------------libxc
 
-./autogen.sh
-make clean
-./configure --prefix=/public/spst/home/tianff/tianff/software/libxc_for_QE-master/libxc/
+./configure --prefix=/public/spst/home/tianff/tianff/software/
 make 
 make install
 
@@ -182,8 +201,8 @@ make clean
 vim make.sys
 #>>
  DFLAGS  = -D__LIBXC
- LD_LIBS = -L/public/spst/home/tianff/tianff/software/libxc_for_QE-master/libxc/lib/ -lxcf90 -lxc
- IFLAGS  = -I/public/spst/home/tianff/tianff/software/libxc_for_QE-master/libxc/include/
+ LD_LIBS = -L/public/spst/home/tianff/tianff/software/lib/ -lxcf03 -lxc
+ IFLAGS  = -I/public/spst/home/tianff/tianff/software/include/
 #<<
 
 make pw
