@@ -8,12 +8,14 @@
   - [pw.in](#pwin)
   - [xspectra](#xspectra)
   - [evc.dat](#evcdat)
-  - [新版本编译-cmake](#新版本编译-cmake)
-  - [新版本编译-make](#新版本编译-make)
-  - [老版本编译](#老版本编译)
-  - [libxc](#libxc)
+  - [编译](#编译)
     - [cmake](#cmake)
     - [make](#make)
+    - [老版本](#老版本)
+  - [libxc](#libxc)
+    - [cmake](#cmake-1)
+    - [make](#make-1)
+    - [qe](#qe)
   - [收敛问题](#收敛问题)
 
 <!-- /code_chunk_output -->
@@ -98,33 +100,30 @@ ATOMIC_POSITIONS angstrom
 6.0 支持 evc.dat  
 <https://lists.quantum-espresso.org/pipermail/users/2019-June/042996.html>
 
-## 新版本编译-cmake
+## 编译
+
+### cmake
 
 ref: lammps compile method
 
 ```sh
 mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_COMPILER=ifx ..
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DCMAKE_INSTALL_PREFIX=$software ..
 make
 ```
 
-## 新版本编译-make
+### make
 
 ```sh
-make clean
-make veryclean
-
-export CC=icc
-export F77=ifort
-export MPIF90=mpiifort
-export F90=ifort
+export CC=icx
+export F90=ifx
 
 ./configure
 
 make all
 ```
 
-## 老版本编译
+### 老版本
 
 ```sh
 # if [ ! -f "make.sys" ]; then
@@ -169,18 +168,14 @@ make links
 ```sh
 #---------------------------------------------libxc
 
-cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/public/spst/home/tianff/tianff/software/ -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx
-cd build && make
+mkdir build; cd build
+cmake -DCMAKE_INSTALL_PREFIX=$software -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DENABLE_FORTRAN=ON  ..
+make
 make test
 make install
-
-#----------------------------------------------qe
-
 ```
 
 ### make
-
-<https://www.quantum-espresso.org/Doc/user_guide/node13.html>
 
 ```sh
 export CC=icc
@@ -188,22 +183,31 @@ export F77=ifort
 export MPIF90=mpiifort
 export F90=ifort
 export FC=ifort
-#---------------------------------------------libxc
 
-./configure --prefix=/public/spst/home/tianff/tianff/software/
+./configure --prefix=$software
 make 
 make install
+```
 
-#----------------------------------------------qe
-make clean
-./configure
+### qe
 
-vim make.sys
-#>>
- DFLAGS  = -D__LIBXC
- LD_LIBS = -L/public/spst/home/tianff/tianff/software/lib/ -lxcf03 -lxc
- IFLAGS  = -I/public/spst/home/tianff/tianff/software/include/
-#<<
+<https://www.quantum-espresso.org/Doc/user_guide/node13.html>
+
+cmake
+
+```sh
+mkdir build; cd build
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON -DCMAKE_INSTALL_PREFIX=$software ..
+make
+```
+
+make
+
+```sh
+export CC=icx
+export F90=ifx
+
+./configure --with-libxc
 
 make pw
 ```
