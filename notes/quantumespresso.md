@@ -5,7 +5,7 @@
 <!-- code_chunk_output -->
 
 - [QuantumEspresso](#quantumespresso)
-  - [pw.in](#pwin)
+  - [`pw.in`](#pwin)
   - [xspectra](#xspectra)
   - [evc.dat](#evcdat)
   - [编译](#编译)
@@ -20,7 +20,7 @@
 
 <!-- /code_chunk_output -->
 
-## pw.in
+## `pw.in`
 
 ```in
 &CONTROL
