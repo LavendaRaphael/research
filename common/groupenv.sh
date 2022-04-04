@@ -11,8 +11,8 @@ source $HOME/.config/.tianff
 echo "#=========================================================================[groupenv.sh]"
 
 #---------------------------------------------[export]
-export vasp_pot=${software}src/potpaw_PBE.54/
-export ESPRESSO_PSEUDO=${software}src/qe_pseudo/
+export vasp_pot=${homedir}/software/potpaw_PBE.54/
+export ESPRESSO_PSEUDO=${homedir}software/qe_pseudo/
 
 #export PATH=${homedir}software/vtstscripts-967:$PATH
 
