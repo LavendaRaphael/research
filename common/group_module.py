@@ -8,6 +8,11 @@ import re
 class class_subparas():
     def __init__(self):
         self._str_dirformat = 'sub_%05d'
+        self._str_compsubdir = 'scf'
+
+    @property
+    def str_compsubdir(self):
+        return self._str_compsubdir
 
     @property
     def str_workdir(self):
@@ -42,13 +47,17 @@ def def_subloop( class_subparas ):
 
     for int_id in class_subparas.array_id:
         print(int_id)
+
         os.chdir( class_subparas.def_id2dir(int_id) )
+        os.chdir( class_subparas.str_compsubdir )
 
         with open( 'sub.py','w' ) as file_sub:
             str_subfile_new = re.sub( 'xNUMx', str(int_id), str_subfile )
             file_sub.write( str_subfile_new )
 
         subprocess.run( ['python','sub.py'] )
+
+        os.chdir('..')
         os.chdir('..')
     
     os.chdir( str_cwd )
