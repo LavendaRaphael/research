@@ -8,7 +8,7 @@ instance_paras = traj_scf.class_paras()
 '''
 instance_paras.list1d_filename = [ '0-1ps_XDATCAR', '1-5ps_XDATCAR' ]
 instance_paras.str_format = 'vasp-xdatcar'
-instance_paras.str_workdir = '../scf_liweiyu_5ps'
+instance_paras.str_workdir = '../liweiyu_5ps'
 instance_paras.array_id = numpy.linspace(
     0,
     10000,
@@ -23,7 +23,7 @@ instance_paras.list2d_files = [
     ['puww_5-15ps_cp',  'qe/cp/traj', 'dpdata' ],
     ['puww_15-25ps_cp', 'qe/cp/traj', 'dpdata' ],
     ]
-instance_paras.str_workdir = '../scf_puww_25ps/'
+instance_paras.str_workdir = '../puww_25ps/'
 instance_paras.array_id = numpy.linspace(
     0,
     50000,
@@ -38,5 +38,5 @@ instance_paras.array_id = numpy.linspace(
 #instance_paras.array_id = instance_paras.array_id[0:1]
 #group_module.def_subloop( instance_paras )
 
-#traj_scf.def_scf2dpraw( instance_paras, int_copy = 100 )
+traj_scf.def_pwscf2dpraw_merge( instance_paras, int_copy=100, str_outdir='../puww_25ps_dpraw' )
 
