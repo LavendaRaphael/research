@@ -98,7 +98,7 @@ def create_disturbs_ase_dev(fin, nfile, dmax=1.0, etmax=0.1, ofmt="lmp", dstyle=
     cell0 = atoms.get_cell()
 
     # creat nfile ofmt files.
-    for fid in range(1, nfile + 1):
+    for fid in range(nfile):
         # Use copy(), otherwise it will modify the inumpyut atoms every time.
         atoms_d = atoms.copy()
 
