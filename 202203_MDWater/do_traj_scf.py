@@ -38,5 +38,5 @@ instance_paras.array_id = numpy.linspace(
 #instance_paras.array_id = instance_paras.array_id[0:1]
 #group_module.def_subloop( instance_paras )
 
-traj_scf.def_pwscf2dpraw_merge( instance_paras, int_copy=100, str_outdir='../64D2O_25ps_puww_dpnpy' )
+traj_scf.def_pwscf2dpraw_merge( instance_paras, int_copy=10, str_outdir='../64D2O_25ps_puww_dpnpy_copy10' )
 
