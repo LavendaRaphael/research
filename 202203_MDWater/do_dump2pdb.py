@@ -1,11 +1,12 @@
 import model_devi
 import ase.io
+import numpy
 
-array_id = [10000]
-str_save = '10000.pdb'
+array_id = numpy.arange(0,1000000,100)
+str_save = 'traj.pdb'
 
 ase_atoms = model_devi.def_dump2ase(
     array_id = array_id,
-    type_map = ["O", "H"]):
+    type_map = ["O", "H"])
 ase.io.write(format="proteindatabank", filename=str_save, images=ase_atoms)
 
