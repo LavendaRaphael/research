@@ -3,23 +3,25 @@ import model_devi
 import numpy as np
 
 # setup
+
+tuple_elements = (8,8)
+
 list_array_id = []
-
+#'''
+list_array_id.append(np.arange( 000000, 400040,40))
+list_array_id.append(np.arange( 400000, 800040,40))
+list_array_id.append(np.arange( 800000,1200040,40))
+list_array_id.append(np.arange(1200000,1600040,40))
+list_array_id.append(np.arange(1600000,2000040,40))
 '''
-list_array_id.append(np.arange(000000,400100,100))
-list_array_id.append(np.arange(400000,800100,100))
-list_array_id.append(np.arange(800000,1200100,100))
-list_array_id.append(np.arange(1200000,1600100,100))
-list_array_id.append(np.arange(1600000,2000100,100))
-'''
-
 list_array_id.append(np.arange(000000, 200100,100))
 list_array_id.append(np.arange(200000, 400100,100))
 list_array_id.append(np.arange(400000, 600100,100))
 list_array_id.append(np.arange(600000, 800100,100))
 list_array_id.append(np.arange(800000,1000100,100))
+'''
 
-tuple_elements = (8,8)
+# def
 
 def gen_filename(
         tuple_elements,
@@ -28,7 +30,7 @@ def gen_filename(
     return f'rdf.{tuple_elements[0]}_{tuple_elements[1]}.{array_id[0]:07d}_{array_id[-1]:07d}.npy'
 
 # common
-float_rmax = 5.95
+float_rmax = 5.9
 int_nbins = 200
 
 # run
