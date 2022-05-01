@@ -18,6 +18,10 @@ export LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/lib6
 export LD_LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/lib64:$LD_LIBRARY_PATH"
 ```
 
+```sh
+export CUDA_VISIBLE_DEVICES=0
+```
+
 ### cuDNN
 
 ```sh

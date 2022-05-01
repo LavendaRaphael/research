@@ -4,7 +4,8 @@ import numpy as np
 
 # setup
 
-tuple_elements = (8,8)
+#tuple_elements = (8,8)
+tuple_elements = (8,1)
 
 list_array_id = []
 #'''
@@ -13,13 +14,6 @@ list_array_id.append(np.arange( 400000, 800040,40))
 list_array_id.append(np.arange( 800000,1200040,40))
 list_array_id.append(np.arange(1200000,1600040,40))
 list_array_id.append(np.arange(1600000,2000040,40))
-'''
-list_array_id.append(np.arange(000000, 200100,100))
-list_array_id.append(np.arange(200000, 400100,100))
-list_array_id.append(np.arange(400000, 600100,100))
-list_array_id.append(np.arange(600000, 800100,100))
-list_array_id.append(np.arange(800000,1000100,100))
-'''
 
 # def
 
