@@ -48,7 +48,6 @@ str_filesave = gen_filesave(
     array_id = array_id,
     )
 
-
 array_rdf = np.load(str_filerdf)
 ax.plot(
     array_rdf[0], 

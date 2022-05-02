@@ -10,8 +10,23 @@ str_homedir = os.environ['homedir']
 array_id = np.arange(1600000,2000040,40)
 
 list2d_dirdata = []
-list2d_dirdata.append( [ 'validation_0', 'Init 0' ] )
-list2d_dirdata.append( [ 'validation_49000', 'Init 49000' ] )
+'''
+list2d_dirdata.append( [ 'validation_49000_4pb/iter.000000/01.model_devi/task.000.000000', '49000' ] )
+list2d_dirdata.append( [ 'validation_0/iter.000000/01.model_devi/task.000.000000', '0' ] )
+str_filesaveinsert = 'init'
+#'''
+'''
+list2d_dirdata.append( [ 'validation_49000_4pb/iter.000000/01.model_devi/task.000.000000', 'taut 0.05' ] )
+list2d_dirdata.append( [ 'validation_49000_taut0.1/iter.000000/01.model_devi/task.000.000000', 'taut 0.1' ] )
+str_filesaveinsert = 'taut'
+#'''
+#'''
+list2d_dirdata.append( [ 'task.000.000000', '0' ] )
+list2d_dirdata.append( [ 'task.001.000000', '1' ] )
+list2d_dirdata.append( [ 'task.002.000000', '3' ] )
+list2d_dirdata.append( [ 'task.003.000000', '4' ] )
+str_filesaveinsert = 'model'
+#'''
 
 #'''
 tuple_elements = (8,8)
@@ -39,7 +54,7 @@ def gen_filesave(
         tuple_elements,
         array_id,
         ):
-    return f'rdf.{tuple_elements[0]}_{tuple_elements[1]}.{array_id[0]:07d}_{array_id[-1]:07d}.pdf'
+    return f'rdf.compare_{str_filesaveinsert}.{tuple_elements[0]}_{tuple_elements[1]}.{array_id[0]:07d}_{array_id[-1]:07d}.pdf'
 
 fig, ax = plt.subplots()
 
@@ -51,6 +66,14 @@ str_filesave = gen_filesave(
     tuple_elements = tuple_elements,
     array_id = array_id,
     )
+
+for list_dirdata in list2d_dirdata:
+    array_rdf = np.load( os.path.join(list_dirdata[0], str_filerdf) )
+    ax.plot(
+        array_rdf[0], 
+        array_rdf[1], 
+        label = list_dirdata[1],
+        )
 
 array_ref = np.genfromtxt(
     fname = str_fileref,
@@ -64,14 +87,6 @@ ax.plot(
     linestyle = '',
     markersize=2
     )
-
-for list_dirdata in list2d_dirdata:
-    array_rdf = np.load( list_dirdata[0] + str_filerdf )
-    ax.plot(
-        array_rdf[0], 
-        array_rdf[1], 
-        label = list_dirdata[1],
-        )
 
 ax.legend()
 ax.set_xlabel('r (Å)')
