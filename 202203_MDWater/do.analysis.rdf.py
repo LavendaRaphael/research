@@ -4,8 +4,8 @@ import numpy as np
 
 # setup
 
-#tuple_elements = (8,8)
-tuple_elements = (8,1)
+tuple_elements = (8,8)
+#tuple_elements = (8,1)
 
 list_array_id = []
 #'''
