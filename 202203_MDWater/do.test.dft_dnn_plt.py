@@ -1,5 +1,10 @@
 import numpy
 from matplotlib import pyplot as plt
+import matplotlib
+
+matplotlib.rcParams['font.size']=15
+matplotlib.rcParams['font.family']='sans-serif'
+matplotlib.rcParams['font.sans-serif']=["Arial"]
 
 # setup
 int_natom = 192
@@ -19,14 +24,15 @@ array_f_norm -= numpy.average( array_f_norm[0] )
 def def_plt(
         array_data,
         str_efv,
+        float_rmse,
         ):
     
     if (str_efv=='e'):
-        str_label = "Energy"
+        str_label = f"Energy RMSE = {float_rmse:.2f} meV/atom"
         str_xlabel = 'DFT energy (meV/atom)'
         str_ylabel = 'DNN energy (meV/atom)'
     elif (str_efv=='f'):
-        str_label = "Force"
+        str_label = f"Force RMSE = {float_rmse:.2f} meV/Å"
         str_xlabel = 'DFT force (eV/Å)'
         str_ylabel = 'DNN force (eV/Å)' 
     else:
@@ -44,7 +50,7 @@ def def_plt(
         )
 
     ax.axline([0, 0], [1, 1], color='black', linestyle='--')
- 
+
     ax.legend()
     ax.set_xlabel(str_xlabel)
     ax.set_ylabel(str_ylabel)
@@ -55,8 +61,10 @@ def def_plt(
 def_plt(
     array_data = array_e,
     str_efv = 'e',
+    float_rmse = 0.6552798,
     )
 def_plt(
     array_data = array_f_norm,
     str_efv = 'f',
+    float_rmse = 64.24218,
     )
