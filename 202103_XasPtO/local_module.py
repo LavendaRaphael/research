@@ -9,20 +9,18 @@ import math
 def def_list1d_key():
     list1d_key=[]
    
-    #---------------------------------- 
-    #list1d_key.append('exp.20210926.pto111')
-    #list1d_key.append('exp.20210924.pto110_a20')
-    #list1d_key.append('exp.20210924.pto110_a41')
     #----------------------------------
     #list1d_key.append('111.a2b2_O1_feffk')
     #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
-    
+    list1d_key.append('111.x4y4_O4_gw')
+    #list1d_key.append('111.x4y4_O4_new_gw')
+
     #----------------------------------
     #list1d_key.append('110.x1y1.a2b2_O2_a1b2')
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
-    list1d_key.append('110.x2y12_O22_gw')
+    #list1d_key.append('110.x2y12_O22_gw')
     #list1d_key.append('110.x2y1_O1_a1b3')
     #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
@@ -53,9 +51,11 @@ def def_class_paras():
 
     class_paras = xas_module.class_paras()
 
+    # scaling method
     #class_paras.str_scalingmethod = 'float_mainscaling'
     class_paras.str_scalingmethod = 'float_postscaling'
     
+    # generate xas from MYCARXAS
     #class_paras.log_tm2xas = False
     class_paras.log_tm2xas = True
     class_paras.str_broadmethod = 'gaussian'
@@ -94,25 +94,6 @@ def def_dict_structure():
     
     dict_structure = {}
     #===================================================================================
-    str_key='exp.20210926.pto111'
-    dict_structure[ str_key ] = def_pto_class(
-        marker = ['exp','111'],
-        str_datfile = '20210926.Pt111-XAS.CSV',
-        list1d_column = [0,2]
-        )
-    str_key='exp.20210924.pto110_a20'
-    dict_structure[ str_key ] = def_pto_class(
-        marker = ['exp','110'],
-        str_datfile = '20210924.Pt110-XAS.CSV',
-        list1d_column = [6,8]
-        )
-    str_key='exp.20210924.pto110_a41'
-    dict_structure[ str_key ] = def_pto_class(
-        marker = ['exp','110'],
-        str_datfile = '20210924.Pt110-XAS.CSV',
-        list1d_column = [10,12]
-        )
-    #===================================================================================
     str_key='111.a2b2_O1_feff'
     dict_structure[ str_key ] = def_pto_class( 
         str_workdir = 'Pt.111.a2b2_O1_vac/feff/',
@@ -136,6 +117,12 @@ def def_dict_structure():
     str_key='111.x4y4_O4_hch'
     dict_structure[ str_key ] = def_pto_class( 
         str_workdir = 'Pt.111.x4y4_O4_vac/vasp_sch.hch/'
+        )
+    #------------------------------------------
+    str_key='111.x4y4_O4_gw'
+    dict_structure[ str_key ] = def_pto_class( 
+        marker = ['theory','vasp','111'],
+        str_workdir = 'Pt.111.x4y4_O4_vac/vasp_sch.gw/'
         )
     #===================================================================================
     str_key='110.x1y1.a2b2_O2_a1b2'
