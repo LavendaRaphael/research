@@ -9,14 +9,14 @@ def def_list1d_key():
     #list1d_key.append('111.a2b2_O1_feffk')
     #list1d_key.append('111.x4y4_O4')
     #list1d_key.append('111.x4y4_O4_hch')
-    list1d_key.append('111.x4y4_O4_gw')
+    #list1d_key.append('111.x4y4_O4_gw')
     #list1d_key.append('111.x4y4_O4_new_gw')
 
     #----------------------------------
     #list1d_key.append('110.x1y1.a2b2_O2_a1b2')
     #list1d_key.append('110.x2y12_O22')
     #list1d_key.append('110.x2y12_O22_aimd')
-    #list1d_key.append('110.x2y12_O22_gw')
+    list1d_key.append('110.x2y12_O22_gw')
     #list1d_key.append('110.x2y1_O1_a1b3')
     #list1d_key.append('110.x2y1_O2_feffk')
     #list1d_key.append('110.x2y1_O2_a1b3')
@@ -74,7 +74,13 @@ def def_dict_structure():
         'str_code': 'vasp',
         'str_surface': '111',
         'str_workdir': 'Pt.111.x4y4_O4_vac/vasp_sch.gw/',
-        'dict_atom': {1: 1.0},
+        }
+    #------------------------------------------
+    str_key='111.x4y4_O4_new_gw'
+    dict_structure[ str_key ] = {
+        'str_code': 'vasp',
+        'str_surface': '111',
+        'str_workdir': 'Pt.111.x4y4_O4_vac/vasp_sch_new.gw/',
         }
     #===================================================================================
     str_key='110.x1y1.a2b2_O2_a1b2'
@@ -90,7 +96,9 @@ def def_dict_structure():
     dict_atom[7] = 4.0
     dict_atom[9] = 4.0
     dict_atom[11] = 2.0
-    dict_structure[ str_key ] = { 
+    dict_structure[ str_key ] = {
+        'str_surface': '110',
+        'str_code': 'vasp', 
         'str_workdir': 'Pt.'+str_key+'_vac/vasp_sch/',
         'dict_atom': dict_atom,
         }

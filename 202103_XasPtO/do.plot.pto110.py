@@ -1,24 +1,20 @@
-
 #!/bin/env python
-
-import xas_module
 import os
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.colors as mcolors
-import local_module
+from XasPtO import local_dict_structure
+from XasPtO import local_class_structure
+from tf_xas_kit import io
 
-str_exp=os.environ['goto_pto_exp']
-str_work_110=os.environ['goto_pto_work_110']
-str_work_111=os.environ['goto_pto_work_111']
+str_exp = os.environ['dir_pto_exp']
+str_work_110 = os.path.join( os.environ['dir_pto_shtu'], 'Pt.110_O_vac')
+dict_structure = local_dict_structure.def_dict_structure()
 
-dict_structure = local_module.def_dict_structure()
-
-matplotlib.rcParams['font.size']=25
+matplotlib.rcParams['font.size']=20
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
-list1d_color = list(mcolors.TABLEAU_COLORS)
 
 #---------------------------------------------------------------------------------------------
 def def_plt_exp(
@@ -27,8 +23,8 @@ def def_plt_exp(
         str_label,
         list1d_column = [0,1]
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
     return obj_ax
 
@@ -38,8 +34,8 @@ def def_plt_theory(
         str_label,
         list1d_column,
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
     return obj_ax
 
@@ -61,9 +57,7 @@ def def_plt_save(
 def def_pic_pto110(
         str_workdir,
         str_savefig,
-        list2d_data, #[
-        #    [ str_datfile, str_label ],
-        #]
+        list2d_data, 
     ):
 
     os.chdir( str_workdir )
@@ -72,14 +66,14 @@ def def_pic_pto110(
     fig, obj_ax = plt.subplots()
     def_plt_exp(
         obj_ax = obj_ax,
-        str_datfile = str_exp+'20210924.pto110_a20_postscaling.csv',
+        str_datfile = os.path.join( str_exp, '20210924.pto110_a20_postscaling.csv'),
         str_label=r'Exp. 20$\degree$',
         list1d_column = [ 1, 2]
     )
     for list1d_data in list2d_data:
         def_plt_theory(
             obj_ax = obj_ax,
-            str_datfile = list1d_data[0]+'xas.alpha.csv',
+            str_datfile = os.path.join( list1d_data[0], 'xas.alpha.csv'),
             list1d_column = [ 0, 1 ],
             str_label = r'Theory 20$\degree$ '+ list1d_data[1]
         )
@@ -100,14 +94,14 @@ def def_pic_pto110(
         fig, obj_ax = plt.subplots()
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+'20210924.pto110_xyzfit.csv',
+            str_datfile = os.path.join(str_exp,'20210924.pto110_xyzfit.csv'),
             str_label=r'Exp. fit '+list1d_loop[3],
             list1d_column = list1d_loop[1]
         )
         for list1d_data in list2d_data:
             def_plt_theory(
                 obj_ax = obj_ax,
-                str_datfile = list1d_data[0]+'xas.alpha.csv',
+                str_datfile = os.path.join(list1d_data[0],'xas.alpha.csv'),
                 list1d_column = list1d_loop[2],
                 str_label = r'Theory '+list1d_loop[3]+' '+ list1d_data[1]
             )
@@ -121,6 +115,15 @@ def def_pic_pto110(
 
     plt.show()
 
+if ('t'):
+    def_pic_pto110(
+        str_workdir = os.path.join( str_work_110, 'Pt.110.x2y12_O22_vac'),
+        str_savefig = 'vasp_sch.gw',
+        list2d_data = [
+            ['vasp_sch/', 'Before'],
+            ['vasp_sch_new.gw/', 'Metal Pot-GW'],
+        ],
+    )
 if (''):
     def_pic_pto110(
         str_workdir = str_work_110,

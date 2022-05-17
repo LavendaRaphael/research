@@ -76,6 +76,8 @@ def def_class_structure_basic(
     
     instance_structure.dict_input = dict_input
     
+    if ('dict_atom' not in dict_input):
+        dict_input['dict_atom'] = {1: 1.0}
     instance_structure.dict_atom = dict_input['dict_atom']
 
     if ( dict_input['str_surface'] == '110' ):

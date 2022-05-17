@@ -1,23 +1,21 @@
 #!/bin/env python
-
-import xas_module
 import os
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.colors as mcolors
-import local_module
+from XasPtO import local_dict_structure
+from XasPtO import local_class_structure
+from tf_xas_kit import io
 
-str_exp=os.environ['goto_pto_exp']
-str_work_110=os.environ['goto_pto_work_110']
-str_work_111=os.environ['goto_pto_work_111']
-
-dict_structure = local_module.def_dict_structure()
+str_exp = os.environ['dir_pto_exp']
+str_work_111 = os.path.join( os.environ['dir_pto_shtu'], 'Pt.111_O_vac')
+str_work_110 = os.path.join( os.environ['dir_pto_shtu'], 'Pt.110_O_vac')
+dict_structure = local_dict_structure.def_dict_structure()
 
 matplotlib.rcParams['font.size']=25
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
-list1d_color = list(mcolors.TABLEAU_COLORS)
 
 #---------------------------------------------------------------------------------------------
 def def_plt_exp(
@@ -26,8 +24,8 @@ def def_plt_exp(
         str_label,
         list1d_column = [0,1]
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
     return obj_ax
 
@@ -37,8 +35,8 @@ def def_plt_theory(
         str_label,
         list1d_column,
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
     return obj_ax
 
@@ -60,9 +58,7 @@ def def_plt_save(
 def def_pic_converge(
         str_workdir,
         str_savefig,
-        list2d_data, #[
-        #    [ str_datfile, str_label, list2d_column ],
-        #]
+        list2d_data, 
         tuple_xlim=(None,None),
         tuple_ylim=(None,None)
     ):
@@ -88,6 +84,17 @@ def def_pic_converge(
     )
     plt.show()
 
+if ('t'):
+    def_pic_converge(
+        str_workdir = os.path.join( str_work_110,'Pt.110.x2y12_O22_vac/vasp_sch' ),
+        str_savefig = 'test',
+        list2d_data = [
+            [ 'xas.alpha.csv', '1',[0,1]],
+            [ 'xastest.alpha.csv', '1',[0,1]],
+        ],
+        tuple_xlim=(527, 540),
+        tuple_ylim=(None, None)
+    )
 if (''):
     def_pic_converge(
         str_workdir = str_work_110,

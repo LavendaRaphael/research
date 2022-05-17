@@ -1,24 +1,21 @@
-
 #!/bin/env python
 
-import xas_module
 import os
 import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.colors as mcolors
-import local_module
+from XasPtO import local_dict_structure
+from XasPtO import local_class_structure
+from tf_xas_kit import io
 
-str_exp=os.environ['goto_pto_exp']
-str_work_110=os.environ['goto_pto_work_110']
-str_work_111=os.environ['goto_pto_work_111']
+str_exp = os.environ['dir_pto_exp']
+str_work_111 = os.path.join( os.environ['dir_pto_shtu'], 'Pt.111_O_vac')
+dict_structure = local_dict_structure.def_dict_structure()
 
-dict_structure = local_module.def_dict_structure()
-
-matplotlib.rcParams['font.size']=25
+matplotlib.rcParams['font.size']=20
 matplotlib.rcParams['font.family']='sans-serif'
 matplotlib.rcParams['font.sans-serif']=["Arial"]
 matplotlib.rcParams["figure.figsize"] = (10,8)
-list1d_color = list(mcolors.TABLEAU_COLORS)
 
 #---------------------------------------------------------------------------------------------
 def def_plt_exp(
@@ -27,8 +24,8 @@ def def_plt_exp(
         str_label,
         list1d_column = [0,1]
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, 'o', mfc='none', label=str_label )
     return obj_ax
 
@@ -38,8 +35,8 @@ def def_plt_theory(
         str_label,
         list1d_column,
         ):
-    _, array2d_xdata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
-    _, array2d_ydata = xas_module.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
+    _, array2d_xdata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[0] ] )
+    _, array2d_ydata = io.def_extract( str_datfile=str_datfile, list1d_column=[ list1d_column[1] ] )
     obj_ax.plot( array2d_xdata, array2d_ydata, label=str_label )
     return obj_ax
 
@@ -61,9 +58,7 @@ def def_plt_save(
 def def_pic_pto111(
         str_workdir,
         str_savefig,
-        list2d_data, #[
-        #    [ str_datfile, str_label ],
-        #]
+        list2d_data,
         tuple_ylim = (None,4)
     ):
 
@@ -81,7 +76,7 @@ def def_pic_pto111(
 
         def_plt_exp(
             obj_ax = obj_ax,
-            str_datfile = str_exp+'20210926.pto111_a20_postscaling.csv',
+            str_datfile = os.path.join( str_exp, '20210926.pto111_a20_postscaling.csv'),
             str_label=r'Exp. 20$\degree$',
             list1d_column = [1,2]
             )
@@ -102,6 +97,17 @@ def def_pic_pto111(
         )
     plt.show()
 
+if ('t'):
+    def_pic_pto111( 
+        str_workdir = os.path.join( str_work_111, 'Pt.111.x4y4_O4_vac'),
+        str_savefig = 'vasp_sch.gw', 
+        list2d_data = [
+            ['vasp_sch/xas.alpha.csv', 'Before'],
+            ['vasp_sch.gw/xas.alpha.csv', 'Pot-GW'],
+            ['vasp_sch_new.gw/xas.alpha.csv', 'Metal Pot-GW'],
+        ],
+        tuple_ylim = (None, 5)
+    )
 if (''):
     def_pic_pto111(
         str_workdir = dict_structure['111.x4y4_O4'].str_chdir,
