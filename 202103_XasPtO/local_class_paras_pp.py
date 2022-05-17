@@ -1,8 +1,9 @@
+import math
 from tf_xas_kit import class_paras
 
 def def_instance_paras_code2xas():
 
-    instance_paras = class_paras()
+    instance_paras = class_paras.class_paras()
 
     # generate xas from MYCARXAS
     #instance_paras.log_tm2xas = False
@@ -22,7 +23,7 @@ def def_instance_paras_code2xas():
 
 def def_instance_paras_alphabeta():
    
-    instance_paras = class_paras()
+    instance_paras = class_paras.class_paras()
      
     str_temp = ''
     instance_paras.str_avefile = 'xas'+str_temp+'.ave.csv'
@@ -40,3 +41,7 @@ def def_instance_paras_alphabeta():
     list1d_alignangle = [ 20, 90, 'trigonal']
     instance_paras.list1d_alignangle = list1d_alignangle
 
+    #instance_paras.str_scalingmethod = 'float_mainscaling'
+    instance_paras.str_scalingmethod = 'float_postscaling'
+
+    return instance_paras
