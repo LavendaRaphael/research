@@ -30,10 +30,10 @@ diagram.space=5
 diagram.plot()
 print(diagram.space, diagram.dimension)
 float_step = diagram.space + diagram.dimension
-diagram.ax.text(float_step*1.5, list_t[0], '4.96 s',  bbox=dict(boxstyle='rarrow',facecolor='white'))
-diagram.ax.text(float_step*2.5, list_t[1], '3.77 μs', bbox=dict(boxstyle='larrow',facecolor='white'))
-diagram.ax.text(float_step*3.5, list_t[2], '0.16 ns', bbox=dict(boxstyle='rarrow',facecolor='white'))
-diagram.ax.text(float_step*4.5, list_t[3], '0.83 μs', bbox=dict(boxstyle='larrow',facecolor='white'))
+diagram.ax.text(float_step*1.5, list_t[0], '7.94 s',  bbox=dict(boxstyle='rarrow',facecolor='white'))
+diagram.ax.text(float_step*2.5, list_t[1], '6.03 μs', bbox=dict(boxstyle='larrow',facecolor='white'))
+diagram.ax.text(float_step*3.5, list_t[2], '0.26 ns', bbox=dict(boxstyle='rarrow',facecolor='white'))
+diagram.ax.text(float_step*4.5, list_t[3], '1.33 μs', bbox=dict(boxstyle='larrow',facecolor='white'))
 
 diagram.ax.set_ylabel('Energy (kcal/mol)')
 diagram.fig.set_size_inches(15, 10)
