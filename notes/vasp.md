@@ -1,9 +1,48 @@
 
 # INCAR
 
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [INCAR](#incar)
+  - [usual](#usual)
+  - [gas](#gas)
+  - [parchg](#parchg)
+  - [vdw](#vdw)
+  - [AIMD](#aimd)
+  - [spin](#spin)
+  - [dipole](#dipole)
+- [POSCAR](#poscar)
+- [AIMD](#aimd-1)
+  - [初始速度](#初始速度)
+  - [SMASS](#smass)
+- [POTCAR](#potcar)
+- [KPOINTS](#kpoints)
+  - [ka](#ka)
+  - [KSPACING/(2$\pi$)](#kspacing2pi)
+  - [KSPACING](#kspacing)
+- [STOPCAR](#stopcar)
+- [compile](#compile)
+  - [mpi+omp混编](#mpiomp混编)
+- [vtst](#vtst)
+  - [vasp6.1兼容性](#vasp61兼容性)
+  - [安装](#安装)
+- [ERROR](#error)
+  - [wavefunction orthogonal band](#wavefunction-orthogonal-band)
+  - [PMPI_Allreduce: Invalid communicator](#pmpi_allreduce-invalid-communicator)
+  - [EDDDAV: Call to ZHEGV failed](#edddav-call-to-zhegv-failed)
+  - [segmentation fault](#segmentation-fault)
+  - [EDDRMM: call to ZHEGV failed](#eddrmm-call-to-zhegv-failed)
+- [杂项](#杂项)
+  - [CRLF&LF](#crlflf)
+
+<!-- /code_chunk_output -->
+
 ## usual
 
-```vasp
+```sh
 #-------------------------[common]
 # ISTART = 0
   NCORE = 16
@@ -54,9 +93,75 @@
 # KGAMMA = .TRUE.   # default
 ```
 
+## gas
+
+```sh
+#-------------------------[common]
+# ISTART = 0
+  NPAR = 2
+# PREC = Normal # default
+  PREC = Accurate
+# LREAL = .FALSE. # default
+  ENCUT = 1500
+
+#-------------------------[electron]
+# ISMEAR = 1        # default, for metal, Methfessel-Paxton smearing order N
+# SIGMA = 0.2       # default
+  ISMEAR = 0        # Gaussian smearing
+  SIGMA = 0.01
+
+# ALGO = Normal     # default, DAV
+# ALGO = Fast       # DAV + RMM
+# ALGO = VeryFast   # RMM
+# ALGO = Damped
+  ALGO = All        # CG
+
+# NELM = 60         # default
+  NELM = 500
+# EDIFF = 1.0E-4    # default
+  EDIFF = 1.0E-6
+
+#-------------------------[spin]
+# ISPIN = 1         # default
+  ISPIN = 2
+# MAGMOM = NIONS * 1.0 # default
+  MAGMOM = 1000*0
+# LORBIT = None     # default
+  LORBIT = 11       # mag per atom output
+
+#-------------------------[SCAN]
+  METAGGA = SCAN
+  LASPH =.TRUE.
+
+#-------------------------[ionic]
+# NSW = 0           # default
+  NSW = 500
+# IBRION = 0        # default, MD
+# IBRION = 1        # quasi-Newton
+  IBRION = 2        # CG
+
+# EDIFFG = EDIFF×10 # default
+  EDIFFG = -0.01
+# ISIF = 2          # default, atom position
+
+#-------------------------[file]
+# LWAVE = .TRUE.    # default
+  LWAVE = .FALSE.   # WAVECAR not write
+# LCHARG = .TRUE.   # default
+  LCHARG = .FALSE.  # CHAGCAR not write
+```
+
+POSCAR
+
+```poscar
+20 0 0
+0 21 0
+0 0 22
+```
+
 ## parchg
 
-```vasp
+```sh
   LPARD = .TRUE.
   NGXF = 240
   NGYF = 1000
@@ -76,7 +181,7 @@
 
 ## vdw
 
-```vasp
+```sh
 #-------------------------[DFT-D]
 # IVDW=0            # default, no correction
 # IVDW=11           # zero damping DFT-D3 method of Grimme (available as of VASP.5.3.4)
@@ -93,7 +198,7 @@
 
 ## AIMD
 
-```vasp
+```sh
 # IBRION = 0        # default, MD
 # MDALGO = 0        # default, standard
   MDALGO = 2        # Nose-Hoover
@@ -108,7 +213,7 @@
 
 ## spin
 
-```vasp
+```sh
 # ISPIN = 1         # default
 # ISPIN = 2
 # MAGMOM = NIONS * 1.0 # default
@@ -119,7 +224,7 @@
 
 ## dipole
 
-```vasp
+```sh
 # LDIPOLE = .TRUE.  # slibe dipole correction
 # IDIPOLE = 3       # z direction
 ```
@@ -167,7 +272,7 @@
 
 ## KSPACING
 
-```vasp
+```sh
 KSPACING=0.25 # ang^-1
 ```
 
@@ -183,7 +288,7 @@ KSPACING = \frac{2\pi}{ak}
 
 # STOPCAR
 
-```vasp
+```sh
 LSTOP = .TRUE.
 ```
 
@@ -213,7 +318,7 @@ LSTOP = .TRUE.
 Information: wavefunction orthogonal band  107  0.8718
 ```
 
-```vasp
+```sh
  IWAVPR = 11
 ```
 
@@ -227,7 +332,7 @@ PMPI_Allreduce(454): MPI_Allreduce(sbuf=0x7fffe380a628, rbuf=0xc56a238, count=1,
 PMPI_Allreduce(375): Invalid communicator
 ```
 
-```vasp
+```sh
   AMIX = 0.01
   ALGO = All 
   MAGMOM = 1000*0

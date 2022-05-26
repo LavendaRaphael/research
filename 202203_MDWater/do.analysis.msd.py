@@ -7,11 +7,13 @@ npint_id = np.array([400000, 2000000])
 float_dt = 0.0005
 
 mda_universe = mda.Universe('traj.dump', format="LAMMPSDUMP", dt=float_dt)
+mda_universe.select_atoms("type 1").types = 'O'
+mda_universe.select_atoms("type 2").types = 'H'
 print(mda_universe.trajectory)
 
 mda_msd = msd.EinsteinMSD(
     u = mda_universe,
-    select = 'type 1'
+    select = 'type O'
     )
 npint_index = np.array(npint_id/int_step, dtype=int)
 print(npint_index)

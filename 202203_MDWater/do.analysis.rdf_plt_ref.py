@@ -7,10 +7,10 @@ str_homedir = os.environ['homedir']
 
 # setup
 
-array_id = np.arange(1600000,2000040,40)
+array_id = np.array([1600000,2000040])
 
 #'''
-tuple_elements = (8,8)
+tuple_elements = ('O','O')
 str_fileref = os.path.join(str_homedir,'research/202112_MDMisc/record/ref/2022_naturecom_xifanwu/sf3_a.csv')
 str_ylabel = r'$g_{\mathrm{OO}}$ (r)'
 tuple_xlim = (2,6)

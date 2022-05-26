@@ -1,90 +1,63 @@
-from ase.geometry.analysis import Analysis
-import model_devi
+import MDAnalysis as mda
+from MDAnalysis.analysis.rdf import InterRDF
 import numpy as np
 
 # setup
+int_nbins = 200
+tuple_type = ('O','O')
+#tuple_type = ('O','H')
+int_step = 40
+list_id = []
+list_id.append( np.array([      0,  400000]))
+list_id.append( np.array([ 400000,  800000]))
+list_id.append( np.array([ 800000, 1200000]))
+list_id.append( np.array([1200000, 1600000]))
+list_id.append( np.array([1600000, 2000000]))
 
-tuple_elements = (8,8)
-#tuple_elements = (8,1)
-
-list_array_id = []
-#'''
-list_array_id.append(np.arange( 000000, 400040,40))
-list_array_id.append(np.arange( 400000, 800040,40))
-list_array_id.append(np.arange( 800000,1200040,40))
-list_array_id.append(np.arange(1200000,1600040,40))
-list_array_id.append(np.arange(1600000,2000040,40))
-
-# def
-
-def gen_filename(
-        tuple_elements,
-        array_id,
-        ):
-    return f'rdf.{tuple_elements[0]}_{tuple_elements[1]}.{array_id[0]:07d}_{array_id[-1]:07d}.npy'
+float_dt = 0.0005
 
 # common
-float_rmax = 5.9
-int_nbins = 200
+mda_universe = mda.Universe('traj.dump', format="LAMMPSDUMP", dt=float_dt)
+mda_universe.select_atoms("type 1").types = 'O'
+mda_universe.select_atoms("type 2").types = 'H'
+print(mda_universe.trajectory)
+mda_atomgroup_0 = mda_universe.select_atoms(f"type {tuple_type[0]}")
+print(mda_atomgroup_0)
+mda_atomgroup_1 = mda_universe.select_atoms(f"type {tuple_type[1]}")
+print(mda_atomgroup_1)
 
-# run
-def rdf(
-        array_id,
-        tuple_elements,
-        str_filerdf,
-        float_rmax,
-        int_nbins,
+mda_rdf = InterRDF( 
+    mda_atomgroup_0, 
+    mda_atomgroup_1,
+    nbins = int_nbins,
+    range=(0.5, 6.0),
+    )
+
+def gen_filenpy(
+        tuple_type,
+        npint_id,
         ):
-    print(str_filerdf)
-    ase_atoms = model_devi.def_dump2ase(
-        array_id = array_id,
-        type_map = ["O", "H"])
+    return f'rdf.{tuple_type[0]}_{tuple_type[1]}.{npint_id[0]:07d}_{npint_id[-1]:07d}.npy'
+
+for npint_id in list_id:
     
-    int_nelement_1 = np.count_nonzero(ase_atoms[0].numbers == tuple_elements[1])
-    int_natoms = len(ase_atoms[0])
-    
-    ase_analysis = Analysis(ase_atoms)
-    list_rdf = ase_analysis.get_rdf(
-        rmax = float_rmax, 
-        nbins = int_nbins, 
-        elements= tuple_elements, 
+    npint_index = np.array(npint_id/int_step, dtype=int)
+    mda_rdf.run(
+        start = npint_index[0],
+        stop = npint_index[1],
+        verbose = True,
         )
-    
-    array_rdf = list_rdf[0]
-    array_rdf = 0
-    for array_tmp in list_rdf:
-        array_rdf += array_tmp
-    int_frames = len(list_rdf)
-    array_rdf /= int_frames / int_natoms * int_nelement_1
-    
-    array_r = ase_analysis.get_rdf(
-        rmax = float_rmax, 
-        nbins = int_nbins, 
-        imageIdx=0, 
-        elements= tuple_elements,
-        return_dists=True,
-        )[0][1]
-    
     array_final = np.empty( shape=(2,int_nbins) )
-    array_final[0] = array_r
-    array_final[1] = array_rdf
-    
-    print(array_final)
+    array_final[0] = mda_rdf.results.bins
+    array_final[1] = mda_rdf.results.rdf
+
+    str_filenpy = gen_filenpy(
+        tuple_type = tuple_type,
+        npint_id = npint_id,
+        )
     
     np.save(
-        file = str_filerdf,
+        file = str_filenpy,
         arr = array_final,
         )
-
-for array_id in list_array_id:
-    str_filerdf = gen_filename( 
-        tuple_elements = tuple_elements, 
-        array_id = array_id,
-        )
-    rdf(
-        array_id = array_id,
-        tuple_elements = tuple_elements,
-        str_filerdf = str_filerdf,
-        float_rmax = float_rmax,
-        int_nbins = int_nbins,
-        )
+    

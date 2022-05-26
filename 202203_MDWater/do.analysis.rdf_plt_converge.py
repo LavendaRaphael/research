@@ -5,23 +5,23 @@ import os
 # setup
 
 #'''
-tuple_elements = (8,8)
+tuple_elements = ('O','O')
 str_ylabel = r'$g_{\mathrm{OO}}$ (r)'
 tuple_xlim = (2,6)
 tuple_ylim = (0,3)
 '''
-tuple_elements = (8,1)
+tuple_elements = ('O','H')
 str_ylabel = r'$g_{\mathrm{OH}}$ (r)'
 tuple_xlim = (0.5,4.5)
 tuple_ylim = (0,2)
 #'''
 
 list_array_id = []
-list_array_id.append(np.arange( 000000, 400040,40))
-list_array_id.append(np.arange( 400000, 800040,40))
-list_array_id.append(np.arange( 800000,1200040,40))
-list_array_id.append(np.arange(1200000,1600040,40))
-list_array_id.append(np.arange(1600000,2000040,40))
+list_array_id.append(np.array([       0, 400000]))
+list_array_id.append(np.array([  400000, 800000]))
+list_array_id.append(np.array([  800000,1200000]))
+list_array_id.append(np.array([ 1200000,1600000]))
+list_array_id.append(np.array([ 1600000,2000000]))
 
 # common
 str_homedir = os.environ['homedir']

@@ -7,9 +7,15 @@ str_homedir = os.environ['homedir']
 
 # setup
 
-array_id = np.arange(1600000,2000040,40)
+array_id = np.array([1600000,2000000])
 
+# data
 list2d_dirdata = []
+#'''
+list2d_dirdata.append( [ '../../validation_test/struc49000_4md/iter.000000/01.model_devi/task.000.000000', 'Steps 1e6' ] )
+list2d_dirdata.append( [ '', 'Steps 8e6' ] )
+str_filesaveinsert = 'steps'
+#'''
 '''
 list2d_dirdata.append( [ 'validation_49000_4pb/iter.000000/01.model_devi/task.000.000000', '49000' ] )
 list2d_dirdata.append( [ 'validation_0/iter.000000/01.model_devi/task.000.000000', '0' ] )
@@ -20,7 +26,7 @@ list2d_dirdata.append( [ 'validation_49000_4pb/iter.000000/01.model_devi/task.00
 list2d_dirdata.append( [ 'validation_49000_taut0.1/iter.000000/01.model_devi/task.000.000000', 'taut 0.1' ] )
 str_filesaveinsert = 'taut'
 #'''
-#'''
+'''
 list2d_dirdata.append( [ 'task.000.000000', '0' ] )
 list2d_dirdata.append( [ 'task.001.000000', '1' ] )
 list2d_dirdata.append( [ 'task.002.000000', '3' ] )
@@ -28,15 +34,17 @@ list2d_dirdata.append( [ 'task.003.000000', '4' ] )
 str_filesaveinsert = 'model'
 #'''
 
-#'''
-tuple_elements = (8,8)
+# ref
+
+'''
+tuple_elements = ('O','O')
 str_fileref = os.path.join(str_homedir,'research/202112_MDMisc/record/ref/2022_naturecom_xifanwu/sf3_a.csv')
 str_ylabel = r'$g_{\mathrm{OO}}$ (r)'
 tuple_xlim = (2,6)
 tuple_ylim = (0,3)
 
 '''
-tuple_elements = (8,1)
+tuple_elements = ('O','H')
 str_fileref = os.path.join(str_homedir,'research/202112_MDMisc/record/ref/2022_naturecom_xifanwu/sf3_b.csv')
 str_ylabel = r'$g_{\mathrm{OH}}$ (r)'
 tuple_xlim = (0.5,4.5)
