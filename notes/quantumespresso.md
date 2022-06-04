@@ -108,7 +108,7 @@ ref: lammps compile method
 
 ```sh
 mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DCMAKE_INSTALL_PREFIX=$software ..
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DCMAKE_INSTALL_PREFIX=$homedir ..
 make
 ```
 
@@ -169,7 +169,7 @@ make links
 #---------------------------------------------libxc
 
 mkdir build; cd build
-cmake -DCMAKE_INSTALL_PREFIX=$software -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DENABLE_FORTRAN=ON  ..
+cmake -DCMAKE_INSTALL_PREFIX=$homedir -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DENABLE_FORTRAN=ON  ..
 make
 make test
 make install
@@ -184,7 +184,7 @@ export MPIF90=mpiifort
 export F90=ifort
 export FC=ifort
 
-./configure --prefix=$software
+./configure --prefix=$homedir
 make 
 make install
 ```
