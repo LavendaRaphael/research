@@ -12,7 +12,7 @@
     - [cmake](#cmake)
     - [make](#make)
     - [老版本](#老版本)
-  - [libxc](#libxc)
+  - [Libxc](#libxc)
     - [cmake](#cmake-1)
     - [make](#make-1)
     - [qe](#qe)
@@ -161,13 +161,11 @@ make links
 <http://bbs.keinsci.com/thread-1324-1-1.html>  
 <http://muchong.com/html/201409/7951501.html>
 
-## libxc
+## Libxc
 
 ### cmake
 
 ```sh
-#---------------------------------------------libxc
-
 mkdir build; cd build
 cmake -DCMAKE_INSTALL_PREFIX=$homedir -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DENABLE_FORTRAN=ON  ..
 make
@@ -197,7 +195,7 @@ cmake
 
 ```sh
 mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON -DCMAKE_INSTALL_PREFIX=$software ..
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON -DCMAKE_INSTALL_PREFIX=$homedir ..
 make
 ```
 
@@ -209,7 +207,7 @@ export F90=ifx
 
 ./configure --with-libxc
 
-make pw
+make
 ```
 
 ## 收敛问题
