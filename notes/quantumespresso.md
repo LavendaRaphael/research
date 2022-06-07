@@ -11,7 +11,8 @@
   - [编译](#编译)
     - [cmake](#cmake)
     - [make](#make)
-    - [老版本](#老版本)
+    - [QE-dev.10.25-PI-copy-edison](#qe-dev1025-pi-copy-edison)
+    - [cohsex](#cohsex)
   - [Libxc](#libxc)
     - [cmake](#cmake-1)
     - [make](#make-1)
@@ -123,7 +124,7 @@ export F90=ifx
 make all
 ```
 
-### 老版本
+### QE-dev.10.25-PI-copy-edison
 
 ```sh
 # if [ ! -f "make.sys" ]; then
@@ -133,22 +134,41 @@ make all
 make clean
 make veryclean
 
-export CC=icc
-export F77=ifort
+export CC=icx
 export MPIF90=mpiifort
-export F90=ifort
-export FC=ifort
+
+./configure
+
+icx -c CPV/src/sockets.c
+if [ -f "sockets.o" ]; then
+  cp sockets.o CPV/src/
+  cp sockets.o PW/src/
+fi
+
+# make all
+make cp
+```
+
+### cohsex
+
+```sh
+# if [ ! -f "make.sys" ]; then
+#  ./configure
+# fi
+
+make clean
+make veryclean
+
+export CC=icx
+export F77=ifx
+export MPIF90=mpiifort
+export F90=ifx
+export FC=ifx
 
 ./configure \
 BLAS_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_intel_lp64.a $MKL_LIB_PATH/libmkl_sequential.a $MKL_LIB_PATH/libmkl_core.a -Wl,--end-group" \
 LAPACK_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_lapack95_lp64.a -Wl,--end-group" \
 FFT_LIBS="$FFT_LIB_PATH/libfftw3.a"
-
-#icc -c CPV/src/sockets.c
-#if [ -f "sockets.o" ]; then
-#  cp sockets.o CPV/src/
-#  cp sockets.o PW/src/
-#fi
 
 # make all
 make cp
