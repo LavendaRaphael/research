@@ -9,14 +9,11 @@
   - [xspectra](#xspectra)
   - [evc.dat](#evcdat)
   - [编译](#编译)
-    - [cmake](#cmake)
-    - [make](#make)
-    - [QE-dev.10.25-PI-copy-edison](#qe-dev1025-pi-copy-edison)
-    - [cohsex](#cohsex)
-  - [Libxc](#libxc)
-    - [cmake](#cmake-1)
-    - [make](#make-1)
+    - [libxc](#libxc)
     - [qe](#qe)
+  - [Qe-car_group_mirror](#qe-car_group_mirror)
+  - [QE-dev.10.25-PI-copy-edison](#qe-dev1025-pi-copy-edison)
+  - [Cohsex](#cohsex)
   - [收敛问题](#收敛问题)
 
 <!-- /code_chunk_output -->
@@ -103,87 +100,9 @@ ATOMIC_POSITIONS angstrom
 
 ## 编译
 
-### cmake
+### libxc
 
-ref: lammps compile method
-
-```sh
-mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DCMAKE_INSTALL_PREFIX=$homedir ..
-make
-```
-
-### make
-
-```sh
-export CC=icx
-export F90=ifx
-
-./configure
-
-make all
-```
-
-### QE-dev.10.25-PI-copy-edison
-
-```sh
-# if [ ! -f "make.sys" ]; then
-#  ./configure
-# fi
-
-make clean
-make veryclean
-
-export CC=icx
-export MPIF90=mpiifort
-
-./configure
-
-icx -c CPV/src/sockets.c
-if [ -f "sockets.o" ]; then
-  cp sockets.o CPV/src/
-  cp sockets.o PW/src/
-fi
-
-# make all
-make cp
-```
-
-### cohsex
-
-```sh
-# if [ ! -f "make.sys" ]; then
-#  ./configure
-# fi
-
-make clean
-make veryclean
-
-export CC=icx
-export F77=ifx
-export MPIF90=mpiifort
-export F90=ifx
-export FC=ifx
-
-./configure \
-BLAS_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_intel_lp64.a $MKL_LIB_PATH/libmkl_sequential.a $MKL_LIB_PATH/libmkl_core.a -Wl,--end-group" \
-LAPACK_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_lapack95_lp64.a -Wl,--end-group" \
-FFT_LIBS="$FFT_LIB_PATH/libfftw3.a"
-
-# make all
-make cp
-make pw
-make links
-```
-
-<http://blog.sciencenet.cn/blog-2909108-1152511.html>  
-<https://blog.csdn.net/odin_linux/article/details/81130075>  
-<http://bbs.keinsci.com/thread-1324-1-1.html>  
-<http://muchong.com/html/201409/7951501.html>
-
-## Libxc
-
-### cmake
+cmake
 
 ```sh
 mkdir build; cd build
@@ -193,7 +112,7 @@ make test
 make install
 ```
 
-### make
+make
 
 ```sh
 export CC=icc
@@ -229,6 +148,99 @@ export F90=ifx
 
 make
 ```
+
+## Qe-car_group_mirror
+
+```sh
+cd libxc_for_QE-master
+
+./autogen.sh
+
+export CC=icc
+export F77=ifort
+export MPIF90=mpiifort
+export F90=ifort
+export FC=ifort
+
+./configure --prefix=/path/to/libxc/
+make 
+make install
+```
+
+```sh
+cd qe-car_group_mirror
+
+make clean
+make veryclean
+
+export CC=icx
+export MPIF90=mpiifort
+
+./configure
+
+vim make.sys
+```
+
+- DFLAGS+=-D__LIBXC
+- LD_LIBS+=-L/path/to/libxc/lib/ -lxcf90 -lxc
+- IFLAGS+=-I/path/to/libxc/include/
+
+```sh
+make cp
+```
+
+## QE-dev.10.25-PI-copy-edison
+
+```sh
+make clean
+make veryclean
+
+export CC=icx
+export MPIF90=mpiifort
+
+./configure
+
+icx -c CPV/src/sockets.c
+if [ -f "sockets.o" ]; then
+  cp sockets.o CPV/src/
+  cp sockets.o PW/src/
+fi
+
+# make all
+make cp
+```
+
+## Cohsex
+
+```sh
+# if [ ! -f "make.sys" ]; then
+#  ./configure
+# fi
+
+make clean
+make veryclean
+
+export CC=icx
+export F77=ifx
+export MPIF90=mpiifort
+export F90=ifx
+export FC=ifx
+
+./configure \
+BLAS_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_intel_lp64.a $MKL_LIB_PATH/libmkl_sequential.a $MKL_LIB_PATH/libmkl_core.a -Wl,--end-group" \
+LAPACK_LIBS="-Wl,--start-group $MKL_LIB_PATH/libmkl_lapack95_lp64.a -Wl,--end-group" \
+FFT_LIBS="$FFT_LIB_PATH/libfftw3.a"
+
+# make all
+make cp
+make pw
+make links
+```
+
+<http://blog.sciencenet.cn/blog-2909108-1152511.html>  
+<https://blog.csdn.net/odin_linux/article/details/81130075>  
+<http://bbs.keinsci.com/thread-1324-1-1.html>  
+<http://muchong.com/html/201409/7951501.html>
 
 ## 收敛问题
 
