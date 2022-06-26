@@ -35,8 +35,6 @@
 &SYSTEM
     input_dft = 'scan'
     ecutwfc = 150
-    ! nosym  Default:  .FALSE.
-    nosym = .TRUE.
     ntyp  = 2
     nat   = 192
     ibrav = 0
@@ -44,7 +42,6 @@
 &ELECTRONS
     ! conv_thr Default: 1.D-6
     ! electron_maxstep Default: 100
-    electron_maxstep = 500
 /
  
 ATOMIC_SPECIES 
@@ -134,7 +131,7 @@ cmake
 
 ```sh
 mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON -DCMAKE_INSTALL_PREFIX=$homedir ..
+cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON ..
 make
 ```
 

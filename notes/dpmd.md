@@ -4,13 +4,13 @@
 
 <https://github.com/deepmodeling/deepmd-kit/blob/master/doc/install/install-from-source.md>
 
-### TensorFlow
+TensorFlow
 
 <https://www.tensorflow.org/install/gpu>
 
-### GPU Driver
+GPU Driver
 
-### CUDA
+CUDA
 
 ```sh
 export PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/bin:$PATH"
@@ -22,7 +22,7 @@ export LD_LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/l
 export CUDA_VISIBLE_DEVICES=0
 ```
 
-### cuDNN
+cuDNN
 
 ```sh
 export LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LIBRARY_PATH"
