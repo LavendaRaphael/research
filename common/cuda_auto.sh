@@ -1,5 +1,6 @@
-CUDA_VISIBLE_DEVICES="auto"
-if [ "${CUDA_VISIBLE_DEVICES}" = "auto" ]
+# https://gist.github.com/akshaychawla/c631971df91a0afdc7f8d64d01646d82
+
+if [ -z ${CUDA_VISIBLE_DEVICES+x} ]
 then
     # number of gpus 
     NUMGPUS=`nvidia-smi -q -d MEMORY | grep "Attached GPU" | grep -P -o "\d"`
