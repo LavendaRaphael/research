@@ -1,4 +1,4 @@
-qstat -f ${PBS_JOBID}|grep exec_gpus
+qstat -f ${PBS_JOBID}
 
 #export CUDA_VISIBLE_DEVICES=`python $homedir/codes/research/common/cuda_auto.py`
 export CUDA_VISIBLE_DEVICES=`python << EOF
