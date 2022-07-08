@@ -2,10 +2,10 @@ nvidia-smi
 qstat -f ${PBS_JOBID}|grep exec_gpus
 
 str_gpu_export=$(python << EOF
+
 import subprocess
 import os
 import numpy
-import time
 
 subprocess_tmp = subprocess.run( args=["qstat -f ${PBS_JOBID}|grep exec_gpus"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
 list_gpu_exec = subprocess_tmp.stdout.split()[-1].split("+")
@@ -19,21 +19,42 @@ if (str_cuda_visible_devices == "" or str_gpu_exec == str_cuda_visible_devices):
 else:
     str_gpu_export = list_gpu_exec[ int(str_cuda_visible_devices) ]
 
+def get_utilization_free(gpu_id) -> float:
+    subprocess_tmp = subprocess.run(
+        args=[f"nvidia-smi -q -d UTILIZATION -i {gpu_id}|grep Gpu"], 
+        shell=True,
+        stdout=subprocess.PIPE, 
+        encoding="utf-8"
+    )
+    return float(subprocess_tmp.stdout.split()[-2])
+
+def get_memory_free(gpu_id) -> float:
+    subprocess_tmp = subprocess.run(
+        args=[f"nvidia-smi -q -d MEMORY -i {gpu_id}|grep Free|head -n 1"], 
+        shell=True,
+        stdout=subprocess.PIPE, 
+        encoding="utf-8"
+    )
+    return float(subprocess_tmp.stdout.split()[-2])
+
+float_utilization_gpu = get_utilization_free(str_gpu_export)
+np_memory_free = get_memory_free(str_gpu_export)
 for int_time in range(6):
-    subprocess_tmp = subprocess.run( args=[f"nvidia-smi -q -d MEMORY -i {str_gpu_export}|grep Free|head -n 1"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
-    float_memory_free = float(subprocess_tmp.stdout.split()[-2])
-    if (float_memory_free > 5000):
+    if (float_utilization_gpu < 20 and np_memory_free > 5000):
         break
     else:
         subprocess_tmp = subprocess.run( args=["nvidia-smi -q|grep Attached"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
         int_gpu_all = int(subprocess_tmp.stdout.split()[-1])
-        np_memory_free = numpy.zeros( shape=int_gpu_all )
-        for int_i in range(int_gpu_all):
-            subprocess_tmp = subprocess.run( args=[f"nvidia-smi -q -d MEMORY -i {int_i}|grep Free|head -n 1"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
-            np_memory_free[int_i] = float(subprocess_tmp.stdout.split()[-2])
-        int_memory_argmax = numpy.argmax( np_memory_free )
-        if np_memory_free( int_memory_argmax ) > 5000:
-            str_gpu_export = int_memory_argmax
+
+        np_memory_free = numpy.zeros(shape=int_gpu_all)
+        np_utilization_gpu = numpy.zeros(shape=int_gpu_all)
+        for int_gpu in range(int_gpu_all):
+            np_memory_free[int_gpu] = get_memory_free(int_gpu)
+            np_utilization_gpu[int_gpu] = get_utilization_free(int_gpu)
+
+        int_utilization_gpu_argmin = numpy.argmin(np_utilization_gpu)
+        if np_memory_free[int_utilization_gpu_argmin] > 5000:
+            str_gpu_export = int_utilization_gpu_argmin
             break
         else:
             open('memory','w+').write(int_time)
@@ -42,14 +63,15 @@ for int_time in range(6):
                 open('memory','w+').write('timeout')
                 str_gpu_export = "timeout"
 print(str_gpu_export)
+
 EOF
 )
 
+echo CUDA_VISIBLE_DEVICES=$str_gpu_export
 if [ $str_gpu_export == "timeout" ] 
 then
     exit 1
 else
     export CUDA_VISIBLE_DEVICES=$str_gpu_export
-    echo CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES
 fi
 
