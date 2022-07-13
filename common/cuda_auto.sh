@@ -57,18 +57,17 @@ for int_time in range(6):
             str_gpu_export = int_utilization_gpu_argmin
             break
         else:
-            open('memory','w+').write(int_time)
+            open('memory','w+').write(str(int_time))
             time.sleep(600)
             if int_time == 5:
                 open('memory','w+').write('timeout')
                 str_gpu_export = "timeout"
 print(str_gpu_export)
 
-EOF
-)
+EOF)
 
 echo CUDA_VISIBLE_DEVICES=$str_gpu_export
-if [ $str_gpu_export == "timeout" ] 
+if [ "$str_gpu_export" == "timeout" ] 
 then
     exit 1
 else
