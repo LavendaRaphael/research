@@ -64,7 +64,8 @@ for int_time in range(6):
                 str_gpu_export = "timeout"
 print(str_gpu_export)
 
-EOF)
+EOF
+)
 
 echo CUDA_VISIBLE_DEVICES=$str_gpu_export
 if [ "$str_gpu_export" == "timeout" ] 
