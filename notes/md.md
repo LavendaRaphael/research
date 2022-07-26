@@ -71,18 +71,50 @@ source $software/bin/kim-api-activate
 
 <https://github.com/CSIprinceton/CSI-hacks-and-tricks/tree/master/Compilation/Plumed>
 
-```sh
-git clone -b v2.7 https://github.com/plumed/plumed2.git plumed2.7
-```
+<https://github.com/plumed/plumed2.git>
 
 ```sh
-./configure CC=icx FC=ifx CXX=mpiicpc --prefix=$software
+./configure CC=icx FC=ifx CXX=mpicxx --prefix=$homedir
 make -j 4
 make install
 ```
 
-```sh
-export PKG_CONFIG_PATH="${software}/lib/pkgconfig:$PKG_CONFIG_PATH"
+```txt
+Install prefix : /public/spst/home/tianff
+Full name      : plumed
+
+Setup your environment
+- Ensure this is in your execution path         : /public/spst/home/tianff/bin
+- Ensure this is in your include path           : /public/spst/home/tianff/include
+- Ensure this is in your library path           : /public/spst/home/tianff/lib
+- Ensure this is in your PKG_CONFIG_PATH path   : /public/spst/home/tianff/lib/pkgconfig
+For runtime binding:
+- Set this environment variable                 : PLUMED_KERNEL=/public/spst/home/tianff/lib/libplumedKernel.so
+
+To create a tcl module that sets all the variables above, use this one as a starting point:
+/public/spst/home/tianff/lib/plumed/modulefile
+
+To uninstall, remove the following files and directories:
+/public/spst/home/tianff/lib/plumed
+/public/spst/home/tianff/share/doc/plumed
+/public/spst/home/tianff/include/plumed
+/public/spst/home/tianff/bin/plumed
+/public/spst/home/tianff/bin/plumed-patch
+/public/spst/home/tianff/bin/plumed-config
+/public/spst/home/tianff/lib/pkgconfig/plumed.pc
+/public/spst/home/tianff/lib/libplumed.so
+/public/spst/home/tianff/lib/libplumedKernel.so
+A vim plugin can be found here: /public/spst/home/tianff/lib/plumed/vim/
+Copy it to /public/spst/home/tianff/.vim/ directory
+Alternatively:
+- Set this environment variable         : PLUMED_VIMPATH=/public/spst/home/tianff/lib/plumed/vim
+- Add the command 'let &runtimepath.=','.$PLUMED_VIMPATH' to your .vimrc file
+From vim, you can use :set syntax=plumed to enable it
+A python plugin can be found here: /public/spst/home/tianff/lib/plumed/python/
+To use PLUMED through python either : 
+- Add /public/spst/home/tianff/lib/plumed/python/ to your PYTHONPATH
+- Execute the command python buildPythonInterface.py install in the plumed2/python directory
+Plumed can be loaded in a python script using the command import plumed
 ```
 
 if not `make install`
@@ -117,14 +149,5 @@ module add mathlib/gsl/intel
 Building
 
 ```sh
-# Building with GNU Compilers:
-cmake ../cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_Fortran_COMPILER=gfortran
-# Building with Intel Compilers:
-cmake ../cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort
-# Building with Intel oneAPI Compilers:
-cmake ../cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_COMPILER=ifx
-```
-
-```sh
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=mpiicpc -DCMAKE_Fortran_COMPILER=ifx -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PKG_KIM=yes -D BUILD_MPI=yes ../cmake
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda ../cmake
 ```
