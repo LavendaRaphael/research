@@ -7,6 +7,8 @@
 - [MD](#md)
   - [DPMD](#dpmd)
     - [Install from src](#install-from-src)
+  - [CUDA](#cuda)
+  - [cuDNN](#cudnn)
     - [Install from conda](#install-from-conda)
   - [KIM](#kim)
   - [PLUMED2](#plumed2)
@@ -26,23 +28,38 @@ TensorFlow
 
 GPU Driver
 
-CUDA
+## CUDA
+
+<https://stackoverflow.com/questions/39379792/install-cuda-without-root>
 
 ```sh
-export PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/bin:$PATH"
-export LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/lib64:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cuda-11.6/lib64:$LD_LIBRARY_PATH"
+Toolkit:  Installed in /public/spst/home/tianff/software/cuda-11.7/
+
+Please make sure that
+ -   PATH includes /public/spst/home/tianff/software/cuda-11.7/bin
+ -   LD_LIBRARY_PATH includes /public/spst/home/tianff/software/cuda-11.7/lib64, or, add /public/spst/home/tianff/software/cuda-11.7/lib64 to /etc/ld.so.conf and run ldconfig as root
+
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /public/spst/home/tianff/software/cuda-11.7/bin
+***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least 515.00 is required for CUDA 11.7 functionality to work.
+To install the driver using this installer, run the following command, replacing <CudaInstaller> with the name of this run file:
+    sudo <CudaInstaller>.run --silent --driver
+```
+
+```sh
+export PATH="/public/spst/home/tianff/software/cuda-11.7/bin:$PATH"
+export LIBRARY_PATH="/public/spst/home/tianff/software/cuda-11.7/lib64:$LIBRARY_PATH"
+export LD_LIBRARY_PATH="/public/spst/home/tianff/software/cuda-11.7/lib64:$LD_LIBRARY_PATH"
 ```
 
 ```sh
 export CUDA_VISIBLE_DEVICES=0
 ```
 
-cuDNN
+## cuDNN
 
 ```sh
-export LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="/public/spst/home/tianff/tianff/software/src/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="/public/spst/home/tianff/software/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LIBRARY_PATH"
+export LD_LIBRARY_PATH="/public/spst/home/tianff/software/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LD_LIBRARY_PATH"
 ```
 
 ### Install from conda
@@ -74,7 +91,7 @@ source $software/bin/kim-api-activate
 <https://github.com/plumed/plumed2.git>
 
 ```sh
-./configure CC=icx FC=ifx CXX=mpicxx --prefix=$homedir
+./configure CC=icx CXX=mpicxx --prefix=$homedir
 make -j 4
 make install
 ```
@@ -149,5 +166,5 @@ module add mathlib/gsl/intel
 Building
 
 ```sh
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda ../cmake
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda -D CUDA_NVCC_FLAGS=-allow-unsupported-compiler ../cmake
 ```
