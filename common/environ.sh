@@ -8,10 +8,6 @@ fi
 
 echo ">>>>----[research/common/envrion.sh]---->>>>"
 
-#---------------------------------------------[export]
-export vasp_pot=${homedir}/software/potpaw_PBE.54/
-export ESPRESSO_PSEUDO=${homedir}software/qe_pseudo/
-
 #---------------------------------------------[jobsub]
 if [ "$mycluster" = "qsub" ]; then
     alias jobsub="qsub"
