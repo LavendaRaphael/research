@@ -5,35 +5,25 @@
 <!-- code_chunk_output -->
 
 - [MD](#md)
-  - [DPMD](#dpmd)
-    - [Install from src](#install-from-src)
   - [CUDA](#cuda)
   - [cuDNN](#cudnn)
-    - [Install from conda](#install-from-conda)
+  - [DeePMD-kit (easy install)](#deepmd-kit-easy-install)
+  - [Tensorflow (python)](#tensorflow-python)
+  - [DeePMD-kit (python)](#deepmd-kit-python)
+  - [Tensorflow (C++)](#tensorflow-c)
   - [KIM](#kim)
   - [PLUMED2](#plumed2)
   - [LAMMPS](#lammps)
 
 <!-- /code_chunk_output -->
 
-## DPMD
-
-### Install from src
-
-<https://github.com/deepmodeling/deepmd-kit/blob/master/doc/install/install-from-source.md>
-
-TensorFlow
-
-<https://www.tensorflow.org/install/gpu>
-
-GPU Driver
-
 ## CUDA
 
-<https://stackoverflow.com/questions/39379792/install-cuda-without-root>
+<https://stackoverflow.com/questions/39379792/install-cuda-without-root>  
+<https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=CentOS&target_version=7&target_type=runfile_local>
 
 ```sh
-Toolkit:  Installed in /public/spst/home/tianff/software/cuda-11.7/
+Toolkit:  Installed in /public/spst/home/tianff/install/cuda-11.7/
 
 Please make sure that
  -   PATH includes /public/spst/home/tianff/software/cuda-11.7/bin
@@ -46,25 +36,59 @@ To install the driver using this installer, run the following command, replacing
 ```
 
 ```sh
-export PATH="/public/spst/home/tianff/software/cuda-11.7/bin:$PATH"
-export LIBRARY_PATH="/public/spst/home/tianff/software/cuda-11.7/lib64:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="/public/spst/home/tianff/software/cuda-11.7/lib64:$LD_LIBRARY_PATH"
-```
-
-```sh
 export CUDA_VISIBLE_DEVICES=0
 ```
 
 ## cuDNN
 
+<https://developer.nvidia.com/rdp/cudnn-download>
+
+## DeePMD-kit (easy install)
+
+<https://docs.deepmodeling.com/projects/deepmd/en/master/install/easy-install.html>
+
 ```sh
-export LIBRARY_PATH="/public/spst/home/tianff/software/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LIBRARY_PATH"
-export LD_LIBRARY_PATH="/public/spst/home/tianff/software/cudnn-linux-x86_64-8.3.2.44_cuda11.5/lib:$LD_LIBRARY_PATH"
+conda create -n deepmd deepmd-kit=*=*gpu libdeepmd=*=*gpu lammps cudatoolkit=11.6 horovod -c https://conda.deepmodeling.com
 ```
 
-### Install from conda
+## Tensorflow (python)
 
-和原本安装 tensorflow 冲突
+```sh
+python -m pip install --user --upgrade tensorflow
+```
+
+## DeePMD-kit (python)
+
+<https://docs.deepmodeling.com/projects/deepmd/en/master/install/install-from-source.html>
+
+```sh
+git clone --recursive https://github.com/deepmodeling/deepmd-kit.git deepmd-kit
+cd deepmd-kit
+export DP_VARIANT=cuda
+export CC=`which gcc`
+export CXX=`which g++`
+python -m pip install --user .
+```
+
+## Tensorflow (C++)
+
+<https://www.tensorflow.org/install/gpu>  
+<https://www.intel.com/content/www/us/en/developer/articles/guide/optimization-for-tensorflow-installation-guide.html>  
+<https://docs.deepmodeling.com/projects/deepmd/en/master/install/install-tf.2.8.html>  
+<https://wiki.cheng-group.net/wiki/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/deepmd-kit_installation_104>  
+<https://wiki.cheng-group.net/wiki/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/deepmd-kit_installation_51>  
+
+```sh
+wget https://github.com/bazelbuild/bazelisk/releases/download/v1.12.0/bazelisk-linux-amd64 -O ${homedir}/.local/bin/bazel
+```
+
+```sh
+git clone https://github.com/tensorflow/tensorflow tensorflow-2.9.1 -b v2.9.1 --depth=1
+cd tensorflow-2.9.1
+./configure
+export TEST_TMPDIR=/tmp/tianff/.bazel
+bazel build -c opt --config=mkl --verbose_failures --local_resources 2048,4,1.0 //tensorflow:libtensorflow_cc.so
+```
 
 ## KIM
 
