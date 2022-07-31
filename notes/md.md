@@ -7,11 +7,13 @@
 - [MD](#md)
   - [CUDA](#cuda)
   - [cuDNN](#cudnn)
-  - [DeePMD-kit (easy install)](#deepmd-kit-easy-install)
+  - [DeePMD-kit (conda)](#deepmd-kit-conda)
+  - [DeePMD-kit (offline)](#deepmd-kit-offline)
   - [Tensorflow (python)](#tensorflow-python)
   - [DeePMD-kit (python)](#deepmd-kit-python)
   - [Tensorflow (C++)](#tensorflow-c)
-  - [KIM](#kim)
+  - [DeePMD-kit (C++)](#deepmd-kit-c)
+  - [Lapack](#lapack)
   - [PLUMED2](#plumed2)
   - [LAMMPS](#lammps)
 
@@ -35,7 +37,12 @@ To install the driver using this installer, run the following command, replacing
     sudo <CudaInstaller>.run --silent --driver
 ```
 
+When run code on computing node, please remove libcuda.so
+
 ```sh
+cd cuda-11.7/lib64/stubs
+mv libcuda.so libcuda.so.bk
+
 export CUDA_VISIBLE_DEVICES=0
 ```
 
@@ -43,12 +50,32 @@ export CUDA_VISIBLE_DEVICES=0
 
 <https://developer.nvidia.com/rdp/cudnn-download>
 
-## DeePMD-kit (easy install)
+## DeePMD-kit (conda)
 
 <https://docs.deepmodeling.com/projects/deepmd/en/master/install/easy-install.html>
 
 ```sh
 conda create -n deepmd deepmd-kit=*=*gpu libdeepmd=*=*gpu lammps cudatoolkit=11.6 horovod -c https://conda.deepmodeling.com
+```
+
+## DeePMD-kit (offline)
+
+```sh
+Please activate the environment before using the packages:
+
+/path/to/deepmd-kit/bin/conda activate /path/to/deepmd-kit
+
+The following executable files have been installed:
+1. DeePMD-kit CLi: dp -h
+2. LAMMPS: lmp -h
+3. DeePMD-kit i-Pi interface: dp_ipi
+4. MPICH: mpirun -h
+5. Horovod: horovod -h
+
+The following Python libraries have been installed:
+1. deepmd
+2. dpdata
+3. pylammps
 ```
 
 ## Tensorflow (python)
@@ -87,35 +114,67 @@ git clone https://github.com/tensorflow/tensorflow tensorflow-2.9.1 -b v2.9.1 --
 cd tensorflow-2.9.1
 ./configure
 export TEST_TMPDIR=/tmp/tianff/.bazel
-bazel build -c opt --config=mkl --verbose_failures --local_resources 2048,4,1.0 //tensorflow:libtensorflow_cc.so
+bazel build -c opt --config=mkl --verbose_failures --local_cpu_resources=HOST_CPUS*.5 --local_ram_resources=2048 //tensorflow:libtensorflow_cc.so
 ```
 
-## KIM
+```sh
+tensorflow=${homedir}/software/tensorflow-2.9.1
+tensorflow_root=${homedir}/software/tensorflow-2.9.1_install
 
-<https://openkim.org/doc/usage/obtaining-models/>
+mkdir -p ${tensorflow_root}/lib
+cp -d ${tensorflow}/bazel-bin/tensorflow/libtensorflow_cc.so* $tensorflow_root/lib/
+cp -d ${tensorflow}/bazel-bin/tensorflow/libtensorflow_framework.so* $tensorflow_root/lib/
+
+mkdir -p $tensorflow_root/include/tensorflow
+rsync -avzh --exclude '_virtual_includes/' --include '*/' --include '*.h' --include '*.inc' --exclude '*' ${tensorflow}/bazel-bin/ $tensorflow_root/include/
+
+rsync -avzh --include '*/' --include '*.h' --include '*.inc' --exclude '*' ${tensorflow}/tensorflow/cc $tensorflow_root/include/tensorflow/
+rsync -avzh --include '*/' --include '*.h' --include '*.inc' --exclude '*' ${tensorflow}/tensorflow/core $tensorflow_root/include/tensorflow/
+
+rsync -avzh --include '*/' --include '*' --exclude '*.cc' ${tensorflow}/third_party/ $tensorflow_root/include/third_party/
+
+rsync -avzh --include '*/' --include '*' --exclude '*.txt' ${tensorflow}/bazel-tensorflow-2.9.1/external/eigen_archive/Eigen/ $tensorflow_root/include/Eigen/
+rsync -avzh --include '*/' --include '*' --exclude '*.txt' ${tensorflow}/bazel-tensorflow-2.9.1/external/eigen_archive/unsupported/ $tensorflow_root/include/unsupported/
+
+rsync -avzh --include '*/' --include '*.h' --include '*.inc' --exclude '*' ${tensorflow}/bazel-tensorflow-2.9.1/external/com_google_protobuf/src/google/ $tensorflow_root/include/google/
+rsync -avzh --include '*/' --include '*.h' --include '*.inc' --exclude '*' ${tensorflow}/bazel-tensorflow-2.9.1/external/com_google_absl/absl/ $tensorflow_root/include/absl/
+
+cp -d ${tensorflow}/bazel-out/k8-opt/bin/external/llvm_openmp/libiomp5.so $tensorflow_root/lib/
+
+find $tensorflow_root -type d -empty -delete
+```
+
+## DeePMD-kit (C++)
+
+<https://docs.deepmodeling.com/projects/deepmd/en/master/install/install-from-source.html>
 
 ```sh
-git clone https://github.com/openkim/kim-api.git
-cd kim-api
-mkdir build
-cd build
-CC=icx CXX=icpx FC=ifx cmake .. -DCMAKE_INSTALL_PREFIX="$software" -DCMAKE_BUILD_TYPE=Release
-make
+mkdir source/build 
+cd source/build
+export CC=`which gcc`
+export CXX=`which g++`
+cmake -DTENSORFLOW_ROOT=${homedir}/software/tensorflow-2.9.1_install -DCMAKE_INSTALL_PREFIX=${homedir}/software/deepmd-kit-2.1.3_install -DUSE_CUDA_TOOLKIT=TRUE -DLAMMPS_SOURCE_ROOT=${homedir}/software/lammps-stable_23Jun2022 ..
+make -j4
 make install
 ```
 
+## Lapack
+
 ```sh
-source $software/bin/kim-api-activate
+wget https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v3.10.1.tar.gz
+mkdir build
+cd build
+cmake -C ../../oneapi.cmake -D BUILD_SHARED_LIBS=ON -D CMAKE_INSTALL_PREFIX=${homedir}/software/lapack-3.10.1_install ..
 ```
 
 ## PLUMED2
 
-<https://github.com/CSIprinceton/CSI-hacks-and-tricks/tree/master/Compilation/Plumed>
-
-<https://github.com/plumed/plumed2.git>
+<https://github.com/CSIprinceton/CSI-hacks-and-tricks/tree/master/Compilation/Plumed>  
+<https://github.com/plumed/plumed2.git>  
+<https://www.plumed.org/doc-v2.8/user-doc/html/_installation.html>
 
 ```sh
-./configure CC=icx CXX=mpicxx --prefix=$homedir
+./configure CC=icx CXX=mpicxx --prefix=${homedir}/software/plumed-2.8.0_install
 make -j 4
 make install
 ```
@@ -158,37 +217,14 @@ To use PLUMED through python either :
 Plumed can be loaded in a python script using the command import plumed
 ```
 
-if not `make install`
-
-```sh
-source sourceme.sh
-```
-
 ## LAMMPS
 
 ```sh
-git clone -b release --depth=1000 https://github.com/lammps/lammps.git lammps
-```
+wget https://github.com/lammps/lammps/archive/stable_23Jun2022.tar.gz
 
-```sh
-cd lammps                # change to the LAMMPS distribution directory
 mkdir build; cd build    # create and use a build directory
-cmake ../cmake           # configuration reading CMake scripts from ../cmake
-cmake --build .          # compilation (or type "make")
-```
 
-GSL
-
-```sh
-sudo apt install libgsl-dev
-```
-
-```sh
-module add mathlib/gsl/intel
-```
-
-Building
-
-```sh
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/basic.cmake -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda -D CUDA_NVCC_FLAGS=-allow-unsupported-compiler ../cmake
+cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/most.cmake -D PKG_MACHDYN=no -D FFT=MKL -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda -D LAMMPS_INSTALL_RPATH=ON -D BUILD_SHARED_LIBS=yes -D CUDA_NVCC_FLAGS=-allow-unsupported-compiler -D CMAKE_INSTALL_PREFIX=${homedir}/software/lammps-stable_23Jun2022_install ../cmake
+make -j 4
+make install
 ```
