@@ -40,8 +40,8 @@ To install the driver using this installer, run the following command, replacing
 When run code on computing node, please remove libcuda.so
 
 ```sh
-cd cuda-11.7/lib64/stubs
-mv libcuda.so libcuda.so.bk
+mkdir libcuda
+mv lib64/stubs/licuda.so* libcuda/
 
 export CUDA_VISIBLE_DEVICES=0
 ```
@@ -110,9 +110,13 @@ wget https://github.com/bazelbuild/bazelisk/releases/download/v1.12.0/bazelisk-l
 ```
 
 ```sh
-git clone https://github.com/tensorflow/tensorflow tensorflow-2.9.1 -b v2.9.1 --depth=1
+wget https://github.com/tensorflow/tensorflow/archive/refs/tags/v2.9.1.zip
 cd tensorflow-2.9.1
+
 ./configure
+#cuda: /public/spst/home/tianff/software/cuda-11.7,/public/spst/home/tianff/software/cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive
+#Compute capability: 7.0,7.5,8.0
+
 export TEST_TMPDIR=/tmp/tianff/.bazel
 bazel build -c opt --config=mkl --verbose_failures --local_cpu_resources=HOST_CPUS*.5 --local_ram_resources=2048 //tensorflow:libtensorflow_cc.so
 ```
