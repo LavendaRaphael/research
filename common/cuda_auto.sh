@@ -6,6 +6,7 @@ str_gpu_export=$(python << EOF
 import subprocess
 import os
 import numpy
+import time
 
 subprocess_tmp = subprocess.run( args=["qstat -f ${PBS_JOBID}|grep exec_gpus"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
 list_gpu_exec = subprocess_tmp.stdout.split()[-1].split("+")
