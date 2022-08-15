@@ -178,6 +178,7 @@ cmake -C ../../oneapi.cmake -D BUILD_SHARED_LIBS=ON -D CMAKE_INSTALL_PREFIX=${ho
 <https://www.plumed.org/doc-v2.8/user-doc/html/_installation.html>
 
 ```sh
+wget https://github.com/plumed/plumed2/releases/download/v2.8.0/plumed-2.8.0.tgz
 ./configure CC=icx CXX=mpicxx --prefix=${homedir}/software/plumed-2.8.0_install
 make -j 4
 make install
