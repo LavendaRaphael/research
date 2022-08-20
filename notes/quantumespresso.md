@@ -5,10 +5,10 @@
 <!-- code_chunk_output -->
 
 - [QuantumEspresso](#quantumespresso)
-  - [`pw.in`](#pwin)
-  - [xspectra](#xspectra)
+  - [PW input](#pw-input)
+  - [Xspectra](#xspectra)
   - [evc.dat](#evcdat)
-  - [编译](#编译)
+  - [Compile](#compile)
     - [libxc](#libxc)
     - [qe](#qe)
   - [Qe-car_group_mirror](#qe-car_group_mirror)
@@ -18,7 +18,7 @@
 
 <!-- /code_chunk_output -->
 
-## `pw.in`
+## PW input
 
 ```in
 &CONTROL
@@ -55,7 +55,7 @@ CELL_PARAMETERS angstrom
 ATOMIC_POSITIONS angstrom
 ```
 
-## xspectra
+## Xspectra
 
 ```in
 &input_xspectra
@@ -95,17 +95,18 @@ ATOMIC_POSITIONS angstrom
 6.0 支持 evc.dat  
 <https://lists.quantum-espresso.org/pipermail/users/2019-June/042996.html>
 
-## 编译
+## Compile
 
 ### libxc
 
 cmake
 
 ```sh
+module load gcc
+
 mkdir build; cd build
-cmake -DCMAKE_INSTALL_PREFIX=$homedir -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DENABLE_FORTRAN=ON  ..
+cmake -C ../../oneapi.cmake -DCMAKE_INSTALL_PREFIX=${homedir}/software/libxc.5.3.2_install -DENABLE_FORTRAN=ON  ..
 make
-make test
 make install
 ```
 
@@ -125,14 +126,22 @@ make install
 
 ### qe
 
+```sh
+wget https://gitlab.com/QEF/q-e/-/archive/qe-7.1/q-e-qe-7.1.tar.gz
+```
+
 <https://www.quantum-espresso.org/Doc/user_guide/node13.html>
 
 cmake
 
 ```sh
+module load gcc
+module load libxc
+
 mkdir build; cd build
-cmake -DCMAKE_C_COMPILER=icx -DCMAKE_Fortran_COMPILER=ifx -DQE_ENABLE_LIBXC=ON ..
-make
+cmake -C ../../oneapi.cmake -DQE_ENABLE_LIBXC=ON -DCMAKE_INSTALL_PREFIX=${homedir}/software/q-e-qe-7.1_install ..
+make -j 4
+make install
 ```
 
 make
@@ -142,7 +151,6 @@ export CC=icx
 export F90=ifx
 
 ./configure --with-libxc
-
 make
 ```
 

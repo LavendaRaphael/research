@@ -11,7 +11,7 @@
   - [DeePMD-kit (offline)](#deepmd-kit-offline)
   - [Tensorflow (python)](#tensorflow-python)
   - [DeePMD-kit (python)](#deepmd-kit-python)
-  - [Tensorflow (C++)](#tensorflow-c)
+  - [Tensorflow (C++) [Not needed]](#tensorflow-c-not-needed)
   - [DeePMD-kit (C++)](#deepmd-kit-c)
   - [Lapack](#lapack)
   - [PLUMED2](#plumed2)
@@ -81,7 +81,7 @@ The following Python libraries have been installed:
 ## Tensorflow (python)
 
 ```sh
-python -m pip install --user --upgrade tensorflow
+python -m pip install --upgrade tensorflow
 ```
 
 ## DeePMD-kit (python)
@@ -89,15 +89,19 @@ python -m pip install --user --upgrade tensorflow
 <https://docs.deepmodeling.com/projects/deepmd/en/master/install/install-from-source.html>
 
 ```sh
-git clone --recursive https://github.com/deepmodeling/deepmd-kit.git deepmd-kit
-cd deepmd-kit
-export DP_VARIANT=cuda
+module load gcc
+module load cuda
+module load cudnn
 export CC=`which gcc`
 export CXX=`which g++`
+
+export DP_VARIANT=cuda
+git clone --recursive https://github.com/deepmodeling/deepmd-kit.git deepmd-kit
+cd deepmd-kit
 python -m pip install --user .
 ```
 
-## Tensorflow (C++)
+## Tensorflow (C++) [Not needed]
 
 <https://www.tensorflow.org/install/gpu>  
 <https://www.intel.com/content/www/us/en/developer/articles/guide/optimization-for-tensorflow-installation-guide.html>  
@@ -153,11 +157,14 @@ find $tensorflow_root -type d -empty -delete
 <https://docs.deepmodeling.com/projects/deepmd/en/master/install/install-from-source.html>
 
 ```sh
+module load gcc
+module load cuda
+module load cudnn
+
+cd deepmd-kit
 mkdir source/build 
 cd source/build
-export CC=`which gcc`
-export CXX=`which g++`
-cmake -DTENSORFLOW_ROOT=${homedir}/software/tensorflow-2.9.1_install -DCMAKE_INSTALL_PREFIX=${homedir}/software/deepmd-kit-2.1.3_install -DUSE_CUDA_TOOLKIT=TRUE -DLAMMPS_SOURCE_ROOT=${homedir}/software/lammps-stable_23Jun2022 ..
+cmake -C ../../../gcc.cmake -DCMAKE_INSTALL_PREFIX=${homedir}/software/deepmd-kit-2.1.4_install -DUSE_CUDA_TOOLKIT=TRUE -DLAMMPS_SOURCE_ROOT=${homedir}/software/lammps-stable_23Jun2022_update1 -DUSE_TF_PYTHON_LIBS=TRUE ..
 make -j4
 make install
 ```
@@ -165,6 +172,8 @@ make install
 ## Lapack
 
 ```sh
+module load gcc
+
 wget https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v3.10.1.tar.gz
 mkdir build
 cd build
@@ -178,6 +187,9 @@ cmake -C ../../oneapi.cmake -D BUILD_SHARED_LIBS=ON -D CMAKE_INSTALL_PREFIX=${ho
 <https://www.plumed.org/doc-v2.8/user-doc/html/_installation.html>
 
 ```sh
+module load gcc
+module load lapack
+
 wget https://github.com/plumed/plumed2/releases/download/v2.8.0/plumed-2.8.0.tgz
 ./configure CC=icx CXX=mpicxx --prefix=${homedir}/software/plumed-2.8.0_install
 make -j 4
@@ -225,11 +237,14 @@ Plumed can be loaded in a python script using the command import plumed
 ## LAMMPS
 
 ```sh
-wget https://github.com/lammps/lammps/archive/stable_23Jun2022.tar.gz
+module load gcc
+module load cuda
+module load cudnn
+module load plumed
 
-mkdir build; cd build    # create and use a build directory
-
-cmake -C ../cmake/presets/oneapi.cmake -C ../cmake/presets/most.cmake -D PKG_MACHDYN=no -D FFT=MKL -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda -D LAMMPS_INSTALL_RPATH=ON -D BUILD_SHARED_LIBS=yes -D CUDA_NVCC_FLAGS=-allow-unsupported-compiler -D CMAKE_INSTALL_PREFIX=${homedir}/software/lammps-stable_23Jun2022_install ../cmake
+wget https://github.com/lammps/lammps/archive/stable_23Jun2022_update1.tar.gz
+mkdir build; cd build
+cmake -C ../cmake/presets/oneapi.cmake -D CUDA_NVCC_FLAGS=-allow-unsupported-compiler -C ../cmake/presets/most.cmake -D PKG_MACHDYN=no -D FFT=MKL -D PKG_PLUMED=yes -D DOWNLOAD_PLUMED=no -D PLUMED_MODE=runtime -D BUILD_MPI=yes -D PKG_GPU=on -D GPU_API=cuda -D LAMMPS_INSTALL_RPATH=ON -D BUILD_SHARED_LIBS=yes -D CMAKE_INSTALL_PREFIX=${homedir}/software/lammps-stable_23Jun2022_update1_install ../cmake
 make -j 4
 make install
 ```
