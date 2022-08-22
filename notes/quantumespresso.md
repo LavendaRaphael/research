@@ -251,7 +251,6 @@ make links
 
 ```in
 &system
-    nbnd=415
     occupations='smearing'
     degauss=0.003
 /
@@ -260,5 +259,5 @@ make links
 /
 ```
 
-<https://suncat.stanford.edu/wiki/convergence-tips>
+<https://suncat.stanford.edu/wiki/convergence-tips>  
 <https://www.quantum-espresso.org/Doc/pw_user_guide/node21.html>
