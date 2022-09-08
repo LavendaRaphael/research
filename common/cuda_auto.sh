@@ -8,7 +8,8 @@ import os
 import numpy
 import time
 
-subprocess_tmp = subprocess.run( args=["qstat -f ${PBS_JOBID}|grep exec_gpus"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
+str_jobid = os.environ["PBS_JOBID"]
+subprocess_tmp = subprocess.run( args=[f"qstat -f {str_jobid}|grep exec_gpus"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
 list_gpu_exec = subprocess_tmp.stdout.split()[-1].split("+")
 list_gpu_exec = [ str_gpu.split("/")[-1] for str_gpu in list_gpu_exec ]
 str_gpu_exec = ",".join(list_gpu_exec)
@@ -54,8 +55,10 @@ for int_time in range(6):
             np_utilization_gpu[int_gpu] = get_utilization_free(int_gpu)
 
         int_utilization_gpu_argmin = numpy.argmin(np_utilization_gpu)
-        if np_memory_free[int_utilization_gpu_argmin] > 5000:
-            str_gpu_export = int_utilization_gpu_argmin
+        int_memory_free_argmax = numpy.argmax(np_memory_free)
+        int_select = int_utilization_gpu_argmin
+        if np_memory_free[int_select] > 5000:
+            str_gpu_export = int_select
             break
         else:
             open('memory','w+').write(str(int_time))
