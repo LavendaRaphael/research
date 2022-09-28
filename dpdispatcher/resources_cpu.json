@@ -1,0 +1,17 @@
+{
+  "cpu_per_node": 32,
+  "queue_name": "spst-sunzhr",
+  
+  "_cpu_per_node": 36,
+  "_queue_name": "sbp_1",
+
+  "_cpu_per_node": 28,
+  "_queue_name": "spst_pub",
+ 
+  "number_node": 3,
+  "group_size": 1,
+  "source_list": [
+      "$HOME/.config/.tianff",
+      "$homedir/.local/bin/bashrc_qe-7.0.sh"
+  ]
+}

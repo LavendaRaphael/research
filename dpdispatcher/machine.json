@@ -1,0 +1,12 @@
+{
+  "batch_type":   "Torque",
+  "context_type": "SSHContext",
+  "local_root":   "./",
+  "remote_root":  "/public/spst/home/tianff/dpdispatcher",
+  "remote_profile": {
+      "hostname": "10.15.22.167",
+      "port":     22112,
+      "username": "tianff",
+      "tar_compress": false
+  }
+}

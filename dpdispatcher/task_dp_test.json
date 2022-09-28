@@ -1,0 +1,15 @@
+{
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && dp test -m frozen_model.pb -s . -n 400 -d dptest",
+    "task_work_path": ".",
+    "forward_files": [
+        "frozen_model.pb"
+    ],
+    "backward_files": [
+        "dptest.e.out",
+        "dptest.f.out",
+        "dptest.v.out",
+        "log"
+    ],
+    "outlog": "log",
+    "errlog": "log"
+}

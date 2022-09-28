@@ -1,0 +1,19 @@
+{
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && if [ ! -f model.ckpt.index ]; then dp train input.json --init-model old/model.ckpt; else dp train input.json --restart model.ckpt; fi && dp freeze",
+    "task_work_path": ".",
+    "forward_files": [
+        "input.json",
+        "old"
+    ],
+    "backward_files": [
+        "frozen_model.pb",
+        "lcurve.out",
+        "train.log",
+        "model.ckpt.meta",
+        "model.ckpt.index",
+        "model.ckpt.data-00000-of-00001",
+        "checkpoint"
+    ],
+    "outlog": "train.log",
+    "errlog": "train.log"
+}

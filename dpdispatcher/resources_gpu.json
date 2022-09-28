@@ -1,0 +1,18 @@
+{
+    "queue_name": "spst_sunzhr_gpu",
+    "_queue_name": "pub_gpu",
+
+    "custom_flags":[
+        "#PBS -l walltime=240:00:00",
+        "# -l nodes=:ppn=2:gpus=1"
+    ],
+
+    "number_node": 1,
+    "cpu_per_node": 2,
+    "gpu_per_node": 1,
+    "group_size": 1,
+    "source_list": [
+        "~/.config/.tianff",
+        "${homedir}/.local/bin/bashrc_dp.sh"
+    ]
+}
