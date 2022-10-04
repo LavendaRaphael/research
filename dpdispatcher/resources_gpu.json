@@ -12,7 +12,6 @@
     "gpu_per_node": 1,
     "group_size": 1,
     "source_list": [
-        "~/.config/.tianff",
-        "${homedir}/.local/bin/bashrc_dp.sh"
+        "~/.config/.tianff"
     ]
 }

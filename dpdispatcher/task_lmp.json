@@ -1,5 +1,5 @@
 {
-    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && if [ ! -f restart.100000 ]; then lmp -i ../input.lammps -v restart 0; else lmp -i input.lammps -v restart 1; fi",
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && source source $homedir/.local/bin/bashrc_lmp.sh && if [ ! -f restart.100000 ]; then lmp -i ../input.lammps -v restart 0; else lmp -i input.lammps -v restart 1; fi",
     "task_work_path": ".",
     "forward_files": [
         "conf.lmp"

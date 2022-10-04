@@ -11,7 +11,6 @@
   "number_node": 3,
   "group_size": 1,
   "source_list": [
-      "$HOME/.config/.tianff",
-      "$homedir/.local/bin/bashrc_qe-7.0.sh"
+      "$HOME/.config/.tianff"
   ]
 }

@@ -1,5 +1,5 @@
 {
-    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && dp test -m frozen_model.pb -s . -n 400 -d dptest",
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && source $homedir/.local/bin/bashrc_dp.sh && dp test -m frozen_model.pb -s . -n 400 -d dptest",
     "task_work_path": ".",
     "forward_files": [
         "frozen_model.pb"

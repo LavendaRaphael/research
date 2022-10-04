@@ -1,0 +1,16 @@
+{
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/.local/bin/bashrc_plm.sh && plumed driver --plumed plm.in --ixyz traj.xyz --trajectory-stride 10 --timestep 0.000048378 --length-units A --box 15.67930909,15.67930909,15.67930909 > plm.log",
+    "task_work_path": ".",
+    "forward_files": [
+        "plm.in",
+        "Proton_modv1.so",
+        "traj.xyz"
+    ],
+    "backward_files": [
+        "COLVAR",
+        "HILLS",
+        "plm.log"
+    ],
+    "outlog": "log",
+    "errlog": "log"
+}
