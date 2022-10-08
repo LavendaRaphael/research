@@ -1,0 +1,12 @@
+{
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh > pwscf.out ; source $homedir/.local/bin/bashrc_qe-7.0.sh && if [ -f please.stop ]; then true; else mpirun pw.x < pwscf.in >> pwscf.out; fi",
+    "task_work_path": ".",
+    "forward_files": [
+        "pwscf.in"
+    ],
+    "backward_files": [
+        "pwscf.out"
+    ],
+    "outlog": "log",
+    "errlog": "log"
+}
