@@ -25,14 +25,15 @@
 <https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=CentOS&target_version=7&target_type=runfile_local>
 
 ```sh
-Toolkit:  Installed in /public/spst/home/tianff/install/cuda-11.7/
+Driver:   Not Selected
+Toolkit:  Installed in /public/spst/home/tianff/software/cuda-11.8/
 
 Please make sure that
- -   PATH includes /public/spst/home/tianff/software/cuda-11.7/bin
- -   LD_LIBRARY_PATH includes /public/spst/home/tianff/software/cuda-11.7/lib64, or, add /public/spst/home/tianff/software/cuda-11.7/lib64 to /etc/ld.so.conf and run ldconfig as root
+ -   PATH includes /public/spst/home/tianff/software/cuda-11.8/bin
+ -   LD_LIBRARY_PATH includes /public/spst/home/tianff/software/cuda-11.8/lib64, or, add /public/spst/home/tianff/software/cuda-11.8/lib64 to /etc/ld.so.conf and run ldconfig as root
 
-To uninstall the CUDA Toolkit, run cuda-uninstaller in /public/spst/home/tianff/software/cuda-11.7/bin
-***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least 515.00 is required for CUDA 11.7 functionality to work.
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /public/spst/home/tianff/software/cuda-11.8/bin
+***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least 520.00 is required for CUDA 11.8 functionality to work.
 To install the driver using this installer, run the following command, replacing <CudaInstaller> with the name of this run file:
     sudo <CudaInstaller>.run --silent --driver
 ```
@@ -40,9 +41,6 @@ To install the driver using this installer, run the following command, replacing
 When run code on computing node, please remove libcuda.so
 
 ```sh
-mkdir libcuda
-mv lib64/stubs/licuda.so* libcuda/
-
 export CUDA_VISIBLE_DEVICES=0
 ```
 
@@ -164,7 +162,7 @@ module load cudnn
 cd deepmd-kit
 mkdir source/build 
 cd source/build
-cmake -C ../../../gcc.cmake -DCMAKE_INSTALL_PREFIX=${homedir}/software/deepmd-kit-2.1.4_install -DUSE_CUDA_TOOLKIT=TRUE -DLAMMPS_SOURCE_ROOT=${homedir}/software/lammps-stable_23Jun2022_update1 -DUSE_TF_PYTHON_LIBS=TRUE ..
+cmake -C ../../../gcc.cmake -DCMAKE_INSTALL_PREFIX=${homedir}/software/deepmd-kit-2.1.5_install -DUSE_CUDA_TOOLKIT=TRUE -DLAMMPS_SOURCE_ROOT=${homedir}/software/lammps-stable_23Jun2022_update1 -DUSE_TF_PYTHON_LIBS=TRUE ..
 make -j4
 make install
 ```
