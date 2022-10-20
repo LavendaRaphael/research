@@ -1,5 +1,5 @@
 {
-    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/codes/research/common/cuda_auto.sh && source $homedir/.local/bin/bashrc_dp.sh && if [ ! -f model.ckpt.index ]; then dp train input.json --init-model old/model.ckpt; else dp train input.json --restart model.ckpt; fi && dp freeze",
+    "command": "bash $homedir/codes/research/common/nodeinfo.sh; source $homedir/.local/bin/bashrc_dp.sh && source $homedir/codes/research/common/cuda_auto.sh && if [ ! -f model.ckpt.index ]; then dp train input.json --init-model old/model.ckpt; else dp train input.json --restart model.ckpt; fi && dp freeze",
     "task_work_path": ".",
     "forward_files": [
         "input.json",
