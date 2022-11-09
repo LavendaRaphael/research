@@ -1,5 +1,6 @@
 nvidia-smi
 qstat -f ${PBS_JOBID}|grep exec_gpus
+echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
 
 str_gpu_export=$(python << EOF
 
@@ -42,7 +43,7 @@ def get_memory_free(gpu_id) -> float:
 float_utilization_gpu = get_utilization_free(str_gpu_export)
 np_memory_free = get_memory_free(str_gpu_export)
 for int_time in range(6):
-    if (float_utilization_gpu < 20 and np_memory_free > 5000):
+    if (float_utilization_gpu < 10 and np_memory_free > 5000):
         break
     else:
         subprocess_tmp = subprocess.run( args=["nvidia-smi -q|grep Attached"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
@@ -71,7 +72,7 @@ print(str_gpu_export)
 EOF
 )
 
-echo CUDA_VISIBLE_DEVICES=$str_gpu_export
+echo str_gpu_export=$str_gpu_export
 if [ "$str_gpu_export" == "timeout" ] 
 then
     exit 1
