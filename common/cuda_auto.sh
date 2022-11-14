@@ -24,7 +24,7 @@ else:
 
 def get_utilization_free(gpu_id) -> float:
     subprocess_tmp = subprocess.run(
-        args=[f"nvidia-smi -q -d UTILIZATION -i {gpu_id}|grep Gpu"], 
+        args=[f"nvidia-smi -q -d UTILIZATION -i {gpu_id}|grep Avg|head -n 1"], 
         shell=True,
         stdout=subprocess.PIPE, 
         encoding="utf-8"
