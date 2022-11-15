@@ -24,7 +24,7 @@ else:
 
 def get_utilization_free(gpu_id) -> float:
     subprocess_tmp = subprocess.run(
-        args=[f"nvidia-smi -q -d UTILIZATION -i {gpu_id}|grep Avg|head -n 1"], 
+        args=[f"nvidia-smi -q -d UTILIZATION -i {gpu_id}|grep Gpu"], 
         shell=True,
         stdout=subprocess.PIPE, 
         encoding="utf-8"
@@ -42,6 +42,8 @@ def get_memory_free(gpu_id) -> float:
 
 float_utilization_gpu = get_utilization_free(str_gpu_export)
 np_memory_free = get_memory_free(str_gpu_export)
+print('float_utilization_gpu',float_utilization_gpu)
+print('np_memory_free',np_memory_free)
 for int_time in range(6):
     if (float_utilization_gpu < 10 and np_memory_free > 5000):
         break
@@ -54,7 +56,8 @@ for int_time in range(6):
         for int_gpu in range(int_gpu_all):
             np_memory_free[int_gpu] = get_memory_free(int_gpu)
             np_utilization_gpu[int_gpu] = get_utilization_free(int_gpu)
-
+        print('np_memory_free',np_memory_free)
+        print('np_utilization_gpu',np_utilization_gpu)
         int_utilization_gpu_argmin = numpy.argmin(np_utilization_gpu)
         int_memory_free_argmax = numpy.argmax(np_memory_free)
         int_select = int_utilization_gpu_argmin
@@ -72,11 +75,14 @@ print(str_gpu_export)
 EOF
 )
 
-echo str_gpu_export=$str_gpu_export
-if [ "$str_gpu_export" == "timeout" ] 
+echo "$str_gpu_export"
+
+str_id=$(echo "$str_gpu_export"|tail -n 1)
+if [ "$str_id" == "timeout" ] 
 then
     exit 1
 else
-    export CUDA_VISIBLE_DEVICES=$str_gpu_export
+    export CUDA_VISIBLE_DEVICES=$str_id
 fi
 
+echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
