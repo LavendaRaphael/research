@@ -2,7 +2,7 @@ nvidia-smi
 qstat -f ${PBS_JOBID}|grep exec_gpus
 echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
 
-str_gpu_export=$(python << EOF
+str_print=$(python << EOF
 
 import subprocess
 import os
@@ -40,49 +40,32 @@ def get_memory_free(gpu_id) -> float:
     )
     return float(subprocess_tmp.stdout.split()[-2])
 
-float_utilization_gpu = get_utilization_free(str_gpu_export)
-np_memory_free = get_memory_free(str_gpu_export)
-print('float_utilization_gpu',float_utilization_gpu)
-print('np_memory_free',np_memory_free)
 for int_time in range(6):
-    if (float_utilization_gpu < 10 and np_memory_free > 5000):
+    float_utilization_gpu = get_utilization_free(str_gpu_export)
+    float_memory_free = get_memory_free(str_gpu_export)
+    print('float_utilization_gpu',float_utilization_gpu)
+    print('float_memory_free',float_memory_free)
+    if (float_utilization_gpu < 100 and float_memory_free > 5000):
+        print(str_gpu_export)
         break
     else:
-        subprocess_tmp = subprocess.run( args=["nvidia-smi -q|grep Attached"], shell=True ,stdout=subprocess.PIPE, encoding="utf-8")
-        int_gpu_all = int(subprocess_tmp.stdout.split()[-1])
-
-        np_memory_free = numpy.zeros(shape=int_gpu_all)
-        np_utilization_gpu = numpy.zeros(shape=int_gpu_all)
-        for int_gpu in range(int_gpu_all):
-            np_memory_free[int_gpu] = get_memory_free(int_gpu)
-            np_utilization_gpu[int_gpu] = get_utilization_free(int_gpu)
-        print('np_memory_free',np_memory_free)
-        print('np_utilization_gpu',np_utilization_gpu)
-        int_utilization_gpu_argmin = numpy.argmin(np_utilization_gpu)
-        int_memory_free_argmax = numpy.argmax(np_memory_free)
-        int_select = int_utilization_gpu_argmin
-        if np_memory_free[int_select] > 5000:
-            str_gpu_export = int_select
-            break
-        else:
-            open('memory','w+').write(str(int_time))
-            time.sleep(600)
-            if int_time == 5:
-                open('memory','w+').write('timeout')
-                str_gpu_export = "timeout"
-print(str_gpu_export)
+        open('memory','w+').write(str(int_time))
+        time.sleep(600)
+        if int_time == 5:
+            open('memory','w+').write('timeout')
+            print("timeout")
 
 EOF
 )
 
-echo "$str_gpu_export"
+echo "$str_print"
 
-str_id=$(echo "$str_gpu_export"|tail -n 1)
-if [ "$str_id" == "timeout" ] 
+str_gpu_export=$(echo "$str_print"|tail -n 1)
+if [ "$str_gpu_export" == "timeout" ] 
 then
     exit 1
 else
-    export CUDA_VISIBLE_DEVICES=$str_id
+    export CUDA_VISIBLE_DEVICES=$str_gpu_export
 fi
 
 echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
