@@ -24,7 +24,7 @@
   - [KSPACING/(2$\pi$)](#kspacing2pi)
   - [KSPACING](#kspacing)
 - [STOPCAR](#stopcar)
-- [compile](#compile)
+- [Compile](#compile)
   - [mpi+omp混编](#mpiomp混编)
 - [vtst](#vtst)
   - [vasp6.1兼容性](#vasp61兼容性)
@@ -292,7 +292,7 @@ KSPACING = \frac{2\pi}{ak}
 LSTOP = .TRUE.
 ```
 
-# compile
+# Compile
 
 ## mpi+omp混编
 

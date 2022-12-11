@@ -4,7 +4,10 @@
 
     "custom_flags":[
         "#PBS -l walltime=240:00:00",
-        "# -l nodes=:ppn=2:gpus=1"
+        "#PBS -N jobname",
+        "#PBS -l nodes=1:ppn=32:gpus=1:spst",
+        "# -l nodes=1:ppn=128:gpus=1:A100",
+        "# -l nodes=1:ppn=7:gpus=1:v100"
     ],
 
     "number_node": 1,
