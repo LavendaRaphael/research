@@ -2,9 +2,9 @@ array pic[100]
 do for [i=1:100] {pic[i]=0}
 
 # pic[3]=1   # goto_llzo_log.'Li7La3Zr2O12/Li7La3Zr2O12.a1b1c1_eosfit/eosfit.pdf'
- pic[4]=1   # goto_llzo_log.'Li/Li_sigma.pdf'
+# pic[4]=1   # goto_llzo_log.'Li/Li_sigma.pdf'
 # pic[2]=1   # goto_llzo_log.'Li/Li.a1b1c1_eosfit/eosfit.pdf'
-# pic[1]=1   # goto_llzo_log.'Au/Au.a1b1c1_eosfit/eosfit.pdf'
+ pic[1]=1   # goto_llzo_log.'Au/Au.a1b1c1_eosfit/eosfit.pdf'
 
 
 array colors2=['#FE7D6A', '#81B8E9']
@@ -22,14 +22,12 @@ set key noautotitle
 set encoding iso_8859_1
 set style data lines
 
-homedir="~/"
-goto_llzo=homedir.'group/202012_LLZO/server/'
-goto_llzo_log=homedir.'group/202012_LLZO/log/server/'
+goto_llzo='~/research/Archive/202012_LLZO/server/'
 #=================================================================================================================================
 
 #-------------------------------------------------------------------------------------[]
 if (pic[4]==1) {
-outfile=goto_llzo_log.'Li/Li_sigma.pdf'
+outfile=goto_llzo.'Li/Li_sigma.pdf'
 
 $Mydata << EOD
 10  -.18399986E+02
@@ -75,14 +73,14 @@ p \
 
 #-------------------------------------------------------------------------------------[]
 if (pic[3]==1) {
-outfile=goto_llzo_log.'Li7La3Zr2O12/Li7La3Zr2O12.a1b1c1_eosfit/eosfit.pdf'
+outfile=goto_llzo.'Li7La3Zr2O12/Li7La3Zr2O12.x1y1z1_eosfit/eosfit.pdf'
 
-datdir=goto_llzo.'Li7La3Zr2O12/Li7La3Zr2O12.a1b1c1_eosfit/'
+datdir=goto_llzo.'Li7La3Zr2O12/Li7La3Zr2O12.x1y1z1_eosfit/'
 datfile=datdir.'E0_a.dat'
 
 titlnum=2
 array titl[titlnum]
-titl[1]='Computational Data'
+titl[1]='Comp. Data'
 titl[2]='Vinet EOS'
 
 colornum=titlnum
@@ -96,15 +94,15 @@ do for [i=1:colornum] {
 }
 
 #set term X11 persist
-set term pdfcairo font "Arial,25" size 7*1,5*1
+set term pdfcairo font "Arial,25" size 7*0.7,5*0.7
 set output outfile
 set xlabel "Volume ({\305}^3)" offset 0,0
 set ylabel "Energy (eV)" offset 1,0
-set xrange [*:*]
-set yrange [*:*]
-set format x "%7.0f"
-set format y "%7.0f"
-set style line 1 lw 2
+#set xrange [*:*]
+#set yrange [*:*]
+#set format x "%7.0f"
+#set format y "%7.0f"
+set style line 1 lw 4
 set key t c
 
 E0_4=-1376.694078
@@ -114,22 +112,22 @@ V0_4=2229.599271
 EOS_Vinet(v) = E0_4 + 2.0*B0_4*V0_4/(Bp_4-1.0)**2 * (2.0 - (5.0 + 3.0*Bp_4*((v/V0_4)**(1.0/3.0)-1.0) - 3.0*(v/V0_4)**(1.0/3.0))*exp(-3.0*(Bp_4-1.0)*((v/V0_4)**(1.0/3.0)-1.0)/2.0))
 
 p \
-datfile u ($1**3):6 w p pt 6 lw 2 lc ''.colo[1] t titl[1],\
+datfile u ($1**3):6 w p pt 6 lw 4 lc ''.colo[1] t titl[1],\
 EOS_Vinet(x) ls 1 lc ''.colo[2] t titl[2]
 }
 
 #-------------------------------------------------------------------------------------[]
 if (pic[2]==1) {
-outfile=goto_llzo_li_log.'Li.a1b1c1_eosfit/eosfit.pdf'
+outfile=goto_llzo.'Li/Li.x1y1z1_eosfit.PBE/eosfit.pdf'
 
 array datdir[1]
-datdir[1]=goto_llzo_li.'Li.a1b1c1_eosfit/'
+datdir[1]=goto_llzo.'Li/Li.x1y1z1_eosfit.PBE/'
 array datfile[1]
 datfile[1]=datdir[1].'E0_a.dat'
 
 titlnum=2
 array titl[titlnum]
-titl[1]='Computational Data'
+titl[1]='Comp. Data'
 #titl[2]='Murnaghan EOS'
 #titl[3]='Birch-Murnaghan EOS'
 #titl[4]='Birch EOS'
@@ -146,16 +144,17 @@ do for [i=1:colornum] {
 }
 
 #set term X11 persist
-set term pdfcairo font "Arial,25" size 7*1,5*1
+set term pdfcairo font "Arial,25" size 7*0.7,5*0.7
 set output outfile
 set xlabel "Volume ({\305}^3)" offset 0,0
 set ylabel "Energy (eV)" offset 1,0
-set xrange [*:*]
-set yrange [*:*]
-set format x "%7.0f"
+#set xrange [*:*]
+#set yrange [*:*]
+#set format x "%7.0f"
 set format y "%7.2f"
-set style line 1 lw 2
-set key t c
+set style line 1 lw 4
+#set key t c
+unset key
 
 #E0_1=-3.813343
 #B0_1=0.085085
@@ -179,15 +178,15 @@ V0_4=40.551894
 EOS_Vinet(v) = E0_4 + 2.0*B0_4*V0_4/(Bp_4-1.0)**2 * (2.0 - (5.0 + 3.0*Bp_4*((v/V0_4)**(1.0/3.0)-1.0) - 3.0*(v/V0_4)**(1.0/3.0))*exp(-3.0*(Bp_4-1.0)*((v/V0_4)**(1.0/3.0)-1.0)/2.0))
 
 p \
-datfile[1] u ($1**3):6 w p pt 6 lw 2 lc ''.colo[1] t titl[1],\
+datfile[1] u ($1**3):6 w p pt 6 lw 4 lc ''.colo[1] t titl[1],\
 EOS_Vinet(x) ls 1 lc ''.colo[2] t titl[2]
 }
 #-------------------------------------------------------------------------------------[]
 if (pic[1]==1) {
-outfile=goto_llzo_au_log.'Au.a1b1c1_eosfit/eosfit.pdf'
+outfile=goto_llzo.'Au/Au.x1y1z1_eosfit/eosfit.pdf'
 
 array datdir[1]
-datdir[1]=goto_llzo_au.'Au.a1b1c1_eosfit/'
+datdir[1]=goto_llzo.'Au/Au.x1y1z1_eosfit/'
 array datfile[1]
 datfile[1]=datdir[1].'E0_a.dat'
 
@@ -210,16 +209,17 @@ do for [i=1:colornum] {
 }
 
 #set term X11 persist
-set term pdfcairo font "Arial,25" size 7*1,5*1
+set term pdfcairo font "Arial,25" size 7*0.7,5*0.7
 set output outfile
 set xlabel "Volume ({\305}^3)" offset 0,0
 set ylabel "Energy (eV)" offset 1,0
-set xrange [*:*]
-set yrange [*:*]
-set format x "%7.0f"
-set format y "%7.2f"
-set style line 1 lw 2
-set key t c
+#set xrange [*:*]
+#set yrange [*:*]
+#set format x "%7.0f"
+set format y "%7.1f"
+set style line 1 lw 4
+#set key t c
+unset key
 
 #E0_1=-12.842750
 #B0_1=0.812546

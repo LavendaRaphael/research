@@ -1,0 +1,16 @@
+{
+    "queue_name": "dm_pub_gpu",
+
+    "custom_flags":[
+        "#SBATCH --job-name=04.md_nvt",
+        "#SBATCH --time=3-0"
+    ],
+
+    "number_node": 1,
+    "cpu_per_node": 2,
+    "gpu_per_node": 1,
+    "group_size": 1,
+    "source_list": [
+        "~/.config/.tianff"
+    ]
+}
