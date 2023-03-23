@@ -167,7 +167,7 @@ export MPIF90=mpiifort
 export F90=ifort
 export FC=ifort
 
-./configure --prefix=/path/to/libxc/
+./configure --prefix=${homedir}/software/libxc-cpbo_install
 make 
 make install
 ```
@@ -181,14 +181,14 @@ make veryclean
 export CC=icx
 export MPIF90=mpiifort
 
-./configure
+./configure --prefix=${homedir}/software/q-e-qe-cpbo_install
 
 vim make.sys
 ```
 
 - DFLAGS+=-D__LIBXC
-- LD_LIBS+=-L/path/to/libxc/lib/ -lxcf90 -lxc
-- IFLAGS+=-I/path/to/libxc/include/
+- LD_LIBS+=-L/public/spst/home/tianff/software/libxc-cpbo_install/lib/ -lxcf90 -lxc
+- IFLAGS+=-I/public/spst/home/tianff/software/libxc-cpbo_install/include/
 
 ```sh
 make cp
