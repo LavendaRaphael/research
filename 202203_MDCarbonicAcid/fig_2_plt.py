@@ -24,9 +24,24 @@ def fig_a(
         list_ypos = [1, 2, 3, 4],
         list_yticklabels = ['HCO$_3^-$', 'TT','CT','CC'],
     )
+    img_dir = homedir+'/research/202203_MDCarbonicAcid/structure/'
+    plot.inset_img(
+        ax,
+        dict_img = {
+            img_dir+'H2CO3_TT.png': (0.1, 0.5, 0.2, 0.4),
+            img_dir+'H2CO3_CT.png': (0.3, 0.5, 0.2, 0.4),
+            img_dir+'H2CO3_CC.png': (0.5, 0.5, 0.2, 0.4),
+        },
+        bool_axis = False,
+    )
     plot.add_text(
         ax,
-        dict_text = {'AIMD': (0.9, 0.9)},
+        dict_text = {
+            'AIMD': (0.9, 0.9),
+            'TT': (0.2, 0.45),
+            'CT': (0.4, 0.45),
+            'CC': (0.6, 0.45),
+        },
         transform = ax.transAxes
     )
 
