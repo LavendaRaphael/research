@@ -37,11 +37,13 @@ def fig_a(
     plot.add_text(
         ax,
         dict_text = {
-            'AIMD': (0.9, 0.9),
-            'TT': (0.2, 0.45),
-            'CT': (0.4, 0.45),
-            'CC': (0.6, 0.45),
+            (0.9, 0.9 )  : 'AIMD',
+            (0.2, 0.45)  : 'TT'  ,
+            (0.4, 0.45)  : 'CT'  ,
+            (0.6, 0.45)  : 'CC'  ,
         },
+        va = 'center',
+        ha = 'center',
         transform = ax.transAxes
     )
 
@@ -62,9 +64,27 @@ def fig_b(
     )
     plot.add_text(
         ax,
-        dict_text = {'DPMD': (0.9, 0.9)},
+        dict_text = {(0.9, 0.9): 'DPMD'},
+        va = 'center',
+        ha = 'center',
         transform = ax.transAxes
     )
+
+def fig_label(
+    dict_ax,
+):
+    dict_pos = {
+        '(a)': (-0.12, 0.9),
+        '(b)': (-0.12, 0.9),
+    }
+    for label, ax in dict_ax.items():
+        pos = dict_pos[label]
+        ax.text(
+            x = pos[0],
+            y = pos[1],
+            s = label,
+            transform = ax.transAxes,
+        )
 
 def run():
 
@@ -73,9 +93,14 @@ def run():
     fig_a(ax0)
     fig_b(ax1)
 
+    fig_label({
+        '(a)': ax0,
+        '(b)': ax1,
+    })
+
     plot.save(
         fig,
-        str_save = 'fig_2',
+        file_save = 'fig_2',
         list_type = ['pdf', 'svg']
     )
 

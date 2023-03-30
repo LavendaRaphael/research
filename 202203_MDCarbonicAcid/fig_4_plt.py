@@ -61,6 +61,7 @@ def fig_a(
         color = 'white'
     )
 
+    ax.set_xlim(290, 350)
     ax.set_ylim(0.5, 1)
     ax.set_xlabel('Temperature (K)')
     ax.set_ylabel('Proportion'),
@@ -74,14 +75,22 @@ def fig_b(ax):
         'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
+    dict_marker = {
+        'TT': 'o',
+        'CT': 'v',
+        'CC': '^',
+        'H2CO3': '<',
+        'HCO3': '>',
+    }
 
     list_header = ['TT', 'CT', 'CC','H2CO3', 'HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature_timemean.csv'
     df_data = pd.read_csv(file_data)
-    for header, marker in zip(list_header, Line2D.filled_markers):
+    for header in list_header:
         color = dict_color[header]
+        marker = dict_marker[header]
         ax.errorbar(df_data['temperature(K)'], df_data[header], ls=':', marker=marker, markersize=2, lw=1, color=color)
 
     ax.set_xlabel('Temperature (K)')
@@ -113,17 +122,25 @@ def fig_c(ax):
         'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
+    dict_marker = {
+        'TT': 'o',
+        'CT': 'v',
+        'CC': '^',
+        'H2CO3': '<',
+        'HCO3': '>',
+    }
 
     list_header = ['TT', 'CT', 'CC','H2CO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature_count.csv'
     df_data = pd.read_csv(file_data)
-    for header, marker in zip(list_header, Line2D.filled_markers):
+    for header in list_header:
         label = header
         if header in dict_label:
             label = dict_label[header]
         color = dict_color[header]
+        marker = dict_marker[header]
         ax.errorbar(df_data['temperature(K)'], df_data[header], label=label, ls=':', marker=marker, markersize=2, lw=1, color=color) 
 
     ax.set_xlabel('Temperature (K)')
@@ -131,17 +148,40 @@ def fig_c(ax):
 
     ax.legend(frameon=False)
 
+def fig_label(
+    dict_ax,
+):
+    dict_pos = {
+        '(a)': (-0.1, 0.9),
+        '(b)': (-0.22, 0.9),
+        '(c)': (-0.22, 0.9),
+    }
+    for label, ax in dict_ax.items():
+        pos = dict_pos[label]
+        ax.text(
+            x = pos[0],
+            y = pos[1],
+            s = label,
+            transform = ax.transAxes,
+        )
+
 def main():
 
     fig = plt.figure( figsize = (8.6*cm, 8*cm))
     (subfig0, subfig1) = fig.subfigures(2, 1)
 
-    ax0 = subfig0.subplots()
+    ax0 = subfig0.subplots( )
     (ax1, ax2) = subfig1.subplots(1, 2)
 
     fig_a(ax0)
     fig_b(ax1)
     fig_c(ax2)
+
+    fig_label({
+        '(a)': ax0,
+        '(b)': ax1,
+        '(c)': ax2,
+    })
 
     plot.save(
         fig,

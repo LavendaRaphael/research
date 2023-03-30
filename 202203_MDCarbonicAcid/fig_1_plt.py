@@ -113,20 +113,41 @@ def fig_e(
     plot.add_text(
         ax,
         dict_text = {
-            r'O$_W$': (700,250),
-            r'H$_W$': (1000,400),
-            r'$^=$O': (600,600),
-            r'H$_{OH}$': (1280,765),
-            r'O$_{OH}$': (1200,1050),
-        }
+            (700,250)  :r'O$_W$'    ,      
+            (1000,400) :r'H$_W$'    ,      
+            (600,600)  :r'$^=$O'    ,      
+            (1300,765) :r'H$_{OH}$' ,   
+            (1200,1050):r'O$_{OH}$' ,   
+        },
+        ha = 'center',
+        va = 'center',
     )
+
+def fig_label(
+    dict_ax,
+):
+    dict_pos = {
+        '(a)': (-0.2, 0.9),
+        '(b)': (-0.2, 0.9),
+        '(c)': (-0.2, 0.9),
+        '(d)': (-0.2, 0.9),
+        '(e)': (-0.1, 0.9),
+    }
+    for label, ax in dict_ax.items():
+        pos = dict_pos[label]
+        ax.text(
+            x = pos[0],
+            y = pos[1],
+            s = label,
+            transform = ax.transAxes,
+        )
 
 def run():
 
-    fig = plt.figure( figsize = (8.6*cm, 11*cm))
+    fig = plt.figure( figsize = (8.6*cm, 10*cm))
 
-    subfigs0 = fig.subfigures(2, 1, height_ratios=[0.4, 0.6])
-    axs0 = subfigs0[0].subplots(1, 2)
+    subfigs0 = fig.subfigures(2, 1, height_ratios=[35, 65])
+    (ax0, ax1) = subfigs0[0].subplots(1, 2)
     subfigs1 = subfigs0[1].subfigures(1, 2)
 
     axs1 = subfigs1[0].subplots(3, 1, sharex='all')
@@ -135,15 +156,25 @@ def run():
     ax2 = subfigs2[0].subplots()
     ax3 = subfigs2[1].subplots()
     
-    fig_a(axs0[0])
-    fig_b(axs0[1])
+    fig_a(ax0)
+    fig_b(ax1)
     fig_c(axs1)
     fig_d(ax2)
     fig_e(ax3)
 
+    fig_label(
+        dict_ax = {
+            '(a)': ax0,
+            '(b)': axs1[0],
+            '(c)': ax1,
+            '(d)': ax2,
+            '(e)': ax3,
+        }
+    )
+
     plot.save(
         fig,
-        str_save = 'fig_1',
+        file_save = 'fig_1',
         list_type = ['pdf', 'svg']
     )
 

@@ -37,7 +37,7 @@ def fig_a(
     )
     fig.colorbar( mappable=image )
 
-    ax.set_aspect(1)
+    #ax.set_aspect(1)
     ax.set_xlabel(r'$\alpha$ (rad)')
     ax.set_ylabel(r'$\beta$ (rad)')
 
@@ -69,64 +69,78 @@ def fig_a_sub(
     ax,
 ):
 
-    img_dir = homedir+'/research/202203_MDCarbonicAcid/structure/'
-    np_img = plt.imread(img_dir+'H2CO3_TS.png')
+    dir_file = homedir+'/research/202203_MDCarbonicAcid/structure/'
+    np_img = plt.imread(dir_file+'H2CO3_TS.png')
     ax.imshow(np_img)
     ax.axis('off')
 
-    o_car = np.array([816, 171])
-    c = np.array((798, 624))
-    o_0 = np.array((534, 956))
-    v_0 = o_car + o_0 - c
-    h_0 = np.array([143, 1000])
-    o_1 = np.array([968, 900])
-    v_1 = o_car + o_1 - c
-    h_1 = np.array([1280, 960])
+    p0 = np.array((303,590))
+    p1 = np.array((255,531))
+    p2 = np.array((314,683))
+    p3 = np.array((323,627))
     plot.add_line(
         ax,
         dict_line = {
-            '0': [c, o_car],
-            '1': [o_car, v_0],
-            '2': [v_0, o_0],
-            '3': [o_0, c],
-            '4': [o_car, v_1],
-            '5': [v_1, o_1],
-            '6': [o_1, c],
-            '7': [o_0, h_0],
-            '8': [o_1, h_1],
+            '0': [p0, p1],
+            '1': [p2, p3],
         },
-        linestyle = '--',
-        color = 'tab:blue',
         lw = 1,
-    )
-
-    arc0_a = (o_0+v_0)/2
-    arc0_b = (o_0+h_0)/2
-    arc1_a = (o_1+v_1)/2
-    arc1_b = (o_1+h_1)/2
-    plot.add_arrow(
-        ax,
-        dict_arrow = {
-            '0': [arc0_a, arc0_b]
-        },
-        arrowstyle = '-',
-        connectionstyle = 'arc3, rad=0.5'
+        color = 'tab:blue',
+        linestyle = ':',
     )
     plot.add_arrow(
         ax,
         dict_arrow = {
-            '0': [arc1_a, arc1_b]
+            '0': [p1, p2]
         },
         arrowstyle = '-',
-        connectionstyle = 'arc3, rad=-0.5'
+        lw = 1,
+        color = 'tab:blue',
+        connectionstyle = 'arc3, rad=0.3',
+        shrinkA = 0,
+        shrinkB = 0,
     )
 
+    l = 942
+    p0 = (l-p0[0],p0[1])
+    p1 = (l-p1[0],p1[1])
+    p2 = (l-p2[0],p2[1])
+    p3 = (l-p3[0],p3[1])
+    plot.add_line(
+        ax,
+        dict_line = {
+            '0': [p0, p1],
+            '1': [p2, p3],
+        },
+        lw = 1,
+        linestyle = ':',
+        color = 'tab:blue',
+    )
+    plot.add_arrow(
+        ax,
+        dict_arrow = {
+            '0': [p1, p2]
+        },
+        arrowstyle = '-',
+        lw = 1,
+        color = 'tab:blue',
+        connectionstyle = 'arc3, rad=-0.3',
+        shrinkA = 0,
+        shrinkB = 0,
+    )
+
+    p0 = (190, 450)
+    p1 = (l-p0[0], p0[1])
     plot.add_text(
         ax,
         dict_text = {
-            (268, 700): r'$\alpha$',
-            (1200, 670): r'$\beta$',
-        }
+            p0: r'-$\beta$',
+            p1: r'$\alpha$'
+        },
+        va = 'center',
+        ha = 'center',
+        fontweight = 'bold',
+        fontsize = 8,
     )
 
 def fig_b(
@@ -163,6 +177,17 @@ def fig_b(
         },
         bool_axis = False,
     )
+    plot.add_text(
+        ax,
+        dict_text = {
+            (0, 15): 'TT',
+            (np.pi, 15): 'CT',
+            (5, 15): 'CC',
+        },
+        va = 'center',
+        ha = 'center',
+        fontweight = 'bold',
+    )
     plot.add_arrow(
         ax,
         dict_arrow = {
@@ -189,7 +214,7 @@ def run():
 
     plot.save(
         fig,
-        str_save = 'fig_3',
+        file_save = 'fig_3',
         list_type = ['pdf', 'svg']
     )
 
