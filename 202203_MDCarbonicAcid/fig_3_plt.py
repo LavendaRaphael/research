@@ -70,7 +70,7 @@ def fig_a_sub(
 ):
 
     dir_file = homedir+'/research/202203_MDCarbonicAcid/structure/'
-    np_img = plt.imread(dir_file+'H2CO3_TS.png')
+    np_img = plt.imread(dir_file+'H2CO3_TS_01.png')
     ax.imshow(np_img)
     ax.axis('off')
 
@@ -200,6 +200,21 @@ def fig_b(
         lw = 1,
     )
 
+def fig_label(
+    dict_ax,
+):
+    dict_pos = {
+        '(a)': (-0.15, 0.9),
+        '(b)': (-0.15, 0.9),
+    }
+    for label, ax in dict_ax.items():
+        pos = dict_pos[label]
+        ax.text(
+            x = pos[0],
+            y = pos[1],
+            s = label,
+            transform = ax.transAxes,
+        )
 
 def run():
 
@@ -211,6 +226,11 @@ def run():
 
     fig_a(subfig0, ax0)
     fig_b(ax1)
+
+    fig_label({
+        '(a)': ax0,
+        '(b)': ax1
+    })
 
     plot.save(
         fig,
