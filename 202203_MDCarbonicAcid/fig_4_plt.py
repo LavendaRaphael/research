@@ -5,7 +5,6 @@ from tf_dpmd_kit import plm
 import os
 import pandas as pd
 import numpy as np
-from matplotlib import patheffects
 from matplotlib.lines import Line2D
 
 plot.set_rcparam()
@@ -21,21 +20,22 @@ def fig_a(
         'TT': 'tab:blue',
         'CT': 'tab:orange',
         'CC': 'tab:green',
-        'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature_prop.csv'
+    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
     list_header = ['TT', 'CT', 'CC', 'HCO3']
 
-    df_data = pd.read_csv(file_data)
-    ser_0 = pd.Series([0]*len(df_data))
+    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
+    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
+    ser_0 = pd.Series([0]*len(ser_temperature))
     for header in list_header:
+        ser_1 = dfgb.get_group(header)['prop'].reset_index(drop=True)
         if header in dict_color:
             color = dict_color[header]
-        ser_1 = ser_0 + df_data[header]
-        ax.fill_between(df_data['temperature(K)'], ser_0, ser_1, lw=1, color=color, alpha=0.5)
+        ser_1 = ser_0 + ser_1
+        ax.fill_between(ser_temperature, ser_0, ser_1, lw=1, color=color, alpha=0.5)
         ser_0 = ser_1
 
     plot.add_text(
@@ -72,26 +72,26 @@ def fig_b(ax):
         'TT': 'tab:blue',
         'CT': 'tab:orange',
         'CC': 'tab:green',
-        'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
     dict_marker = {
         'TT': 'o',
         'CT': 'v',
         'CC': '^',
-        'H2CO3': '<',
         'HCO3': '>',
     }
 
-    list_header = ['TT', 'CT', 'CC','H2CO3', 'HCO3']
+    list_header = ['TT', 'CT', 'CC', 'HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature_timemean.csv'
-    df_data = pd.read_csv(file_data)
+    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
+    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
+    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
     for header in list_header:
         color = dict_color[header]
         marker = dict_marker[header]
-        ax.errorbar(df_data['temperature(K)'], df_data[header], ls=':', marker=marker, markersize=2, lw=1, color=color)
+        df = dfgb.get_group(header)
+        ax.errorbar(ser_temperature, df['lifetime(ps)'], yerr = [df['lower'], df['upper']], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2)
 
     ax.set_xlabel('Temperature (K)')
     ax.set_ylabel('Lifetime (ps)')
@@ -100,9 +100,8 @@ def fig_b(ax):
         ax,
         dict_text = {
             (355, 1000): 'TT',
-            (355,  400): r'H$_2$CO$_3$',
             (355,  100): 'CT',
-            (355,   30): r'HCO$_3^-$',
+            (355,   50): r'HCO$_3^-$',
             (355,   15): 'CC',
         }
     )
@@ -112,36 +111,37 @@ def fig_b(ax):
 def fig_c(ax):
 
     dict_label = {
-        'H2CO3': r'H$_2$CO$_3$',
         'HCO3': r'HCO$_3^-$',
     }
     dict_color = {
         'TT': 'tab:blue',
         'CT': 'tab:orange',
         'CC': 'tab:green',
-        'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
     dict_marker = {
         'TT': 'o',
         'CT': 'v',
         'CC': '^',
-        'H2CO3': '<',
         'HCO3': '>',
     }
 
-    list_header = ['TT', 'CT', 'CC','H2CO3']
+    list_header = ['TT', 'CT', 'CC','HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature_count.csv'
-    df_data = pd.read_csv(file_data)
+    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
+
+    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
+    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
     for header in list_header:
+        color = dict_color[header]
+        marker = dict_marker[header]
+        df = dfgb.get_group(header)
         label = header
         if header in dict_label:
             label = dict_label[header]
-        color = dict_color[header]
-        marker = dict_marker[header]
-        ax.errorbar(df_data['temperature(K)'], df_data[header], label=label, ls=':', marker=marker, markersize=2, lw=1, color=color) 
+        ax.errorbar(ser_temperature, df['count(ns-1)'], yerr = df['count(ns-1)_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2, label=label)
+
 
     ax.set_xlabel('Temperature (K)')
     ax.set_ylabel(r'Count (ns$^{-1}$)')
@@ -153,8 +153,8 @@ def fig_label(
 ):
     dict_pos = {
         '(a)': (-0.1, 0.9),
-        '(b)': (-0.22, 0.9),
-        '(c)': (-0.22, 0.9),
+        '(b)': (-0.3, 0.9),
+        '(c)': (-0.3, 0.9),
     }
     for label, ax in dict_ax.items():
         pos = dict_pos[label]

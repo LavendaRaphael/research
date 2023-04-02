@@ -70,12 +70,41 @@ def fig_b(
         transform = ax.transAxes
     )
 
+def fig_c(
+    ax
+):
+
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+
+    list_state = ['TT', 'CT', 'CC','H2CO3', 'HCO3']
+    dict_color = {
+        'TT': 'tab:blue',
+        'CT': 'tab:orange',
+        'CC': 'tab:green',
+        'H2CO3': 'tab:red',
+        'HCO3': 'tab:purple',
+    }
+    dict_label = {
+        'H2CO3': r'H$_2$CO$_3$',
+        'HCO3': r'HCO$_3^-$',
+    }
+
+    analysis.carbonic_survival(
+        ax = ax,
+        file_data = str_dir+'carbonic_lifedata.csv',
+        list_state = list_state,
+        dict_color = dict_color,
+        dict_label = dict_label,
+        file_lifetime = None
+    )
+
 def fig_label(
     dict_ax,
 ):
     dict_pos = {
         '(a)': (-0.12, 0.9),
         '(b)': (-0.12, 0.9),
+        '(c)': (-0.12, 0.9),
     }
     for label, ax in dict_ax.items():
         pos = dict_pos[label]
@@ -88,14 +117,16 @@ def fig_label(
 
 def run():
 
-    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, 7*cm))
+    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize = (8.6*cm, 10*cm))
 
     fig_a(ax0)
     fig_b(ax1)
+    fig_c(ax2)
 
     fig_label({
         '(a)': ax0,
         '(b)': ax1,
+        '(c)': ax2,
     })
 
     plot.save(
