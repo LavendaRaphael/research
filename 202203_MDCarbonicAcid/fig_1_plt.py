@@ -13,7 +13,7 @@ def fig_a(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/03.train/03.iter17_initmodel/02.rmse_val/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/03.train/03.iter17_initmodel/03.rmse_val.npt/'
     train.dptest_parity_plt(
         ax,
         str_file = str_dir+'dptest.e.out',
@@ -26,7 +26,7 @@ def fig_b(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/03.train/03.iter17_initmodel/02.rmse_val/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/03.train/03.iter17_initmodel/03.rmse_val.npt/'
     train.dptest_parity_plt(
         ax,
         str_file = str_dir+'dptest.f.out',

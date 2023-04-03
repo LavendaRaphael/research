@@ -23,6 +23,13 @@ def fig_a(
         list_header = ['HCO3', 'TT', 'CT', 'CC'],
         list_ypos = [1, 2, 3, 4],
         list_yticklabels = ['HCO$_3^-$', 'TT','CT','CC'],
+        dict_color = {
+            'TT': 'tab:blue',
+            'CT': 'tab:orange',
+            'CC': 'tab:green',
+            'H2CO3': 'tab:red',
+            'HCO3': 'tab:purple',
+        }
     )
     img_dir = homedir+'/research/202203_MDCarbonicAcid/structure/'
     plot.inset_img(
@@ -51,16 +58,23 @@ def fig_b(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/TT/carbonic/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CT/carbonic/'
     analysis.carbonic_rolling_plt(
         ax,
         str_file = str_dir+'carbonic_rolling.csv',
-        float_xscale = 0.000005,
+        float_xscale = 0.00001,
         str_xlabel = 'Time (ns)',
         tup_ylim = (0.5, 4.5),
         list_header = ['HCO3', 'TT', 'CT', 'CC'],
         list_ypos = [1, 2, 3, 4],
         list_yticklabels = ['HCO$_3^-$', 'TT','CT','CC'],
+        dict_color = {
+            'TT': 'tab:blue',
+            'CT': 'tab:orange',
+            'CC': 'tab:green',
+            'H2CO3': 'tab:red',
+            'HCO3': 'tab:purple',
+        }
     )
     plot.add_text(
         ax,

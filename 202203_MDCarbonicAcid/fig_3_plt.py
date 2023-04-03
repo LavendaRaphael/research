@@ -5,7 +5,7 @@ from tf_dpmd_kit import plm
 import os
 import pandas as pd
 import numpy as np
-from matplotlib import patheffects
+import matplotlib.colors as colors
 
 plot.set_rcparam()
 cm = 1/2.54
@@ -26,16 +26,20 @@ def fig_a(
     energy = plm.prob_to_deltag(h, temperature=330)
     energy -= np.amin(energy)
     extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-    cmap_new = plt.get_cmap('coolwarm', 10)
+    bounds = np.linspace(0, 30, 11)
+    norm = colors.BoundaryNorm(boundaries=bounds, ncolors=256, extend='max')
+    #cmap_new = plt.get_cmap('coolwarm', 14)
     #cmap_new = 'coolwarm'
     image = ax.imshow(
         energy.T,
         origin = 'lower',
         extent = extent,
-        cmap = cmap_new,
+        cmap = 'coolwarm',
         aspect = 'auto',
+        norm = norm
     )
-    fig.colorbar( mappable=image )
+    colorbar =  fig.colorbar( mappable=image, ax=ax, extend='max')
+    colorbar.ax.set_ylabel('Free energy (kJ/mol)')
 
     #ax.set_aspect(1)
     ax.set_xlabel(r'$\alpha$ (rad)')
@@ -191,7 +195,7 @@ def fig_b(
     plot.add_arrow(
         ax,
         dict_arrow = {
-            '1': [(np.pi*2, 26), (np.pi*2, 20)],
+            '1': [(np.pi*2, 26), (np.pi*2, 21)],
             '2': [(np.pi*2, 14), (np.pi*1.75, 19)],
             '3': [(np.pi*2, 14), (np.pi*2.25, 19)],
         },
