@@ -1,162 +1,302 @@
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from tf_dpmd_kit import plot
-from tf_dpmd_kit import plm
 import os
-import pandas as pd
+import matplotlib.pyplot as plt
+from tf_dpmd_kit import analysis
+from tf_dpmd_kit import plot
+import matplotlib as mpl
 import numpy as np
-from matplotlib.lines import Line2D
-
-plot.set_rcparam()
-cm = 1/2.54
-homedir = os.environ['homedir']
-mpl.rcParams['figure.dpi'] = 300
 
 def fig_a(
-    ax,
+    ax
 ):
 
+    str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+    df = analysis.carbonic_survival(
+        list_file = [
+            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
+            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
+            str_dir+'../CC/carbonic/carbonic_lifedata.csv',
+        ]
+    )
+
+    list_state = ['TT', 'CT', 'CC','H2CO3', 'HCO3']
     dict_color = {
         'TT': 'tab:blue',
         'CT': 'tab:orange',
         'CC': 'tab:green',
+        'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
+    dict_label = {
+        'H2CO3': r'H$_2$CO$_3$',
+        'HCO3': r'HCO$_3^-$',
+    }
 
-    dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
-    list_header = ['TT', 'CT', 'CC', 'HCO3']
+    analysis.carbonic_survival_plt(
+        ax = ax,
+        df = df,
+        list_state = list_state,
+        dict_color = dict_color,
+        dict_label = dict_label,
+    )
 
-    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
-    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
-    ser_0 = pd.Series([0]*len(ser_temperature))
-    for header in list_header:
-        ser_1 = dfgb.get_group(header)['prop'].reset_index(drop=True)
-        if header in dict_color:
-            color = dict_color[header]
-        ser_1 = ser_0 + ser_1
-        ax.fill_between(ser_temperature, ser_0, ser_1, lw=1, color=color, alpha=0.5)
-        ser_0 = ser_1
+def fig_b(ax):
+    ax.axis('off')
 
+    # horizon fig
+    w, h = ax.bbox.width, ax.bbox.height
+    dx = 0.27
+    dy = 5/8*w/h*dx
+    # vertical fig
+    dx1 = dy*h/w
+    dy1 = dx*w/h
+
+    # right, top
+    r = np.array([ dx/2,    0])
+    t = np.array([    0,   dy/2])
+    r1 = np.array([ dx1/2,    0])
+    t1 = np.array([    0,   dy1/2])
+    # shift
+    sx = np.array([0.05,   0])
+    sy = np.array([   0,0.05])
+
+    # pos
+    p_cc = np.array([1.2*dx, dy/2])
+    p_ct = np.array([1.2*dx, 0.5])
+    p_tt = np.array([1.2*dx, 1-dy/2])
+    p_xx = np.array([1-dx1/2, 0.5])
+    # middle
+    p_cc_ct = (p_cc+p_ct)/2
+    p_ct_tt = (p_ct+p_tt)/2
+    p_xx_tt = (p_xx-r1+t1+p_tt+r)/2
+    p_xx_ct = (p_xx-r1+p_ct+r)/2
+    p_xx_cc = (p_xx-r1-t1+p_cc+r)/2
+
+    # img
+    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_TT_H2O_126/plm/'
+    dir_cc  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/CC/plm/'
+    [axin3] = plot.inset_img(
+        ax,
+        dict_img = {
+            dir_cp +   '60147.png': (p_xx[0]-0.5*dx1, p_xx[1]-dy1/2, dx1, dy1),
+        },
+        dict_spinecolor = {
+            dir_cp +   '60147.png': 'tab:purple',
+        },
+        bool_rot90 = True,
+    )
+    [axin0, axin1, axin2] = plot.inset_img(
+        ax,
+        dict_img = {
+            dir_cc +'1.100001.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
+            dir_cp +   '60281.png': (p_ct[0]-0.5*dx, p_ct[1]-0.5*dy, dx, dy),
+            dir_cc +'0.003922.png': (p_cc[0]-0.5*dx, p_cc[1]-0.5*dy, dx, dy),
+        },
+        dict_spinecolor = {
+            dir_cc +'1.100001.png': 'tab:blue',
+            dir_cp +   '60281.png': 'tab:orange', 
+            dir_cc +'0.003922.png': 'tab:green',
+        }
+    )
+
+    # TT
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_tt-t-sx, p_ct+t-sx],
+            [p_tt+r+sy, p_xx+t1],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        color = 'tab:blue',
+    )
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_tt-r, p_cc-r],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        connectionstyle = 'arc3, rad=0.5',
+        color = 'tab:blue',
+    )
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_tt-r+sy, p_tt-r+sy-4*sx],
+        ],
+        arrowstyle = '<|-|>, head_length=2, head_width=1',
+        color = 'tab:blue',
+    )
+    plot.add_text(
+        axin0,
+        dict_text = {
+            (0.02, 0.95): '0.46',
+        },
+        transform = axin0.transAxes,
+        va = 'top',
+        ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc='tab:blue', lw=0)
+    )
     plot.add_text(
         ax,
         dict_text = {
-            (330, 0.65): 'TT',
-            (330, 0.87): 'CT',
-            (340, 0.87): 'CC',
-            (330, 0.97): r'HCO$_3^-$',
+            tuple(p_ct_tt-sx): '0.09',
+            tuple(p_xx_tt+sy): '0.33',
+            tuple(p_ct-r-3*sx): '0.01',
+            tuple(p_tt-r-2*sx+sy): '0.02'
         },
         va = 'center',
         ha = 'center',
-        color = 'white',
-        fontweight = 'bold',
-        fontsize = 8,
-    ),
-    plot.add_arrow(
+        bbox = dict(boxstyle='round', ec='tab:blue', fc='white')
+    )
+    plot.add_text(
         ax,
-        dict_arrow = {
-            'x': [(342, 0.87), (348, 0.92)]
+        dict_text = {
+            tuple(p_tt-r-2*sx+2*sy): 'Censored',
         },
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.1',
-        color = 'white'
+        va = 'center',
+        ha = 'center',
     )
 
-    ax.set_xlim(290, 350)
-    ax.set_ylim(0.5, 1)
-    ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Proportion'),
+    # CT
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_ct+t+sx, p_tt-t+sx],
+            [p_ct-t-sx, p_cc+t-sx],
+            [p_ct+r+sy, p_xx-r1+sy],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        color = 'tab:orange',
+    )
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_ct-r+[0,0.1], p_ct-r-[0,0.1]],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        connectionstyle = 'arc3, rad=0.4',
+        color = 'tab:orange',
+    )
+    plot.add_text(
+        axin1,
+        dict_text = {
+            (0.02, 0.95): '0.82',
+        },
+        transform = axin1.transAxes,
+        va = 'top',
+        ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc='tab:orange', lw=0)
+    )
+    plot.add_text(
+        ax,
+        dict_text = {
+            tuple(p_cc_ct-sx): '0.02',
+            tuple(p_ct_tt+sx): '0.10',
+            tuple(p_xx_ct+sy): '0.69',
+            tuple(p_ct-r-sx): '0.01',
+        },
+        va = 'center',
+        ha = 'center',
+        bbox = dict(boxstyle='round', ec='tab:orange', fc='white')
+    )
+    plot.add_text(
+        ax,
+        dict_text = {
+            tuple(p_ct-r-sx+sy): 'TS',
+        },
+        va = 'center',
+        ha = 'center',
+    )
 
-def fig_b(ax):
+    # CC
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_cc+t+sx, p_ct-t+sx],
+            [p_cc+r+sy, p_xx-r1-sy*3],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        color = 'tab:green',
+    )
+    plot.add_text(
+        axin2,
+        dict_text = {
+            (0.02, 0.95): '0.12',
+        },
+        transform = axin2.transAxes,
+        va = 'top',
+        ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc='tab:green', lw=0)
+    )
+    plot.add_text(
+        ax,
+        dict_text = {
+            tuple(p_cc_ct+sx): '0.02',
+            tuple(p_xx_cc+sy): '0.09',
+        },
+        va = 'center',
+        ha = 'center',
+        bbox = dict(boxstyle='round', ec='tab:green', fc='white')
+    )
 
-    dict_color = {
-        'TT': 'tab:blue',
-        'CT': 'tab:orange',
-        'CC': 'tab:green',
-        'HCO3': 'tab:purple',
-    }
-    dict_marker = {
-        'TT': 'o',
-        'CT': 'v',
-        'CC': '^',
-        'HCO3': '>',
-    }
-
-    list_header = ['TT', 'CT', 'CC', 'HCO3']
-
-    dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
-    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
-    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
-    for header in list_header:
-        color = dict_color[header]
-        marker = dict_marker[header]
-        df = dfgb.get_group(header)
-        ax.errorbar(ser_temperature, df['lifetime(ps)'], yerr = [df['lower'], df['upper']], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2)
-
-    ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Lifetime (ps)')
+    # HCO3
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_xx-r1+sy*3, p_tt+r-sy],
+            [p_xx-r1-sy,   p_ct+r-sy],
+            [p_xx-t1, p_cc+r-sy],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        color = 'tab:purple',
+    )
+    plot.add_text(
+        axin3,
+        dict_text = {
+            (0.95, 0.5): '1.12',
+        },
+        transform = axin3.transAxes,
+        va = 'center',
+        ha = 'right',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc='tab:purple', lw=0)
+    )
+    plot.add_text(
+        ax,
+        dict_text = {
+            tuple(p_xx_ct-sy): '0.70',
+            tuple(p_xx_tt-sy): '0.33',
+            tuple(p_xx_cc-sy): '0.09',
+        },
+        va = 'center',
+        ha = 'center',
+        bbox = dict(boxstyle='round', ec='tab:purple', fc='white')
+    )
 
     plot.add_text(
         ax,
         dict_text = {
-            (355, 1000): 'TT',
-            (355,  100): 'CT',
-            (355,   50): r'HCO$_3^-$',
-            (355,   15): 'CC',
-        }
+            (0.9, 0.95): r'Frequency (ns$^{-1}$)',
+        },
+        va = 'top',
+        ha = 'right',
     )
-    ax.set_yscale('log')
-    ax.set_xlim(None, 380)
-
-def fig_c(ax):
-
-    dict_label = {
-        'HCO3': r'HCO$_3^-$',
-    }
-    dict_color = {
-        'TT': 'tab:blue',
-        'CT': 'tab:orange',
-        'CC': 'tab:green',
-        'HCO3': 'tab:purple',
-    }
-    dict_marker = {
-        'TT': 'o',
-        'CT': 'v',
-        'CC': '^',
-        'HCO3': '>',
-    }
-
-    list_header = ['TT', 'CT', 'CC','HCO3']
-
-    dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
-
-    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
-    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
-    for header in list_header:
-        color = dict_color[header]
-        marker = dict_marker[header]
-        df = dfgb.get_group(header)
-        label = header
-        if header in dict_label:
-            label = dict_label[header]
-        ax.errorbar(ser_temperature, df['count(ns-1)'], yerr = df['count(ns-1)_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2, label=label)
-
-
-    ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel(r'Count (ns$^{-1}$)')
-
-    ax.legend(frameon=False)
 
 def fig_label(
-    dict_ax,
+    list_ax,
 ):
+
     dict_pos = {
         '(a)': (-0.1, 0.9),
-        '(b)': (-0.3, 0.9),
-        '(c)': (-0.3, 0.9),
+        '(b)': (0, 1),
     }
-    for label, ax in dict_ax.items():
+    for ax, label in zip(list_ax, dict_pos):
         pos = dict_pos[label]
         ax.text(
             x = pos[0],
@@ -167,21 +307,20 @@ def fig_label(
 
 def main():
 
-    fig = plt.figure( figsize = (8.6*cm, 8*cm))
-    (subfig0, subfig1) = fig.subfigures(2, 1)
+    plot.set_rcparam()
+    cm = 1/2.54
+    mpl.rcParams['figure.dpi'] = 300
+    homedir = os.environ['homedir']
 
-    ax0 = subfig0.subplots( )
-    (ax1, ax2) = subfig1.subplots(1, 2)
+    fig = plt.figure(figsize=(8.6*cm, (4+6)*cm))
+    (sfig0, sfig1) = fig.subfigures(2, 1, height_ratios=[4,6])
+    ax0 = sfig0.subplots()
+    ax1 = sfig1.subplots()
 
     fig_a(ax0)
     fig_b(ax1)
-    fig_c(ax2)
 
-    fig_label({
-        '(a)': ax0,
-        '(b)': ax1,
-        '(c)': ax2,
-    })
+    fig_label([ax0, ax1])
 
     plot.save(
         fig,
@@ -192,5 +331,4 @@ def main():
     plt.show()
 
 main()
-
 
