@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from tf_dpmd_kit import plot
 from tf_dpmd_kit import plm
+from tf_dpmd_kit import analysis
 import os
 import pandas as pd
 import numpy as np
@@ -17,9 +18,13 @@ def fig_a(
     ax,
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
-    df_data = pd.read_csv(str_dir+'carbonic_dihedrals.csv')
+    df_data = analysis.read_multidata([
+        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CC/carbonic/carbonic_dihedrals.csv',
+    ])
 
     h, xedges, yedges = np.histogram2d(df_data['dihedral0(rad)'], df_data['dihedral1(rad)'], bins=100, density=True)
 
@@ -74,7 +79,7 @@ def fig_a_sub(
 ):
 
     dir_file = homedir+'/research/202203_MDCarbonicAcid/structure/'
-    np_img = plt.imread(dir_file+'H2CO3_TS_01.png')
+    np_img = plt.imread(dir_file+'H2CO3_TS_02.png')
     ax.imshow(np_img)
     ax.axis('off')
 
@@ -94,9 +99,9 @@ def fig_a_sub(
     )
     plot.add_arrow(
         ax,
-        dict_arrow = {
-            '0': [p1, p2]
-        },
+        list_arrow = [
+            [p1, p2]
+        ],
         arrowstyle = '-',
         lw = 1,
         color = 'tab:blue',
@@ -122,9 +127,9 @@ def fig_a_sub(
     )
     plot.add_arrow(
         ax,
-        dict_arrow = {
-            '0': [p1, p2]
-        },
+        list_arrow = [
+            [p1, p2]
+        ],
         arrowstyle = '-',
         lw = 1,
         color = 'tab:blue',
@@ -151,9 +156,13 @@ def fig_b(
     ax,
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
-    df_data = pd.read_csv(str_dir+'carbonic_dihedrals.csv')
+    df_data = analysis.read_multidata([
+        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CC/carbonic/carbonic_dihedrals.csv',
+    ])
     ser_sum = df_data['dihedral0(rad)'] + df_data['dihedral1(rad)']
 
     np_hist, bin_edges = np.histogram(ser_sum, bins=100, density=True)
@@ -194,11 +203,11 @@ def fig_b(
     )
     plot.add_arrow(
         ax,
-        dict_arrow = {
-            '1': [(np.pi*2, 26), (np.pi*2, 21)],
-            '2': [(np.pi*2, 14), (np.pi*1.75, 19)],
-            '3': [(np.pi*2, 14), (np.pi*2.25, 19)],
-        },
+        list_arrow = [
+            [(np.pi*2, 26), (np.pi*2, 21)],
+            [(np.pi*2, 14), (np.pi*1.75, 19)],
+            [(np.pi*2, 14), (np.pi*2.25, 19)],
+        ],
         arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
         color = 'tab:orange',
         lw = 1,

@@ -56,8 +56,8 @@ def fig_b(ax):
     r1 = np.array([ dx1/2,    0])
     t1 = np.array([    0,   dy1/2])
     # shift
-    sx = np.array([0.05,   0])
-    sy = np.array([   0,0.05])
+    sx = np.array([dx/5,   0])
+    sy = np.array([   0,dy/5])
 
     # pos
     p_cc = np.array([1.2*dx, dy/2])
@@ -98,6 +98,7 @@ def fig_b(ax):
         }
     )
 
+    headstyle = 'head_length=4, head_width=4'
     # TT
     plot.add_arrow(
         ax,
@@ -105,7 +106,7 @@ def fig_b(ax):
             [p_tt-t-sx, p_ct+t-sx],
             [p_tt+r+sy, p_xx+t1],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:blue',
     )
     plot.add_arrow(
@@ -113,17 +114,28 @@ def fig_b(ax):
         list_arrow = [
             [p_tt-r, p_cc-r],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         connectionstyle = 'arc3, rad=0.5',
         color = 'tab:blue',
     )
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_tt-r+sy, p_tt-r+sy-4*sx],
+            [p_tt-r+sy, p_tt-2.2*r+sy],
         ],
-        arrowstyle = '<|-|>, head_length=2, head_width=1',
+        arrowstyle = f'-',
         color = 'tab:blue',
+        shrinkA=5, shrinkB=5,
+        linestyle = ':'
+    ),
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [p_tt-r+sy, p_tt-2.2*r+sy],
+        ],
+        arrowstyle = f'<|-|>, head_length=4, head_width=2',
+        color = 'tab:blue',
+        linewidth = 0,
     )
     plot.add_text(
         axin0,
@@ -140,10 +152,10 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_ct_tt-sx): '0.09',
+            tuple(p_ct_tt-sx+0.3*sy): '0.09',
             tuple(p_xx_tt+sy): '0.33',
-            tuple(p_ct-r-3*sx): '0.01',
-            tuple(p_tt-r-2*sx+sy): '0.02'
+            tuple(p_ct_tt-1.7*r): '0.01',
+            tuple(p_tt-1.6*r+sy): '0.02'
         },
         va = 'center',
         ha = 'center',
@@ -152,7 +164,7 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_tt-r-2*sx+2*sy): 'Censored',
+            tuple(p_tt-1.6*r+2*sy): 'Censored',
         },
         va = 'center',
         ha = 'center',
@@ -166,7 +178,7 @@ def fig_b(ax):
             [p_ct-t-sx, p_cc+t-sx],
             [p_ct+r+sy, p_xx-r1+sy],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:orange',
     )
     plot.add_arrow(
@@ -174,7 +186,7 @@ def fig_b(ax):
         list_arrow = [
             [p_ct-r+[0,0.1], p_ct-r-[0,0.1]],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         connectionstyle = 'arc3, rad=0.4',
         color = 'tab:orange',
     )
@@ -193,8 +205,8 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_cc_ct-sx): '0.02',
-            tuple(p_ct_tt+sx): '0.10',
+            tuple(p_cc_ct-sx+0.3*sy): '0.02',
+            tuple(p_ct_tt+sx-0.3*sy): '0.10',
             tuple(p_xx_ct+sy): '0.69',
             tuple(p_ct-r-sx): '0.01',
         },
@@ -218,7 +230,7 @@ def fig_b(ax):
             [p_cc+t+sx, p_ct-t+sx],
             [p_cc+r+sy, p_xx-r1-sy*3],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:green',
     )
     plot.add_text(
@@ -236,7 +248,7 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_cc_ct+sx): '0.02',
+            tuple(p_cc_ct+sx-0.3*sy): '0.02',
             tuple(p_xx_cc+sy): '0.09',
         },
         va = 'center',
@@ -252,7 +264,7 @@ def fig_b(ax):
             [p_xx-r1-sy,   p_ct+r-sy],
             [p_xx-t1, p_cc+r-sy],
         ],
-        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:purple',
     )
     plot.add_text(

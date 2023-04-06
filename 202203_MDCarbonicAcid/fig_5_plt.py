@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from matplotlib.lines import Line2D
 
+homedir = os.environ['homedir']
 def fig_a(
     ax,
 ):
@@ -103,7 +104,49 @@ def fig_b(ax):
     ax.set_yscale('log')
     ax.set_xlim(None, 375)
 
+
 def fig_c(ax):
+
+    dict_color = {
+        'TT': 'tab:blue',
+        'CT': 'tab:orange',
+        'CC': 'tab:green',
+        'HCO3': 'tab:purple',
+    }
+    dict_marker = {
+        'TT': 'o',
+        'CT': 'v',
+        'CC': '^',
+        'HCO3': '>',
+    }
+
+    list_header = ['TT', 'CT', 'CC', 'HCO3']
+
+    dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
+    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
+    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
+    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
+    for header in list_header:
+        color = dict_color[header]
+        marker = dict_marker[header]
+        df = dfgb.get_group(header)
+        ax.errorbar(ser_temperature, df['freqprop'], yerr = df['freqprop_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2)
+
+    ax.set_xlabel('Temperature (K)')
+    ax.set_ylabel('Frequency proportion')
+
+    plot.add_text(
+        ax,
+        dict_text = {
+            (355, 0.2): 'TT',
+            (355, 0.3): 'CT',
+            (355, 0.4): r'HCO$_3^-$',
+            (355, 0.08): 'CC',
+        }
+    )
+    ax.set_xlim(None, 375)
+
+def fig_c_(ax):
 
     dict_label = {
         'HCO3': r'HCO$_3^-$',
@@ -144,14 +187,15 @@ def fig_c(ax):
     ax.legend(frameon=False)
 
 def fig_label(
-    dict_ax,
+    list_ax,
 ):
+
     dict_pos = {
         '(a)': (-0.1, 0.9),
         '(b)': (-0.3, 0.9),
         '(c)': (-0.3, 0.9),
     }
-    for label, ax in dict_ax.items():
+    for ax, label in zip(list_ax, dict_pos):
         pos = dict_pos[label]
         ax.text(
             x = pos[0],
@@ -164,7 +208,6 @@ def main():
 
     plot.set_rcparam()
     cm = 1/2.54
-    homedir = os.environ['homedir']
     mpl.rcParams['figure.dpi'] = 300
 
     fig = plt.figure( figsize = (8.6*cm, 8*cm))
@@ -177,11 +220,7 @@ def main():
     fig_b(ax1)
     fig_c(ax2)
 
-    fig_label({
-        '(a)': ax0,
-        '(b)': ax1,
-        '(c)': ax2,
-    })
+    fig_label([ax0,ax1,ax2])
 
     plot.save(
         fig,
