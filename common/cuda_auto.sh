@@ -1,6 +1,6 @@
-nvidia-smi
+#!/bin/bash
+
 qstat -f ${PBS_JOBID}|grep exec_gpus
-echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
 
 str_print=$(python << EOF
 
