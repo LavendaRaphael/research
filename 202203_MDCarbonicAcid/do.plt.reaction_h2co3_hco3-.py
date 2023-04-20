@@ -14,11 +14,11 @@ list_t = []
 for int_i in range(len(list_e)-1):
     list_t.append( (list_e[int_i]+list_e[int_i+1])/2 )
 
-diagram.add_level(list_e[0],f'${Formula("H2CO3").latex}$(TT)')
+diagram.add_level(list_e[0],f'${Formula("H2CO3").latex}$(CC)')
 diagram.add_level(list_e[1],f'${Formula("HCO3-").latex}$(T)')
 diagram.add_level(list_e[2],f'${Formula("H2CO3").latex}$(CT)')
 diagram.add_level(list_e[3],f'${Formula("HCO3-").latex}$(C)')
-diagram.add_level(list_e[4],f'${Formula("H2CO3").latex}$(CC)',top_text="?")
+diagram.add_level(list_e[4],f'${Formula("H2CO3").latex}$(TT)',top_text="?")
 
 diagram.add_link(0,1)
 diagram.add_link(1,2)

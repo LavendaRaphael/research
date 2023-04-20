@@ -12,17 +12,17 @@ def fig_a(
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     df = analysis.carbonic_survival(
         list_file = [
-            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
-            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
             str_dir+'../CC/carbonic/carbonic_lifedata.csv',
+            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
+            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
         ]
     )
 
-    list_state = ['TT', 'CT', 'CC','H2CO3', 'HCO3']
+    list_state = ['CC', 'CT', 'TT','H2CO3', 'HCO3']
     dict_color = {
-        'TT': 'tab:blue',
+        'CC': 'tab:blue',
         'CT': 'tab:orange',
-        'CC': 'tab:green',
+        'TT': 'tab:green',
         'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
@@ -42,6 +42,25 @@ def fig_a(
 def fig_b(ax):
     ax.axis('off')
 
+    f_cc = 0.46
+    f_ct = 0.71
+    f_tt = 0.12
+    f_xx = 1.05
+    f_tt_ct = 0.02
+    f_tt_xx = '0.10'
+    f_ct_tt = 0.03
+    f_ct_ct = 0.01
+    f_ct_xx = '0.60'
+    f_ct_cc = 0.08
+    f_xx_tt = 0.09
+    f_xx_ct = 0.59
+    f_xx_cc = 0.37
+    f_cc_tt = 0.01
+    f_cc_ct = 0.09
+    f_cc_xx = 0.35
+    f_cc_cen = 0.02
+    f_cen_cc = 0.02
+
     # horizon fig
     w, h = ax.bbox.width, ax.bbox.height
     dx = 0.27
@@ -60,20 +79,20 @@ def fig_b(ax):
     sy = np.array([   0,dy/5])
 
     # pos
-    p_cc = np.array([1.2*dx, dy/2])
+    p_tt = np.array([1.2*dx, dy/2])
     p_ct = np.array([1.2*dx, 0.5])
-    p_tt = np.array([1.2*dx, 1-dy/2])
+    p_cc = np.array([1.2*dx, 1-dy/2])
     p_xx = np.array([1-dx1/2, 0.5])
     # middle
-    p_cc_ct = (p_cc+p_ct)/2
-    p_ct_tt = (p_ct+p_tt)/2
-    p_xx_tt = (p_xx-r1+t1+p_tt+r)/2
+    p_tt_ct = (p_tt+p_ct)/2
+    p_ct_cc = (p_ct+p_cc)/2
+    p_xx_cc = (p_xx-r1+t1+p_cc+r)/2
     p_xx_ct = (p_xx-r1+p_ct+r)/2
-    p_xx_cc = (p_xx-r1-t1+p_cc+r)/2
+    p_xx_tt = (p_xx-r1-t1+p_tt+r)/2
 
     # img
-    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_TT_H2O_126/plm/'
-    dir_cc  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/CC/plm/'
+    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
+    dir_tt  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/TT/plm/'
     [axin3] = plot.inset_img(
         ax,
         dict_img = {
@@ -87,24 +106,24 @@ def fig_b(ax):
     [axin0, axin1, axin2] = plot.inset_img(
         ax,
         dict_img = {
-            dir_cc +'1.100001.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
+            dir_tt +'1.100001.png': (p_cc[0]-0.5*dx, p_cc[1]-0.5*dy, dx, dy),
             dir_cp +   '60281.png': (p_ct[0]-0.5*dx, p_ct[1]-0.5*dy, dx, dy),
-            dir_cc +'0.003922.png': (p_cc[0]-0.5*dx, p_cc[1]-0.5*dy, dx, dy),
+            dir_tt +'0.003922.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
         },
         dict_spinecolor = {
-            dir_cc +'1.100001.png': 'tab:blue',
+            dir_tt +'1.100001.png': 'tab:blue',
             dir_cp +   '60281.png': 'tab:orange', 
-            dir_cc +'0.003922.png': 'tab:green',
+            dir_tt +'0.003922.png': 'tab:green',
         }
     )
 
     headstyle = 'head_length=4, head_width=4'
-    # TT
+    # CC
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_tt-t-sx, p_ct+t-sx],
-            [p_tt+r+sy, p_xx+t1],
+            [p_cc-t-sx, p_ct+t-sx],
+            [p_cc+r+sy, p_xx+t1],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:blue',
@@ -112,7 +131,7 @@ def fig_b(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_tt-r, p_cc-r],
+            [p_cc-r, p_tt-r],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         connectionstyle = 'arc3, rad=0.5',
@@ -121,7 +140,7 @@ def fig_b(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_tt-r+sy, p_tt-2.2*r+sy],
+            [p_cc-r+sy, p_cc-2.2*r+sy],
         ],
         arrowstyle = f'-',
         color = 'tab:blue',
@@ -131,7 +150,7 @@ def fig_b(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_tt-r+sy, p_tt-2.2*r+sy],
+            [p_cc-r+sy, p_cc-2.2*r+sy],
         ],
         arrowstyle = f'<|-|>, head_length=4, head_width=2',
         color = 'tab:blue',
@@ -140,7 +159,7 @@ def fig_b(ax):
     plot.add_text(
         axin0,
         dict_text = {
-            (0.02, 0.95): '0.46',
+            (0.02, 0.95): f_cc,
         },
         transform = axin0.transAxes,
         va = 'top',
@@ -152,10 +171,10 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_ct_tt-sx+0.3*sy): '0.09',
-            tuple(p_xx_tt+sy): '0.33',
-            tuple(p_ct_tt-1.7*r): '0.01',
-            tuple(p_tt-1.6*r+sy): '0.02'
+            tuple(p_ct_cc-sx+0.3*sy): f_cc_ct,
+            tuple(p_xx_cc+sy): f_cc_xx,
+            tuple(p_ct_cc-1.7*r): f_cc_tt,
+            tuple(p_cc-1.6*r+sy): f_cc_cen
         },
         va = 'center',
         ha = 'center',
@@ -164,7 +183,7 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_tt-1.6*r+2*sy): 'Censored',
+            tuple(p_cc-1.6*r+2*sy): 'Censored',
         },
         va = 'center',
         ha = 'center',
@@ -174,8 +193,8 @@ def fig_b(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_ct+t+sx, p_tt-t+sx],
-            [p_ct-t-sx, p_cc+t-sx],
+            [p_ct+t+sx, p_cc-t+sx],
+            [p_ct-t-sx, p_tt+t-sx],
             [p_ct+r+sy, p_xx-r1+sy],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
@@ -193,7 +212,7 @@ def fig_b(ax):
     plot.add_text(
         axin1,
         dict_text = {
-            (0.02, 0.95): '0.82',
+            (0.02, 0.95): f_ct,
         },
         transform = axin1.transAxes,
         va = 'top',
@@ -205,10 +224,10 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_cc_ct-sx+0.3*sy): '0.02',
-            tuple(p_ct_tt+sx-0.3*sy): '0.10',
-            tuple(p_xx_ct+sy): '0.69',
-            tuple(p_ct-r-sx): '0.01',
+            tuple(p_tt_ct-sx+0.3*sy): f_ct_tt,
+            tuple(p_ct_cc+sx-0.3*sy): f_ct_cc,
+            tuple(p_xx_ct+sy): f_ct_xx,
+            tuple(p_ct-r-sx): f_ct_ct,
         },
         va = 'center',
         ha = 'center',
@@ -223,12 +242,12 @@ def fig_b(ax):
         ha = 'center',
     )
 
-    # CC
+    # TT
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_cc+t+sx, p_ct-t+sx],
-            [p_cc+r+sy, p_xx-r1-sy*3],
+            [p_tt+t+sx, p_ct-t+sx],
+            [p_tt+r+sy, p_xx-r1-sy*3],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:green',
@@ -236,7 +255,7 @@ def fig_b(ax):
     plot.add_text(
         axin2,
         dict_text = {
-            (0.02, 0.95): '0.12',
+            (0.02, 0.95): f_tt,
         },
         transform = axin2.transAxes,
         va = 'top',
@@ -248,8 +267,8 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_cc_ct+sx-0.3*sy): '0.02',
-            tuple(p_xx_cc+sy): '0.09',
+            tuple(p_tt_ct+sx-0.3*sy): f_tt_ct,
+            tuple(p_xx_tt+sy): f_tt_xx,
         },
         va = 'center',
         ha = 'center',
@@ -260,9 +279,9 @@ def fig_b(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [p_xx-r1+sy*3, p_tt+r-sy],
+            [p_xx-r1+sy*3, p_cc+r-sy],
             [p_xx-r1-sy,   p_ct+r-sy],
-            [p_xx-t1, p_cc+r-sy],
+            [p_xx-t1, p_tt+r-sy],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         color = 'tab:purple',
@@ -270,7 +289,7 @@ def fig_b(ax):
     plot.add_text(
         axin3,
         dict_text = {
-            (0.95, 0.5): '1.12',
+            (0.95, 0.5): f_xx,
         },
         transform = axin3.transAxes,
         va = 'center',
@@ -282,9 +301,9 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_xx_ct-sy): '0.70',
-            tuple(p_xx_tt-sy): '0.33',
-            tuple(p_xx_cc-sy): '0.09',
+            tuple(p_xx_ct-sy): f_xx_ct,
+            tuple(p_xx_cc-sy): f_xx_cc,
+            tuple(p_xx_tt-sy): f_xx_tt,
         },
         va = 'center',
         ha = 'center',

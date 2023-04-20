@@ -21,32 +21,28 @@ def fig_a(
     str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
     df_data = analysis.read_multidata([
-        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
-        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
         str_dir+'CC/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
     ])
 
-    h, xedges, yedges = np.histogram2d(df_data['dihedral0(rad)'], df_data['dihedral1(rad)'], bins=100, density=True)
+    h, xedges, yedges = np.histogram2d(df_data['dihedral0(rad)'], df_data['dihedral1(rad)'], bins=200, density=True)
 
     energy = plm.prob_to_deltag(h, temperature=330)
     energy -= np.amin(energy)
     extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-    bounds = np.linspace(0, 30, 11)
-    norm = colors.BoundaryNorm(boundaries=bounds, ncolors=256, extend='max')
-    #cmap_new = plt.get_cmap('coolwarm', 14)
-    #cmap_new = 'coolwarm'
     image = ax.imshow(
         energy.T,
         origin = 'lower',
         extent = extent,
         cmap = 'coolwarm',
+        #cmap = 'terrain',
         aspect = 'auto',
-        norm = norm
+        norm =colors.BoundaryNorm(boundaries=np.linspace(0, 30, 11), ncolors=256, extend='max')
     )
     colorbar =  fig.colorbar( mappable=image, ax=ax, extend='max')
     colorbar.ax.set_ylabel('Free energy (kJ/mol)')
 
-    #ax.set_aspect(1)
     ax.set_xlabel(r'$\alpha$ (rad)')
     ax.set_ylabel(r'$\beta$ (rad)')
 
@@ -58,10 +54,10 @@ def fig_a(
     plot.add_text(
         ax,
         dict_text = {
-            (0, 0)       : 'TT',
+            (0, 0)       : 'CC',
             (np.pi, 0)   : 'CT',
             (0, np.pi)   : 'CT',
-            (np.pi, np.pi): 'CC',
+            (np.pi, np.pi): 'TT',
         },
         va = 'center',
         ha = 'center',
@@ -159,9 +155,9 @@ def fig_b(
     str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
     df_data = analysis.read_multidata([
-        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
-        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
         str_dir+'CC/carbonic/carbonic_dihedrals.csv',
+        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
+        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
     ])
     ser_sum = df_data['dihedral0(rad)'] + df_data['dihedral1(rad)']
 
@@ -178,24 +174,24 @@ def fig_b(
     ax.set_xticklabels([0, r'$\pi$/2', r'$\pi$', r'3$\pi$/2', r'2$\pi$'])
     ax.set_ylim(None, None)
 
-    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_TT_H2O_126/plm/'
-    dir_cc  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/CC/plm/'
+    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
+    dir_tt  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/TT/plm/'
     plot.inset_img(
         ax,
         dict_img = {
-            dir_cc +'1.100001.png': (0.05, 0.5, 0.3, 0.4),
+            dir_tt +'1.100001.png': (0.05, 0.5, 0.3, 0.4),
             dir_cp +   '60281.png': (0.33, 0.5, 0.3, 0.4),
-            dir_cc +'0.003922.png': (0.6, 0.1, 0.3, 0.3),
-            dir_cc +'0.003576.png': (0.6, 0.65, 0.3, 0.3),
+            dir_tt +'0.003922.png': (0.6, 0.1, 0.3, 0.3),
+            dir_tt +'0.003576.png': (0.6, 0.65, 0.3, 0.3),
         },
         bool_axis = False,
     )
     plot.add_text(
         ax,
         dict_text = {
-            (0, 15): 'TT',
+            (0, 15): 'CC',
             (np.pi, 15): 'CT',
-            (5, 15): 'CC',
+            (5, 15): 'TT',
         },
         va = 'center',
         ha = 'center',

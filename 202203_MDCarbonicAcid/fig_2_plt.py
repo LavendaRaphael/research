@@ -13,7 +13,7 @@ def fig_a(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_TT_H2O_126/carbonic/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/carbonic/'
     analysis.carbonic_rolling_plt(
         ax,
         file_data = str_dir+'carbonic_state.csv',
@@ -21,13 +21,13 @@ def fig_a(
         str_xlabel = 'Time (ps)',
         int_window = 10,
         tup_ylim = (0.5, 4.5),
-        list_header = ['HCO3', 'TT', 'CT', 'CC'],
+        list_header = ['HCO3', 'CC', 'CT', 'TT'],
         list_ypos = [1, 2, 3, 4],
-        list_yticklabels = ['HCO$_3^-$', 'TT','CT','CC'],
+        list_yticklabels = ['HCO$_3^-$', 'CC','CT','TT'],
         dict_color = {
-            'TT': 'tab:blue',
+            'CC': 'tab:blue',
             'CT': 'tab:orange',
-            'CC': 'tab:green',
+            'TT': 'tab:green',
             'H2CO3': 'tab:red',
             'HCO3': 'tab:purple',
         }
@@ -36,9 +36,9 @@ def fig_a(
     plot.inset_img(
         ax,
         dict_img = {
-            img_dir+'H2CO3_TT.png': (0.1, 0.5, 0.2, 0.4),
+            img_dir+'H2CO3_CC.png': (0.1, 0.5, 0.2, 0.4),
             img_dir+'H2CO3_CT.png': (0.3, 0.5, 0.2, 0.4),
-            img_dir+'H2CO3_CC.png': (0.5, 0.5, 0.2, 0.4),
+            img_dir+'H2CO3_TT.png': (0.5, 0.5, 0.2, 0.4),
         },
         bool_axis = False,
     )
@@ -46,9 +46,9 @@ def fig_a(
         ax,
         dict_text = {
             (0.9, 0.9 )  : 'AIMD',
-            (0.2, 0.45)  : 'TT'  ,
+            (0.2, 0.45)  : 'CC'  ,
             (0.4, 0.45)  : 'CT'  ,
-            (0.6, 0.45)  : 'CC'  ,
+            (0.6, 0.45)  : 'TT'  ,
         },
         va = 'center',
         ha = 'center',
@@ -67,13 +67,13 @@ def fig_b(
         str_xlabel = 'Time (ns)',
         tup_ylim = (0.5, 4.5),
         int_window = 100,
-        list_header = ['HCO3', 'TT', 'CT', 'CC'],
+        list_header = ['HCO3', 'CC', 'CT', 'TT'],
         list_ypos = [1, 2, 3, 4],
-        list_yticklabels = ['HCO$_3^-$', 'TT','CT','CC'],
+        list_yticklabels = ['HCO$_3^-$', 'CC','CT','TT'],
         dict_color = {
-            'TT': 'tab:blue',
+            'CC': 'tab:blue',
             'CT': 'tab:orange',
-            'CC': 'tab:green',
+            'TT': 'tab:green',
             'H2CO3': 'tab:red',
             'HCO3': 'tab:purple',
         }

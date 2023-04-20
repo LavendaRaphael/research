@@ -13,15 +13,15 @@ def fig_a(
 ):
 
     dict_color = {
-        'TT': 'tab:blue',
+        'CC': 'tab:blue',
         'CT': 'tab:orange',
-        'CC': 'tab:green',
+        'TT': 'tab:green',
         'HCO3': 'tab:purple',
     }
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature.csv'
-    list_header = ['TT', 'CT', 'CC', 'HCO3']
+    list_header = ['CC', 'CT', 'TT', 'HCO3']
 
     dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
     ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
@@ -37,9 +37,9 @@ def fig_a(
     plot.add_text(
         ax,
         dict_text = {
-            (330, 0.65): 'TT',
+            (330, 0.65): 'CC',
             (330, 0.87): 'CT',
-            (340, 0.87): 'CC',
+            (340, 0.87): 'TT',
             (330, 0.97): r'HCO$_3^-$',
         },
         va = 'center',
@@ -65,19 +65,19 @@ def fig_a(
 def fig_b(ax):
 
     dict_color = {
-        'TT': 'tab:blue',
+        'CC': 'tab:blue',
         'CT': 'tab:orange',
-        'CC': 'tab:green',
+        'TT': 'tab:green',
         'HCO3': 'tab:purple',
     }
     dict_marker = {
-        'TT': 'o',
+        'CC': 'o',
         'CT': 'v',
-        'CC': '^',
+        'TT': '^',
         'HCO3': '>',
     }
 
-    list_header = ['TT', 'CT', 'CC', 'HCO3']
+    list_header = ['CC', 'CT', 'TT', 'HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature.csv'
@@ -95,10 +95,10 @@ def fig_b(ax):
     plot.add_text(
         ax,
         dict_text = {
-            (355, 1000): 'TT',
+            (355, 1000): 'CC',
             (355,  100): 'CT',
             (355,   50): r'HCO$_3^-$',
-            (355,   15): 'CC',
+            (355,   15): 'TT',
         }
     )
     ax.set_yscale('log')
@@ -108,19 +108,19 @@ def fig_b(ax):
 def fig_c(ax):
 
     dict_color = {
-        'TT': 'tab:blue',
+        'CC': 'tab:blue',
         'CT': 'tab:orange',
-        'CC': 'tab:green',
+        'TT': 'tab:green',
         'HCO3': 'tab:purple',
     }
     dict_marker = {
-        'TT': 'o',
+        'CC': 'o',
         'CT': 'v',
-        'CC': '^',
+        'TT': '^',
         'HCO3': '>',
     }
 
-    list_header = ['TT', 'CT', 'CC', 'HCO3']
+    list_header = ['CC', 'CT', 'TT', 'HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature.csv'
@@ -138,10 +138,10 @@ def fig_c(ax):
     plot.add_text(
         ax,
         dict_text = {
-            (355, 0.2): 'TT',
+            (355, 0.2): 'CC',
             (355, 0.3): 'CT',
             (355, 0.4): r'HCO$_3^-$',
-            (355, 0.08): 'CC',
+            (355, 0.08): 'TT',
         }
     )
     ax.set_xlim(None, 375)
@@ -152,19 +152,19 @@ def fig_c_(ax):
         'HCO3': r'HCO$_3^-$',
     }
     dict_color = {
-        'TT': 'tab:blue',
+        'CC': 'tab:blue',
         'CT': 'tab:orange',
-        'CC': 'tab:green',
+        'TT': 'tab:green',
         'HCO3': 'tab:purple',
     }
     dict_marker = {
-        'TT': 'o',
+        'CC': 'o',
         'CT': 'v',
-        'CC': '^',
+        'TT': '^',
         'HCO3': '>',
     }
 
-    list_header = ['TT', 'CT', 'CC','HCO3']
+    list_header = ['CC', 'CT', 'TT','HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
     file_data = dir_data+ 'carbonic_statistic.temperature.csv'
