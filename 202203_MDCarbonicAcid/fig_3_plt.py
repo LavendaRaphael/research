@@ -25,6 +25,8 @@ def fig_a(
         str_dir+'CT/carbonic/carbonic_dihedrals.csv',
         str_dir+'TT/carbonic/carbonic_dihedrals.csv',
     ])
+    df_sym = df_data.rename(columns={'dihedral1(rad)': 'dihedral0(rad)', 'dihedral0(rad)': 'dihedral1(rad)'})
+    df_data = pd.concat([df_data, df_sym], ignore_index=True)
 
     h, xedges, yedges = np.histogram2d(df_data['dihedral0(rad)'], df_data['dihedral1(rad)'], bins=200, density=True)
 
@@ -46,6 +48,8 @@ def fig_a(
     ax.set_xlabel(r'$\alpha$ (rad)')
     ax.set_ylabel(r'$\beta$ (rad)')
 
+    ax.set_xlim(-np.pi/2, 1.5*np.pi)
+    ax.set_ylim(-np.pi/2, 1.5*np.pi)
     ax.set_xticks([0, np.pi/2, np.pi])
     ax.set_yticks([0, np.pi/2, np.pi])
     ax.set_xticklabels([0, r'$\pi$/2', r'$\pi$'])
