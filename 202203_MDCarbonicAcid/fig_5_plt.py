@@ -31,7 +31,7 @@ def fig_a(
         if header in dict_color:
             color = dict_color[header]
         ser_1 = ser_0 + ser_1
-        ax.fill_between(ser_temperature, ser_0, ser_1, lw=1, color=color, alpha=0.5)
+        ax.fill_between(ser_temperature, ser_0, ser_1, lw=0, color=color, alpha=0.5)
         ser_0 = ser_1
 
     plot.add_text(
@@ -62,7 +62,7 @@ def fig_a(
     ax.set_xlabel('Temperature (K)')
     ax.set_ylabel('Proportion'),
 
-def fig_b(ax):
+def fig_c(ax):
 
     dict_color = {
         'CC': 'tab:blue',
@@ -105,7 +105,7 @@ def fig_b(ax):
     ax.set_xlim(None, 375)
 
 
-def fig_c(ax):
+def fig_b(ax):
 
     dict_color = {
         'CC': 'tab:blue',
@@ -138,7 +138,7 @@ def fig_c(ax):
     plot.add_text(
         ax,
         dict_text = {
-            (355, 0.2): 'CC',
+            (355, 0.15): 'CC',
             (355, 0.3): 'CT',
             (355, 0.4): r'HCO$_3^-$',
             (355, 0.08): 'TT',
