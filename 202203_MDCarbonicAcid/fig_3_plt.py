@@ -40,22 +40,22 @@ def fig_b(
 def fig_a(ax):
     ax.axis('off')
 
-    f_cc = 0.45
-    f_ct = 0.75
-    f_tt = 0.13
-    f_xx = 1.06
+    f_cc = 0.47
+    f_ct = 0.84
+    f_tt = 0.17
+    f_xx = 1.17
     f_cc_ct = 0.11
-    f_cc_xx = 0.33
-    f_cc_tt = 0.004
-    f_ct_cc = 0.08
-    f_ct_ct = 0.008
-    f_ct_xx = 0.63
-    f_ct_tt = 0.03
-    f_xx_cc = 0.36
-    f_xx_ct = '0.60'
-    f_xx_tt = '0.10'
-    f_tt_ct = 0.03
-    f_tt_xx = 0.11
+    f_cc_xx = 0.35
+    f_cc_tt = 0.003
+    f_ct_cc = 0.09
+    f_ct_ct = 0.007
+    f_ct_xx = 0.69
+    f_ct_tt = 0.04
+    f_xx_cc = 0.37
+    f_xx_ct = 0.68
+    f_xx_tt = 0.13
+    f_tt_ct = 0.04
+    f_tt_xx = 0.13
 
     # horizon fig
     w, h = ax.bbox.width, ax.bbox.height

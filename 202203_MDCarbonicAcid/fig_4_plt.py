@@ -185,8 +185,8 @@ def fig_b(
         dict_img = {
             dir_tt +'1.100001.png': (0.05, 0.5, 0.3, 0.4),
             dir_cp +   '60281.png': (0.33, 0.5, 0.3, 0.4),
-            dir_tt +'0.003922.png': (0.6, 0.1, 0.3, 0.3),
-            dir_tt +'0.003576.png': (0.6, 0.65, 0.3, 0.3),
+            dir_tt +'0.003922.png': (0.6, 0.05, 0.3, 0.3),
+            dir_tt +'0.003576.png': (0.6, 0.60, 0.3, 0.3),
         },
         bool_axis = False,
     )
@@ -204,9 +204,9 @@ def fig_b(
     plot.add_arrow(
         ax,
         list_arrow = [
-            [(np.pi*2, 26), (np.pi*2, 21)],
-            [(np.pi*2, 14), (np.pi*1.75, 19)],
-            [(np.pi*2, 14), (np.pi*2.25, 19)],
+            [(np.pi*2, 24), (np.pi*2, 19)],
+            [(np.pi*2, 12), (np.pi*1.75, 17)],
+            [(np.pi*2, 12), (np.pi*2.25, 17)],
         ],
         arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
         color = 'tab:orange',
@@ -247,7 +247,7 @@ def run():
 
     plot.save(
         fig,
-        file_save = 'fig_3',
+        file_save = 'fig_4',
         list_type = ['pdf', 'svg']
     )
 
