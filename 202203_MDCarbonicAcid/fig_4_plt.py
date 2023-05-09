@@ -21,29 +21,41 @@ def fig_a(
     str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
     df_data = analysis.read_multidata([
-        str_dir+'CC/carbonic/carbonic_dihedrals.csv',
-        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
-        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
-    ])
+        str_dir+'CC/carbonic/carbonic.product.csv',
+        str_dir+'CT/carbonic/carbonic.product.csv',
+        str_dir+'TT/carbonic/carbonic.product.csv',
+    ]).dropna()
+    df_data = df_data[df_data['roh0(ang)']<1.3]
     df_sym = df_data.rename(columns={'dihedral1(rad)': 'dihedral0(rad)', 'dihedral0(rad)': 'dihedral1(rad)'})
     df_data = pd.concat([df_data, df_sym], ignore_index=True)
 
     h, xedges, yedges = np.histogram2d(df_data['dihedral0(rad)'], df_data['dihedral1(rad)'], bins=200, density=True)
-
     energy = plm.prob_to_deltag(h, temperature=330)
     energy -= np.amin(energy)
-    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+
+    print(energy)
+    cen_x = (xedges[:-1] + xedges[1:])/2
+    cen_y = (yedges[:-1] + yedges[1:])/2
+    bool_xc = (cen_x < np.pi/2)
+    bool_xt = (cen_x > np.pi/2)
+    bool_yc = (cen_y < np.pi/2)
+    bool_yt = (cen_y > np.pi/2)
+    print('CC', min(energy[bool_xc, bool_yc]))
+    print('CT', min(energy[bool_xc, bool_yt]))
+    print('TC', min(energy[bool_xt, bool_yc]))
+    print('TT', min(energy[bool_xt, bool_yt]))
+
     image = ax.imshow(
         energy.T,
         origin = 'lower',
-        extent = extent,
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]],
         cmap = 'coolwarm',
         #cmap = 'terrain',
         aspect = 'auto',
-        norm =colors.BoundaryNorm(boundaries=np.linspace(0, 30, 11), ncolors=256, extend='max')
+        norm =colors.BoundaryNorm(boundaries=np.linspace(0, 7, 8), ncolors=256, extend='max')
     )
-    colorbar =  fig.colorbar( mappable=image, ax=ax, extend='max')
-    colorbar.ax.set_ylabel('Free energy (kJ/mol)')
+    colorbar = fig.colorbar( mappable=image, ax=ax, extend='max')
+    colorbar.ax.set_ylabel('Free energy (kcal/mol)')
 
     ax.set_xlabel(r'$\alpha$ (rad)')
     ax.set_ylabel(r'$\beta$ (rad)')
@@ -159,10 +171,11 @@ def fig_b(
     str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
     df_data = analysis.read_multidata([
-        str_dir+'CC/carbonic/carbonic_dihedrals.csv',
-        str_dir+'CT/carbonic/carbonic_dihedrals.csv',
-        str_dir+'TT/carbonic/carbonic_dihedrals.csv',
-    ])
+        str_dir+'CC/carbonic/carbonic.product.csv',
+        str_dir+'CT/carbonic/carbonic.product.csv',
+        str_dir+'TT/carbonic/carbonic.product.csv',
+    ]).dropna()
+    df_data = df_data[df_data['roh0(ang)']<1.3]
     ser_sum = df_data['dihedral0(rad)'] + df_data['dihedral1(rad)']
 
     np_hist, bin_edges = np.histogram(ser_sum, bins=100, density=True)
@@ -173,7 +186,7 @@ def fig_b(
     ax.plot(bin_center, np_energy)
 
     ax.set_xlabel(r'$\alpha+\beta$ (rad)')
-    ax.set_ylabel('Free energy (kJ/mol)')
+    ax.set_ylabel('Free energy (kcal/mol)')
     ax.set_xticks([0, np.pi/2, np.pi, np.pi*1.5, np.pi*2])
     ax.set_xticklabels([0, r'$\pi$/2', r'$\pi$', r'3$\pi$/2', r'2$\pi$'])
     ax.set_ylim(None, None)
@@ -193,9 +206,9 @@ def fig_b(
     plot.add_text(
         ax,
         dict_text = {
-            (0, 15): 'CC',
-            (np.pi, 15): 'CT',
-            (5, 15): 'TT',
+            (0, 3): 'CC',
+            (np.pi, 3): 'CT',
+            (5, 3): 'TT',
         },
         va = 'center',
         ha = 'center',
@@ -204,9 +217,9 @@ def fig_b(
     plot.add_arrow(
         ax,
         list_arrow = [
-            [(np.pi*2, 24), (np.pi*2, 19)],
-            [(np.pi*2, 12), (np.pi*1.75, 17)],
-            [(np.pi*2, 12), (np.pi*2.25, 17)],
+            [(np.pi*2, 6), (np.pi*2, 4.5)],
+            [(np.pi*2, 3), (np.pi*1.75, 4)],
+            [(np.pi*2, 3), (np.pi*2.25, 4)],
         ],
         arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
         color = 'tab:orange',
