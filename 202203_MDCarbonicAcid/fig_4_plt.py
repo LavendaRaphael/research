@@ -7,11 +7,9 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.colors as colors
+import matplotlib.transforms as mtransforms
 
-plot.set_rcparam()
-cm = 1/2.54
 homedir = os.environ['homedir']
-mpl.rcParams['figure.dpi'] = 300
 
 def fig_a(
     fig,
@@ -227,36 +225,46 @@ def fig_b(
     )
 
 def fig_label(
-    dict_ax,
+    fig,
+    axs,
 ):
+
+    x = -20/72
+    y = 0/72
     dict_pos = {
-        '(a)': (-0.15, 0.9),
-        '(b)': (-0.15, 0.9),
+        '(a)': (x, y),
+        '(b)': (x, y),
     }
-    for label, ax in dict_ax.items():
-        pos = dict_pos[label]
-        ax.text(
-            x = pos[0],
-            y = pos[1],
-            s = label,
-            transform = ax.transAxes,
-        )
 
-def run():
+    for ax, label in zip(axs, dict_pos.keys()):
+        (x, y) = dict_pos[label]
+        # label physical distance to the left and up:
+        trans = mtransforms.ScaledTranslation(x, y, fig.dpi_scale_trans)
+        ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
+                fontsize='medium', va='top')
 
-    fig = plt.figure( figsize = (8.6*cm, 11*cm))
-    (subfig0, subfig1) = fig.subfigures(2, 1, height_ratios=[7, 4])
 
-    ax0 = subfig0.subplots()
-    ax1 = subfig1.subplots()
+def main():
 
-    fig_a(subfig0, ax0)
+    plot.set_rcparam()
+    cm = 1/2.54
+    mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['figure.constrained_layout.use'] = False
+
+    fig = plt.figure( figsize = (8.6*cm, (7+3.5)*cm) )
+
+    gs = fig.add_gridspec(2, 2, height_ratios=[6.5, 3.5], width_ratios=[20,1], left=0.13, right=0.99, bottom=0.1, top=0.99, hspace=0.2, wspace=0)
+
+    ax0 = fig.add_subplot(gs[0, :])
+    ax1 = fig.add_subplot(gs[1, 0])
+
+    fig_a(fig, ax0)
     fig_b(ax1)
 
-    fig_label({
-        '(a)': ax0,
-        '(b)': ax1
-    })
+    fig_label(
+        fig,
+        axs = [ax0,ax1]
+    )
 
     plot.save(
         fig,
@@ -264,7 +272,7 @@ def run():
         list_type = ['pdf', 'svg']
     )
 
-run()
+    plt.show()
 
-plt.show()
+main()
 

@@ -60,7 +60,7 @@ def fig_a(
     ax.set_xlim(290, 350)
     ax.set_ylim(0.5, 1)
     ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Proportion'),
+    ax.set_ylabel('Mole Fraction'),
 
 def fig_c(ax):
 
@@ -133,7 +133,7 @@ def fig_b(ax):
         ax.errorbar(ser_temperature, df['freqprop'], yerr = df['freqprop_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2)
 
     ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Frequency proportion')
+    ax.set_ylabel('Formation Rate Fraction')
 
     plot.add_text(
         ax,
@@ -145,46 +145,6 @@ def fig_b(ax):
         }
     )
     ax.set_xlim(None, 375)
-
-def fig_c_(ax):
-
-    dict_label = {
-        'HCO3': r'HCO$_3^-$',
-    }
-    dict_color = {
-        'CC': 'tab:blue',
-        'CT': 'tab:orange',
-        'TT': 'tab:green',
-        'HCO3': 'tab:purple',
-    }
-    dict_marker = {
-        'CC': 'o',
-        'CT': 'v',
-        'TT': '^',
-        'HCO3': '>',
-    }
-
-    list_header = ['CC', 'CT', 'TT','HCO3']
-
-    dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
-    file_data = dir_data+ 'carbonic_statistic.temperature.csv'
-
-    dfgb = pd.read_csv(file_data, index_col=['state']).groupby(level='state')
-    ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
-    for header in list_header:
-        color = dict_color[header]
-        marker = dict_marker[header]
-        df = dfgb.get_group(header)
-        label = header
-        if header in dict_label:
-            label = dict_label[header]
-        ax.errorbar(ser_temperature, df['frequency(ns-1)'], yerr = df['frequency(ns-1)_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2, label=label)
-
-
-    ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel(r'Frequency (ns$^{-1}$)')
-
-    ax.legend(frameon=False)
 
 def fig_label(
     list_ax,
