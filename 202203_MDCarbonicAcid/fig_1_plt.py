@@ -34,15 +34,51 @@ def fig_b(
     )
 
 def fig_c(
+    ax
+):
+
+    str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
+    str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
+    dict2d_data ={
+        'DPMD': {
+            'o_w.o_w': str_dir_dpmd+'rdf.o_w.o_w.ave.csv',
+        },
+        'AIMD': {
+            'o_w.o_w': str_dir_aimd+'rdf.o_w.o_w.ave.csv',
+        },
+    }
+    ax.set_ylabel('g(r)')
+    ax.text(
+        x=0.1,
+        y=0.9,
+        s = r'O$\mathregular{_W}$-O$\mathregular{_W}$',
+        horizontalalignment = 'left',
+        verticalalignment = 'top',
+        transform=ax.transAxes
+    )
+    ax.set_ylim((0,4))
+    for str_label, dict_data in dict2d_data.items():
+        str_file = dict_data['o_w.o_w']
+        np_data = np.loadtxt(str_file)
+        ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
+
+    ax.legend(
+        frameon = False,
+        handlelength = 1
+    )
+    ax.set_xlabel('r (Å)')
+    ax.set_xlim(1,6)
+
+def fig_d(
     axs
 ):
 
     str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
     str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
     dict_title = {
-        'cc_h_oh.o_w': r'H$_{OH}$-O$_W$',
-        'cc_o_oh.h_w': r'O$_{OH}$-H$_W$',
-        'cc_o_c.h_w': r'$^=$O-H$_W$',
+        'cc_o_c.h_w': r'$^=$O-H$\mathregular{_W}$',
+        'cc_o_oh.h_w': r'O$\mathregular{_{OH}}$-H$\mathregular{_W}$',
+        'cc_h_oh.o_w': r'H$\mathregular{_{OH}}$-O$\mathregular{_W}$',
     }
     dict2d_data ={
         'DPMD': {
@@ -79,67 +115,35 @@ def fig_c(
             ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
     axs[0].tick_params(labelbottom=False)
     axs[1].tick_params(labelbottom=False)
-    axs[1].legend(
-        frameon = False,
-        handlelength = 1
-    )
+    #axs[1].legend(
+    #    frameon = False,
+    #    handlelength = 1
+    #)
 
     axs[-1].set_xlabel('r (Å)')
     axs[0].set_xlim(1,6)
-
-
-def fig_d(
-    ax
-):
-
-    str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
-    str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
-    dict2d_data ={
-        'DPMD': {
-            'o_w.o_w': str_dir_dpmd+'rdf.o_w.o_w.ave.csv',
-        },
-        'AIMD': {
-            'o_w.o_w': str_dir_aimd+'rdf.o_w.o_w.ave.csv',
-        },
-    }
-    ax.set_ylabel('g(r)')
-    ax.text(
-        x=0.9,
-        y=0.9,
-        s = r'O$_W$-O$_W$',
-        horizontalalignment = 'right',
-        verticalalignment = 'top',
-        transform=ax.transAxes
-    )
-    ax.set_ylim((0,4))
-    for str_label, dict_data in dict2d_data.items():
-        str_file = dict_data['o_w.o_w']
-        np_data = np.loadtxt(str_file)
-        ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
-
-    ax.set_xlabel('r (Å)')
-    ax.set_xlim(1,6)
 
 def fig_e(
     ax,
 ):
     ax.axis('off')
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
-    image = plt.imread(str_dir+'33732.png')
+    image = plt.imread(str_dir+'33733.png')
     ax.set_ylim(1200,-300)
     ax.imshow(image, origin='upper')
 
     plot.add_text(
         ax,
         dict_text = {
-            (700,250)  :r'O$_W$'    ,      
-            (1000,400) :r'H$_W$'    ,      
-            (600,600)  :r'$^=$O'    ,      
-            (1300,765) :r'H$_{OH}$' ,   
-            (1200,1050):r'O$_{OH}$' ,   
+            #(700,250)  :r'O$_W$'    ,      
+            #(1000,400) :r'H$_W$'    ,      
+            (572,365)  :r'$\bf{^=}$O',
+            (1244,532) :r'H$\bf{\mathregular{_{OH}}}$',
+            (1061,992) :r'O$\bf{\mathregular{_{OH}}}$',
         },
         ha = 'center',
         va = 'center',
+        fontweight='bold'
     )
 
 def fig_label(
@@ -182,20 +186,20 @@ def main():
 
     gs1 = gs[1].subgridspec(3, 2, wspace=0.3)
     ax2 = fig.add_subplot(gs1[0, 0])
-    ax3 = fig.add_subplot(gs1[1, 0], sharex=ax2)
-    ax4 = fig.add_subplot(gs1[2, 0], sharex=ax2)
-    ax6 = fig.add_subplot(gs1[1:, 1])
-    ax5 = fig.add_subplot(gs1[0, 1])
+    ax3 = fig.add_subplot(gs1[0, 1])
+    ax4 = fig.add_subplot(gs1[1, 1], sharex=ax2)
+    ax5 = fig.add_subplot(gs1[2, 1], sharex=ax2)
+    ax6 = fig.add_subplot(gs1[1:, 0])
 
     fig_a(ax0)
     fig_b(ax1)
-    fig_c([ax2, ax3, ax4])
-    fig_d(ax5)
+    fig_c(ax2)
+    fig_d([ax3, ax4, ax5])
     fig_e(ax6)
 
     fig_label(
         fig,
-        axs = [ax0,ax1,ax2,ax5,ax6]
+        axs = [ax0,ax1,ax2,ax3,ax6]
     )
 
     plot.save(
