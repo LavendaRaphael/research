@@ -163,61 +163,65 @@ def fig_a_sub(
     )
 
 def fig_b(
-    ax
+    ax,
 ):
 
-    ax.axis('off')
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
+
+    df_data = analysis.read_multidata([
+        str_dir+'CC/carbonic/carbonic.product.csv',
+        str_dir+'CT/carbonic/carbonic.product.csv',
+        str_dir+'TT/carbonic/carbonic.product.csv',
+    ]).dropna()
+    df_data = df_data[df_data['roh0(ang)']<1.3]
+    ser_sum = df_data['dihedral0(rad)'] + df_data['dihedral1(rad)']
+
+    np_hist, bin_edges = np.histogram(ser_sum, bins=100, density=True)
+    np_energy = plm.prob_to_deltag(np_hist, temperature=330)
+    np_energy -= np.amin(np_energy)
+    bin_center = bin_edges[:-1] + (bin_edges[1]-bin_edges[0])/2
+
+    ax.plot(bin_center, np_energy)
+
+    ax.set_xlabel(r'$\alpha+\beta$ (rad)')
+    ax.set_ylabel('Free energy (kcal/mol)')
+    ax.set_xticks([0, np.pi/2, np.pi, np.pi*1.5, np.pi*2])
+    ax.set_xticklabels([0, r'$\pi$/2', r'$\pi$', r'3$\pi$/2', r'2$\pi$'])
+    ax.set_ylim(None, None)
+
     dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
     dir_tt  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/TT/plm/'
     plot.inset_img(
         ax,
         dict_img = {
-            dir_tt +'0.003922.png': (0., 0.5, 1, 0.4),
-            dir_tt +'0.003576.png': (0., 0.1, 1, 0.4),
+            dir_tt +'1.100001.png': (0.05, 0.5, 0.3, 0.4),
+            dir_cp +   '60281.png': (0.33, 0.5, 0.3, 0.4),
+            dir_tt +'0.003922.png': (0.6, 0.05, 0.3, 0.3),
+            dir_tt +'0.003576.png': (0.6, 0.60, 0.3, 0.3),
         },
         bool_axis = False,
     )
     plot.add_text(
         ax,
         dict_text = {
-            (0.5, 0.5): r'$\alpha$ = $\beta$ = $\pi$',
-            (0.5, 0.9): r'$\alpha$ = $\beta$ = 0.88$\pi$ / 1.12$\pi$',
+            (0, 3): 'CC',
+            (np.pi, 3): 'CT',
+            (5, 3): 'TT',
         },
+        va = 'center',
         ha = 'center',
-        va = 'top'
+        fontweight = 'bold',
     )
- 
-
-def fig_c(
-    ax
-):
-
-    str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
-    df = analysis.carbonic_survival(
-        list_file = [
-            str_dir+'../CC/carbonic/carbonic_lifedata.csv',
-            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
-            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
-        ]
-    )
-
-    list_state = ['CC', 'CT', 'TT', 'HCO3']
-    dict_color = {
-        'CC': 'tab:blue',
-        'CT': 'tab:orange',
-        'TT': 'tab:green',
-        'HCO3': 'tab:purple',
-    }
-    dict_label = {
-        'HCO3': r'HCO$_3^-$',
-    }
-
-    analysis.carbonic_survival_plt(
-        ax = ax,
-        df = df,
-        list_state = list_state,
-        dict_color = dict_color,
-        dict_label = dict_label,
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [(np.pi*2, 6), (np.pi*2, 4.5)],
+            [(np.pi*2, 3), (np.pi*1.75, 4)],
+            [(np.pi*2, 3), (np.pi*2.25, 4)],
+        ],
+        arrowstyle = 'simple, head_length=2, head_width=2, tail_width=0.2',
+        color = 'tab:orange',
+        lw = 1,
     )
 
 def fig_label(
@@ -225,12 +229,11 @@ def fig_label(
     axs,
 ):
 
-    x = -25/72
+    x = -20/72
     y = 0/72
     dict_pos = {
         '(a)': (x, y),
-        '(b)': (0/72, y),
-        '(c)': (x, y),
+        '(b)': (x, y),
     }
 
     for ax, label in zip(axs, dict_pos.keys()):
@@ -248,21 +251,19 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, (5+3.5)*cm) )
+    fig = plt.figure( figsize = (8.6*cm, (7+3.5)*cm) )
 
-    gs = fig.add_gridspec(2, 2, height_ratios=[5, 3.5], width_ratios=[6,2.6], left=0.13, right=0.99, bottom=0.1, top=0.99, hspace=0.25, wspace=0.1)
-    ax0 = fig.add_subplot(gs[0, 0])
-    ax1 = fig.add_subplot(gs[0, 1])
-    ax2 = fig.add_subplot(gs[1, :])
+    gs = fig.add_gridspec(2, 2, height_ratios=[6.5, 3.5], width_ratios=[20,1], left=0.13, right=0.99, bottom=0.1, top=0.99, hspace=0.2, wspace=0)
 
+    ax0 = fig.add_subplot(gs[0, :])
+    ax1 = fig.add_subplot(gs[1, 0])
 
     fig_a(fig, ax0)
     fig_b(ax1)
-    fig_c(ax2)
 
     fig_label(
         fig,
-        axs = [ax0 ,ax1, ax2]
+        axs = [ax0,ax1]
     )
 
     plot.save(

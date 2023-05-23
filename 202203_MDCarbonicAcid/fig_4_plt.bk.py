@@ -7,13 +7,42 @@ import numpy as np
 import json
 import pandas as pd
 import matplotlib.transforms as mtransforms
-import matplotlib.patches as mpatches
-import matplotlib.colors as mcolors
 
-def fig_a(ax):
+def fig_a(
+    ax
+):
+
+    str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+    df = analysis.carbonic_survival(
+        list_file = [
+            str_dir+'../CC/carbonic/carbonic_lifedata.csv',
+            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
+            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
+        ]
+    )
+
+    list_state = ['CC', 'CT', 'TT', 'HCO3']
+    dict_color = {
+        'CC': 'tab:blue',
+        'CT': 'tab:orange',
+        'TT': 'tab:green',
+        'HCO3': 'tab:purple',
+    }
+    dict_label = {
+        'HCO3': r'HCO$_3^-$',
+    }
+
+    analysis.carbonic_survival_plt(
+        ax = ax,
+        df = df,
+        list_state = list_state,
+        dict_color = dict_color,
+        dict_label = dict_label,
+    )
+
+def fig_b(ax):
     ax.axis('off')
 
-    # read data
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     fl = {}
     df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['frequency(ns-1)']
@@ -45,11 +74,13 @@ def fig_a(ax):
     f = {}
     for key, value in fl.items():
         value *= molar*ns2s/1e8
+        #f[key] = f'{value:.3f}'
         f[key] = f'{value:.2f}'
 
     plot.add_text(
         ax,
         dict_text = {
+            #(0.9, 0.95): r'Frequency (ns$^{-1}$)',
             (0.9, 0.95): r'Rate ($\times 10^{8}$ mol L$^{-1}$s$^{-1}$)',
         },
         va = 'top',
@@ -58,8 +89,8 @@ def fig_a(ax):
 
     # horizon fig
     w, h = ax.bbox.width, ax.bbox.height
-    dx = 0.2
-    dy = 1200/1600*w/h*dx
+    dx = 0.27
+    dy = 5/8*w/h*dx
     # vertical fig
     dx1 = dy*h/w
     dy1 = dx*w/h
@@ -74,10 +105,10 @@ def fig_a(ax):
     sy = np.array([   0,dy/5])
 
     # pos
-    p_tt = np.array([0.3, dy/2])
-    p_ct = np.array([0.3, 0.5])
-    p_cc = np.array([0.3, 1-dy/2])
-    p_xx = np.array([0.8, 0.5])
+    p_tt = np.array([1.1*dx, dy/2])
+    p_ct = np.array([1.1*dx, 0.5])
+    p_cc = np.array([1.1*dx, 1-dy/2])
+    p_xx = np.array([1-dx1/2, 0.5])
     # middle
     p_tt_ct = (p_tt+p_ct)/2
     p_ct_cc = (p_ct+p_cc)/2
@@ -85,42 +116,30 @@ def fig_a(ax):
     p_xx_ct = (p_xx-r1+p_ct+r)/2
     p_xx_tt = (p_xx-r1-t1+p_tt+r)/2
 
-    # color
-    alpha = 0.7
-    c = mcolors.to_rgb('tab:blue')
-    c_cc = (c[0], c[1], c[2], alpha)
-    c = mcolors.to_rgb('tab:orange')
-    c_ct = (c[0], c[1], c[2], alpha)
-    c = mcolors.to_rgb('tab:green')
-    c_tt = (c[0], c[1], c[2], alpha)
-    c = mcolors.to_rgb('tab:purple')
-    c_xx = (c[0], c[1], c[2], alpha)
-
     # img
     dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
     dir_tt  = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt_velocity/330K/TT/plm/'
-    dir_cc = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
     [axin3] = plot.inset_img(
         ax,
         dict_img = {
-            dir_cc + '0.360003.png': (p_xx[0]-0.5*dx1, p_xx[1]-dy1/2, dx1, dy1),
+            dir_cp +   '60147.png': (p_xx[0]-0.5*dx1, p_xx[1]-dy1/2, dx1, dy1),
         },
         dict_spinecolor = {
-            dir_cc + '0.360003.png': c_xx,
+            dir_cp +   '60147.png': 'tab:purple',
         },
         bool_rot90 = True,
     )
     [axin0, axin1, axin2] = plot.inset_img(
         ax,
         dict_img = {
-            dir_cc +'3.000000.png': (p_cc[0]-0.5*dx, p_cc[1]-0.5*dy, dx, dy),
-            dir_cc +'3.067520.png': (p_ct[0]-0.5*dx, p_ct[1]-0.5*dy, dx, dy),
-            dir_cc +'3.170878.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
+            dir_tt +'1.100001.png': (p_cc[0]-0.5*dx, p_cc[1]-0.5*dy, dx, dy),
+            dir_cp +   '60281.png': (p_ct[0]-0.5*dx, p_ct[1]-0.5*dy, dx, dy),
+            dir_tt +'0.003922.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
         },
         dict_spinecolor = {
-            dir_cc +'3.000000.png': c_cc,
-            dir_cc +'3.067520.png': c_ct, 
-            dir_cc +'3.170878.png': c_tt,
+            dir_tt +'1.100001.png': 'tab:blue',
+            dir_cp +   '60281.png': 'tab:orange', 
+            dir_tt +'0.003922.png': 'tab:green',
         }
     )
 
@@ -133,7 +152,7 @@ def fig_a(ax):
             [p_cc+r+sy, p_xx+t1],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
-        color = c_cc,
+        color = 'tab:blue',
     )
     plot.add_arrow(
         ax,
@@ -142,19 +161,19 @@ def fig_a(ax):
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         connectionstyle = 'arc3, rad=0.5',
-        color = c_cc,
+        color = 'tab:blue',
     )
     plot.add_text(
         axin0,
         dict_text = {
-            (0.03, 0.95): f['cc'],
+            (0.02, 0.95): f['cc'],
         },
         transform = axin0.transAxes,
         va = 'top',
         ha = 'left',
         color = 'white',
         fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_cc, lw=0)
+        bbox = dict(boxstyle='round', fc='tab:blue', lw=0)
     )
     plot.add_text(
         ax,
@@ -166,7 +185,7 @@ def fig_a(ax):
         },
         va = 'center',
         ha = 'center',
-        bbox = dict(boxstyle='round', ec=c_cc, fc='white')
+        bbox = dict(boxstyle='round', ec='tab:blue', fc='white')
     )
 
     # CT
@@ -178,7 +197,7 @@ def fig_a(ax):
             [p_ct+r+sy, p_xx-r1+sy],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
-        color = c_ct,
+        color = 'tab:orange',
     )
     plot.add_arrow(
         ax,
@@ -187,19 +206,19 @@ def fig_a(ax):
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
         connectionstyle = 'arc3, rad=0.4',
-        color = c_ct,
+        color = 'tab:orange',
     )
     plot.add_text(
         axin1,
         dict_text = {
-            (0.03, 0.95): f['ct'],
+            (0.02, 0.95): f['ct'],
         },
         transform = axin1.transAxes,
         va = 'top',
         ha = 'left',
         color = 'white',
         fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_ct, lw=0)
+        bbox = dict(boxstyle='round', fc='tab:orange', lw=0)
     )
     plot.add_text(
         ax,
@@ -211,7 +230,7 @@ def fig_a(ax):
         },
         va = 'center',
         ha = 'center',
-        bbox = dict(boxstyle='round', ec=c_ct, fc='white')
+        bbox = dict(boxstyle='round', ec='tab:orange', fc='white')
     )
 
     # TT
@@ -222,19 +241,19 @@ def fig_a(ax):
             [p_tt+r+sy, p_xx-r1-sy*3],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
-        color = c_tt,
+        color = 'tab:green',
     )
     plot.add_text(
         axin2,
         dict_text = {
-            (0.03, 0.95): f['tt'],
+            (0.02, 0.95): f['tt'],
         },
         transform = axin2.transAxes,
         va = 'top',
         ha = 'left',
         color = 'white',
         fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_tt, lw=0)
+        bbox = dict(boxstyle='round', fc='tab:green', lw=0)
     )
     plot.add_text(
         ax,
@@ -244,7 +263,7 @@ def fig_a(ax):
         },
         va = 'center',
         ha = 'center',
-        bbox = dict(boxstyle='round', ec=c_tt, fc='white')
+        bbox = dict(boxstyle='round', ec='tab:green', fc='white')
     )
 
     # HCO3
@@ -256,19 +275,19 @@ def fig_a(ax):
             [p_xx-t1, p_tt+r-sy],
         ],
         arrowstyle = f'simple, {headstyle}, tail_width=0.2',
-        color = c_xx,
+        color = 'tab:purple',
     )
     plot.add_text(
         axin3,
         dict_text = {
-            (0.95, 0.97): f['xx'],
+            (0.95, 0.5): f['xx'],
         },
         transform = axin3.transAxes,
-        va = 'top',
+        va = 'center',
         ha = 'right',
         color = 'white',
         fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_xx, lw=0)
+        bbox = dict(boxstyle='round', fc='tab:purple', lw=0)
     )
     plot.add_text(
         ax,
@@ -279,66 +298,7 @@ def fig_a(ax):
         },
         va = 'center',
         ha = 'center',
-        bbox = dict(boxstyle='round', ec=c_xx, fc='white')
-    )
-
-def fig_b(ax):
-
-    dir_cc = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
-    # 
-    w, h = ax.bbox.width, ax.bbox.height
-    dx = 0.18
-    dy = 1200/1600*w/h*dx
-    y0 = 0.75
-    y1 = 0.25
-    ax.axis('off')
-    plot.inset_img(
-        ax,
-        dict_img = {
-            dir_cc+'1.362850.png': (0.2-dx/2, y0-dy/2, dx, dy),
-            dir_cc+'1.362857.png': (0.4-dx/2, y0-dy/2, dx, dy),
-            dir_cc+'1.362864.png': (0.6-dx/2, y0-dy/2, dx, dy),
-            dir_cc+'1.362871.png': (0.8-dx/2, y0-dy/2, dx, dy),
-            dir_cc+'0.355834.png': (0.1-dx/2, y1-dy/2, dx, dy),
-            dir_cc+'0.355840.png': (0.3-dx/2, y1-dy/2, dx, dy),
-            dir_cc+'0.360003.png': (0.5-dx/2, y1-dy/2, dx, dy),
-            dir_cc+'0.363351.png': (0.7-dx/2, y1-dy/2, dx, dy),
-            dir_cc+'0.363355.png': (0.9-dx/2, y1-dy/2, dx, dy),
-        },
-        bool_axis = False
-    )
-    plot.add_arrow(
-        ax,
-        list_arrow = [
-            [(0.2 +dx/2-0.01, y0), (0.4 -dx/2+0.01, y0)],
-            [(0.4 +dx/2-0.01, y0), (0.6 -dx/2+0.01, y0)],
-            [(0.6 +dx/2-0.01, y0), (0.8 -dx/2+0.01, y0)],
-            [(0.1 +dx/2-0.01, y1), (0.3 -dx/2+0.01, y1)],
-            [(0.3 +dx/2-0.01, y1), (0.5 -dx/2+0.01, y1)],
-            [(0.5 +dx/2-0.01, y1), (0.7 -dx/2+0.01, y1)],
-            [(0.71+dx/2-0.01, y1), (0.91-dx/2+0.01, y1)],
-        ],
-        arrowstyle = 'fancy, head_length=6, head_width=6, tail_width=0.01',
-        lw = 0,
-        color = 'tab:blue'
-    )
-    plot.add_text(
-        ax,
-        dict_text = {
-            (0.5, 0.95): 'Direct: Dihedral Rotation',
-            (0.2, 0.6): '0 ps',
-            (0.4, 0.6): '0.07 ps',
-            (0.6, 0.6): '0.14 ps',
-            (0.8, 0.6): '0.21 ps',
-            (0.5, 0.45): 'Indirect: Proton Transfer',
-            (0.1, 0.1): '0 ps',
-            (0.3, 0.1): '0.06 ps',
-            (0.5, 0.1): '41.69 ps',
-            (0.7, 0.1): '75.17 ps',
-            (0.9, 0.1): '75.21 ps',
-        },
-        va = 'top',
-        ha = 'center',
+        bbox = dict(boxstyle='round', ec='tab:purple', fc='white')
     )
 
 def fig_label(
@@ -346,7 +306,7 @@ def fig_label(
     axs,
 ):
 
-    x = 0/72
+    x = -25/72
     y = 0/72
     dict_pos = {
         '(a)': (x, y),
@@ -368,9 +328,9 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, (5.5+4)*cm) )
+    fig = plt.figure( figsize = (8.6*cm, (4+6)*cm) )
 
-    gs = fig.add_gridspec(2, 1, height_ratios=[5.5,4], left=0.01, right=0.99, bottom=0.01, top=0.99, hspace=0.05)
+    gs = fig.add_gridspec(2, 1, height_ratios=[4, 6], left=0.15, right=0.99, bottom=0.01, top=0.99, hspace=0.2)
 
     ax0 = fig.add_subplot(gs[0])
     ax1 = fig.add_subplot(gs[1])
@@ -378,7 +338,10 @@ def main():
     fig_a(ax0)
     fig_b(ax1)
 
-    fig_label(fig, [ax0, ax1])
+    fig_label(
+        fig,
+        axs = [ax0,ax1]
+    )
 
     plot.save(
         fig,
