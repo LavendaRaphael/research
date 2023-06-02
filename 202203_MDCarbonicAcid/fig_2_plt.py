@@ -4,10 +4,7 @@ from tf_dpmd_kit import plot
 from tf_dpmd_kit import analysis
 import os
 
-plot.set_rcparam()
-cm = 1/2.54
 homedir = os.environ['homedir']
-mpl.rcParams['figure.dpi'] = 300
 
 def fig_a(
     ax
@@ -18,12 +15,9 @@ def fig_a(
         ax,
         file_data = str_dir+'carbonic_state.csv',
         float_xscale = 0.0004837769,
-        str_xlabel = 'Time (ps)',
         int_window = 10,
-        tup_ylim = (0.5, 4.8),
         list_header = ['HCO3', 'CC', 'CT', 'TT'],
         list_ypos = [1, 2, 3, 4],
-        list_yticklabels = ['HCO$_3^-$', 'CC','CT','TT'],
         dict_color = {
             'CC': 'tab:blue',
             'CT': 'tab:orange',
@@ -32,6 +26,9 @@ def fig_a(
             'HCO3': 'tab:purple',
         }
     )
+    ax.set_xlabel('Time (ps)')
+    ax.set_ylim(0.5, 4.8)
+    ax.set_yticklabels(['HCO$_3^-$', 'CC','CT','TT'])
     img_dir = homedir+'/research/202203_MDCarbonicAcid/structure/'
     plot.inset_img(
         ax,
@@ -64,12 +61,9 @@ def fig_b(
         ax,
         file_data = str_dir+'carbonic_state.csv',
         float_xscale = 0.00001,
-        str_xlabel = 'Time (ns)',
-        tup_ylim = (0.5, 4.8),
         int_window = 100,
         list_header = ['HCO3', 'CC', 'CT', 'TT'],
         list_ypos = [1, 2, 3, 4],
-        list_yticklabels = ['HCO$_3^-$', 'CC','CT','TT'],
         dict_color = {
             'CC': 'tab:blue',
             'CT': 'tab:orange',
@@ -78,6 +72,9 @@ def fig_b(
             'HCO3': 'tab:purple',
         }
     )
+    ax.set_xlabel('Time (ns)')
+    ax.set_ylim(0.5, 4.8)
+    ax.set_yticklabels(['HCO$_3^-$', 'CC','CT','TT'])
     plot.add_text(
         ax,
         dict_text = {(0.9, 0.9): 'DPMD'},
@@ -102,6 +99,10 @@ def fig_label(
         )
 
 def run():
+
+    plot.set_rcparam()
+    cm = 1/2.54
+    mpl.rcParams['figure.dpi'] = 300
 
     fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, (3+3)*cm))
 

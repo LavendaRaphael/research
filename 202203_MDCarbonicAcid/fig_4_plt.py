@@ -16,13 +16,13 @@ def fig_a(ax):
     # read data
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     fl = {}
-    df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['frequency(ns-1)']
+    df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['rate(M/s)']
     fl['cc'] = df['CC']
     fl['ct'] = df['CT']
     fl['tt'] = df['TT']
     fl['xx'] = df['HCO3']
 
-    df = pd.read_csv(str_dir+'carbonic_flow.csv', index_col=['from','to'])['frequency(ns-1)']
+    df = pd.read_csv(str_dir+'carbonic_flow.csv', index_col=['from','to'])['rate(M/s)']
     fl['cc_ct'] = df[('CC', 'CT')]
     fl['cc_xx'] = df[('CC', 'HCO3')]
     fl['cc_tt'] = df[('CC', 'TT')]
@@ -36,21 +36,15 @@ def fig_a(ax):
     fl['tt_ct'] = df[('TT', 'CT')]
     fl['tt_xx'] = df[('TT', 'HCO3')]
 
-    with open(str_dir+'volume.json') as fp:
-        volume = json.load(fp)['volume(ang3)']
-    Avogadro = 6.02214076e23
-    molar = 1e27/Avogadro/volume
-    ns2s = 1e9
-    print(molar,'mol/L')
-    f = {}
+    rate = {}
     for key, value in fl.items():
-        value *= molar*ns2s/1e8
-        f[key] = f'{value:.2f}'
+        value /= 1e8
+        rate[key] = f'{value:.2f}'
 
     plot.add_text(
         ax,
         dict_text = {
-            (0.9, 0.95): r'Rate ($\times 10^{8}$ mol L$^{-1}$s$^{-1}$)',
+            (0.8, 0.95): r'Rate ($\times 10^{8}$ M/s)',
         },
         va = 'top',
         ha = 'right',
@@ -74,9 +68,9 @@ def fig_a(ax):
     sy = np.array([   0,dy/5])
 
     # pos
-    p_tt = np.array([0.3, dy/2])
+    p_tt = np.array([0.3, 0.13])
     p_ct = np.array([0.3, 0.5])
-    p_cc = np.array([0.3, 1-dy/2])
+    p_cc = np.array([0.3, 0.87])
     p_xx = np.array([0.8, 0.5])
     # middle
     p_tt_ct = (p_tt+p_ct)/2
@@ -147,7 +141,7 @@ def fig_a(ax):
     plot.add_text(
         axin0,
         dict_text = {
-            (0.03, 0.95): f['cc'],
+            (0.03, 0.95): rate['cc'],
         },
         transform = axin0.transAxes,
         va = 'top',
@@ -159,10 +153,9 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_ct_cc-sx+0.3*sy): f['cc_ct'],
-            tuple(p_xx_cc+sy): f['cc_xx'],
-            tuple(p_ct_cc-1.7*r): f['cc_tt'],
-            #tuple(p_cc-1.6*r+sy): f['cc_cen']
+            tuple(p_ct_cc-sx+0.3*sy): rate['cc_ct'],
+            tuple(p_xx_cc+sy): rate['cc_xx'],
+            tuple(p_ct_cc-1.7*r): rate['cc_tt'],
         },
         va = 'center',
         ha = 'center',
@@ -192,7 +185,7 @@ def fig_a(ax):
     plot.add_text(
         axin1,
         dict_text = {
-            (0.03, 0.95): f['ct'],
+            (0.03, 0.95): rate['ct'],
         },
         transform = axin1.transAxes,
         va = 'top',
@@ -204,10 +197,10 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_tt_ct-sx+0.3*sy): f['ct_tt'],
-            tuple(p_ct_cc+sx-0.3*sy): f['ct_cc'],
-            tuple(p_xx_ct+sy): f['ct_xx'],
-            tuple(p_ct-r-sx): f['ct_ct'],
+            tuple(p_tt_ct-sx+0.3*sy): rate['ct_tt'],
+            tuple(p_ct_cc+sx-0.3*sy): rate['ct_cc'],
+            tuple(p_xx_ct+sy): rate['ct_xx'],
+            tuple(p_ct-r-sx): rate['ct_ct'],
         },
         va = 'center',
         ha = 'center',
@@ -227,7 +220,7 @@ def fig_a(ax):
     plot.add_text(
         axin2,
         dict_text = {
-            (0.03, 0.95): f['tt'],
+            (0.03, 0.95): rate['tt'],
         },
         transform = axin2.transAxes,
         va = 'top',
@@ -239,8 +232,8 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_tt_ct+sx-0.3*sy): f['tt_ct'],
-            tuple(p_xx_tt+sy): f['tt_xx'],
+            tuple(p_tt_ct+sx-0.3*sy): rate['tt_ct'],
+            tuple(p_xx_tt+sy): rate['tt_xx'],
         },
         va = 'center',
         ha = 'center',
@@ -261,7 +254,7 @@ def fig_a(ax):
     plot.add_text(
         axin3,
         dict_text = {
-            (0.95, 0.97): f['xx'],
+            (0.95, 0.97): rate['xx'],
         },
         transform = axin3.transAxes,
         va = 'top',
@@ -273,13 +266,27 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            tuple(p_xx_ct-sy): f['xx_ct'],
-            tuple(p_xx_cc-sy): f['xx_cc'],
-            tuple(p_xx_tt-sy): f['xx_tt'],
+            tuple(p_xx_ct-sy): rate['xx_ct'],
+            tuple(p_xx_cc-sy): rate['xx_cc'],
+            tuple(p_xx_tt-sy): rate['xx_tt'],
         },
         va = 'center',
         ha = 'center',
         bbox = dict(boxstyle='round', ec=c_xx, fc='white')
+    )
+    # box
+    rect = mpatches.Rectangle( (0.06,0.01), 0.324, 0.98, linewidth=1, facecolor = 'None', edgecolor='grey', ls=':')
+    ax.add_patch(rect)
+    rect = mpatches.Rectangle( (0.384,0.01), 0.45, 0.98, linewidth=1, facecolor = 'None', edgecolor='grey', ls=':')
+    ax.add_patch(rect)
+    plot.add_text(
+        ax,
+        dict_text = {
+            (0.15, 0.05): 'Direct',
+            (0.8, 0.05): 'Indirect',
+        },
+        va = 'bottom',
+        ha = 'right',
     )
 
 def fig_b(ax):

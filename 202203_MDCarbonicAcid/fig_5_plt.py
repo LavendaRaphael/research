@@ -6,6 +6,7 @@ import os
 import pandas as pd
 import numpy as np
 from matplotlib.lines import Line2D
+import matplotlib.transforms as mtransforms
 
 homedir = os.environ['homedir']
 def fig_a(
@@ -27,7 +28,7 @@ def fig_a(
     ser_temperature = dfgb.get_group(list_header[0])['temperature(K)']
     ser_0 = pd.Series([0]*len(ser_temperature))
     for header in list_header:
-        ser_1 = dfgb.get_group(header)['prop'].reset_index(drop=True)
+        ser_1 = dfgb.get_group(header)['frac'].reset_index(drop=True)
         if header in dict_color:
             color = dict_color[header]
         ser_1 = ser_0 + ser_1
@@ -62,7 +63,7 @@ def fig_a(
     ax.set_xlabel('Temperature (K)')
     ax.set_ylabel('Mole Fraction'),
 
-def fig_c(ax):
+def fig_b(ax):
 
     dict_color = {
         'CC': 'tab:blue',
@@ -103,9 +104,10 @@ def fig_c(ax):
     )
     ax.set_yscale('log')
     ax.set_xlim(None, 375)
+    ax.set_xticks([290, 310, 330, 350])
 
 
-def fig_b(ax):
+def fig_c(ax):
 
     dict_color = {
         'CC': 'tab:blue',
@@ -119,7 +121,9 @@ def fig_b(ax):
         'TT': '^',
         'HCO3': '>',
     }
-
+    dict_label = {
+        'HCO3': r'HCO$_3^-$',
+    }
     list_header = ['CC', 'CT', 'TT', 'HCO3']
 
     dir_data = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/carbonic/'
@@ -130,57 +134,55 @@ def fig_b(ax):
         color = dict_color[header]
         marker = dict_marker[header]
         df = dfgb.get_group(header)
-        ax.errorbar(ser_temperature, df['freqprop'], yerr = df['freqprop_sem'], ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2)
+        label = header
+        if header in dict_label:
+            label = dict_label[header]
+        ax.errorbar(ser_temperature, df['rate(M/s)']/1e8, yerr = df['rate(M/s)_sem']/1e8, ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2, label=label)
 
     ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Formation Rate Fraction')
-
-    plot.add_text(
-        ax,
-        dict_text = {
-            (355, 0.15): 'CC',
-            (355, 0.3): 'CT',
-            (355, 0.4): r'HCO$_3^-$',
-            (355, 0.08): 'TT',
-        }
-    )
-    ax.set_xlim(None, 375)
+    ax.set_ylabel(r'Formation Rate ($\times 10^{8}$ M/s)')
+    ax.set_xticks([290, 310, 330, 350])
+    #ax.set_xlim(None, 375)
+    ax.legend(frameon=False)
 
 def fig_label(
-    list_ax,
+    fig,
+    axs,
 ):
 
+    x = -25/72
+    y = 0/72
     dict_pos = {
-        '(a)': (-0.1, 0.9),
-        '(b)': (-0.3, 0.9),
-        '(c)': (-0.3, 0.9),
+        '(a)': (x, y),
+        '(b)': (x, y),
+        '(c)': (x, y),
     }
-    for ax, label in zip(list_ax, dict_pos):
-        pos = dict_pos[label]
-        ax.text(
-            x = pos[0],
-            y = pos[1],
-            s = label,
-            transform = ax.transAxes,
-        )
+
+    for ax, label in zip(axs, dict_pos.keys()):
+        (x, y) = dict_pos[label]
+        # label physical distance to the left and up:
+        trans = mtransforms.ScaledTranslation(x, y, fig.dpi_scale_trans)
+        ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
+                fontsize='medium', va='top')
 
 def main():
 
     plot.set_rcparam()
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['figure.constrained_layout.use'] = False
 
     fig = plt.figure( figsize = (8.6*cm, 8*cm))
-    (subfig0, subfig1) = fig.subfigures(2, 1)
-
-    ax0 = subfig0.subplots( )
-    (ax1, ax2) = subfig1.subplots(1, 2)
+    gs = fig.add_gridspec(2, 2, left=0.13, right=0.97, bottom=0.1, top=0.99, hspace=0.3, wspace=0.35)
+    ax0 = fig.add_subplot(gs[0, :])
+    ax1 = fig.add_subplot(gs[1, 0])
+    ax2 = fig.add_subplot(gs[1, 1])
 
     fig_a(ax0)
     fig_b(ax1)
     fig_c(ax2)
 
-    fig_label([ax0,ax1,ax2])
+    fig_label(fig, [ax0,ax1,ax2])
 
     plot.save(
         fig,
