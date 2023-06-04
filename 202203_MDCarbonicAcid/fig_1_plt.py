@@ -5,6 +5,7 @@ from tf_dpmd_kit import train
 import os
 import numpy as np
 import matplotlib.transforms as mtransforms
+import pandas as pd
 
 homedir = os.environ['homedir']
 
@@ -33,18 +34,23 @@ def fig_b(
         list_ticks = [-5, 0, 5],
     )
 
+def rdfcsv(file):
+    
+    data = np.loadtxt(file)
+    return data[:,0], data[:,1]
+    
 def fig_c(
     ax
 ):
 
-    str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
-    str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
+    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
     dict2d_data ={
         'DPMD': {
-            'o_w.o_w': str_dir_dpmd+'rdf.o_w.o_w.ave.csv',
+            'o_w.o_w': rdfcsv(dir_dpmd+'rdf.o_w.o_w.ave.csv'),
         },
         'AIMD': {
-            'o_w.o_w': str_dir_aimd+'rdf.o_w.o_w.ave.csv',
+            'o_w.o_w': rdfcsv(dir_aimd+'rdf.o_w.o_w.ave.csv'),
         },
     }
     ax.set_ylabel('g(r)')
@@ -57,10 +63,9 @@ def fig_c(
         transform=ax.transAxes
     )
     ax.set_ylim((0,4))
-    for str_label, dict_data in dict2d_data.items():
-        str_file = dict_data['o_w.o_w']
-        np_data = np.loadtxt(str_file)
-        ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
+    for label, dict_data in dict2d_data.items():
+        data = dict_data['o_w.o_w']
+        ax.plot( data[0], data[1], label=label, lw=1)
 
     ax.legend(
         frameon = False,
@@ -73,46 +78,46 @@ def fig_d(
     axs
 ):
 
-    str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
-    str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
+    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/carbonicrdf/'
+    df = pd.read_csv(dir_dpmd+'carbonicrdf_mod.csv', index_col='r(ang)')
     dict_title = {
-        'cc_o_c.h_w': r'$^=$O-H$\mathregular{_W}$',
-        'cc_o_oh.h_w': r'O$\mathregular{_{OH}}$-H$\mathregular{_W}$',
-        'cc_h_oh.o_w': r'H$\mathregular{_{OH}}$-O$\mathregular{_W}$',
+        'o_nyl.h_w': r'$^=$O-H$\mathregular{_W}$',
+        'o_oh.h_w': r'O$\mathregular{_{OH}}$-H$\mathregular{_W}$',
+        'h_oh.o_w': r'H$\mathregular{_{OH}}$-O$\mathregular{_W}$',
     }
     dict2d_data ={
         'DPMD': {
-            'cc_h_oh.o_w': str_dir_dpmd+'rdf.cc_h_oh.o_w.ave.csv',
-            'cc_o_oh.h_w': str_dir_dpmd+'rdf.cc_o_oh.h_w.ave.csv',
-            'cc_o_c.h_w': str_dir_dpmd+'rdf.cc_o_c.h_w.ave.csv',
+            'h_oh.o_w' : [df.index, df['cc.h_oh.o_w' ]],
+            'o_oh.h_w' : [df.index, df['cc.o_oh.h_w' ]],
+            'o_nyl.h_w': [df.index, df['cc.o_nyl.h_w']],
         },
         'AIMD': {
-            'cc_h_oh.o_w': str_dir_aimd+'rdf.cc_h_oh.o_w.ave.csv',
-            'cc_o_oh.h_w': str_dir_aimd+'rdf.cc_o_oh.h_w.ave.csv',
-            'cc_o_c.h_w': str_dir_aimd+'rdf.cc_o_c.h_w.ave.csv',
+            'h_oh.o_w' :rdfcsv(dir_aimd+'rdf.cc_h_oh.o_w.ave.csv' ),
+            'o_oh.h_w' :rdfcsv(dir_aimd+'rdf.cc_o_oh.h_w.ave.csv' ),
+            'o_nyl.h_w':rdfcsv(dir_aimd+'rdf.cc_o_nyl.h_w.ave.csv'),
         },
     }
     dict_ylim = {
-        'cc_h_oh.o_w': (0,3),
-        'cc_o_oh.h_w': (0,2),
-        'cc_o_c.h_w': (0,2),
+        'h_oh.o_w': (0,3),
+        'o_oh.h_w': (0,2),
+        'o_nyl.h_w': (0,2),
     }
     
-    for ax, str_key in zip(axs, dict_title):
+    for ax, key in zip(axs, dict_title):
         ax.set_ylabel('g(r)')
         ax.text(
             x=0.9,
             y=0.9,
-            s = dict_title[str_key],
+            s = dict_title[key],
             horizontalalignment = 'right',
             verticalalignment = 'top',
             transform=ax.transAxes
         )
-        ax.set_ylim(dict_ylim[str_key])
-        for str_label, dict_data in dict2d_data.items():
-            str_file = dict_data[str_key]
-            np_data = np.loadtxt(str_file)
-            ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
+        ax.set_ylim(dict_ylim[key])
+        for label, dict_data in dict2d_data.items():
+            data = dict_data[key]
+            ax.plot( data[0], data[1], label=label, lw=1)
     axs[0].tick_params(labelbottom=False)
     axs[1].tick_params(labelbottom=False)
     #axs[1].legend(

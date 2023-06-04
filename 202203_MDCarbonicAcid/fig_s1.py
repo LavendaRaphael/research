@@ -5,15 +5,15 @@ from tf_dpmd_kit import train
 import os
 import numpy as np
 import matplotlib.transforms as mtransforms
+import pandas as pd
 
 homedir = os.environ['homedir']
 
-def fig_d(
+def fig_a(
     axs
 ):
 
-    str_dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
-    str_dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/carbonicrdf/'
     dict_title = {
         'o_nyl.h_w': r'$^=$O-H$\mathregular{_W}$',
         'o_oh.h_w': r'O$\mathregular{_{OH}}$-H$\mathregular{_W}$',
@@ -39,30 +39,30 @@ def fig_d(
     dict_ylim = {
         'h_oh.o_w': (0,3),
         'o_oh.h_w': (0,2),
-        'o_c.h_w': (0,2),
+        'o_nyl.h_w': (0,2),
     }
-    
-    for ax, str_key in zip(axs, dict_title):
+    df = pd.read_csv(dir_dpmd+'carbonicrdf_mod.csv', index_col='r(ang)')
+    for ax, key in zip(axs, dict_title):
         ax.set_ylabel('g(r)')
         ax.text(
             x=0.9,
             y=0.9,
-            s = dict_title[str_key],
+            s = dict_title[key],
             horizontalalignment = 'right',
             verticalalignment = 'top',
             transform=ax.transAxes
         )
-        ax.set_ylim(dict_ylim[str_key])
-        for str_label, dict_data in dict2d_data.items():
-            str_file = dict_data[str_key]
-            np_data = np.loadtxt(str_file)
-            ax.plot( np_data[:,0], np_data[:,1], label=str_label, lw=1)
+        ax.set_ylim(dict_ylim[key])
+        for label, dict_data in dict2d_data.items():
+            ax.plot( df.index, df[dict_data[key]], label=label, lw=1)
+
     axs[0].tick_params(labelbottom=False)
     axs[1].tick_params(labelbottom=False)
-    #axs[1].legend(
-    #    frameon = False,
-    #    handlelength = 1
-    #)
+    axs[1].legend(
+        frameon = False,
+        #handlelength = 1,
+        loc = 'center left'
+    )
 
     axs[-1].set_xlabel('r (Å)')
     axs[0].set_xlim(1,6)
@@ -95,15 +95,15 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, 10*cm) )
+    fig = plt.figure( figsize = (8.6*cm, 9*cm) )
 
-    gs = fig.add_gridspec(3, 1, left=0.1, right=0.99, bottom=0.1, top=0.99, hspace=0.3)
+    gs = fig.add_gridspec(3, 1, left=0.1, right=0.99, bottom=0.1, top=0.99, hspace=0.1)
 
     ax0 = fig.add_subplot(gs[0])
     ax1 = fig.add_subplot(gs[1], sharex=ax0)
     ax2 = fig.add_subplot(gs[2], sharex=ax0)
 
-    fig_a([ax3, ax4, ax5])
+    fig_a([ax0, ax1, ax2])
 
     #fig_label(
     #    fig,
