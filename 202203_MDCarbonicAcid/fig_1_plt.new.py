@@ -43,14 +43,16 @@ def fig_c(
     ax
 ):
 
-    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/rdf/'
-    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/rdf/'
+    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/CPBO/CC/carbonicrdf/'
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/DPMD/330K/CC/carbonicrdf/'
+    df_dpmd = pd.read_csv(dir_dpmd+'carbonicrdf.csv', index_col='r(ang)')
+    df_aimd = pd.read_csv(dir_aimd+'carbonicrdf.csv', index_col='r(ang)')
     dict2d_data ={
         'DPMD': {
-            'o_w.o_w': rdfcsv(dir_dpmd+'rdf.o_w.o_w.ave.csv'),
+            'o_w.o_w': [df_dpmd.index, df_dpmd['o_w.o_w']],
         },
         'AIMD': {
-            'o_w.o_w': rdfcsv(dir_aimd+'rdf.o_w.o_w.ave.csv'),
+            'o_w.o_w': [df_aimd.index, df_aimd['o_w.o_w']],
         },
     }
     ax.set_ylabel('g(r)')
@@ -78,8 +80,8 @@ def fig_d(
     axs
 ):
 
-    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/carbonicrdf/'
-    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_nvt/330K/CC/carbonicrdf/'
+    dir_aimd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/CPBO/CC/carbonicrdf/'
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/DPMD/330K/CC/carbonicrdf/'
     df_dpmd = pd.read_csv(dir_dpmd+'carbonicrdf.csv', index_col='r(ang)')
     df_aimd = pd.read_csv(dir_aimd+'carbonicrdf.csv', index_col='r(ang)')
     dict_title = {
@@ -210,7 +212,7 @@ def main():
 
     plot.save(
         fig,
-        file_save = 'fig_1',
+        file_save = 'fig_1.new',
         list_type = ['pdf', 'svg']
     )
 

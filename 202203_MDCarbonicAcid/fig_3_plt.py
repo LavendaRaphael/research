@@ -175,13 +175,13 @@ def fig_b(
             dir_tt +'0.003922.png': (0., 0.5, 1, 0.4),
             dir_tt +'0.003576.png': (0., 0.1, 1, 0.4),
         },
-        bool_axis = False,
+        axin_axis = False,
     )
     plot.add_text(
         ax,
         dict_text = {
             (0.5, 0.5): r'$\alpha$ = $\beta$ = $\pi$',
-            (0.5, 0.9): r'$\alpha$ = $\beta$ = 0.88$\pi$ / 1.12$\pi$',
+            (0.5, 0.9): r'$\alpha$ = $\beta$ = 0.88$\pi$',
         },
         ha = 'center',
         va = 'top'
@@ -201,14 +201,16 @@ def fig_c(
         ]
     )
 
-    list_state = ['CC', 'CT', 'TT', 'HCO3']
+    list_state = ['CC', 'CT', 'TT','H2CO3', 'HCO3']
     dict_color = {
         'CC': 'tab:blue',
         'CT': 'tab:orange',
         'TT': 'tab:green',
+        'H2CO3': 'tab:red',
         'HCO3': 'tab:purple',
     }
     dict_label = {
+        'H2CO3': r'H$_2$CO$_3$',
         'HCO3': r'HCO$_3^-$',
     }
 

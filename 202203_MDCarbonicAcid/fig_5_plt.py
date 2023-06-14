@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from matplotlib.lines import Line2D
 import matplotlib.transforms as mtransforms
+import matplotlib.ticker as mtick
 
 homedir = os.environ['homedir']
 def fig_a(
@@ -34,7 +35,7 @@ def fig_a(
         ser_1 = ser_0 + ser_1
         ax.fill_between(ser_temperature, ser_0, ser_1, lw=0, color=color, alpha=0.5)
         ser_0 = ser_1
-
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0,symbol=None))
     plot.add_text(
         ax,
         dict_text = {
@@ -61,7 +62,7 @@ def fig_a(
     ax.set_xlim(290, 350)
     ax.set_ylim(0.5, 1)
     ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel('Mole Fraction'),
+    ax.set_ylabel('Mole percent (%)'),
 
 def fig_b(ax):
 
@@ -140,7 +141,7 @@ def fig_c(ax):
         ax.errorbar(ser_temperature, df['rate(M/s)']/1e8, yerr = df['rate(M/s)_sem']/1e8, ls=':', marker=marker, markersize=2, lw=1, color=color, capsize=2, label=label)
 
     ax.set_xlabel('Temperature (K)')
-    ax.set_ylabel(r'Formation Rate ($\times 10^{8}$ M/s)')
+    ax.set_ylabel(r'Formation rate ($\times 10^{8}$ M/s)')
     ax.set_xticks([290, 310, 330, 350])
     #ax.set_xlim(None, 375)
     ax.legend(frameon=False)

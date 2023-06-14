@@ -9,62 +9,64 @@ import pandas as pd
 
 homedir = os.environ['homedir']
 
-def addimg(ax, list_img, y):
-    
-    w, h = ax.bbox.width, ax.bbox.height
-    dx = 0.2
-    dy = 1200/1600*w/h*dx
-
-    sep = 0.2
-    nlen = len(list_img)
-    dict_img = {}
-    for idx, img in enumerate(list_img):
-        dict_img[img] = (sep*idx-dx/2+1/2-(nlen-1)/2*sep, y-dy/2, dx, dy)
-
-    plot.inset_img(
-        ax,
-        dict_img = dict_img,
-        spinels = ':',
-        spinecolor = 'tab:grey',
-        spinelw = 1
-    )
-
 def fig_a(
-    ax
+    axs
 ):
 
-    dirx = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
-    ax.axis('off')
-    addimg(
-        ax,
-        list_img = [
-            dirx+'0.319625.png',
-            dirx+'0.319744.png',
-            dirx+'0.319797.png',
-            dirx+'0.319839.png',
-        ],
-        y = 0.5+1/3
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/DPMD/330K/CC/carbonicrdf/'
+    dict_title = {
+        'o_nyl.h_w': r'$^=$O-H$\mathregular{_W}$',
+        'o_oh.h_w': r'O$\mathregular{_{OH}}$-H$\mathregular{_W}$',
+        'h_oh.o_w': r'H$\mathregular{_{OH}}$-O$\mathregular{_W}$',
+    }
+    dict2d_data ={
+        'CC': {
+            'o_nyl.h_w': 'cc.o_nyl.h_w',
+            'o_oh.h_w' : 'cc.o_oh.h_w' ,
+            'h_oh.o_w' : 'cc.h_oh.o_w' ,
+        },
+        'CT': {
+            'o_nyl.h_w': 'ct.o_nyl.h_w',
+            'o_oh.h_w' : 'ct.o_oh.h_w' ,
+            'h_oh.o_w' : 'ct.h_oh.o_w' ,
+        },
+        'TT': {
+            'o_nyl.h_w': 'tt.o_nyl.h_w',
+            'o_oh.h_w' : 'tt.o_oh.h_w' ,
+            'h_oh.o_w' : 'tt.h_oh.o_w' ,
+        },
+    }
+    dict_ylim = {
+        'h_oh.o_w': (0,3),
+        'o_oh.h_w': (0,2),
+        'o_nyl.h_w': (0,2),
+    }
+    df = pd.read_csv(dir_dpmd+'carbonicrdf.csv', index_col='r(ang)')
+    for ax, key in zip(axs, dict_title):
+        ax.set_ylabel('g(r)')
+        ax.text(
+            x=0.9,
+            y=0.9,
+            s = dict_title[key],
+            horizontalalignment = 'right',
+            verticalalignment = 'top',
+            transform=ax.transAxes
+        )
+        ax.set_ylim(dict_ylim[key])
+        for label, dict_data in dict2d_data.items():
+            ax.plot( df.index, df[dict_data[key]], label=label, lw=1)
+
+    axs[0].tick_params(labelbottom=False)
+    axs[1].tick_params(labelbottom=False)
+    axs[1].legend(
+        frameon = False,
+        #handlelength = 1,
+        loc = 'center left'
     )
-    addimg(
-        ax,
-        list_img = [
-            dirx+'4.338185.png',
-            dirx+'4.338197.png',
-            dirx+'4.338223.png',
-            dirx+'4.338285.png',
-        ],
-        y = 0.5
-    )
-    addimg(
-        ax,
-        list_img = [
-            dirx+'0.303612.png',
-            dirx+'0.303821.png',
-            dirx+'0.303919.png',
-            dirx+'0.304128.png',
-        ],
-        y = 0.5-1/3
-    )
+
+    axs[-1].set_xlabel('r (Å)')
+    axs[0].set_xlim(1,6)
+
 def fig_label(
     fig,
     axs,
@@ -74,6 +76,8 @@ def fig_label(
     y = 0/72
     dict_pos = {
         '(a)': (x, y),
+        '(b)': (x, y),
+        '(c)': (x, y),
     }
 
     for ax, label in zip(axs, dict_pos.keys()):
@@ -91,13 +95,15 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, 1.5*3*cm) )
+    fig = plt.figure( figsize = (8.6*cm, 9*cm) )
 
-    gs = fig.add_gridspec(1, 1, left=0.01, right=0.99, bottom=0.01, top=0.99)
+    gs = fig.add_gridspec(3, 1, left=0.1, right=0.99, bottom=0.1, top=0.99, hspace=0.1)
 
     ax0 = fig.add_subplot(gs[0])
+    ax1 = fig.add_subplot(gs[1], sharex=ax0)
+    ax2 = fig.add_subplot(gs[2], sharex=ax0)
 
-    fig_a(ax0)
+    fig_a([ax0, ax1, ax2])
 
     #fig_label(
     #    fig,

@@ -59,19 +59,20 @@ def fig_a(ax):
     dy1 = dx*w/h
 
     # right, top
-    r = np.array([ dx/2,    0])
-    t = np.array([    0,   dy/2])
-    r1 = np.array([ dx1/2,    0])
-    t1 = np.array([    0,   dy1/2])
+    r  = np.array([ dx/2,      0])
+    t  = np.array([    0,   dy/2])
+    r1 = np.array([dx1/2,      0])
+    t1 = np.array([    0,  dy1/2])
     # shift
     sx = np.array([dx/5,   0])
     sy = np.array([   0,dy/5])
 
     # pos
-    p_tt = np.array([0.3, 0.13])
-    p_ct = np.array([0.3, 0.5])
-    p_cc = np.array([0.3, 0.87])
-    p_xx = np.array([0.8, 0.5])
+    yx = 0.03
+    p_tt = np.array([0.3, 0.17+yx])
+    p_ct = np.array([0.3,  0.5+yx])
+    p_cc = np.array([0.3, 0.83+yx])
+    p_xx = np.array([0.8,  0.5+yx])
     # middle
     p_tt_ct = (p_tt+p_ct)/2
     p_ct_cc = (p_ct+p_cc)/2
@@ -99,10 +100,10 @@ def fig_a(ax):
         dict_img = {
             dir_cc + '0.360003.png': (p_xx[0]-0.5*dx1, p_xx[1]-dy1/2, dx1, dy1),
         },
-        dict_spinecolor = {
+        spinecolor = {
             dir_cc + '0.360003.png': c_xx,
         },
-        bool_rot90 = True,
+        img_rot90 = True,
     )
     [axin0, axin1, axin2] = plot.inset_img(
         ax,
@@ -111,7 +112,7 @@ def fig_a(ax):
             dir_cc +'3.067520.png': (p_ct[0]-0.5*dx, p_ct[1]-0.5*dy, dx, dy),
             dir_cc +'3.170878.png': (p_tt[0]-0.5*dx, p_tt[1]-0.5*dy, dx, dy),
         },
-        dict_spinecolor = {
+        spinecolor = {
             dir_cc +'3.000000.png': c_cc,
             dir_cc +'3.067520.png': c_ct, 
             dir_cc +'3.170878.png': c_tt,
@@ -149,6 +150,15 @@ def fig_a(ax):
         color = 'white',
         fontweight = 'bold',
         bbox = dict(boxstyle='round', fc=c_cc, lw=0)
+    )
+    plot.add_text(
+        axin0,
+        dict_text = {
+            (0.97, 0.95): 'CC',
+        },
+        transform = axin0.transAxes,
+        va = 'top',
+        ha = 'right',
     )
     plot.add_text(
         ax,
@@ -195,6 +205,15 @@ def fig_a(ax):
         bbox = dict(boxstyle='round', fc=c_ct, lw=0)
     )
     plot.add_text(
+        axin1,
+        dict_text = {
+            (0.97, 0.95): 'CT',
+        },
+        transform = axin1.transAxes,
+        va = 'top',
+        ha = 'right',
+    )
+    plot.add_text(
         ax,
         dict_text = {
             tuple(p_tt_ct-sx+0.3*sy): rate['ct_tt'],
@@ -228,6 +247,15 @@ def fig_a(ax):
         color = 'white',
         fontweight = 'bold',
         bbox = dict(boxstyle='round', fc=c_tt, lw=0)
+    )
+    plot.add_text(
+        axin2,
+        dict_text = {
+            (0.97, 0.95): 'TT',
+        },
+        transform = axin2.transAxes,
+        va = 'top',
+        ha = 'right',
     )
     plot.add_text(
         ax,
@@ -274,7 +302,7 @@ def fig_a(ax):
         ha = 'center',
         bbox = dict(boxstyle='round', ec=c_xx, fc='white')
     )
-    # box
+    # rect
     rect = mpatches.Rectangle( (0.06,0.01), 0.324, 0.98, linewidth=1, facecolor = 'None', edgecolor='grey', ls=':')
     ax.add_patch(rect)
     rect = mpatches.Rectangle( (0.384,0.01), 0.45, 0.98, linewidth=1, facecolor = 'None', edgecolor='grey', ls=':')
@@ -282,11 +310,12 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            (0.15, 0.05): 'Direct',
-            (0.8, 0.05): 'Indirect',
+            ( 0.25, 0.02): 'Direct',
+            ( 0.65, 0.02): 'Indirect',
         },
         va = 'bottom',
         ha = 'right',
+        fontweight = 'bold',
     )
 
 def fig_b(ax):
@@ -312,7 +341,7 @@ def fig_b(ax):
             dir_cc+'0.363351.png': (0.7-dx/2, y1-dy/2, dx, dy),
             dir_cc+'0.363355.png': (0.9-dx/2, y1-dy/2, dx, dy),
         },
-        bool_axis = False
+        axin_axis = False
     )
     plot.add_arrow(
         ax,
@@ -375,9 +404,9 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, (5.5+4)*cm) )
+    fig = plt.figure( figsize = (8.6*cm, (6.2+4)*cm) )
 
-    gs = fig.add_gridspec(2, 1, height_ratios=[5.5,4], left=0.01, right=0.99, bottom=0.01, top=0.99, hspace=0.05)
+    gs = fig.add_gridspec(2, 1, height_ratios=[6.2,4], left=0.01, right=0.99, bottom=0.01, top=0.99, hspace=0.05)
 
     ax0 = fig.add_subplot(gs[0])
     ax1 = fig.add_subplot(gs[1])
