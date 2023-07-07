@@ -42,7 +42,7 @@ def fig_a(
     plot.add_text(
         ax,
         dict_text = {
-            (0.9, 0.9 )  : 'AIMD',
+            (0.9, 0.9 )  : 'BOMD',
             (0.2, 0.45)  : 'CC'  ,
             (0.4, 0.45)  : 'CT'  ,
             (0.6, 0.45)  : 'TT'  ,
@@ -82,42 +82,24 @@ def fig_b(
         ha = 'center',
         transform = ax.transAxes
     )
-def fig_label(
-    list_ax,
-):
-    dict_pos = {
-        '(a)': (-0.12, 0.9),
-        '(b)': (-0.12, 0.9),
-    }
-    for ax, label in zip(list_ax, dict_pos):
-        pos = dict_pos[label]
-        ax.text(
-            x = pos[0],
-            y = pos[1],
-            s = label,
-            transform = ax.transAxes,
-        )
 
-def run():
+def main():
 
     plot.set_rcparam()
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
 
     fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, (3+3)*cm))
-
     fig_a(ax0)
     fig_b(ax1)
 
-    fig_label([ax0,ax1])
-
     plot.save(
         fig,
-        file_save = 'fig_2.new',
+        file_save = 'timeline_aimd_dpmd',
         list_type = ['pdf', 'svg']
     )
 
-run()
+    plt.show()
 
-plt.show()
+main()
 

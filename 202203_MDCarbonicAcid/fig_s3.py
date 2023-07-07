@@ -1,130 +1,137 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from tf_dpmd_kit import plot
-from tf_dpmd_kit import train
 import os
-import numpy as np
-import matplotlib.transforms as mtransforms
-import pandas as pd
 
 homedir = os.environ['homedir']
 
-def addimg(ax, list_img, y):
-    
-    w, h = ax.bbox.width, ax.bbox.height
-    dx = 0.2
-    dy = 1200/1600*w/h*dx
+def run0(ax):
 
-    sep = 0.2
-    nlen = len(list_img)
-    dict_img = {}
-    for idx, img in enumerate(list_img):
-        dict_img[img] = (sep*idx-dx/2+1/2-(nlen-1)/2*sep, y-dy/2, dx, dy)
+    o0 = (540, 840)
+    h0 = (401, 697)
+    o1 = (1018, 829)
+    h1 = (1217, 729)
 
-    plot.inset_img(
+    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+
+    plot.add_text(
         ax,
-        dict_img = dict_img,
-        spinels = ':',
-        spinecolor = 'tab:grey',
-        spinelw = 1
+        dict_text = {
+            (325, 884): r'R$_1$',
+            (1000, 630): r'R$_0$ = 1.09 Å',
+            (680, 320): r'$^=$O',
+            (624, 618): r'C',
+            (511, 1000): r'O$_1$',
+            (999, 1000): r'O$_0$',
+            (1310, 791): r'Ex$_0$',
+            (185, 672): r'Ex$_1$',
+        }
+    )
+
+def run1(ax):
+
+    o0 = (354, 845)
+    h0 = (195, 704)
+    o1 = (810, 815)
+    h1 = (1099, 707)
+
+    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+
+    plot.add_text(
+        ax,
+        dict_text = {
+            (125, 840): r'R$_1$',
+            (780, 610): r'R$_0$ = 1.42 Å'
+        }
+    )
+
+def run2(ax):
+
+    o0 = (341, 837)
+    h0 = (196, 705)
+    o1 = (798, 837)
+    h1 = (1318, 733)
+
+    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+
+    plot.add_text(
+        ax,
+        dict_text = {
+            (116, 846): r'R$_1$',
+            (780, 630): r'R$_0$ = 2.44 Å',
+            (1190, 966): 'Zundel'
+        }
+    )
+
+def run3(ax):
+
+    o0 = (335, 834)
+    h0 = (157, 713)
+    o1 = (798, 843)
+    h1 = (1356, 465)
+
+    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
+
+    plot.add_text(
+        ax,
+        dict_text = {
+            (748, 524): r'R$_0$ = 3.34 Å',
+            (101, 870): r'R$_1$'
+        }
     )
 
 def fig_a(
     ax
 ):
 
-    dirx = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
-    diry = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/TT/snap/'
+    img_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
+    # 
+    w, h = ax.bbox.width, ax.bbox.height
+    dx = 0.45
+    dy = 1200/1600*w/h*dx
     ax.axis('off')
-    addimg(
+
+    ax0, ax1, ax2, ax3 = plot.inset_img(
         ax,
-        list_img = [
-            dirx+'2.035757.png',
-            dirx+'2.035762.png',
-            dirx+'2.035768.png',
-            dirx+'2.035783.png',
-        ],
-        y = 0.9
-    )
-    addimg(
-        ax,
-        list_img = [
-            dirx+'10.388854.png',
-            dirx+'10.388898.png',
-            dirx+'10.388917.png',
-        ],
-        y = 0.7
-    )
-    addimg(
-        ax,
-        list_img = [
-            dirx+'11.331220.png',
-            dirx+'11.331223.png',
-            dirx+'11.331267.png',
-            dirx+'11.331276.png',
-        ],
-        y = 0.5
-    )
-    addimg(
-        ax,
-        list_img = [
-            diry+'4.094088.png',
-            diry+'4.094147.png',
-            diry+'4.094196.png',
-            diry+'4.094225.png',
-            diry+'4.094245.png',
-        ],
-        y = 0.3
-    )
-    addimg(
-        ax,
-        list_img = [
-            diry+'7.413039.png',
-            diry+'7.413042.png',
-            diry+'7.413048.png',
-            diry+'7.413141.png',
-        ],
-        y = 0.1
+        dict_img = {
+            img_dir+'0.174174.png': (1/4-dx/2, 3/4-dy/2, dx, dy),
+            img_dir+'0.174177.png': (3/4-dx/2, 3/4-dy/2, dx, dy),
+            img_dir+'0.174180.png': (3/4-dx/2, 1/4-dy/2, dx, dy),
+            img_dir+'0.174181.png': (1/4-dx/2, 1/4-dy/2, dx, dy),
+        },
+        axin_axis = False,
     )
 
-def fig_label(
-    fig,
-    axs,
-):
+    run0(ax0)
+    run1(ax1)
+    run2(ax2)
+    run3(ax3)
 
-    x = -20/72
-    y = 0/72
-    dict_pos = {
-        '(a)': (x, y),
-    }
-
-    for ax, label in zip(axs, dict_pos.keys()):
-        (x, y) = dict_pos[label]
-        # label physical distance to the left and up:
-        trans = mtransforms.ScaledTranslation(x, y, fig.dpi_scale_trans)
-        ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
-                fontsize='medium', va='top')
-
+    plot.add_arrow(
+        ax,
+        list_arrow = [
+            [(1/2-0.01, 3/4), (1/2+0.01, 3/4)],
+            [(3/4, 1/2+0.01), (3/4, 1/2-0.01)],
+            [(1/2+0.01, 1/4), (1/2-0.01, 1/4)],
+        ],
+        arrowstyle = 'fancy, head_length=6, head_width=6, tail_width=0.01',
+        lw = 0,
+        color = 'tab:blue'
+    )
 
 def main():
 
     plot.set_rcparam()
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
-    mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, 1.5*5*cm) )
+    fig, ax = plt.subplots(1, 1, figsize = (8.6*cm, 7*cm))
 
-    gs = fig.add_gridspec(1, 1, left=0.01, right=0.99, bottom=0.01, top=0.99)
-
-    ax0 = fig.add_subplot(gs[0])
-
-    fig_a(ax0)
-
-    #fig_label(
-    #    fig,
-    #    axs = [ax0,ax1,ax2,ax3,ax6]
-    #)
+    fig_a(ax)
 
     plot.save(
         fig,
@@ -135,4 +142,5 @@ def main():
     plt.show()
 
 main()
+
 

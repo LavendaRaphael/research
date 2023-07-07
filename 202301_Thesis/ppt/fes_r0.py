@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from tf_dpmd_kit import plot
 import os
+from tf_dpmd_kit import analysis
+from tf_dpmd_kit import plm
+import numpy as np
+import pandas as pd
 
 homedir = os.environ['homedir']
 
@@ -105,7 +109,6 @@ def fig_a(
         },
         axin_axis = False,
     )
-
     run0(ax0)
     run1(ax1)
     run2(ax2)
@@ -123,24 +126,88 @@ def fig_a(
         color = 'tab:blue'
     )
 
+def fig_b(fig, ax):
+
+    data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
+
+    df_data = analysis.read_multidata([
+        data_dir+'CC/carbonic/carbonic.product.csv',
+        #data_dir+'CT/carbonic/carbonic.product.csv',
+        #data_dir+'TT/carbonic/carbonic.product.csv',
+    ]).dropna()
+
+    print(df_data)
+
+    h, xedges, yedges = np.histogram2d(df_data['roh0(ang)'], df_data['roh1(ang)'], bins=[300, 300], density=True, range=[[0.8, 6],[0.8, 1.3]])
+
+    energy = plm.prob_to_deltag(h, temperature=330)
+    energy -= np.amin(energy)
+    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+    image = ax.imshow(
+        energy.T,
+        origin = 'lower',
+        extent = extent,
+        cmap = 'coolwarm',
+        aspect = 'auto',
+    )
+    colorbar = fig.colorbar( mappable=image, ax=ax, extend='max')
+    colorbar.ax.set_ylabel('Free energy (kcal/mol)')
+
+    ax.set_xlim(0.8, 6)
+    #ax.set_xlabel(r'R$_0$ (Å) [R$_0$ > R$_1$]')
+    ax.set_ylabel(r'R$_1$ (Å)')
+    ax.tick_params(labelbottom=False)
+
+def fig_c(ax):
+
+    dict_label = {
+        'CC': 'CC',
+        'CT': 'CT',
+        'TT': 'TT',
+        'H2CO3': r'H$_2$CO$_3$',
+    }
+    data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
+    df = pd.read_csv(data_dir+'carbonic_roh_1d.csv', index_col='roh0(ang)')
+    for header in ['CC', 'CT', 'TT', 'H2CO3']:
+        ser = df[header]
+        ser -= min(ser[(ser.index>3.0) & (ser.index<4.2)])
+        ax.plot(df.index, df[header], label=dict_label[header], lw=1)
+
+    ax.set_xlabel(r'R$_0$ (Å) [R$_0$ > R$_1$]')
+    ax.set_ylabel('Free energy (kcal/mol)')
+    ax.set_xlim(0.8, 6)
+    ax.legend(
+        frameon = False,
+    )
+    ax.hlines(0, xmin=0.8, xmax=4, color='grey', ls=':')
+
 def main():
 
     plot.set_rcparam()
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig, ax = plt.subplots(1, 1, figsize = (8.6*cm, 7*cm))
+    fig = plt.figure(figsize = ((8+8)*cm, 8*cm))
+    gs = fig.add_gridspec(2, 2, width_ratios=[7,6], left=0., right=0.99, bottom=0.12, top=0.99, wspace=0.2, hspace=0.1)
 
-    fig_a(ax)
+    ax0 = fig.add_subplot(gs[:, 0])
+    fig_a(ax0)
+
+    ax1 = fig.add_subplot(gs[0, 1])
+    fig_b(fig, ax1)
+    
+    gs1 = gs[1, 1].subgridspec(1, 2, width_ratios=[8,2], wspace=0)
+    ax2 = fig.add_subplot(gs1[0], sharex=ax1)
+    fig_c(ax2)
 
     plot.save(
         fig,
-        file_save = 'fig_s5',
+        file_save = 'fes_r0',
         list_type = ['pdf', 'svg']
     )
 
     plt.show()
 
 main()
-
 

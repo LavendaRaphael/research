@@ -10,11 +10,11 @@ def fig_a(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/carbonic/'
+    str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/CPBO/CC/carbonic/'
     analysis.carbonic_rolling_plt(
         ax,
         file_data = str_dir+'carbonic_state.csv',
-        float_xscale = 0.0004837769,
+        float_xscale = 0.0004837769*5,
         int_window = 10,
         list_header = ['HCO3', 'CC', 'CT', 'TT'],
         list_ypos = [1, 2, 3, 4],
@@ -30,14 +30,14 @@ def fig_a(
     ax.set_ylim(0.5, 4.8)
     ax.set_yticklabels(['HCO$_3^-$', 'CC','CT','TT'])
     img_dir = homedir+'/research/202203_MDCarbonicAcid/structure/'
-    plot.inset_img(
+    axins = plot.inset_img(
         ax,
         dict_img = {
             img_dir+'H2CO3_CC.png': (0.1, 0.5, 0.2, 0.4),
             img_dir+'H2CO3_CT.png': (0.3, 0.5, 0.2, 0.4),
             img_dir+'H2CO3_TT.png': (0.5, 0.5, 0.2, 0.4),
         },
-        bool_axis = False,
+        axin_axis = False
     )
     plot.add_text(
         ax,
@@ -56,7 +56,7 @@ def fig_b(
     ax
 ):
 
-    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CT/carbonic/'
+    str_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/carbonic/'
     analysis.carbonic_rolling_plt(
         ax,
         file_data = str_dir+'carbonic_state.csv',
@@ -113,7 +113,7 @@ def run():
 
     plot.save(
         fig,
-        file_save = 'fig_2',
+        file_save = 'fig_2.new',
         list_type = ['pdf', 'svg']
     )
 

@@ -31,18 +31,6 @@ def fig_a(
     energy = plm.prob_to_deltag(h, temperature=330)
     energy -= np.amin(energy)
 
-    print(energy)
-    cen_x = (xedges[:-1] + xedges[1:])/2
-    cen_y = (yedges[:-1] + yedges[1:])/2
-    bool_xc = (cen_x < np.pi/2)
-    bool_xt = (cen_x > np.pi/2)
-    bool_yc = (cen_y < np.pi/2)
-    bool_yt = (cen_y > np.pi/2)
-    print('CC', min(energy[bool_xc, bool_yc]))
-    print('CT', min(energy[bool_xc, bool_yt]))
-    print('TC', min(energy[bool_xt, bool_yc]))
-    print('TT', min(energy[bool_xt, bool_yt]))
-
     image = ax.imshow(
         energy.T,
         origin = 'lower',
@@ -83,7 +71,6 @@ def fig_a(
 
     axin = ax.inset_axes((0.35, 0.38, 0.3, 0.3))
     fig_a_sub(axin)
-
 def fig_a_sub(
     ax,
 ):
@@ -166,13 +153,13 @@ def fig_b(
     ax
 ):
 
-    ax.axis('off')
     dir_cc = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
+    ax.axis('off')
     plot.inset_img(
         ax,
         dict_img = {
-            dir_cc +'3.175340.png': (0., 0.1, 1, 0.4),
-            dir_cc +'3.172348.png': (0., 0.5, 1, 0.4),
+            dir_cc +'3.175340.png': (0., 0.05, 1, 0.4),
+            dir_cc +'3.172348.png': (0., 0.55, 1, 0.4),
         },
         axin_axis = False,
     )
@@ -180,78 +167,11 @@ def fig_b(
         ax,
         dict_text = {
             (0.5, 0.5): r'$\alpha$ ≈ $\beta$ ≈ $\pi$',
-            (0.5, 0.9): r'$\alpha$ ≈ $\beta$ ≈ 0.88$\pi$',
+            (0.5, 1.0): r'$\alpha$ ≈ $\beta$ ≈ 0.88$\pi$',
         },
         ha = 'center',
         va = 'top'
     )
- 
-
-def fig_c(
-    ax
-):
-
-    str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
-    df = analysis.carbonic_survival(
-        list_file = [
-            str_dir+'../CC/carbonic/carbonic_lifedata.csv',
-            str_dir+'../CT/carbonic/carbonic_lifedata.csv',
-            str_dir+'../TT/carbonic/carbonic_lifedata.csv',
-        ]
-    )
-
-    list_state = ['CC', 'CT', 'TT','H2CO3', 'HCO3']
-    dict_color = {
-        'CC': 'tab:blue',
-        'CT': 'tab:orange',
-        'TT': 'tab:green',
-        'H2CO3': 'tab:red',
-        'HCO3': 'tab:purple',
-    }
-    dict_label = {
-        'H2CO3': r'H$_2$CO$_3$',
-        'HCO3': r'HCO$_3^-$',
-    }
-
-    analysis.carbonic_survival_plt(
-        ax = ax,
-        df = df,
-        list_state = list_state,
-        dict_color = dict_color,
-        dict_label = dict_label,
-    )
-    ax.vlines(1.5, 0.01, 0.99, ls=':', lw=1, color='grey')
-    plot.add_text(
-        ax,
-        dict_text = {
-            (1.5, 0.4): 't = 1.5 ps'
-        },
-        va = 'center',
-        ha = 'center',
-        bbox = dict(boxstyle='round', fc='white', lw=1, ls=':', ec='grey')
-    )
-
-def fig_label(
-    fig,
-    axs,
-):
-
-    x = -25/72
-    y = 0/72
-    dict_pos = {
-        '(a)': (x, y),
-        '(b)': (0/72, y),
-        '(c)': (x, y),
-    }
-
-    for ax, label in zip(axs, dict_pos.keys()):
-        (x, y) = dict_pos[label]
-        # label physical distance to the left and up:
-        trans = mtransforms.ScaledTranslation(x, y, fig.dpi_scale_trans)
-        ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
-                fontsize='medium', va='top')
-
-
 def main():
 
     plot.set_rcparam()
@@ -259,26 +179,18 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, (5+3.5)*cm) )
+    fig = plt.figure( figsize = (8.6*cm, 5*cm) )
 
-    gs = fig.add_gridspec(2, 2, height_ratios=[5, 3.5], width_ratios=[6,2.6], left=0.13, right=0.99, bottom=0.1, top=0.99, hspace=0.25, wspace=0.1)
+    gs = fig.add_gridspec(1, 2, width_ratios=[6,2.6], left=0.13, right=0.99, bottom=0.17, top=0.99, wspace=0.1)
     ax0 = fig.add_subplot(gs[0, 0])
     ax1 = fig.add_subplot(gs[0, 1])
-    ax2 = fig.add_subplot(gs[1, :])
-
 
     fig_a(fig, ax0)
     fig_b(ax1)
-    fig_c(ax2)
-
-    fig_label(
-        fig,
-        axs = [ax0 ,ax1, ax2]
-    )
 
     plot.save(
         fig,
-        file_save = 'fig_3',
+        file_save = 'fes_alpha_beta',
         list_type = ['pdf', 'svg']
     )
 
