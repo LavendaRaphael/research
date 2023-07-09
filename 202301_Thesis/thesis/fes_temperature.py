@@ -22,11 +22,11 @@ def fig_a(ax):
     dict_color = plot.dict_color_temperature(
         colormap = (280, 320),
         dict_temperature = {
-            '280K': 280,
-            '290K': 290,
-            '300K': 300,
-            '310K': 310,
-            '320K': 320,
+            '280 K': 280,
+            '290 K': 290,
+            '300 K': 300,
+            '310 K': 310,
+            '320 K': 320,
         }
     )
 

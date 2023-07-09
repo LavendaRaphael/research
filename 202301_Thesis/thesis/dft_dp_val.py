@@ -42,8 +42,8 @@ def fig_c(
         file_out = str_dir+'dptest.e.out',
         int_natoms = 384,
         float_lw = 0.75,
-        xlim = (-1.1, 1.1)
     )
+    ax.set_xlim(-1.1, 1.1)
 
 def fig_d(
     ax
@@ -53,8 +53,8 @@ def fig_d(
         ax,
         file_out = str_dir+'dptest.f.out',
         float_lw = 0.75,
-        xlim = (-0.5, 0.5)
     )
+    ax.set_xlim(-0.5, 0.5)
 
 def main():
 
@@ -63,9 +63,9 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (12*cm, 10*cm) )
+    fig = plt.figure( figsize = (10*cm, 10*cm) )
 
-    gs = fig.add_gridspec(2, 2, left=0.1, right=0.99, bottom=0.1, top=0.99, wspace=0.2, hspace=0.2)
+    gs = fig.add_gridspec(2, 2, left=0.1, right=0.99, bottom=0.1, top=0.99, wspace=0.25, hspace=0.25)
 
     ax0 = fig.add_subplot(gs[0,0])
     ax1 = fig.add_subplot(gs[0,1])
