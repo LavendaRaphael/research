@@ -1,137 +1,105 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from tf_dpmd_kit import plot
+from tf_dpmd_kit import train
 import os
-
-homedir = os.environ['homedir']
-
-def run0(ax):
-
-    o0 = (540, 840)
-    h0 = (401, 697)
-    o1 = (1018, 829)
-    h1 = (1217, 729)
-
-    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-
-    plot.add_text(
-        ax,
-        dict_text = {
-            (325, 884): r'R$_1$',
-            (1000, 630): r'R$_0$ = 1.09 Å',
-            (680, 320): r'$^=$O',
-            (624, 618): r'C',
-            (511, 1000): r'O$_1$',
-            (999, 1000): r'O$_0$',
-            (1310, 791): r'Ex$_0$',
-            (185, 672): r'Ex$_1$',
-        }
-    )
-
-def run1(ax):
-
-    o0 = (354, 845)
-    h0 = (195, 704)
-    o1 = (810, 815)
-    h1 = (1099, 707)
-
-    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-
-    plot.add_text(
-        ax,
-        dict_text = {
-            (125, 840): r'R$_1$',
-            (780, 610): r'R$_0$ = 1.42 Å'
-        }
-    )
-
-def run2(ax):
-
-    o0 = (341, 837)
-    h0 = (196, 705)
-    o1 = (798, 837)
-    h1 = (1318, 733)
-
-    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-
-    plot.add_text(
-        ax,
-        dict_text = {
-            (116, 846): r'R$_1$',
-            (780, 630): r'R$_0$ = 2.44 Å',
-            (1190, 966): 'Zundel'
-        }
-    )
-
-def run3(ax):
-
-    o0 = (335, 834)
-    h0 = (157, 713)
-    o1 = (798, 843)
-    h1 = (1356, 465)
-
-    ax.plot( [o0[0], h0[0]], [o0[1], h0[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-    ax.plot( [o1[0], h1[0]], [o1[1], h1[1]], ls=':', marker='o', color='tab:cyan', lw=1, markersize=1)
-
-    plot.add_text(
-        ax,
-        dict_text = {
-            (748, 524): r'R$_0$ = 3.34 Å',
-            (101, 870): r'R$_1$'
-        }
-    )
+import numpy as np
+import matplotlib.transforms as mtransforms
+import pandas as pd
 
 def fig_a(
+    axs
+):
+
+    dir_dpmd = '/home/faye/research_d/202203_MDCarbonicAcid/server/07.md_water62/DPMD/330K/CC/carbonicrdf/'
+    dict_title = {
+        'o_nyl.h_w': r'$^=$O-H$\mathregular{_W}$',
+        'h_oh.o_w': r'H$\mathregular{_{OH}}$-O$\mathregular{_W}$',
+    }
+    dict2d_data ={
+        'CC': {
+            'o_nyl.h_w': 'cc.o_nyl.h_w',
+            'h_oh.o_w' : 'cc.h_oh.o_w' ,
+        },
+        'CT': {
+            'o_nyl.h_w': 'ct.o_nyl.h_w',
+            'h_oh.o_w' : 'ct.h_oh.o_w' ,
+        },
+        'TT': {
+            'o_nyl.h_w': 'tt.o_nyl.h_w',
+            'h_oh.o_w' : 'tt.h_oh.o_w' ,
+        },
+    }
+    df = pd.read_csv(dir_dpmd+'carbonicrdf.csv', index_col='r(ang)')
+    for ax, key in zip(axs, dict_title):
+        ax.set_ylabel('g(r)')
+        ax.text(
+            x=0.9,
+            y=0.9,
+            s = dict_title[key],
+            horizontalalignment = 'right',
+            verticalalignment = 'top',
+            transform=ax.transAxes
+        )
+        for label, dict_data in dict2d_data.items():
+            ax.plot( df.index, df[dict_data[key]], label=label, lw=1)
+
+    axs[0].tick_params(labelbottom=False)
+    axs[0].legend(
+        frameon = False,
+        #handlelength = 1,
+        loc = (0.2, 0.5)
+    )
+
+    axs[-1].set_xlabel('r (Å)')
+    axs[0].set_xlim(1,6)
+    axs[0].set_ylim(0,3)
+
+def fig_b(
     ax
 ):
 
-    img_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
-    # 
-    w, h = ax.bbox.width, ax.bbox.height
-    dx = 0.45
-    dy = 1200/1600*w/h*dx
     ax.axis('off')
-
-    ax0, ax1, ax2, ax3 = plot.inset_img(
+    dir_cp  = '/home/faye/research_d/202203_MDCarbonicAcid/server/01.init/H2CO3_CC_H2O_126/plm/'
+    dir_cc = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CC/snap/'
+    axins = plot.inset_img(
         ax,
         dict_img = {
-            img_dir+'0.174174.png': (1/4-dx/2, 3/4-dy/2, dx, dy),
-            img_dir+'0.174177.png': (3/4-dx/2, 3/4-dy/2, dx, dy),
-            img_dir+'0.174180.png': (3/4-dx/2, 1/4-dy/2, dx, dy),
-            img_dir+'0.174181.png': (1/4-dx/2, 1/4-dy/2, dx, dy),
+            dir_cp +'33732.png'   : (0., 0.66, 1, 0.31),
+            dir_cp +'64961.png'   : (0., 0.33, 1, 0.31),
+            dir_cc +'3.171816.png': (0., 0.00, 1, 0.31),
         },
-        axin_axis = False,
+        spinecolor = {
+            dir_cp +'33732.png'   : 'tab:blue',
+            dir_cp +'64961.png'   : 'tab:orange',
+            dir_cc +'3.171816.png': 'tab:green'
+        }
     )
-
-    run0(ax0)
-    run1(ax1)
-    run2(ax2)
-    run3(ax3)
-
-    plot.add_arrow(
-        ax,
-        list_arrow = [
-            [(1/2-0.01, 3/4), (1/2+0.01, 3/4)],
-            [(3/4, 1/2+0.01), (3/4, 1/2-0.01)],
-            [(1/2+0.01, 1/4), (1/2-0.01, 1/4)],
-        ],
-        arrowstyle = 'fancy, head_length=6, head_width=6, tail_width=0.01',
-        lw = 0,
-        color = 'tab:blue'
-    )
+    for axin, s in zip(axins, ['CC','CT','TT']):
+        axin.text(
+            0.05, 0.95,
+            s,
+            ha = 'left', va='top',
+            transform=axin.transAxes
+        )
 
 def main():
 
     plot.set_rcparam()
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig, ax = plt.subplots(1, 1, figsize = (8.6*cm, 7*cm))
+    fig = plt.figure( figsize = ((6+2)*cm, 5*cm) )
 
-    fig_a(ax)
+    gs = fig.add_gridspec(2, 2, width_ratios=[6,2], left=0.1, right=0.99, bottom=0.17, top=0.97, hspace=0.1)
+
+    ax0 = fig.add_subplot(gs[0, 0])
+    ax1 = fig.add_subplot(gs[1, 0], sharex=ax0, sharey=ax0)
+    fig_a([ax0, ax1])
+
+    ax2 = fig.add_subplot(gs[:, 1])
+    fig_b(ax2)
 
     plot.save(
         fig,
@@ -142,5 +110,4 @@ def main():
     plt.show()
 
 main()
-
 

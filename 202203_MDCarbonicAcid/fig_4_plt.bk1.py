@@ -37,11 +37,11 @@ def fig_a(ax):
     # read data
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     fl = {}
-    #df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['rate(M/s)']
-    #fl['cc'] = df['CC']
-    #fl['ct'] = df['CT']
-    #fl['tt'] = df['TT']
-    #fl['xx'] = df['HCO3']
+    df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['rate(M/s)']
+    fl['cc'] = df['CC']
+    fl['ct'] = df['CT']
+    fl['tt'] = df['TT']
+    fl['xx'] = df['HCO3']
 
     df = pd.read_csv(str_dir+'carbonic_flow.csv', index_col=['from','to'])['rate(M/s)']
     fl['cc_ct'] = df[('CC', 'CT')]
@@ -168,26 +168,26 @@ def fig_a(ax):
         color = c_cc,
         **arrowkw
     )
-    #plot.add_text(
-    #    axin0,
-    #    dict_text = {
-    #        (0.03, 0.95): rate['cc'],
-    #    },
-    #    transform = axin0.transAxes,
-    #    va = 'top',
-    #    ha = 'left',
-    #    color = 'white',
-    #    fontweight = 'bold',
-    #    bbox = dict(boxstyle='round', fc=c_cc, lw=0)
-    #)
     plot.add_text(
         axin0,
         dict_text = {
-            (0.03, 0.95): 'CC',
+            (0.03, 0.95): rate['cc'],
         },
         transform = axin0.transAxes,
         va = 'top',
         ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc=c_cc, lw=0)
+    )
+    plot.add_text(
+        axin0,
+        dict_text = {
+            (0.97, 0.95): 'CC',
+        },
+        transform = axin0.transAxes,
+        va = 'top',
+        ha = 'right',
     )
     add_text(
         ax,
@@ -223,26 +223,26 @@ def fig_a(ax):
         color = c_ct,
         **arrowkw
     )
-    #plot.add_text(
-    #    axin1,
-    #    dict_text = {
-    #        (0.03, 0.95): rate['ct'],
-    #    },
-    #    transform = axin1.transAxes,
-    #    va = 'top',
-    #    ha = 'left',
-    #    color = 'white',
-    #    fontweight = 'bold',
-    #    bbox = dict(boxstyle='round', fc=c_ct, lw=0)
-    #)
     plot.add_text(
         axin1,
         dict_text = {
-            (0.03, 0.95): 'CT',
+            (0.03, 0.95): rate['ct'],
         },
         transform = axin1.transAxes,
         va = 'top',
         ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc=c_ct, lw=0)
+    )
+    plot.add_text(
+        axin1,
+        dict_text = {
+            (0.97, 0.95): 'CT',
+        },
+        transform = axin1.transAxes,
+        va = 'top',
+        ha = 'right',
     )
     add_text(
         ax,
@@ -268,26 +268,26 @@ def fig_a(ax):
         color = c_tt,
         **arrowkw
     )
-    #plot.add_text(
-    #    axin2,
-    #    dict_text = {
-    #        (0.03, 0.95): rate['tt'],
-    #    },
-    #    transform = axin2.transAxes,
-    #    va = 'top',
-    #    ha = 'left',
-    #    color = 'white',
-    #    fontweight = 'bold',
-    #    bbox = dict(boxstyle='round', fc=c_tt, lw=0)
-    #)
     plot.add_text(
         axin2,
         dict_text = {
-            (0.03, 0.95): 'TT',
+            (0.03, 0.95): rate['tt'],
         },
         transform = axin2.transAxes,
         va = 'top',
         ha = 'left',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc=c_tt, lw=0)
+    )
+    plot.add_text(
+        axin2,
+        dict_text = {
+            (0.97, 0.95): 'TT',
+        },
+        transform = axin2.transAxes,
+        va = 'top',
+        ha = 'right',
     )
     add_text(
         ax,
@@ -312,18 +312,18 @@ def fig_a(ax):
         color = c_xx,
         **arrowkw
     )
-    #plot.add_text(
-    #    axin3,
-    #    dict_text = {
-    #        (0.95, 0.97): rate['xx'],
-    #    },
-    #    transform = axin3.transAxes,
-    #    va = 'top',
-    #    ha = 'right',
-    #    color = 'white',
-    #    fontweight = 'bold',
-    #    bbox = dict(boxstyle='round', fc=c_xx, lw=0)
-    #)
+    plot.add_text(
+        axin3,
+        dict_text = {
+            (0.95, 0.97): rate['xx'],
+        },
+        transform = axin3.transAxes,
+        va = 'top',
+        ha = 'right',
+        color = 'white',
+        fontweight = 'bold',
+        bbox = dict(boxstyle='round', fc=c_xx, lw=0)
+    )
     add_text(
         ax,
         dict_text = {

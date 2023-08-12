@@ -9,24 +9,6 @@ import numpy as np
 import matplotlib.colors as colors
 import matplotlib.transforms as mtransforms
 
-def add_text_sub(
-    ax,
-    dict_text,
-    dict_color,
-):
-
-    for xy, s in dict_text.items():
-        color = dict_color[xy]
-        plot.add_text(
-            ax,
-            dict_text = {
-                xy: s
-            },
-            va = 'center',
-            ha = 'center',
-            bbox = dict(boxstyle='round', fc='white', lw=1, ls=':', ec=color)
-        )
-
 def fig_a(
     ax
 ):
@@ -42,11 +24,11 @@ def fig_a(
 
     list_state = ['CC', 'CT', 'TT','H2CO3', 'HCO3']
     dict_color = {
-        'CC'   : 'tab:blue',
-        'CT'   : 'tab:orange',
-        'TT'   : 'tab:green',
+        'CC': 'tab:blue',
+        'CT': 'tab:orange',
+        'TT': 'tab:green',
         'H2CO3': 'tab:red',
-        'HCO3' : 'tab:purple',
+        'HCO3': 'tab:purple',
     }
     dict_label = {
         'H2CO3': r'H$_2$CO$_3$',
@@ -60,7 +42,6 @@ def fig_a(
         dict_color = dict_color,
         dict_label = dict_label,
     )
-    ax.get_legend().remove()
     ax.vlines(1.5, 0.01, 0.99, ls=':', lw=1, color='grey')
     plot.add_text(
         ax,
@@ -70,23 +51,6 @@ def fig_a(
         va = 'center',
         ha = 'center',
         bbox = dict(boxstyle='round', fc='white', lw=1, ls=':', ec='grey')
-    )
-    add_text_sub(
-        ax,
-        dict_text = {
-            (1500, 0.4): 'CC',
-            ( 150, 0.4): 'CT',
-            (  15, 0.4): 'TT',
-            (1000, 0.2): r'H$_2$CO$_3$',
-            ( 100, 0.2): r'HCO$_3^-$',
-        },
-        dict_color = {
-            (1500, 0.4): 'tab:blue',
-            ( 150, 0.4): 'tab:orange',
-            (  15, 0.4): 'tab:green',
-            (1000, 0.2): 'tab:red',
-            ( 100, 0.2): 'tab:purple',
-        },
     )
 
 def main():

@@ -9,17 +9,38 @@ import pandas as pd
 import matplotlib.transforms as mtransforms
 import matplotlib.patches as mpatches
 import matplotlib.colors as mcolors
+from matplotlib.patches import FancyBboxPatch
 
+def add_text(
+    ax,
+    dict_text: dict,
+    bbox: dict,
+    **kwargs,
+) -> None:
+
+    w = 0.04
+    h = 0.03
+    yoff = 0.001
+    for (x,y), s in dict_text.items():
+        text = ax.text(
+            x = x,
+            y = y,
+            s = s,
+            **kwargs,
+        )
+        fancy = FancyBboxPatch((x-w/2, y-h/2+yoff), w, h, mutation_scale=0.04,
+                           **bbox)
+        ax.add_patch(fancy)
 def fig_a(ax):
 
     # read data
     str_dir = '/home/faye/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     fl = {}
-    df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['rate(M/s)']
-    fl['cc'] = df['CC']
-    fl['ct'] = df['CT']
-    fl['tt'] = df['TT']
-    fl['xx'] = df['HCO3']
+    #df = pd.read_csv(str_dir+'carbonic_statistic.csv', index_col='state')['rate(M/s)']
+    #fl['cc'] = df['CC']
+    #fl['ct'] = df['CT']
+    #fl['tt'] = df['TT']
+    #fl['xx'] = df['HCO3']
 
     df = pd.read_csv(str_dir+'carbonic_flow.csv', index_col=['from','to'])['rate(M/s)']
     fl['cc_ct'] = df[('CC', 'CT')]
@@ -43,10 +64,12 @@ def fig_a(ax):
     plot.add_text(
         ax,
         dict_text = {
-            (0.8, 0.95): r'Rate ($\times 10^{8}$ M/s)',
+            (0.8, 0.95): r'Rate ($\bf{\times 10^{8}}$ M/s)',
+            #(0.8, 0.95): r'Rate (× 10⁸ M/s)',
         },
         va = 'top',
         ha = 'right',
+        fontweight = 'bold'
     )
 
     # horizon fig
@@ -71,7 +94,7 @@ def fig_a(ax):
     p_tt = np.array([0.3, 0.17+yx])
     p_ct = np.array([0.3,  0.5+yx])
     p_cc = np.array([0.3, 0.83+yx])
-    p_xx = np.array([0.9,  0.5+yx])
+    p_xx = np.array([0.8,  0.5+yx])
     # middle
     p_tt_ct = (p_tt+p_ct)/2
     p_ct_cc = (p_ct+p_cc)/2
@@ -120,7 +143,8 @@ def fig_a(ax):
 
     arrowstyle = 'simple, head_length=4, head_width=4, tail_width=0.2'
     arrowkw = {
-        'shrinkA': 0
+        'shrinkA': 0,
+        'shrinkB': 0.4
     }
     # CC
     plot.add_arrow(
@@ -143,31 +167,31 @@ def fig_a(ax):
         color = c_cc,
         **arrowkw
     )
+    #plot.add_text(
+    #    axin0,
+    #    dict_text = {
+    #        (0.03, 0.95): rate['cc'],
+    #    },
+    #    transform = axin0.transAxes,
+    #    va = 'top',
+    #    ha = 'left',
+    #    color = 'white',
+    #    fontweight = 'bold',
+    #    bbox = dict(boxstyle='round', fc=c_cc, lw=0)
+    #)
     plot.add_text(
         axin0,
         dict_text = {
-            (0.03, 0.95): rate['cc'],
+            (0.03, 0.95): 'CC',
         },
         transform = axin0.transAxes,
         va = 'top',
         ha = 'left',
-        color = 'white',
-        fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_cc, lw=0)
     )
-    plot.add_text(
-        axin0,
-        dict_text = {
-            (0.97, 0.95): 'CC',
-        },
-        transform = axin0.transAxes,
-        va = 'top',
-        ha = 'right',
-    )
-    plot.add_text(
+    add_text(
         ax,
         dict_text = {
-            tuple(p_ct_cc-sx+0.3*sy): rate['cc_ct'],
+            tuple(p_ct_cc-sx): rate['cc_ct'],
             tuple(p_xx_cc+sy): rate['cc_xx'],
             tuple(p_ct_cc-1.7*r): rate['cc_tt'],
         },
@@ -175,6 +199,7 @@ def fig_a(ax):
         ha = 'center',
         bbox = dict(boxstyle='round', ec=c_cc, fc='white')
     )
+
     # CT
     plot.add_arrow(
         ax,
@@ -197,32 +222,32 @@ def fig_a(ax):
         color = c_ct,
         **arrowkw
     )
+    #plot.add_text(
+    #    axin1,
+    #    dict_text = {
+    #        (0.03, 0.95): rate['ct'],
+    #    },
+    #    transform = axin1.transAxes,
+    #    va = 'top',
+    #    ha = 'left',
+    #    color = 'white',
+    #    fontweight = 'bold',
+    #    bbox = dict(boxstyle='round', fc=c_ct, lw=0)
+    #)
     plot.add_text(
         axin1,
         dict_text = {
-            (0.03, 0.95): rate['ct'],
+            (0.03, 0.95): 'CT',
         },
         transform = axin1.transAxes,
         va = 'top',
         ha = 'left',
-        color = 'white',
-        fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_ct, lw=0)
     )
-    plot.add_text(
-        axin1,
-        dict_text = {
-            (0.97, 0.95): 'CT',
-        },
-        transform = axin1.transAxes,
-        va = 'top',
-        ha = 'right',
-    )
-    plot.add_text(
+    add_text(
         ax,
         dict_text = {
-            tuple(p_tt_ct-sx+0.3*sy): rate['ct_tt'],
-            tuple(p_ct_cc+sx-0.3*sy): rate['ct_cc'],
+            tuple(p_tt_ct-sx): rate['ct_tt'],
+            tuple(p_ct_cc+sx): rate['ct_cc'],
             tuple(p_xx_ct+sy): rate['ct_xx'],
             tuple(p_ct-r-sx): rate['ct_ct'],
         },
@@ -242,37 +267,38 @@ def fig_a(ax):
         color = c_tt,
         **arrowkw
     )
+    #plot.add_text(
+    #    axin2,
+    #    dict_text = {
+    #        (0.03, 0.95): rate['tt'],
+    #    },
+    #    transform = axin2.transAxes,
+    #    va = 'top',
+    #    ha = 'left',
+    #    color = 'white',
+    #    fontweight = 'bold',
+    #    bbox = dict(boxstyle='round', fc=c_tt, lw=0)
+    #)
     plot.add_text(
         axin2,
         dict_text = {
-            (0.03, 0.95): rate['tt'],
+            (0.03, 0.95): 'TT',
         },
         transform = axin2.transAxes,
         va = 'top',
         ha = 'left',
-        color = 'white',
-        fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_tt, lw=0)
     )
-    plot.add_text(
-        axin2,
-        dict_text = {
-            (0.97, 0.95): 'TT',
-        },
-        transform = axin2.transAxes,
-        va = 'top',
-        ha = 'right',
-    )
-    plot.add_text(
+    add_text(
         ax,
         dict_text = {
-            tuple(p_tt_ct+sx-0.3*sy): rate['tt_ct'],
+            tuple(p_tt_ct+sx): rate['tt_ct'],
             tuple(p_xx_tt+sy): rate['tt_xx'],
         },
         va = 'center',
         ha = 'center',
         bbox = dict(boxstyle='round', ec=c_tt, fc='white')
     )
+
     # HCO3
     plot.add_arrow(
         ax,
@@ -285,19 +311,19 @@ def fig_a(ax):
         color = c_xx,
         **arrowkw
     )
-    plot.add_text(
-        axin3,
-        dict_text = {
-            (0.95, 0.97): rate['xx'],
-        },
-        transform = axin3.transAxes,
-        va = 'top',
-        ha = 'right',
-        color = 'white',
-        fontweight = 'bold',
-        bbox = dict(boxstyle='round', fc=c_xx, lw=0)
-    )
-    plot.add_text(
+    #plot.add_text(
+    #    axin3,
+    #    dict_text = {
+    #        (0.95, 0.97): rate['xx'],
+    #    },
+    #    transform = axin3.transAxes,
+    #    va = 'top',
+    #    ha = 'right',
+    #    color = 'white',
+    #    fontweight = 'bold',
+    #    bbox = dict(boxstyle='round', fc=c_xx, lw=0)
+    #)
+    add_text(
         ax,
         dict_text = {
             tuple(p_xx_ct-sy): rate['xx_ct'],
@@ -320,8 +346,8 @@ def fig_a(ax):
     plot.add_arrow(
         ax,
         list_arrow = [
-            [(x_v-x_s, y_a), (0.01, y_a)],
-            [(x_v+x_s, y_a), (0.99, y_a)],
+            [(x_v-x_s, y_a), (0.0, y_a)],
+            [(x_v+x_s, y_a), (0.9, y_a)],
         ],
         arrowstyle = '->, head_length=4, head_width=2',
         **arrowkw
@@ -336,6 +362,7 @@ def fig_a(ax):
         ha = 'center',
         fontweight = 'bold',
     )
+
 def main():
 
     plot.set_rcparam()

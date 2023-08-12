@@ -113,7 +113,7 @@ def run():
 
     plot.save(
         fig,
-        file_save = 'fig_2.new',
+        file_save = 'fig_2',
         list_type = ['pdf', 'svg']
     )
 

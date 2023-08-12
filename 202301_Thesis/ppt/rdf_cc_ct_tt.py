@@ -8,8 +8,6 @@ import matplotlib.transforms as mtransforms
 import pandas as pd
 import matplotlib.ticker as mticker
 
-homedir = os.environ['homedir']
-
 def fig_a(
     axs
 ):
