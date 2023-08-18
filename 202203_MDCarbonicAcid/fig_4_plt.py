@@ -461,9 +461,9 @@ def fig_label(
     x = 0/72
     y = 0/72
     dict_pos = {
-        '(a)': (x, y),
-        '(b)': (x, y),
-        '(c)': (x, y),
+        'a': (x, y),
+        'b': (x, y),
+        'c': (x, y),
     }
 
     for ax, label in zip(axs, dict_pos.keys()):
@@ -471,7 +471,7 @@ def fig_label(
         # label physical distance to the left and up:
         trans = mtransforms.ScaledTranslation(x, y, fig.dpi_scale_trans)
         ax.text(0.0, 1.0, label, transform=ax.transAxes + trans,
-                fontsize='medium', va='top')
+                fontsize='medium', va='top', fontweight='bold')
 
 
 def main():
@@ -481,7 +481,7 @@ def main():
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig = plt.figure( figsize = (8.6*cm, (6.2+2+2)*cm) )
+    fig = plt.figure( figsize = (3.33, 4.02) )
 
     gs = fig.add_gridspec(3, 1, height_ratios=[6.2,2,2], left=0.01, right=0.99, bottom=0.01, top=0.99, hspace=0.0)
 

@@ -86,8 +86,8 @@ def fig_label(
     list_ax,
 ):
     dict_pos = {
-        '(a)': (-0.12, 0.9),
-        '(b)': (-0.12, 0.9),
+        'a': (-0.12, 0.9),
+        'b': (-0.12, 0.9),
     }
     for ax, label in zip(list_ax, dict_pos):
         pos = dict_pos[label]
@@ -96,15 +96,15 @@ def fig_label(
             y = pos[1],
             s = label,
             transform = ax.transAxes,
+            fontweight='bold'
         )
 
 def run():
 
     plot.set_rcparam()
-    cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
 
-    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, (3+3)*cm))
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (3.33, 2.36))
 
     fig_a(ax0)
     fig_b(ax1)
