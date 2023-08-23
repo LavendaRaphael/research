@@ -71,7 +71,7 @@ def fig_a(
             (0, 0)       : 'CC',
             (np.pi, 0)   : 'CT',
             (0, np.pi)   : 'CT',
-            (np.pi, np.pi): 'TT',
+            (np.pi-0.3, np.pi+0.3): 'TT',
         },
         va = 'center',
         ha = 'center',
@@ -83,6 +83,26 @@ def fig_a(
 
     axin = ax.inset_axes((0.35, 0.38, 0.3, 0.3))
     fig_a_sub(axin)
+
+    x = [np.pi, 0.88*np.pi, 1.12*np.pi]
+    y = [np.pi, 0.88*np.pi, 1.12*np.pi]
+    ax.scatter(x, y, 
+        s=3, c='tab:green', marker='*')
+    x_d = 0.2
+    y_d = -0.2
+    plot.add_text(
+        ax,
+        dict_text = {
+            (x[0]+x_d, y[0]+y_d): 'Y',
+            (x[1]+x_d, y[1]+y_d): 'X',
+            (x[2]+x_d, y[2]+y_d): 'Z',
+        },
+        va = 'center',
+        ha = 'center',
+        color = 'black',
+        #fontweight = 'bold',
+        fontsize = 6,
+    )
 
 def fig_a_sub(
     ax,
@@ -179,8 +199,10 @@ def fig_b(
     plot.add_text(
         ax,
         dict_text = {
-            (0.5, 0.5): r'$\alpha$ ≈ $\beta$ ≈ $\pi$',
-            (0.5, 0.9): r'$\alpha$ ≈ $\beta$ ≈ 0.88$\pi$',
+            #(0.5, 0.5): r'$\alpha$ ≈ $\beta$ ≈ $\pi$',
+            #(0.5, 0.9): r'$\alpha$ ≈ $\beta$ ≈ 0.88$\pi$',
+            (0.5, 0.5): 'Y',
+            (0.5, 0.9): 'X / Z',
         },
         ha = 'center',
         va = 'top'
