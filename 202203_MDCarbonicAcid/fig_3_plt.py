@@ -84,18 +84,18 @@ def fig_a(
     axin = ax.inset_axes((0.35, 0.38, 0.3, 0.3))
     fig_a_sub(axin)
 
-    x = [np.pi, 0.88*np.pi, 1.12*np.pi]
-    y = [np.pi, 0.88*np.pi, 1.12*np.pi]
+    x = [0.88*np.pi, np.pi, 1.12*np.pi]
+    y = [0.88*np.pi, np.pi, 1.12*np.pi]
     ax.scatter(x, y, 
         s=3, c='tab:green', marker='*')
-    x_d = 0.2
-    y_d = -0.2
+    x_d = 0.3
+    y_d = -0.3
     plot.add_text(
         ax,
         dict_text = {
-            (x[0]+x_d, y[0]+y_d): 'Y',
-            (x[1]+x_d, y[1]+y_d): 'X',
-            (x[2]+x_d, y[2]+y_d): 'Z',
+            (x[0]+x_d, y[0]+y_d): 'P$_1$',
+            (x[1]+x_d, y[1]+y_d): 'P$_2$',
+            (x[2]+x_d, y[2]+y_d): 'P$_3$',
         },
         va = 'center',
         ha = 'center',
@@ -201,8 +201,8 @@ def fig_b(
         dict_text = {
             #(0.5, 0.5): r'$\alpha$ ≈ $\beta$ ≈ $\pi$',
             #(0.5, 0.9): r'$\alpha$ ≈ $\beta$ ≈ 0.88$\pi$',
-            (0.5, 0.5): 'Y',
-            (0.5, 0.9): 'X / Z',
+            (0.5, 0.5): 'P$_2$',
+            (0.5, 0.9): 'P$_1$ / P$_3$',
         },
         ha = 'center',
         va = 'top'

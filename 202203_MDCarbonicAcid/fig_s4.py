@@ -135,7 +135,7 @@ def main():
 
     plot.save(
         fig,
-        file_save = 'fig_s3',
+        file_save = 'fig_s4',
         list_type = ['pdf', 'svg']
     )
 

@@ -9,7 +9,6 @@ homedir = os.environ['homedir']
 def run(
     ax,
     data_dir,
-    text,
     float_xscale,
 ):
 
@@ -31,13 +30,13 @@ def run(
     ax.set_xlabel('Time (ns)')
     ax.set_ylim(0.5, 4.8)
     ax.set_yticklabels(['HCO$_3^-$', 'CC','CT','TT'])
-    plot.add_text(
-        ax,
-        dict_text = {(0.5, 0.9): text},
-        va = 'center',
-        ha = 'center',
-        transform = ax.transAxes
-    )
+    #plot.add_text(
+    #    ax,
+    #    dict_text = {(0.5, 0.9): text},
+    #    va = 'center',
+    #    ha = 'center',
+    #    transform = ax.transAxes
+    #)
 
 def fig_a(
     ax,
@@ -45,9 +44,9 @@ def fig_a(
 
     run(
         ax,
-        data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/07.md_water62/DPMD/330K/CC/carbonic/',
-        text = 'H$_2$CO$_3$ + 62 H$_2$O NVT (330 K)',
-        float_xscale = 0.000005,
+        data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CT/carbonic/',
+        #text = 'H$_2$CO$_3$ + 126 H$_2$O NpT (330 K, 1 bar)',
+        float_xscale = 0.00001,
     )
 
 def fig_b(
@@ -56,19 +55,7 @@ def fig_b(
 
     run(
         ax,
-        data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/CT/carbonic/',
-        text = 'H$_2$CO$_3$ + 126 H$_2$O NpT (330 K, 1 bar)',
-        float_xscale = 0.00001,
-    )
-
-def fig_c(
-    ax,
-):
-
-    run(
-        ax,
         data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/TT/carbonic/',
-        text = 'H$_2$CO$_3$ + 126 H$_2$O NpT (330 K, 1 bar)',
         float_xscale = 0.00001,
     )
 
@@ -78,11 +65,10 @@ def main():
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
 
-    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize = (8.6*cm, (3+3+3)*cm))
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, (3+3)*cm))
 
     fig_a(ax0)
     fig_b(ax1)
-    fig_c(ax2)
 
     plot.save(
         fig,

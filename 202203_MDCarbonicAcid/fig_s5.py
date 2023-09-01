@@ -9,7 +9,7 @@ import pandas as pd
 
 homedir = os.environ['homedir']
 
-def fig_a(fig, ax):
+def fig_(fig, ax):
 
     data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/'
 
@@ -40,19 +40,19 @@ def fig_a(fig, ax):
     ax.set_xlabel(r'R$_0$ (Å) [R$_0$ > R$_1$]')
     ax.set_ylabel(r'R$_1$ (Å)')
 
-def fig_b(ax):
+def fig_a(ax):
 
     dict_label = {
         'CC': 'CC',
         'CT': 'CT',
         'TT': 'TT',
-        'H2CO3': r'H$_2$CO$_3$',
     }
     data_dir = homedir+'/research_d/202203_MDCarbonicAcid/server/04.md_npt/330K/carbonic/'
     df = pd.read_csv(data_dir+'carbonic_roh_1d.csv', index_col='roh0(ang)')
-    for header in ['CC', 'CT', 'TT', 'H2CO3']:
+    for header in ['CC', 'CT', 'TT']:
         ser = df[header]
         ser -= min(ser[(ser.index>3.0) & (ser.index<4.2)])
+        print(header, min(ser))
         ax.plot(df.index, df[header], label=dict_label[header], lw=1)
 
     ax.set_xlabel(r'R$_0$ (Å)')
@@ -69,14 +69,13 @@ def main():
     cm = 1/2.54
     mpl.rcParams['figure.dpi'] = 300
 
-    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (8.6*cm, (4+4)*cm))
+    fig, ax0 = plt.subplots(1, 1, figsize = (8.6*cm, 6*cm))
 
-    fig_a(fig, ax0)
-    fig_b(ax1)
+    fig_a(ax0)
 
     plot.save(
         fig,
-        file_save = 'fig_s4',
+        file_save = 'fig_s5',
         list_type = ['pdf', 'svg']
     )
 

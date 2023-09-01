@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from tf_dpmd_kit import plot
-from tf_dpmd_kit import train
 import os
 import numpy as np
 import matplotlib.transforms as mtransforms
