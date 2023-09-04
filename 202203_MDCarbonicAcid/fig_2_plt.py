@@ -3,6 +3,8 @@ import matplotlib as mpl
 from tf_dpmd_kit import plot
 from tf_dpmd_kit import analysis
 import os
+import matplotlib.patches as mpatches
+import matplotlib.colors as mcolors
 
 homedir = os.environ['homedir']
 
@@ -82,12 +84,27 @@ def fig_b(
         ha = 'center',
         transform = ax.transAxes
     )
+
+def fig_c(ax):
+
+    ax.errorbar([0,1], [81.3/12.4, 0.3/12.4], label='DPMD (aq)', marker='*', lw=0)
+    ax.errorbar([0], [7.5], [2.5], label='Exp. (gas)', lw=0, elinewidth=1, capsize=2)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(['CC:CT', 'TT:CT'])
+    ax.set_ylabel('Mole Ratio')
+    ax.set_xlim(-1,2)
+    ax.set_ylim(-2,20)
+    ax.legend(
+        frameon = False
+    )
+
 def fig_label(
     list_ax,
 ):
     dict_pos = {
         'a': (-0.12, 0.9),
         'b': (-0.12, 0.9),
+        'c': (-0.30, 0.9),
     }
     for ax, label in zip(list_ax, dict_pos):
         pos = dict_pos[label]
@@ -103,13 +120,21 @@ def run():
 
     plot.set_rcparam()
     mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['figure.constrained_layout.use'] = False
 
-    fig, (ax0, ax1) = plt.subplots(2, 1, figsize = (3.33, 2.36))
+    fig = plt.figure( figsize = (3.33, 2.36) )
 
+    gs = fig.add_gridspec(2, 2, width_ratios=[2, 1], left=0.12, right=0.99, bottom=0.15, top=0.95, wspace=0.3, hspace=0.4)
+
+    ax0 = fig.add_subplot(gs[0, 0])
+    ax1 = fig.add_subplot(gs[1, :])
     fig_a(ax0)
     fig_b(ax1)
 
-    fig_label([ax0,ax1])
+    ax2 = fig.add_subplot(gs[0, 1])
+    fig_c(ax2)
+
+    fig_label([ax0, ax1, ax2])
 
     plot.save(
         fig,
